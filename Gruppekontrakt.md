@@ -39,9 +39,6 @@ Det er vigtigt for gruppen, at når der aftales et mødetidspunkt, at alle medle
 Ydermere er det vigtigt, at der afleveres til tiden, og, at medlemmerne laver det, der er aftalt. I tilfælde af, at det ikke er muligt for et medlem at overholde en aftale, skal vedkommende informere om dette, så hurtigt som muligt.   
 >Et medlem sanktioneres ved, at vedkommende skal medbringe snacks til næste møde, eller give øl til fredagsbar. Det er op til de resterende medlemmer at bestemme det! 
 
-## Time-management
-TODO: Find en god måde, at lave en god tidsplan over, hvornår diverse opgaver skal færdiggøres.
-
 ## Andre Ansvar
 **Ugentligt aflevering:** Anders   
 **Changelog:** Også Anders  
