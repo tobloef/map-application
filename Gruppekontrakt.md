@@ -36,9 +36,9 @@ Hvis dette ikke kan overholdes skal man informer tidligste mulig.
 ## Time-management
 TODO: Finde en god måde at lave en god tidsplan over hvornår ting skal laves.
 ## Andre Ansvar
-**Ugentligt aflevering:** Anders
-**Changelog:** Også Anders
-**Planlægning af opgaver:** Tobias
+* **Ugentligt aflevering:** Anders
+* **Changelog:** Også Anders
+* **Planlægning af opgaver:** Tobias
 ## Uddelegering af opgaver
 Sørge for at alle har lavet opgaver der vigtige og der bliver gået op i til eksamen.
 ## Målsætninger
