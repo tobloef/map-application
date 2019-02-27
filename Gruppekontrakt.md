@@ -1,53 +1,69 @@
 # Gruppekontrakt
+
 ## Møde
+### Funktion
+Møderne afholdes for, at gruppen sammen kan tage vigtige beslutninger angående projektet, og uddeligere opgaver. Ydermere vil gruppen bruge møderne til, sammen at gennemgå færdig kode, således at alle medlemmer forstår koden. 
+
 ### Tid og sted
-IT-Universitetet, minimum en gang om ugen. Tirsdag: Klokken 10, skubbes til senere hvis der er forelæsning eller lignende.
-Hvis flere møder er nødvendigt bliver der tilføjet et om Torsdagen.
+Som udangspunkt mødes gruppen på IT-Universitetet hver tirsdag klokken 10. I tilfælde af, at der er forlæsning, rykkes mødet til senere. Hvis gruppen finder det nødvendigt at afholde endnu et møde, vil det i så fald blive afholdt om torsdagen.
+
 ### Roller
-#### Mødeleder: Hjalte. 
-Står for at dagsorden bliver overholdt og at punkt bliver tilføjet til den.
-#### Referent: Tobias Løfgren
-Ansvarlig for at skrive ned hvad der er blevet diskuteret, besluttet og snakket om under møderne.
+**Mødeleder: Hjalte.**  
+ Hjalte vil stå for at konstruere dagsordenen, og sørge for, at den overholdes til møderne.
+ 
+**Referent: Tobias Løfgren**  
+Tobias er ansvarlig for, at skrive ned hvad der diskuteres, besluttes og snakkes om til møderne.
+
 ### Regler for referatet
-Der skal være: Dagsorden.
-### Basis dagsorden
+Det er vigtigt for gruppen, at der inden hvert møde, er en klar og veldefineret dagsorden, som overholdes.
+
 ## Dokumentation
-Personlig dagbog
-Github Projects/Trello
-Gode commit beskeder.
-Små commit.
+Hvad angår dokumentation, har gruppen besluttet, at hvert gruppemedlem skal skrive personlige noter. Det indebærer, at når et medlem har fået tildelt en individuel opgave, skal vedkommende notere alle beslutninger.  
+Endvidere vil gruppen anvende Github Projects eller Trello, for at lave en tidsplan og give overblik. 
+Hvad angår commits, er det vigtigt for gruppen, at lave mange små commits, med gode beskeder.
+
 ## Version Control
-Ingen commiting til master og develop, kun merges fra feature branches ind i develop. 
-Og så fra develop til master når det virker.
+Gruppen har besluttet, at der ikke skal være nogen commits til master og develop, men at der kun skal merges fra feature branches ind i develop. Når alt virker, kan det herefter merges fra develop til master. 
+
 ## Code style
-Rimelig niveau af test til features.
-Aftale en codestyle og indstille intellij.
+Der skal være et rimelige niveau af tests til alle features, og der aftales en codestyle hvortil intelliJ indstilles. 
+
 ## Kommunikation
-Facebook-messenger chat til daglig kommunikation.
-Og ingen temaer i chatten.
+Den daglige kommunikation vil primært foregå over messenger på Facebook, og chatten skal ikke have noget tema! 
+
 ## Socialt
-Fredags-bar så vidt muligt.
-Hjælpe hinanden og sørge for at alle forstår koden og design valg.
+Gruppen vil så vidt muligt mødes i fredagsbaren engang imellem. 
+
 ## Sanktioner
-Møde til tiden og det er præcis.
-Aflevere til tiden. Lave hvad man har aftalt. 
-Hvis dette ikke kan overholdes skal man informer tidligste mulig.
->Man bliver sanktioneret ved at man skal give kage/snacks til møde eller øl til fredagsbar.
+Det er vigtigt for gruppen, at når der aftales et mødetidspunkt, at alle medlemmer dukker op til tiden! Der er ikke noget med det akademiske kvarter! 
+Ydermere er det vigtigt, at der afleveres til tiden, og, at medlemmerne laver det, der er aftalt. I tilfælde af, at det ikke er muligt for et medlem at overholde en aftale, skal vedkommende informere om dette, så hurtigt som muligt.   
+>Et medlem sanktioneres ved, at vedkommende skal medbringe snacks til næste møde, eller give øl til fredagsbar. Det er op til de resterende medlemmer at bestemme det! 
+
 ## Time-management
-TODO: Finde en god måde at lave en god tidsplan over hvornår ting skal laves.
+TODO: Find en god måde, at lave en god tidsplan over, hvornår diverse opgaver skal færdiggøres.
+
 ## Andre Ansvar
-**Ugentligt aflevering:** Anders
-**Changelog:** Også Anders
+**Ugentligt aflevering:** Anders   
+**Changelog:** Også Anders  
 **Planlægning af opgaver:** Tobias
+
 ## Uddelegering af opgaver
-Sørge for at alle har lavet opgaver der vigtige og der bliver gået op i til eksamen.
+Der sørges for, at alle medlemmer har lavet vigtige opgaver. 
+
 ## Målsætninger
-Vi vil gerne have clean code, vi vil gerne sørge for at rapporten svarer til koden i kvalitet.
+Gruppen vil have fokus på clean code, og uddarbejde en rapport, der kvalitetsmæssigt er tilsvarende koden. 
+
+
 ## Beslutningsproces
-Vi tager udgangspunkt i at flertallet bestemmer, men vil gerne give folk mulighed for at appellere beslutninger, og fremføre argumenter. Med andre ord vil vi gerne sørge for at alle føler sig hørt.
+Som udgangspunkt bestemmer flertallet, men det er vigtigt for gruppen, at alle får mulighed for, at fremføre deres synspunkter, og, at argumentere og diskutere disse. 
+
+
 ## Hjælpe hinanden
-Vi vil forsøge til hvert møde at bruge noget tid på at folk forklarer hvad deres kode gør og hvordan den overordnet virker. Vi er også åbne for at folk beder om at skrive noget kode sammen med andre, hvis de føler at det er nødvendigt. 
+Som tidligere nævnt, vil gruppen så vidt muligt, sørge for, at alle medlemmer, til en hvis grad, forstår alt kode, og dets overordnede funktionallitet. Ydermere er det mugligt for medlemmer, at skrive sammen to og to, hvis behovet skulle opstå. Det er vigtigt for gruppen at hjælpe hinanden, og det er tilladt at stille "dumme" spørgsmål. 
+
 ## Kodeændringer
-Lad være med at ændre i folks kode mens det er i feature/develop branch. Hvis det er merget ind i master kan man godt ændre i det som en ny feature.
+Medlemmer må som udagngspunkt ikke ændre i andres kode, så længe det er i feature/develop branch. Er koden merget ind i master, er det dog tilladt at ændre i det, som en ny feature. 
+
+
 ## Opfølge på gruppekontrakt
-Følge op gruppekontrakt hver anden uge.
+Hver anden uge vil gruppen følge op på gruppekontrakten.
