@@ -18,7 +18,10 @@ public class Model {
 	OSMRelation rel = null;
 	WayType type = null;
 
-	Map<WayType,List<Drawable>> ways = new EnumMap<>(WayType.class); {
+	Map<WayType,List<Drawable>> ways = new EnumMap<>(WayType.class);
+
+	private void initializeWaysEnumMap() {
+		ways = new EnumMap<>(WayType.class);
 		for (WayType type : WayType.values()) {
 			ways.put(type, new ArrayList<>());
 		}
@@ -106,7 +109,9 @@ public class Model {
 				case CHARACTERS: break;
 				case COMMENT: break;
 				case SPACE: break;
-				case START_DOCUMENT: break;
+				case START_DOCUMENT:
+					startElement();
+					break;
 				case END_DOCUMENT:
 					endDocument();
 					break;
@@ -119,6 +124,10 @@ public class Model {
 				case ENTITY_DECLARATION: break;
 			}
 		}
+	}
+
+	private void startElement() {
+		initializeWaysEnumMap();
 	}
 
 	private void endDocument() {
