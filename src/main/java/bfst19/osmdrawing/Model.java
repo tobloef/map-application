@@ -17,15 +17,7 @@ public class Model {
 	OSMWay way = null;
 	OSMRelation rel = null;
 	WayType type = null;
-
 	Map<WayType,List<Drawable>> ways = new EnumMap<>(WayType.class);
-
-	private void initializeWaysEnumMap() {
-		ways = new EnumMap<>(WayType.class);
-		for (WayType type : WayType.values()) {
-			ways.put(type, new ArrayList<>());
-		}
-	}
 	List<Runnable> observers = new ArrayList<>();
 	float minlat, minlon, maxlat, maxlon;
 
@@ -139,20 +131,28 @@ public class Model {
 	private void endElement(XMLStreamReader reader) {
 		switch (reader.getLocalName()) {
 			case "way":
-				if (type == WayType.COASTLINE) {
-					coast.add(way);
-				} else {
-					ways.get(type).add(new Polyline(way));
-				}
-				way = null;
+				endElementWay();
 				break;
 			case "relation":
-				if (type == WayType.WATER) {
-					ways.get(type).add(new MultiPolyline(rel));
-					way = null;
-				}
+				endElementRelation();
 				break;
 		}
+	}
+
+	private void endElementRelation() {
+		if (type == WayType.WATER) {
+			ways.get(type).add(new MultiPolyline(rel));
+			way = null;
+		}
+	}
+
+	private void endElementWay() {
+		if (type == WayType.COASTLINE) {
+			coast.add(way);
+		} else {
+			ways.get(type).add(new Polyline(way));
+		}
+		way = null;
 	}
 
 	private void startElement(XMLStreamReader reader) {
@@ -260,5 +260,12 @@ public class Model {
 			pieces.put(res.getLast(), res);
 		}
 		return pieces.values();
+	}
+
+	private void initializeWaysEnumMap() {
+		ways = new EnumMap<>(WayType.class);
+		for (WayType type : WayType.values()) {
+			ways.put(type, new ArrayList<>());
+		}
 	}
 }
