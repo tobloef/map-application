@@ -2,28 +2,34 @@
 ## Gruppemedlemmer
 ### Anders Parsberg Wagner (awag)
 #### Billede
-!(https://github.itu.dk/trbj/BFST19_GroupG/Docs/img/awag.jpg "Anders Parsberg Wagner")
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/awag.jpg "Anders Parsberg Wagner")
 #### Underskrift
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/awag_underskrift.png "Anders Parsberg Wagner")
 
 ### Anne-Sophie Køhler Bak (koab)
 #### Billede
-
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/koab.png "Anne-Sophie Køhler Bak")
 #### Underskrift
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/koab_underskrift.png "Anne-Sophie Køhler Bak")
+
 
 ### Hjalte Mac Dalland (hjda)
 #### Billede
-
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/hjda.jpg "Hjalte Mac Dalland")
 #### Underskrift
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/hjda_underskrift.jpg "Hjalte Mac Dalland")
 
 ### Jakob Israelsen (jais)
 #### Billede
-
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/jais.jpg "Jakob Israelsen")
 #### Underskrift
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/jais_underskrift.jpg "Jakob Israelsen")
 
 ### Tobias Løfgren (tobl)
 #### Billede
-
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/tobl.jpg "Tobias Løfgren")
 #### Underskrift
+![](https://github.itu.dk/trbj/BFST19_GroupG/Docs/Img/tobl_underskrift.png "Tobias Løfgren")
 
 ## Møde
 ### Funktion
