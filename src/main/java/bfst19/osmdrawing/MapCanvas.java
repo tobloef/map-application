@@ -1,89 +1,63 @@
 package bfst19.osmdrawing;
 
-
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.stage.Stage;
 
-public class MapCanvas extends Canvas{
+public class MapCanvas extends Canvas {
 	GraphicsContext gc = getGraphicsContext2D();
 	Affine transform = new Affine();
 	Model model;
-	private double zoomLevel;
 
 	public void init(Model model) {
 		this.model = model;
-		panViewToModel();
-		gc.setFillRule(FillRule.EVEN_ODD);
-		flipYCoordinates();
+		pan(-model.minlon, -model.maxlat);
+		zoom(800/(model.maxlon-model.minlon), 0,0);
+		transform.prependScale(1,-1, 0, 0);
 		model.addObserver(this::repaint);
-		makeCanvasUpdateOnResize();
+		model.addObserver(this::repaint);
 		repaint();
 	}
 
-	private void makeCanvasUpdateOnResize() {
-		this.widthProperty().addListener(observable -> repaint());
-		this.heightProperty().addListener(observable -> repaint());
-	}
-
-	private void panViewToModel() {
-		pan(-model.minlon, -model.maxlat);
-		zoom(getWidth()/(model.maxlon-model.minlon), 0,0);
-	}
-
-	private void flipYCoordinates() {
-		transform.prependScale(1,-1, 0, 0);
-	}
-
 	public void repaint() {
-		clearCanvas();
-		updateTransform();
-		setColors();
-		drawShapes();
+		gc.setTransform(new Affine());
+		if (model.getWaysOfType(WayType.COASTLINE).iterator().hasNext()) {
+			gc.setFill(Color.BLUE);
+		} else {
+			gc.setFill(Color.GREEN);
+		}
+		gc.fillRect(0, 0, getWidth(), getHeight());
+		gc.setTransform(transform);
+		gc.setStroke(Color.BLACK);
+		gc.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
+//		for (Drawable way : model.getWaysOfType(WayType.UNKNOWN)) way.stroke(gc);
+		gc.setFillRule(FillRule.EVEN_ODD);
+		DrawShapes();
 	}
 
-	private void drawShapes() {
+	private void DrawShapes() {
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				gc.setFill(wayType.getFillColor());
 				for (Drawable way : model.getWaysOfType(wayType)) {
-					if (way instanceof MultiPolyline)
-						way.fill(gc);
+					way.fill(gc);
 				}
 			}
 			if (wayType.hasStroke()) {
 				gc.setLineDashes(wayType.getLineDash() / 10000);
 				gc.setStroke(wayType.getStrokeColor());
 				for (Drawable way : model.getWaysOfType(wayType)){
-					if (way instanceof MultiPolyline)
-						way.stroke(gc);
+					way.stroke(gc);
 				}
 			}
 		}
-	}
-
-	private void setColors() {
-		gc.setStroke(Color.BLACK);
-		gc.setFill(Color.RED);
-	}
-
-	private void updateTransform() {
-		gc.setTransform(transform);
-		updateZoomLevel();
-		gc.setLineWidth(this.zoomLevel);
-	}
-
-	private void updateZoomLevel() {
-		this.zoomLevel = 1/Math.sqrt(Math.abs(transform.determinant()));
-	}
-
-	private void clearCanvas() {
-		gc.setTransform(new Affine());
-		gc.clearRect(0, 0, getWidth(), getHeight());
 	}
 
 	public void pan(double dx, double dy) {
