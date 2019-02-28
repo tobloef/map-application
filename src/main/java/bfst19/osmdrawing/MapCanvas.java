@@ -18,15 +18,20 @@ public class MapCanvas extends Canvas {
 
 	public void init(Model model) {
 		this.model = model;
-		pan(-model.minlon, -model.maxlat);
-		zoom(800/(model.maxlon-model.minlon), 0,0);
+		panViewToModel();
 		transform.prependScale(1,-1, 0, 0);
-		model.addObserver(this::repaint);
+		gc.setFillRule(FillRule.EVEN_ODD);
 		model.addObserver(this::repaint);
 		repaint();
 	}
 
 	public void repaint() {
+		clearBackground();
+		updateLineWidth();
+		DrawShapes();
+	}
+
+	private void clearBackground() {
 		gc.setTransform(new Affine());
 		if (model.getWaysOfType(WayType.COASTLINE).iterator().hasNext()) {
 			gc.setFill(Color.BLUE);
@@ -35,11 +40,15 @@ public class MapCanvas extends Canvas {
 		}
 		gc.fillRect(0, 0, getWidth(), getHeight());
 		gc.setTransform(transform);
-		gc.setStroke(Color.BLACK);
+	}
+
+	private void panViewToModel() {
+		pan(-model.minlon, -model.maxlat);
+		zoom(getWidth()/(model.maxlon-model.minlon), 0,0);
+	}
+
+	private void updateLineWidth() {
 		gc.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
-//		for (Drawable way : model.getWaysOfType(WayType.UNKNOWN)) way.stroke(gc);
-		gc.setFillRule(FillRule.EVEN_ODD);
-		DrawShapes();
 	}
 
 	private void DrawShapes() {
