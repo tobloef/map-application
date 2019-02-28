@@ -1,4 +1,29 @@
 # Gruppekontrakt
+## Gruppemedlemmer
+### Anders Parsberg Wagner (awag)
+#### Billede
+
+#### Underskrift
+
+### Anne-Sophie Køhler Bak (koab)
+#### Billede
+
+#### Underskrift
+
+### Hjalte Mac Dalland (hjda)
+#### Billede
+
+#### Underskrift
+
+### Jakob Israelsen (jais)
+#### Billede
+
+#### Underskrift
+
+### Tobias Løfgren (tobl)
+#### Billede
+
+#### Underskrift
 
 ## Møde
 ### Funktion
