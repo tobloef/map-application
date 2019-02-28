@@ -2,9 +2,9 @@
 ## Gruppemedlemmer
 ### Anders Parsberg Wagner (awag)
 #### Billede
-![](img/awag.jpg "Anders Parsberg Wagner")
+![](Img/awag.jpg "Anders Parsberg Wagner")
 #### Underskrift
-![](img/awag_underskrift.png "Anders Parsberg Wagner")
+![](Img/awag_underskrift.png "Anders Parsberg Wagner")
 
 ### Anne-Sophie Køhler Bak (koab)
 #### Billede
