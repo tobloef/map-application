@@ -3,7 +3,7 @@ package bfst19.osmdrawing;
 import javafx.scene.paint.Color;
 
 public enum WayType {
-	COASTLINE(Color.GREEN,null ),
+	COASTLINE(Color.web("EEF0D5", 1.0),null ),
 	WATER(Color.LIGHTSKYBLUE, null),
 	ISLAND(Color.PINK, null),
 	BARRIER(null, Color.BROWN),
