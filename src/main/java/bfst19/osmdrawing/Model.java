@@ -41,36 +41,51 @@ public class Model {
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
 		String filename = args.get(0);
 		InputStream osmsource;
+		long time = -System.nanoTime();
 		if (filename.endsWith(".obj")) {
-			long time = -System.nanoTime();
-			try (ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
-				ways = (Map<WayType, List<Drawable>>) input.readObject();
-				minlat = input.readFloat();
-				minlon = input.readFloat();
-				maxlat = input.readFloat();
-				maxlon = input.readFloat();
-			}
-			time += System.nanoTime();
-			System.out.printf("Load time: %.1fs\n", time / 1e9);
+			parseObj(filename);
 		} else {
-			long time = -System.nanoTime();
 			if (filename.endsWith(".zip")) {
-				ZipInputStream zip = new ZipInputStream(new BufferedInputStream(new FileInputStream(filename)));
-				zip.getNextEntry();
-				osmsource = zip;
+				osmsource = getZipFile(filename);
 			} else {
-				osmsource = new BufferedInputStream(new FileInputStream(filename));
+				osmsource = getOsmFile(filename);
 			}
 			parseOSM(osmsource);
-			time += System.nanoTime();
-			System.out.printf("Parse time: %.1fs\n", time / 1e9);
-			try (ObjectOutputStream output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename + ".obj")))) {
-				output.writeObject(ways);
-				output.writeFloat(minlat);
-				output.writeFloat(minlon);
-				output.writeFloat(maxlat);
-				output.writeFloat(maxlon);
-			}
+			serializeData(filename);
+		}
+		time += System.nanoTime();
+		System.out.printf("Load time: %.1fs\n", time / 1e9);
+	}
+
+	private void serializeData(String filename) throws IOException {
+		try (ObjectOutputStream output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename + ".obj")))) {
+			output.writeObject(ways);
+			output.writeFloat(minlat);
+			output.writeFloat(minlon);
+			output.writeFloat(maxlat);
+			output.writeFloat(maxlon);
+		}
+	}
+
+	private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
+		return new BufferedInputStream(new FileInputStream(filename));
+	}
+
+	private InputStream getZipFile(String filename) throws IOException {
+		InputStream osmsource;
+		ZipInputStream zip = new ZipInputStream(new BufferedInputStream(new FileInputStream(filename)));
+		zip.getNextEntry();
+		osmsource = zip;
+		return osmsource;
+	}
+
+	private void parseObj(String filename) throws IOException, ClassNotFoundException {
+		try (ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+			ways = (Map<WayType, List<Drawable>>) input.readObject();
+			minlat = input.readFloat();
+			minlon = input.readFloat();
+			maxlat = input.readFloat();
+			maxlon = input.readFloat();
 		}
 	}
 
@@ -85,22 +100,7 @@ public class Model {
 					startElement(reader);
 					break;
 				case END_ELEMENT:
-					switch (reader.getLocalName()) {
-						case "way":
-							if (type == WayType.COASTLINE) {
-								coast.add(way);
-							} else {
-								ways.get(type).add(new Polyline(way));
-							}
-							way = null;
-							break;
-						case "relation":
-							if (type == WayType.WATER) {
-								ways.get(type).add(new MultiPolyline(rel));
-								way = null;
-							}
-							break;
-					}
+					endElement(reader);
 					break;
 				case PROCESSING_INSTRUCTION: break;
 				case CHARACTERS: break;
@@ -108,9 +108,7 @@ public class Model {
 				case SPACE: break;
 				case START_DOCUMENT: break;
 				case END_DOCUMENT:
-					for (OSMWay c : merge(coast)) {
-						ways.get(WayType.COASTLINE).add(new Polyline(c));
-					}
+					endDocument();
 					break;
 				case ENTITY_REFERENCE: break;
 				case ATTRIBUTE: break;
@@ -120,6 +118,31 @@ public class Model {
 				case NOTATION_DECLARATION: break;
 				case ENTITY_DECLARATION: break;
 			}
+		}
+	}
+
+	private void endDocument() {
+		for (OSMWay c : merge(coast)) {
+			ways.get(WayType.COASTLINE).add(new Polyline(c));
+		}
+	}
+
+	private void endElement(XMLStreamReader reader) {
+		switch (reader.getLocalName()) {
+			case "way":
+				if (type == WayType.COASTLINE) {
+					coast.add(way);
+				} else {
+					ways.get(type).add(new Polyline(way));
+				}
+				way = null;
+				break;
+			case "relation":
+				if (type == WayType.WATER) {
+					ways.get(type).add(new MultiPolyline(rel));
+					way = null;
+				}
+				break;
 		}
 	}
 
@@ -205,7 +228,7 @@ public class Model {
 		maxlon *= lonfactor;
 	}
 
-	private Iterable<OSMWay> merge(List<OSMWay> coast) {
+	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
 		Map<OSMNode,OSMWay> pieces = new HashMap<>();
 		for (OSMWay way : coast) {
 			OSMWay res = new OSMWay(0);
