@@ -10,10 +10,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static javafx.scene.input.KeyCode.V;
-
-// Test comment
-
 public class Controller {
 	private Model model;
 	double x, y;
