@@ -19,7 +19,7 @@ public class MapCanvas extends Canvas{
 		this.model = model;
 		panViewToModel();
 		gc.setFillRule(FillRule.EVEN_ODD);
-		compensateForProjectionDistortion(model);
+		flipYCoordinates();
 		model.addObserver(this::repaint);
 		makeCanvasUpdateOnResize();
 		repaint();
@@ -35,7 +35,7 @@ public class MapCanvas extends Canvas{
 		zoom(getWidth()/(model.maxlon-model.minlon), 0,0);
 	}
 
-	private void compensateForProjectionDistortion(Model model) {
+	private void flipYCoordinates() {
 		transform.prependScale(1,-1, 0, 0);
 	}
 
@@ -73,8 +73,12 @@ public class MapCanvas extends Canvas{
 
 	private void updateTransform() {
 		gc.setTransform(transform);
-		this.zoomLevel = 1/Math.sqrt(Math.abs(transform.determinant()));
+		updateZoomLevel();
 		gc.setLineWidth(this.zoomLevel);
+	}
+
+	private void updateZoomLevel() {
+		this.zoomLevel = 1/Math.sqrt(Math.abs(transform.determinant()));
 	}
 
 	private void clearCanvas() {
