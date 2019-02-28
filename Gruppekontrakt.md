@@ -40,9 +40,9 @@ Ydermere er det vigtigt, at der afleveres til tiden, og, at medlemmerne laver de
 >Et medlem sanktioneres ved, at vedkommende skal medbringe snacks til næste møde, eller give øl til fredagsbar. Det er op til de resterende medlemmer at bestemme det! 
 
 ## Andre Ansvar
-**Ugentligt aflevering:** Anders   
-**Changelog:** Også Anders  
-**Planlægning af opgaver:** Tobias
+* **Ugentligt aflevering:** Anders
+* **Changelog:** Også Anders
+* **Planlægning af opgaver:** Tobias
 
 ## Uddelegering af opgaver
 Der sørges for, at alle medlemmer har lavet vigtige opgaver. 
