@@ -59,7 +59,7 @@ Som udgangspunkt bestemmer flertallet, men det er vigtigt for gruppen, at alle f
 Som tidligere nævnt, vil gruppen så vidt muligt, sørge for, at alle medlemmer, til en hvis grad, forstår alt kode, og dets overordnede funktionallitet. Ydermere er det mugligt for medlemmer, at skrive sammen to og to, hvis behovet skulle opstå. Det er vigtigt for gruppen at hjælpe hinanden, og det er tilladt at stille "dumme" spørgsmål. 
 
 ## Kodeændringer
-Medlemmer må som udagngspunkt ikke ændre i andres kode, så længe det er i feature/develop branch. Er koden merget ind i master, er det dog tilladt at ændre i det, som en ny feature. 
+Medlemmer må som udgangspunkt ikke ændre i andres kode, så længe det er i feature/develop branch. Er koden merget ind i master, er det dog tilladt at ændre i det, som en ny feature. 
 
 
 ## Opfølge på gruppekontrakt
