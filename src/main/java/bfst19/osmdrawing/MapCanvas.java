@@ -22,13 +22,21 @@ public class MapCanvas extends Canvas {
 		transform.prependScale(1,-1, 0, 0);
 		gc.setFillRule(FillRule.EVEN_ODD);
 		model.addObserver(this::repaint);
+		makeCanvasUpdateOnResize();
 		repaint();
+
 	}
+
 
 	public void repaint() {
 		clearBackground();
 		updateLineWidth();
 		DrawShapes();
+	}
+
+	private void makeCanvasUpdateOnResize() {
+		this.widthProperty().addListener(observable -> repaint());
+		this.heightProperty().addListener(observable -> repaint());
 	}
 
 	private void clearBackground() {
