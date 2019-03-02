@@ -31,7 +31,7 @@ public class MapCanvas extends Canvas {
 	public void repaint() {
 		clearBackground();
 		updateLineWidth();
-		DrawShapes();
+		drawShapes();
 	}
 
 	private void makeCanvasUpdateOnResize() {
@@ -59,7 +59,7 @@ public class MapCanvas extends Canvas {
 		gc.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
 	}
 
-	private void DrawShapes() {
+	private void drawShapes() {
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				gc.setFill(wayType.getFillColor());
