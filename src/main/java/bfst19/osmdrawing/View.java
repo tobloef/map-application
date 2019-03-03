@@ -19,8 +19,8 @@ public class View {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("View.fxml"));
 		Scene scene = loader.load();
 		Controller controller = loader.getController();
-		controller.init(model);
 		stage.setScene(scene);
 		stage.show();
+		controller.init(model);
 	}
 }
