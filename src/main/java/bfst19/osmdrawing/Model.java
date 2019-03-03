@@ -34,6 +34,7 @@ public class Model {
 	}
 
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
+		initializeWaysEnumMap();
 		String filename = args.get(0);
 		InputStream osmsource;
 		long time = -System.nanoTime();
@@ -102,8 +103,6 @@ public class Model {
 				case COMMENT: break;
 				case SPACE: break;
 				case START_DOCUMENT:
-					startElement();
-					break;
 				case END_DOCUMENT:
 					endDocument();
 					break;
@@ -116,10 +115,6 @@ public class Model {
 				case ENTITY_DECLARATION: break;
 			}
 		}
-	}
-
-	private void startElement() {
-		initializeWaysEnumMap();
 	}
 
 	private void endDocument() {
