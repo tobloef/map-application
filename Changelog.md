@@ -5,10 +5,11 @@ Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige rel
 ### Tilføjet
 - Gruppekontrakt (Ligger i Github Wiki)
 - OSMDrawing
-- WayTypeFactory
+- WayTypeFactory: en nemmere måde at definere hvad type en bestemt key-value pair hører til.
 
 ### Ændringer
 - Refaktorisering af model parsing
 - Ændret farverne
 
 ### Bugs osv.
+- Coasts tegnes ikke korrekt
