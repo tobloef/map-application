@@ -12,4 +12,3 @@ Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige rel
 - Ændret farverne
 
 ### Bugs osv.
-- Coasts tegnes ikke korrekt
