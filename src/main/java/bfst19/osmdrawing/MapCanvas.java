@@ -42,9 +42,9 @@ public class MapCanvas extends Canvas {
 	private void clearBackground() {
 		gc.setTransform(new Affine());
 		if (model.getWaysOfType(WayType.COASTLINE).iterator().hasNext()) {
-			gc.setFill(Color.BLUE);
+			gc.setFill(WayType.WATER.getFillColor());
 		} else {
-			gc.setFill(Color.GREEN);
+			gc.setFill(WayType.COASTLINE.getFillColor());
 		}
 		gc.fillRect(0, 0, getWidth(), getHeight());
 		gc.setTransform(transform);
