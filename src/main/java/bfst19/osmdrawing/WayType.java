@@ -25,6 +25,7 @@ public enum WayType {
 	PARK(Color.LIGHTGREEN, null),
 	SWIMMINGPOOL(Color.LIGHTSKYBLUE, null),
 	PLAYGROUND(Color.MEDIUMAQUAMARINE, null),
+	INTERSTATE(Color.LIGHTGREY, null),
 	BUILDING(Color.DARKGRAY, null),
 	UNKNOWN(null, Color.BLACK),
 	RAILWAY(null, Color.LIGHTGRAY, 2),

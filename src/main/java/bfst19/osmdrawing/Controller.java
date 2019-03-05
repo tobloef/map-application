@@ -42,7 +42,9 @@ public class Controller {
 
 	@FXML
 	private void onMouseDragged(MouseEvent e) {
-		if (e.isPrimaryButtonDown()) mapCanvas.pan(e.getX() - x, e.getY() - y);
+		if (e.isPrimaryButtonDown()) {
+			mapCanvas.pan(e.getX() - x, e.getY() - y);
+		}
 		x = e.getX();
 		y = e.getY();
 	}

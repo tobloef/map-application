@@ -51,6 +51,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void panViewToModel() {
+		//This repaints the map twice.
 		pan(-model.minlon, -model.maxlat);
 		zoom(getWidth()/(model.maxlon-model.minlon), 0,0);
 	}

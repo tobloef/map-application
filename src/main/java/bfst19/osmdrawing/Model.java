@@ -98,26 +98,15 @@ public class Model {
 				case END_ELEMENT:
 					endElement(reader);
 					break;
-				case PROCESSING_INSTRUCTION: break;
-				case CHARACTERS: break;
-				case COMMENT: break;
-				case SPACE: break;
-				case START_DOCUMENT:
 				case END_DOCUMENT:
 					endDocument();
 					break;
-				case ENTITY_REFERENCE: break;
-				case ATTRIBUTE: break;
-				case DTD: break;
-				case CDATA: break;
-				case NAMESPACE: break;
-				case NOTATION_DECLARATION: break;
-				case ENTITY_DECLARATION: break;
 			}
 		}
 	}
 
 	private void endDocument() {
+		//Get a list of merged coastlines.
 		for (OSMWay c : merge(coast)) {
 			ways.get(WayType.COASTLINE).add(new Polyline(c));
 		}
