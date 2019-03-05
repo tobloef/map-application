@@ -21,7 +21,7 @@ public class Model {
 	List<Runnable> observers = new ArrayList<>();
 	float minlat, minlon, maxlat, maxlon;
 
-	public Iterable<Drawable> getWaysOfType(WayType type) {
+	public Iterable<Drawable> getWaysOfType(WayType type, ModelBounds modelBounds) {
 		return ways.get(type);
 	}
 
