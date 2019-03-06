@@ -10,6 +10,10 @@ public class ModelBounds {
 		this.ymax = ymax;
 	}
 
+	public ModelBounds() {
+
+	}
+
 	@Override
 	public String toString() {
 		return "" + xmin + " " + ymin + " " + xmax + " " + ymax;

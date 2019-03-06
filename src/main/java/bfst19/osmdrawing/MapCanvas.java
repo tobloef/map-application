@@ -49,8 +49,8 @@ public class MapCanvas extends Canvas {
 
 	private void panViewToModel() {
 		//This repaints the map twice.
-		pan(-model.minlon, -model.maxlat);
-		zoom(getWidth()/(model.maxlon-model.minlon), 0,0);
+		pan(-model.bounds.xmin, -model.bounds.ymax);
+		zoom(getWidth()/(model.bounds.xmax-model.bounds.xmin), 0,0);
 	}
 
 	private void updateLineWidth() {
