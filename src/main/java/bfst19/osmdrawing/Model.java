@@ -1,13 +1,8 @@
 package bfst19.osmdrawing;
 
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.util.*;
-import java.util.zip.ZipInputStream;
-
-import static javax.xml.stream.XMLStreamConstants.*;
 
 public class Model {
 	DrawableModel drawableModel = new BasicDrawableModel();

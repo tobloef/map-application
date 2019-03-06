@@ -1,6 +1,5 @@
 package bfst19.osmdrawing;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
