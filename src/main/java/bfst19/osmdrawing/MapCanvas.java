@@ -59,7 +59,6 @@ public class MapCanvas extends Canvas {
 
 	private void drawShapes() {
 		ModelBounds modelBounds = getModelBounds();
-		System.out.println(modelBounds.toString());
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				gc.setFill(wayType.getFillColor());
