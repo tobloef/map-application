@@ -1,15 +1,12 @@
 package bfst19.osmdrawing;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.stage.Stage;
 
 public class MapCanvas extends Canvas {
 	GraphicsContext gc = getGraphicsContext2D();
@@ -41,7 +38,7 @@ public class MapCanvas extends Canvas {
 
 	private void clearBackground() {
 		gc.setTransform(new Affine());
-		if (model.getWaysOfType(WayType.COASTLINE).iterator().hasNext()) {
+		if (model.getWaysOfType(WayType.COASTLINE, getModelBounds()).iterator().hasNext()) {
 			gc.setFill(WayType.WATER.getFillColor());
 		} else {
 			gc.setFill(WayType.COASTLINE.getFillColor());
@@ -52,8 +49,8 @@ public class MapCanvas extends Canvas {
 
 	private void panViewToModel() {
 		//This repaints the map twice.
-		pan(-model.minlon, -model.maxlat);
-		zoom(getWidth()/(model.maxlon-model.minlon), 0,0);
+		pan(-model.bounds.xmin, -model.bounds.ymax);
+		zoom(getWidth()/(model.bounds.xmax-model.bounds.xmin), 0,0);
 	}
 
 	private void updateLineWidth() {
@@ -61,17 +58,18 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void drawShapes() {
+		Rectangle modelBounds = getModelBounds();
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				gc.setFill(wayType.getFillColor());
-				for (Drawable way : model.getWaysOfType(wayType)) {
+				for (Drawable way : model.getWaysOfType(wayType, modelBounds)) {
 					way.fill(gc);
 				}
 			}
 			if (wayType.hasStroke()) {
 				gc.setLineDashes(wayType.getLineDash() / 10000);
 				gc.setStroke(wayType.getStrokeColor());
-				for (Drawable way : model.getWaysOfType(wayType)){
+				for (Drawable way : model.getWaysOfType(wayType, modelBounds)){
 					way.stroke(gc);
 				}
 			}
@@ -95,5 +93,12 @@ public class MapCanvas extends Canvas {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private Rectangle getModelBounds(){
+		Bounds bounds = this.getBoundsInLocal();
+		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
+		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
+		return new Rectangle((float)min.getX(), (float)min.getY(), (float)max.getX(), (float)max.getY());
 	}
 }
