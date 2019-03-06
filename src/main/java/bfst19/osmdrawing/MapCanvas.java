@@ -58,17 +58,19 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void drawShapes() {
+		ModelBounds modelBounds = getModelBounds();
+		System.out.println(modelBounds.toString());
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				gc.setFill(wayType.getFillColor());
-				for (Drawable way : model.getWaysOfType(wayType,  getModelBounds())) {
+				for (Drawable way : model.getWaysOfType(wayType, modelBounds)) {
 					way.fill(gc);
 				}
 			}
 			if (wayType.hasStroke()) {
 				gc.setLineDashes(wayType.getLineDash() / 10000);
 				gc.setStroke(wayType.getStrokeColor());
-				for (Drawable way : model.getWaysOfType(wayType, getModelBounds())){
+				for (Drawable way : model.getWaysOfType(wayType, modelBounds)){
 					way.stroke(gc);
 				}
 			}
@@ -97,7 +99,7 @@ public class MapCanvas extends Canvas {
 	private ModelBounds getModelBounds(){
 		Bounds bounds = this.getBoundsInLocal();
 		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
-		Point2D max = modelCoords(bounds.getMinX(), bounds.getMinY());
+		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
 		return new ModelBounds(min.getX(), min.getY(), max.getX(), max.getY());
 	}
 }
