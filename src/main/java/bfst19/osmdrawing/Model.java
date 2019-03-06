@@ -45,10 +45,11 @@ public class Model {
 	private void parseObj(String filename) throws IOException, ClassNotFoundException {
 		try (ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
 			ways = (Map<WayType, List<Drawable>>) input.readObject();
+			bounds = new ModelBounds();
 			bounds.ymin = input.readDouble();
 			bounds.xmin = input.readDouble();
 			bounds.ymax = input.readDouble();
-			bounds.ymax = input.readDouble();
+			bounds.xmax = input.readDouble();
 		}
 	}
 
