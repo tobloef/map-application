@@ -1,7 +1,5 @@
 package bfst19.osmdrawing;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;
@@ -17,11 +15,11 @@ class OSMParserTest {
 		DrawableModel drawableModel = new BasicDrawableModel();
 		String filePath = this.getClass().getResource("small.osm").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
-		System.out.println(osmParser.getBounds().ymin);
-		assertEquals(55.6631 ,osmParser.getBounds().ymin, 0.02);
-		assertEquals(7.090 ,osmParser.getBounds().xmin, 0.02);
-		assertEquals(55.6804 ,osmParser.getBounds().ymax, 0.02);
-		assertEquals(7.1073 ,osmParser.getBounds().xmax, 0.02);
+		System.out.println(osmParser.getModelBounds().ymin);
+		assertEquals(55.6631 ,osmParser.getModelBounds().ymin, 0.02);
+		assertEquals(7.090 ,osmParser.getModelBounds().xmin, 0.02);
+		assertEquals(55.6804 ,osmParser.getModelBounds().ymax, 0.02);
+		assertEquals(7.1073 ,osmParser.getModelBounds().xmax, 0.02);
 	}
 
 	@Test
@@ -30,10 +28,10 @@ class OSMParserTest {
 		DrawableModel drawableModel = new BasicDrawableModel();
 		String filePath = this.getClass().getResource("small.zip").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
-		System.out.println(osmParser.getBounds().ymin);
-		assertEquals(55.6631 ,osmParser.getBounds().ymin, 0.02);
-		assertEquals(7.090 ,osmParser.getBounds().xmin, 0.02);
-		assertEquals(55.6804 ,osmParser.getBounds().ymax, 0.02);
-		assertEquals(7.1073 ,osmParser.getBounds().xmax, 0.02);
+		System.out.println(osmParser.getModelBounds().ymin);
+		assertEquals(55.6631 ,osmParser.getModelBounds().ymin, 0.02);
+		assertEquals(7.090 ,osmParser.getModelBounds().xmin, 0.02);
+		assertEquals(55.6804 ,osmParser.getModelBounds().ymax, 0.02);
+		assertEquals(7.1073 ,osmParser.getModelBounds().xmax, 0.02);
 	}
 }

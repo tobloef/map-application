@@ -7,7 +7,7 @@ import java.util.*;
 public class Model {
 	DrawableModel drawableModel = new BasicDrawableModel();
 	List<Runnable> observers = new ArrayList<>();
-	Rectangle bounds;
+	Rectangle modelBounds;
 
 	public Iterable<Drawable> getWaysOfType(WayType type, Rectangle modelBounds) {
 		return drawableModel.getDrawablesOfType(type, modelBounds);
@@ -28,7 +28,7 @@ public class Model {
 			parseObj(filename);
 		} else {
 			OSMParser parser = new OSMParser(filename, drawableModel);
-			bounds = parser.getBounds();
+			modelBounds = parser.getModelBounds();
 			serializeData(filename);
 		}
 		time += System.nanoTime();
@@ -38,21 +38,21 @@ public class Model {
 	private void parseObj(String filename) throws IOException, ClassNotFoundException {
 		try (ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
 			drawableModel = (BasicDrawableModel) input.readObject();
-			bounds = new Rectangle();
-			bounds.ymin = input.readFloat();
-			bounds.xmin = input.readFloat();
-			bounds.ymax = input.readFloat();
-			bounds.xmax = input.readFloat();
+			modelBounds = new Rectangle();
+			modelBounds.ymin = input.readFloat();
+			modelBounds.xmin = input.readFloat();
+			modelBounds.ymax = input.readFloat();
+			modelBounds.xmax = input.readFloat();
 		}
 	}
 
 	private void serializeData(String filename) throws IOException {
 		try (ObjectOutputStream output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename + ".obj")))) {
 			output.writeObject(drawableModel);
-			output.writeFloat(bounds.ymin);
-			output.writeFloat(bounds.xmin);
-			output.writeFloat(bounds.ymax);
-			output.writeFloat(bounds.xmax);
+			output.writeFloat(modelBounds.ymin);
+			output.writeFloat(modelBounds.xmin);
+			output.writeFloat(modelBounds.ymax);
+			output.writeFloat(modelBounds.xmax);
 		}
 	}
 

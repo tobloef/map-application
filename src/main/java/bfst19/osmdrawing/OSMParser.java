@@ -208,7 +208,7 @@ public class OSMParser {
 		return pieces.values();
 	}
 
-	public Rectangle getBounds() {
+	public Rectangle getModelBounds() {
 		return bounds;
 	}
 }
