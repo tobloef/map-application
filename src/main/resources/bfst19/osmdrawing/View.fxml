@@ -3,24 +3,26 @@
 <?import bfst19.osmdrawing.MapCanvas?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.Scene?>
+<?import javafx.scene.layout.VBox?>
+
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
        fx:controller="bfst19.osmdrawing.Controller"
        fx:id="scene"
-       onKeyPressed="#onKeyPressed"
->
-    <root>
-        <BorderPane prefHeight="400.0" prefWidth="600.0">
-            <center>
-                <MapCanvas fx:id="mapCanvas"
-                           width="${scene.width}"
-                           height="${scene.height}"
-                           onScroll="#onScroll"
-                           onMousePressed="#onMousePressed"
-                           onMouseDragged="#onMouseDragged"
-                />
-            </center>
-        </BorderPane>
-    </root>
+       onKeyPressed="#onKeyPressed">
+        <VBox>
+            <fx:include source="TopMenu.fxml"/>
+            <BorderPane prefHeight="600.0" prefWidth="800.0">
+                <center>
+                    <MapCanvas fx:id="mapCanvas"
+                               width="${scene.width}"
+                               height="${scene.height}"
+                               onScroll="#onScroll"
+                               onMousePressed="#onMousePressed"
+                               onMouseDragged="#onMouseDragged"
+                    />
+                </center>
+            </BorderPane>
+        </VBox>
 </Scene>
 
