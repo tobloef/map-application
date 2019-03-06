@@ -17,12 +17,12 @@ public class OSMParser {
 	OSMWay way = null;
 	OSMRelation rel = null;
 	WayType type = null;
-	Map<WayType,List<Drawable>> ways;
+	DrawableModel drawableModel;
 	ModelBounds bounds = new ModelBounds();
 
-	public OSMParser(String filename, Map<WayType, List<Drawable>> ways) throws IOException, XMLStreamException {
+	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmsource;
-		this.ways = ways;
+		this.drawableModel = drawableModel;
 		if (filename.endsWith(".zip")) {
 			osmsource = getZipFile(filename);
 		} else {
@@ -69,7 +69,7 @@ public class OSMParser {
 	private void endDocument() {
 		//Get a list of merged coastlines.
 		for (OSMWay c : merge(coast)) {
-			ways.get(WayType.COASTLINE).add(new Polyline(c));
+			drawableModel.add(WayType.COASTLINE, new Polyline(c));
 		}
 	}
 
@@ -86,7 +86,7 @@ public class OSMParser {
 
 	private void endElementRelation() {
 		if (type == WayType.WATER) {
-			ways.get(type).add(new MultiPolyline(rel));
+			drawableModel.add(type, new MultiPolyline(rel));
 			way = null;
 		}
 	}
@@ -95,7 +95,7 @@ public class OSMParser {
 		if (type == WayType.COASTLINE) {
 			coast.add(way);
 		} else {
-			ways.get(type).add(new Polyline(way));
+			drawableModel.add(type, new Polyline(way));
 		}
 		way = null;
 	}

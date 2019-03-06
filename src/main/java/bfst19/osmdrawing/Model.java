@@ -10,13 +10,12 @@ import java.util.zip.ZipInputStream;
 import static javax.xml.stream.XMLStreamConstants.*;
 
 public class Model {
-
-	Map<WayType,List<Drawable>> ways = new EnumMap<>(WayType.class);
+	DrawableModel drawableModel = new BasicDrawableModel();
 	List<Runnable> observers = new ArrayList<>();
 	ModelBounds bounds;
 
 	public Iterable<Drawable> getWaysOfType(WayType type, ModelBounds modelBounds) {
-		return ways.get(type);
+		return drawableModel.getDrawablesOfType(type, modelBounds);
 	}
 
 	public void addObserver(Runnable observer) {
@@ -28,13 +27,12 @@ public class Model {
 	}
 
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
-		initializeWaysEnumMap();
 		String filename = args.get(0);
 		long time = -System.nanoTime();
 		if (filename.endsWith(".obj")) {
 			parseObj(filename);
 		} else {
-			OSMParser parser = new OSMParser(filename, ways);
+			OSMParser parser = new OSMParser(filename, drawableModel);
 			bounds = parser.getBounds();
 			serializeData(filename);
 		}
@@ -44,7 +42,7 @@ public class Model {
 
 	private void parseObj(String filename) throws IOException, ClassNotFoundException {
 		try (ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
-			ways = (Map<WayType, List<Drawable>>) input.readObject();
+			drawableModel = (BasicDrawableModel) input.readObject();
 			bounds = new ModelBounds();
 			bounds.ymin = input.readDouble();
 			bounds.xmin = input.readDouble();
@@ -55,7 +53,7 @@ public class Model {
 
 	private void serializeData(String filename) throws IOException {
 		try (ObjectOutputStream output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename + ".obj")))) {
-			output.writeObject(ways);
+			output.writeObject(drawableModel);
 			output.writeDouble(bounds.ymin);
 			output.writeDouble(bounds.xmin);
 			output.writeDouble(bounds.ymax);
@@ -63,10 +61,5 @@ public class Model {
 		}
 	}
 
-	private void initializeWaysEnumMap() {
-		ways = new EnumMap<>(WayType.class);
-		for (WayType type : WayType.values()) {
-			ways.put(type, new ArrayList<>());
-		}
-	}
+
 }
