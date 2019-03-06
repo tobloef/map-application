@@ -14,9 +14,9 @@ public class OSMParser {
 	LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
 	LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
 	List<OSMWay> coast = new ArrayList<>();
-	OSMWay way = null;
-	OSMRelation rel = null;
-	WayType type = null;
+	OSMWay currentWay = null;
+	OSMRelation currentRelation = null;
+	WayType currentType = null;
 	DrawableModel drawableModel;
 	ModelBounds bounds = new ModelBounds();
 
@@ -29,6 +29,7 @@ public class OSMParser {
 			osmsource = getOsmFile(filename);
 		}
 		parseOSM(osmsource);
+		drawableModel.doneAdding();
 	}
 
 
@@ -85,19 +86,19 @@ public class OSMParser {
 	}
 
 	private void endElementRelation() {
-		if (type == WayType.WATER) {
-			drawableModel.add(type, new MultiPolyline(rel));
-			way = null;
+		if (currentType == WayType.WATER) {
+			drawableModel.add(currentType, new MultiPolyline(currentRelation));
+			currentWay = null;
 		}
 	}
 
 	private void endElementWay() {
-		if (type == WayType.COASTLINE) {
-			coast.add(way);
+		if (currentType == WayType.COASTLINE) {
+			coast.add(currentWay);
 		} else {
-			drawableModel.add(type, new Polyline(way));
+			drawableModel.add(currentType, new Polyline(currentWay));
 		}
-		way = null;
+		currentWay = null;
 	}
 
 	private void startElement(XMLStreamReader reader) {
@@ -133,36 +134,36 @@ public class OSMParser {
 		long ref;
 		ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		OSMWay member = idToWay.get(ref);
-		if (member != null) rel.add(member);
+		if (member != null) currentRelation.add(member);
 	}
 
 	private void startElementRelation() {
-		type = WayType.UNKNOWN;
-		rel = new OSMRelation();
+		currentType = WayType.UNKNOWN;
+		currentRelation = new OSMRelation();
 	}
 
 	private void startElementTag(XMLStreamReader reader) {
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
-		if (way != null || rel != null) {
+		if (currentWay != null || currentRelation != null) {
 			WayType type = WayTypeFactory.getType(k, v);
 			if (type != null){
-				this.type = type;
+				this.currentType = type;
 			}
 		}
 	}
 
 	private void startElementNd(XMLStreamReader reader) {
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
-		way.add(idToNode.get(ref));
+		currentWay.add(idToNode.get(ref));
 	}
 
 	private void startElementWay(XMLStreamReader reader) {
 		long id;
 		id = Long.parseLong(reader.getAttributeValue(null, "id"));
-		type = WayType.UNKNOWN;
-		way = new OSMWay(id);
-		idToWay.add(way);
+		currentType = WayType.UNKNOWN;
+		currentWay = new OSMWay(id);
+		idToWay.add(currentWay);
 	}
 
 	private void startElementNode(XMLStreamReader reader) {

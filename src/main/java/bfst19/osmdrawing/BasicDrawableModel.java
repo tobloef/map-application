@@ -6,7 +6,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class BasicDrawableModel implements DrawableModel, Serializable {
+public class BasicDrawableModel implements DrawableModel {
 
 	Map<WayType, List<Drawable>> wayTypeEnumMap = new EnumMap<>(WayType.class);
 
@@ -23,6 +23,11 @@ public class BasicDrawableModel implements DrawableModel, Serializable {
 	@Override
 	public Iterable<Drawable> getDrawablesOfType(WayType type, ModelBounds bounds) {
 		return wayTypeEnumMap.get(type);
+	}
+
+	@Override
+	public void doneAdding() {
+		return; //Does nothing in this model, but is needed for more complex models.
 	}
 
 	private void initializeWaysEnumMap() {
