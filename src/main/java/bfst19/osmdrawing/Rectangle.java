@@ -1,17 +1,17 @@
 package bfst19.osmdrawing;
 
-public class ModelBounds {
-	double xmin, ymin, xmax, ymax;
+public class Rectangle {
+	float xmin, ymin, xmax, ymax;
 
-	public ModelBounds(double xmin, double ymin, double xmax, double ymax) {
+	public Rectangle(float xmin, float ymin, float xmax, float ymax) {
 		this.xmin = xmin;
 		this.ymin = ymin;
 		this.xmax = xmax;
 		this.ymax = ymax;
 	}
 
-	public ModelBounds() {
-
+	public Rectangle() {
+		//Empty on purpose
 	}
 
 	@Override

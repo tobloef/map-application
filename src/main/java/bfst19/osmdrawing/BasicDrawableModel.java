@@ -20,7 +20,7 @@ public class BasicDrawableModel implements DrawableModel {
 	}
 
 	@Override
-	public Iterable<Drawable> getDrawablesOfType(WayType type, ModelBounds bounds) {
+	public Iterable<Drawable> getDrawablesOfType(WayType type, Rectangle bounds) {
 		return wayTypeEnumMap.get(type);
 	}
 

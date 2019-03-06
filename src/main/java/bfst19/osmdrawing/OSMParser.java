@@ -18,7 +18,7 @@ public class OSMParser {
 	OSMRelation currentRelation = null;
 	WayType currentType = null;
 	DrawableModel drawableModel;
-	ModelBounds bounds = new ModelBounds();
+	Rectangle bounds = new Rectangle();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmsource;
@@ -174,10 +174,10 @@ public class OSMParser {
 	}
 
 	private void startElementBounds(XMLStreamReader reader) {
-		bounds.ymin = Double.parseDouble(reader.getAttributeValue(null, "minlat"));
-		bounds.xmin = Double.parseDouble(reader.getAttributeValue(null, "minlon"));
-		bounds.ymax = Double.parseDouble(reader.getAttributeValue(null, "maxlat"));
-		bounds.xmax = Double.parseDouble(reader.getAttributeValue(null, "maxlon"));
+		bounds.ymin = Float.parseFloat(reader.getAttributeValue(null, "minlat"));
+		bounds.xmin = Float.parseFloat(reader.getAttributeValue(null, "minlon"));
+		bounds.ymax = Float.parseFloat(reader.getAttributeValue(null, "maxlat"));
+		bounds.xmax = Float.parseFloat(reader.getAttributeValue(null, "maxlon"));
 		lonFactor = (float) Math.cos((bounds.ymax+bounds.ymin)/2*Math.PI/180);
 		bounds.xmin *= lonFactor;
 		bounds.xmax *= lonFactor;
@@ -208,7 +208,7 @@ public class OSMParser {
 		return pieces.values();
 	}
 
-	public ModelBounds getBounds() {
+	public Rectangle getBounds() {
 		return bounds;
 	}
 }

@@ -58,7 +58,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void drawShapes() {
-		ModelBounds modelBounds = getModelBounds();
+		Rectangle modelBounds = getModelBounds();
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				gc.setFill(wayType.getFillColor());
@@ -95,10 +95,10 @@ public class MapCanvas extends Canvas {
 		}
 	}
 
-	private ModelBounds getModelBounds(){
+	private Rectangle getModelBounds(){
 		Bounds bounds = this.getBoundsInLocal();
 		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
 		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
-		return new ModelBounds(min.getX(), min.getY(), max.getX(), max.getY());
+		return new Rectangle((float)min.getX(), (float)min.getY(), (float)max.getX(), (float)max.getY());
 	}
 }
