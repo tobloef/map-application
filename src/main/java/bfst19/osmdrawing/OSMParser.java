@@ -10,10 +10,10 @@ import java.util.zip.ZipInputStream;
 import static javax.xml.stream.XMLStreamConstants.*;
 
 public class OSMParser {
-	float lonfactor = 1.0f;
+	float lonFactor = 1.0f;
 	LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
 	LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
-	List<OSMWay> coast = new ArrayList<>();
+	List<OSMWay> coastLines = new ArrayList<>();
 	OSMWay currentWay = null;
 	OSMRelation currentRelation = null;
 	WayType currentType = null;
@@ -69,7 +69,7 @@ public class OSMParser {
 
 	private void endDocument() {
 		//Get a list of merged coastlines.
-		for (OSMWay c : merge(coast)) {
+		for (OSMWay c : merge(coastLines)) {
 			drawableModel.add(WayType.COASTLINE, new Polyline(c));
 		}
 	}
@@ -94,7 +94,7 @@ public class OSMParser {
 
 	private void endElementWay() {
 		if (currentType == WayType.COASTLINE) {
-			coast.add(currentWay);
+			coastLines.add(currentWay);
 		} else {
 			drawableModel.add(currentType, new Polyline(currentWay));
 		}
@@ -169,7 +169,7 @@ public class OSMParser {
 	private void startElementNode(XMLStreamReader reader) {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		float lat = Float.parseFloat(reader.getAttributeValue(null, "lat"));
-		float lon = lonfactor * Float.parseFloat(reader.getAttributeValue(null, "lon"));
+		float lon = lonFactor * Float.parseFloat(reader.getAttributeValue(null, "lon"));
 		idToNode.add(new OSMNode(id,lon, lat));
 	}
 
@@ -178,9 +178,9 @@ public class OSMParser {
 		bounds.xmin = Double.parseDouble(reader.getAttributeValue(null, "minlon"));
 		bounds.ymax = Double.parseDouble(reader.getAttributeValue(null, "maxlat"));
 		bounds.xmax = Double.parseDouble(reader.getAttributeValue(null, "maxlon"));
-		lonfactor = (float) Math.cos((bounds.ymax+bounds.ymin)/2*Math.PI/180);
-		bounds.xmin *= lonfactor;
-		bounds.xmax *= lonfactor;
+		lonFactor = (float) Math.cos((bounds.ymax+bounds.ymin)/2*Math.PI/180);
+		bounds.xmin *= lonFactor;
+		bounds.xmax *= lonFactor;
 	}
 
 	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
