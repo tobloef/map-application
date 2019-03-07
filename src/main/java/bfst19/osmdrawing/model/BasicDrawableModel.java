@@ -1,4 +1,6 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.model;
+
+import bfst19.osmdrawing.view.WayType;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

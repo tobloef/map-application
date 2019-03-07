@@ -1,5 +1,8 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.view;
 
+import bfst19.osmdrawing.model.Drawable;
+import bfst19.osmdrawing.model.Model;
+import bfst19.osmdrawing.model.Rectangle;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;

@@ -1,16 +1,9 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.view;
 
+import bfst19.osmdrawing.controller.Controller;
+import bfst19.osmdrawing.model.Model;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.stage.Stage;
 
 import java.io.IOException;

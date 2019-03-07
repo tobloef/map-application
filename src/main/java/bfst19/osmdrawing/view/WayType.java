@@ -1,5 +1,5 @@
 
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.view;
 
 import javafx.scene.paint.Color;
 //The wayTypes are drawed in the order they are written in

@@ -1,13 +1,10 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.view;
 
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
+import bfst19.osmdrawing.model.Model;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
 
 import java.util.ArrayList;
 import java.util.List;
