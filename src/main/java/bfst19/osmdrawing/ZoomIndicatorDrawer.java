@@ -15,7 +15,7 @@ public class ZoomIndicatorDrawer implements Drawer {
 	private int margin = 5;
 	private int boxWidth = 100;
 	private int boxHeight = 30;
-	private int bottomOffset = boxHeight - margin;
+	private int bottomOffset = 0;
 
 	public ZoomIndicatorDrawer(MapCanvas canvas) {
 		this.canvas = canvas;
@@ -46,11 +46,20 @@ public class ZoomIndicatorDrawer implements Drawer {
 
 	private void drawText() {
 		double distance = (boxWidth - (margin * 2)) * canvas.getZoomFactor() * 111;
+		String unit = "km";
+		if (distance < 1) {
+			distance *= 1000;
+			unit = "m";
+		}
+		renderText(distance, unit);
+	}
+
+	private void renderText(double distance, String unit) {
 		Font font = new Font(10);
 		graphicsContext.setLineWidth(0);
 		graphicsContext.setFont(font);
 		graphicsContext.setTextAlign(TextAlignment.CENTER);
-		graphicsContext.strokeText(String.format("%.1f km", distance), margin + boxWidth / 2f, canvas.getHeight() - (bottomOffset + margin + boxHeight / 2f));
+		graphicsContext.strokeText(String.format("%.1f " + unit, distance), margin + boxWidth / 2f, canvas.getHeight() - (bottomOffset + margin + boxHeight / 2f));
 	}
 
 	private void drawBlackBars() {
