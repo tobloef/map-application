@@ -48,9 +48,7 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
-run {
-    args = ['data/copenhagen.zip']
-}
+
 
 test {
     testLogging {
@@ -60,3 +58,5 @@ test {
 test {
     useJUnitPlatform()
 }
+
+apply from: 'args.gradle'

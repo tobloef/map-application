@@ -1,0 +1,3 @@
+run {
+    args = ['data/copenhagen.zip']
+}
