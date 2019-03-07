@@ -1,5 +1,6 @@
 package bfst19.osmdrawing;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -7,10 +8,12 @@ import javafx.scene.transform.Affine;
 
 
 public class ZoomIndicatorDrawer implements Drawer {
+	private Canvas canvas;
 	private GraphicsContext graphicsContext;
 
-	public ZoomIndicatorDrawer(GraphicsContext graphicsContext) {
-		this.graphicsContext = graphicsContext;
+	public ZoomIndicatorDrawer(Canvas canvas) {
+		this.canvas = canvas;
+		this.graphicsContext = canvas.getGraphicsContext2D();
 	}
 
 	@Override

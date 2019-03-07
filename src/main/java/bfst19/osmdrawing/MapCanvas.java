@@ -18,8 +18,8 @@ public class MapCanvas extends Canvas {
 
 	public void init(Model model) {
 		this.model = model;
-		mapDrawer = new MapDrawer(graphicsContext, model);
-		zoomIndicatorDrawer = new ZoomIndicatorDrawer(graphicsContext);
+		mapDrawer = new MapDrawer(this, model);
+		zoomIndicatorDrawer = new ZoomIndicatorDrawer(this);
 		panViewToModel();
 		transform.prependScale(1,-1, 0, 0);
 		graphicsContext.setFillRule(FillRule.EVEN_ODD);
@@ -45,12 +45,7 @@ public class MapCanvas extends Canvas {
 
 	private void clearBackground() {
 		graphicsContext.setTransform(new Affine());
-		if (model.getWaysOfType(WayType.COASTLINE, getModelBounds()).iterator().hasNext()) {
-			graphicsContext.setFill(WayType.WATER.getFillColor());
-		} else {
-			graphicsContext.setFill(WayType.COASTLINE.getFillColor());
-		}
-		graphicsContext.fillRect(0, 0, getWidth(), getHeight());
+
 		graphicsContext.setTransform(transform);
 	}
 
@@ -73,21 +68,5 @@ public class MapCanvas extends Canvas {
 	public void zoom(double factor, double x, double y) {
 		transform.prependScale(factor, factor, x, y);
 		repaint();
-	}
-
-	public Point2D modelCoords(double x, double y) {
-		try {
-			return transform.inverseTransform(x, y);
-		} catch (NonInvertibleTransformException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private Rectangle getModelBounds(){
-		Bounds bounds = this.getBoundsInLocal();
-		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
-		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
-		return new Rectangle((float)min.getX(), (float)min.getY(), (float)max.getX(), (float)max.getY());
 	}
 }
