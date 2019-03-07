@@ -14,7 +14,7 @@ public class ZoomIndicatorDrawer implements Drawer {
 	private GraphicsContext graphicsContext;
 	private int margin = 5;
 	private int boxWidth = 100;
-	private int boxHeight = 30;
+	private int boxHeight = 20;
 	private int bottomOffset = 0;
 
 	public ZoomIndicatorDrawer(MapCanvas canvas) {

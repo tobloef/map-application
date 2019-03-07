@@ -9,17 +9,18 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapCanvas extends Canvas {
-	private GraphicsContext graphicsContext = getGraphicsContext2D();
+	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
 	private Affine transform = new Affine();
 	private Model model;
-	private MapDrawer mapDrawer;
-	private ZoomIndicatorDrawer zoomIndicatorDrawer;
+	private List<Drawer> drawers;
 
-	public void init(Model model) {
+	public void initialize(Model model) {
 		this.model = model;
-		mapDrawer = new MapDrawer(this, model);
-		zoomIndicatorDrawer = new ZoomIndicatorDrawer(this);
+		initializeDrawers(model);
 		panViewToModel();
 		transform.prependScale(1,-1, 0, 0);
 		graphicsContext.setFillRule(FillRule.EVEN_ODD);
@@ -29,13 +30,20 @@ public class MapCanvas extends Canvas {
 
 	}
 
+	private void initializeDrawers(Model model) {
+		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
+		drawers = new ArrayList<>();
+		drawers.add( new MapDrawer(this, model));
+		drawers.add(new ZoomIndicatorDrawer(this));
+	}
+
 
 	public void repaint() {
 		clearBackground();
 		updateLineWidth();
-		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
-		mapDrawer.draw();
-		zoomIndicatorDrawer.draw();
+		for (Drawer drawer : drawers) {
+			drawer.draw();
+		}
 	}
 
 	private void makeCanvasUpdateOnResize() {
@@ -45,7 +53,7 @@ public class MapCanvas extends Canvas {
 
 	private void clearBackground() {
 		graphicsContext.setTransform(new Affine());
-
+		graphicsContext.clearRect(0,0, getWidth(), getHeight());
 		graphicsContext.setTransform(transform);
 	}
 
@@ -60,8 +68,8 @@ public class MapCanvas extends Canvas {
 	}
 
 
-	public void pan(double dx, double dy) {
-		transform.prependTranslation(dx, dy);
+	public void pan(double deltaX, double deltaY) {
+		transform.prependTranslation(deltaX, deltaY);
 		repaint();
 	}
 
