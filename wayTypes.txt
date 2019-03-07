@@ -1,28 +1,29 @@
 #WayType key value1, value2.... valueN
-BUILDING building
-PITCH leisure
+ALLOTMENTS landuse allotments
 BARRIER barrier
-CANAL water canal pond reservoir
-RAILWAY railway rail construction
-ISLAND place island
-WATER shrub water
-FERRY route ferry tour
+BASIN landuse basin
 BRIDGE man_made bridge
-WATER natural water
+BROWNFIELD landuse brownfield
+BUILDING building
+CANAL water canal pond reservoir
+CEMETERY landuse cemetery
+COASTLINE natural coastline
+CONSTRUCTION landuse construction
+FERRY route ferry tour
+GRASS landuse grass
+INDUSTRIAL landuse industrial
+ISLAND place island
+PARK leisure park garden
+PIER man_made pier
+PITCH leisure
+PLAYGROUND leisure playground
+RAILWAY railway rail construction
+RESIDENTIAL residential
+SWIMMINGPOOL leisure swimming_pool
 TREES landuse forest
 TREES natural tree
-GRASS landuse grass
-CONSTRUCTION landuse construction
-INDUSTRIAL landuse industrial
-CEMETERY landuse cemetery
-RESIDENTIAL residential
-BROWNFIELD landuse brownfield
-ALLOTMENTS landuse allotments
-BASIN landuse basin
-PARK leisure park garden
-SWIMMINGPOOL leisure swimming_pool
-PLAYGROUND leisure playground
-PIER man_made pier
-COASTLINE natural coastline
+WATER natural water
+WATER shrub water
+
 #power is powerlines and such, they arent drawn on the web version either.
 IGNORE power
