@@ -9,8 +9,9 @@ RESIDENTIALROAD highway residential
 SECONDARYROAD highway secondary
 MOTORWAY highway motorway
 SERVICEROAD highway service
+TERTIARYROAD highway tertiary
 TRACK highway track
-SECONDARYROAD highway trunk
+PRIMARYROAD highway trunk
 ALLOTMENTS landuse allotments
 BASIN landuse basin
 BROWNFIELD landuse brownfield

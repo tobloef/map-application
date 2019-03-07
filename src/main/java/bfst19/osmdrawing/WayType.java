@@ -38,13 +38,15 @@ public enum WayType {
 
 	//Veje
 	RESIDENTIALROAD(null, Color.web("FFFFFF")), //Har ikke en tykkelse
-	PRIMARYROAD(null, Color.web("F8FBC0")), //Har ikke en tykkelse
+	PRIMARYROAD(null, Color.web("FFAD95")), //Har ikke en tykkelse
 	RUNWAY(null, Color.web("BABACC")), //Har ikke en tykkelse
 	RAILWAY(null, Color.LIGHTGRAY, 2),
 	MOTORWAY(null, Color.web("FEB9C3")), //Har ikke en tykkelse
-	SECONDARYROAD(null, Color.web("FFAD95")), //Har ikke en tykkelse
+	SECONDARYROAD(null, Color.web("F7FBBB")), //Har ikke en tykkelse
+	TERTIARYROAD(null,Color.web("FFFFFF")), //Har ikke en tykkelse
+	SERVICEROAD(null, Color.web("FFFFFF")), //Har ikke en tykkelse
 	BRIDGE(Color.DARKKHAKI, Color.DARKKHAKI),
-
+	
 	//Abstrakte ting såsom ruter
 	MARKING(Color.BLACK, null),
 	TRACK(null, Color.web("B68235"), 2),
