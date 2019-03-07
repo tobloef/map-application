@@ -1,17 +1,32 @@
 #WayType key value1, value2.... valueN
-MARKING aeroway marking
 RUNWAY aeroway runway
+APRON aeroway apron
+MARKING aeroway marking
 RUNWAY aeroway taxiway
 BARRIER barrier
+BRIDLEWAY highway bridleway
 BUILDING building
+BUS_GUIDEWAY highway bus_guideway
+CYCLEWAY highway cycleway
+FOOTWAY highway footway
+LIVING_STREET highway living_street
+MOTORWAY highway motorway
+MOTORWAYEXIT highway motorway_link
+PEDESTRIAN highway pedestrian
 PRIMARYROAD highway primary
+PRIMARYROADEXIT highway primary_link
+RACEWAY highway raceway
 RESIDENTIALROAD highway residential
 SECONDARYROAD highway secondary
-MOTORWAY highway motorway
+SECONDARYROADEXIT highway secondary_link
 SERVICEROAD highway service
 TERTIARYROAD highway tertiary
+TERTIARYROADEXIT high tertiary_link
 TRACK highway track
 PRIMARYROAD highway trunk
+PRIMARYROADEXIT highway trunk_link
+UNCLASSIFIEDROAD highway unclassified
+ROUNDABOUT junction roundabout
 ALLOTMENTS landuse allotments
 BASIN landuse basin
 BROWNFIELD landuse brownfield

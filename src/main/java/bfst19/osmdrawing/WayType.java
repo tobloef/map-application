@@ -35,23 +35,39 @@ public enum WayType {
 	PITCH(Color.MEDIUMAQUAMARINE, null),
 	GROYNE(Color.web("A9A9A9"), null),
 	PIER(Color.YELLOW, Color.YELLOW),
+	BRIDGE(Color.DARKKHAKI, Color.DARKKHAKI),
+	APRON(Color.web("DADAE0"),null),
 
 	//Veje
-	RESIDENTIALROAD(null, Color.web("FFFFFF")), //Har ikke en tykkelse
-	PRIMARYROAD(null, Color.web("FFAD95")), //Har ikke en tykkelse
-	RUNWAY(null, Color.web("BABACC")), //Har ikke en tykkelse
+	RESIDENTIALROAD(null, Color.web("FFFFFF")), //Skal have en tykkelse
+	PRIMARYROAD(null, Color.web("FFAD95")), //Skal have en tykkelse
+	RUNWAY(null, Color.web("BABACC")), //Skal have en tykkelse
 	RAILWAY(null, Color.LIGHTGRAY, 2),
-	MOTORWAY(null, Color.web("FEB9C3")), //Har ikke en tykkelse
-	SECONDARYROAD(null, Color.web("F7FBBB")), //Har ikke en tykkelse
-	TERTIARYROAD(null,Color.web("FFFFFF")), //Har ikke en tykkelse
-	SERVICEROAD(null, Color.web("FFFFFF")), //Har ikke en tykkelse
-	BRIDGE(Color.DARKKHAKI, Color.DARKKHAKI),
-	
+	MOTORWAY(null, Color.web("FEB9C3")), //Skal have en tykkelse
+	SECONDARYROAD(null, Color.web("F7FBBB")), //Skal have en tykkelse
+	TERTIARYROAD(null,Color.web("FFFFFF")), //Skal have en tykkelse
+	SERVICEROAD(null, Color.web("FFFFFF")), //Skal have en tykkelse
+	UNCLASSIFIEDROAD(null,Color.web("FFFFFF")), //Skal have en tykkelse
+	LIVING_STREET(null, Color.web("EDEEED")), //Skal have en tykkelse
+	PEDESTRIAN(null,Color.web("DDDDE9")), //Skal have en tykkelse
+	RACEWAY(null, Color.web(("FFBDC7"))), //Skal have en tykkelse
+	ROUNDABOUT(null, Color.web("FFFFFF")), //Skal have en tykkelse
+
+	//Afkørelser
+	MOTORWAYEXIT(null, Color.web("FC8A9C")), //Skal have en tykkelse
+	PRIMARYROADEXIT(null,Color.web("FFAD95")), //Skal have en tykkelse
+	SECONDARYROADEXIT(null, Color.web("F7FBBB")), //Skal have en tykkelse
+	TERTIARYROADEXIT(null, Color.web("FFFFFF")), //Skal have en tykkelse
+
 	//Abstrakte ting såsom ruter
-	MARKING(Color.BLACK, null),
+	MARKING(null, Color.BLACK), //Skal have en tykkelse
 	TRACK(null, Color.web("B68235"), 2),
 	FERRY(null, Color.BLUE, 2),
 	TOUR(null, Color.BLACK, 2),
+	BUS_GUIDEWAY(null, Color.web("6066FF"), 2),
+	FOOTWAY(null, Color.web("FE9E93"),2),
+	BRIDLEWAY(null, Color.web("A8D7B6"), 2),
+	CYCLEWAY(null, Color.web("7B7EF8"), 2),
 
 	//Vand
 	WATER(Color.LIGHTSKYBLUE, null),
