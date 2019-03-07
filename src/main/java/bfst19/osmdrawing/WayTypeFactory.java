@@ -45,16 +45,35 @@ public class WayTypeFactory {
 		return null;
 	}
 
+	private static WayType getWayTypeFromString(String name){
+		try {
+			WayType type = WayType.valueOf(name);
+			return type;
+		}
+		catch (IllegalArgumentException e){
+			e.printStackTrace();
+			//If it does exist then we return null (Which is what java should do.
+		}
+		return null;
+	}
+
 	private static void initializeWayTypes(String filename) {
 		try {
 			keyValuesToType = new HashMap<>();
 			FileReader fr = new FileReader(filename);
 			BufferedReader br = new BufferedReader(fr);
 			while (br.ready()) {
-				StringTokenizer st = new StringTokenizer(br.readLine());
+				String line = br.readLine();
+				if (line.trim().isEmpty() || lineIsComment(line)){
+					continue;
+				}
+				StringTokenizer st = new StringTokenizer(line);
 				String first = st.nextToken();
-				if (first.contains("#")) continue;
-				WayType currentType = WayType.valueOf(first);
+				WayType currentType = getWayTypeFromString(first);
+				if (currentType == null) {
+					System.err.println("Wrong/Missing WayType: " + first);
+					continue;
+				}
 				String key = st.nextToken().trim();
 				List<String> values = new ArrayList<>();
 				while (st.hasMoreElements()) {
@@ -64,7 +83,12 @@ public class WayTypeFactory {
 			}
 		}
 		catch (Exception e){
+			e.printStackTrace();
 			//Uncle bob is gonna find us and kill us all
 		}
+	}
+
+	private static boolean lineIsComment(String line) {
+		return (line.trim().charAt(0) == '#');
 	}
 }

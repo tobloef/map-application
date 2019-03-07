@@ -1,28 +1,62 @@
 #WayType key value1, value2.... valueN
-BUILDING building
-PITCH leisure
+RUNWAY aeroway runway
+APRON aeroway apron
+MARKING aeroway marking
+RUNWAY aeroway taxiway
 BARRIER barrier
-CANAL water canal pond reservoir
-RAILWAY railway rail construction
-ISLAND place island
-WATER shrub water
-FERRY route ferry tour
-BRIDGE man_made bridge
-WATER natural water
-TREES landuse forest
-TREES natural tree
-GRASS landuse grass
-CONSTRUCTION landuse construction
-INDUSTRIAL landuse industrial
-CEMETERY landuse cemetery
-RESIDENTIAL residential
-BROWNFIELD landuse brownfield
+BRIDLEWAY highway bridleway
+BUILDING building
+BUS_GUIDEWAY highway bus_guideway
+CYCLEWAY highway cycleway
+FOOTWAY highway footway
+LIVING_STREET highway living_street
+MOTORWAY highway motorway
+MOTORWAYEXIT highway motorway_link
+PEDESTRIAN highway pedestrian
+PRIMARYROAD highway primary
+PRIMARYROADEXIT highway primary_link
+RACEWAY highway raceway
+RESIDENTIALROAD highway residential
+SECONDARYROAD highway secondary
+SECONDARYROADEXIT highway secondary_link
+SERVICEROAD highway service
+TERTIARYROAD highway tertiary
+TERTIARYROADEXIT high tertiary_link
+TRACK highway track
+PRIMARYROAD highway trunk
+PRIMARYROADEXIT highway trunk_link
+UNCLASSIFIEDROAD highway unclassified
+ROUNDABOUT junction roundabout
 ALLOTMENTS landuse allotments
 BASIN landuse basin
+BROWNFIELD landuse brownfield
+CEMETERY landuse cemetery
+CONSTRUCTION landuse construction
+FARMLAND landuse farmland
+TREES landuse forest
+GRASS landuse grass
+INDUSTRIAL landuse industrial
+MEADOW landuse meadow
+PITCH leisure
 PARK leisure park garden
-SWIMMINGPOOL leisure swimming_pool
 PLAYGROUND leisure playground
+SWIMMINGPOOL leisure swimming_pool
+BRIDGE man_made bridge
+GROYNE man_made groyne
 PIER man_made pier
+SAND natural beach
 COASTLINE natural coastline
+HEATH natural heath
+SCREE natural scree
+TREES natural tree
+WATER natural water
+WETLAND natural wetland
+WOOD natural wood
+ISLAND place island
+RAILWAY railway rail construction
+RESIDENTIAL residential
+FERRY route ferry tour
+WATER shrub water
+CANAL water canal pond reservoir
 #power is powerlines and such, they arent drawn on the web version either.
 IGNORE power
