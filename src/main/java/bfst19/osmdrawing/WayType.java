@@ -38,7 +38,7 @@ public enum WayType {
 
 	//Veje
 	RESIDENTIALROAD(null, Color.web("FFFFFF")), //Har ikke en tykkelse
-	SECONDARYHIGHWAY(null, Color.web("F8FBC0")), //Har ikke en tykkelse
+	PRIMARYROAD(null, Color.web("F8FBC0")), //Har ikke en tykkelse
 	RUNWAY(null, Color.web("BABACC")), //Har ikke en tykkelse
 	RAILWAY(null, Color.LIGHTGRAY, 2),
 	MOTORWAY(null, Color.web("FEB9C3")), //Har ikke en tykkelse
