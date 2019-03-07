@@ -1,5 +1,8 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.Controller;
 
+import bfst19.osmdrawing.MapCanvas;
+import bfst19.osmdrawing.Model.Model;
+import bfst19.osmdrawing.View;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;

@@ -1,4 +1,4 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.Model;
 
 import java.util.ArrayList;
 import java.util.function.LongSupplier;

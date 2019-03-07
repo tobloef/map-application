@@ -1,4 +1,6 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.Model;
+
+import bfst19.osmdrawing.WayType;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
