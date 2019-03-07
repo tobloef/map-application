@@ -15,9 +15,10 @@ public class MapCanvas extends Canvas {
 	GraphicsContext gc = getGraphicsContext2D();
 	Affine transform = new Affine();
 	Model model;
-
+	MapDrawer mapDrawer;
 	public void init(Model model) {
 		this.model = model;
+		mapDrawer = new MapDrawer(gc, model);
 		panViewToModel();
 		transform.prependScale(1,-1, 0, 0);
 		gc.setFillRule(FillRule.EVEN_ODD);
@@ -31,7 +32,8 @@ public class MapCanvas extends Canvas {
 	public void repaint() {
 		clearBackground();
 		updateLineWidth();
-		drawShapes();
+		mapDrawer.draw();
+		//drawShapes();
 	}
 
 	private void makeCanvasUpdateOnResize() {
@@ -59,23 +61,6 @@ public class MapCanvas extends Canvas {
 		gc.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
 	}
 
-	private void drawShapes() {
-		for (WayType wayType : WayType.values()){
-			if (wayType.hasFill()) {
-				gc.setFill(wayType.getFillColor());
-				for (Drawable way : model.getWaysOfType(wayType)) {
-					way.fill(gc);
-				}
-			}
-			if (wayType.hasStroke()) {
-				gc.setLineDashes(wayType.getLineDash() / 10000);
-				gc.setStroke(wayType.getStrokeColor());
-				for (Drawable way : model.getWaysOfType(wayType)){
-					way.stroke(gc);
-				}
-			}
-		}
-	}
 
 	public void pan(double dx, double dy) {
 		transform.prependTranslation(dx, dy);
