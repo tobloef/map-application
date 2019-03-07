@@ -8,18 +8,17 @@ import javafx.scene.transform.Affine;
 
 public class ZoomIndicatorDrawer implements Drawer {
 	private GraphicsContext graphicsContext;
-	private int margin = 5;
-	private int boxWidth = 40;
-	private int boxHeight = 100;
-	Font font;
 
 	public ZoomIndicatorDrawer(GraphicsContext graphicsContext) {
 		this.graphicsContext = graphicsContext;
-		font = new Font(10);
 	}
 
 	@Override
 	public void draw() {
+		int margin = 5;
+		int boxWidth = 40;
+		int boxHeight = 100;
+		Font font = new Font(10);
 		Affine affine = graphicsContext.getTransform();
 		double oldLineWidth = graphicsContext.getLineWidth();
 		graphicsContext.setTransform(new Affine());
