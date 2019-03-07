@@ -1,5 +1,6 @@
 package bfst19.osmdrawing;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -42,7 +43,9 @@ public class Controller {
 
 	@FXML
 	private void onMouseDragged(MouseEvent e) {
-		if (e.isPrimaryButtonDown()) mapCanvas.pan(e.getX() - x, e.getY() - y);
+		if (e.isPrimaryButtonDown()) {
+			mapCanvas.pan(e.getX() - x, e.getY() - y);
+		}
 		x = e.getX();
 		y = e.getY();
 	}

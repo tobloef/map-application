@@ -1,3 +1,4 @@
+#WayType key value1, value2.... valueN
 BUILDING building
 PITCH leisure
 BARRIER barrier
@@ -23,3 +24,5 @@ SWIMMINGPOOL leisure swimming_pool
 PLAYGROUND leisure playground
 PIER man_made pier
 COASTLINE natural coastline
+#power is powerlines and such, they arent drawn on the web version either.
+IGNORE power

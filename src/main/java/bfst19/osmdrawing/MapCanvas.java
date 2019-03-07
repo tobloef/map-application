@@ -1,5 +1,6 @@
 package bfst19.osmdrawing;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -44,18 +45,19 @@ public class MapCanvas extends Canvas {
 
 	private void clearBackground() {
 		graphicsContext.setTransform(new Affine());
-		if (model.getWaysOfType(WayType.COASTLINE).iterator().hasNext()) {
-			graphicsContext.setFill(Color.BLUE);
+		if (model.getWaysOfType(WayType.COASTLINE, getModelBounds()).iterator().hasNext()) {
+			graphicsContext.setFill(WayType.WATER.getFillColor());
 		} else {
-			graphicsContext.setFill(Color.GREEN);
+			graphicsContext.setFill(WayType.COASTLINE.getFillColor());
 		}
 		graphicsContext.fillRect(0, 0, getWidth(), getHeight());
 		graphicsContext.setTransform(transform);
 	}
 
 	private void panViewToModel() {
-		pan(-model.minlon, -model.maxlat);
-		zoom(getWidth()/(model.maxlon-model.minlon), 0,0);
+		//This repaints the map twice.
+		pan(-model.modelBounds.xmin, -model.modelBounds.ymax);
+		zoom(getWidth()/(model.modelBounds.xmax-model.modelBounds.xmin), 0,0);
 	}
 
 	private void updateLineWidth() {
@@ -80,5 +82,12 @@ public class MapCanvas extends Canvas {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private Rectangle getModelBounds(){
+		Bounds bounds = this.getBoundsInLocal();
+		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
+		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
+		return new Rectangle((float)min.getX(), (float)min.getY(), (float)max.getX(), (float)max.getY());
 	}
 }

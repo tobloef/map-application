@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
@@ -21,6 +22,7 @@ public class View {
 		Controller controller = loader.getController();
 		stage.setScene(scene);
 		stage.show();
+		stage.setTitle("Førsteårsprojekt: Danmarkskort");
 		controller.init(model);
 	}
 }
