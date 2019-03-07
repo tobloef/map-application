@@ -1,9 +1,6 @@
 package bfst19.osmdrawing;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -19,7 +16,7 @@ public class Controller {
 
 	public void init(Model model) {
 		this.model = model;
-		mapCanvas.init(model);
+		mapCanvas.initialize(model);
 	}
 
 	@FXML

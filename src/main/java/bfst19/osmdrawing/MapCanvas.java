@@ -4,31 +4,46 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
-public class MapCanvas extends Canvas {
-	GraphicsContext gc = getGraphicsContext2D();
-	Affine transform = new Affine();
-	Model model;
+import java.util.ArrayList;
+import java.util.List;
 
-	public void init(Model model) {
+public class MapCanvas extends Canvas {
+	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
+	private Affine transform = new Affine();
+	private Model model;
+	private List<Drawer> drawers;
+
+	public void initialize(Model model) {
 		this.model = model;
+		initializeDrawers(model);
 		panViewToModel();
 		transform.prependScale(1,-1, 0, 0);
-		gc.setFillRule(FillRule.EVEN_ODD);
+		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		model.addObserver(this::repaint);
 		makeCanvasUpdateOnResize();
 		repaint();
 
 	}
 
+	private void initializeDrawers(Model model) {
+		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
+		drawers = new ArrayList<>();
+		drawers.add( new MapDrawer(this, model));
+		drawers.add(new ZoomIndicatorDrawer(this));
+	}
+
 
 	public void repaint() {
 		clearBackground();
 		updateLineWidth();
-		drawShapes();
+		for (Drawer drawer : drawers) {
+			drawer.draw();
+		}
 	}
 
 	private void makeCanvasUpdateOnResize() {
@@ -37,14 +52,9 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void clearBackground() {
-		gc.setTransform(new Affine());
-		if (model.getWaysOfType(WayType.COASTLINE, getModelBounds()).iterator().hasNext()) {
-			gc.setFill(WayType.WATER.getFillColor());
-		} else {
-			gc.setFill(WayType.COASTLINE.getFillColor());
-		}
-		gc.fillRect(0, 0, getWidth(), getHeight());
-		gc.setTransform(transform);
+		graphicsContext.setTransform(new Affine());
+		graphicsContext.clearRect(0,0, getWidth(), getHeight());
+		graphicsContext.setTransform(transform);
 	}
 
 	private void panViewToModel() {
@@ -54,30 +64,12 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void updateLineWidth() {
-		gc.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
+		graphicsContext.setLineWidth(getZoomFactor());
 	}
 
-	private void drawShapes() {
-		Rectangle modelBounds = getModelBounds();
-		for (WayType wayType : WayType.values()){
-			if (wayType.hasFill()) {
-				gc.setFill(wayType.getFillColor());
-				for (Drawable way : model.getWaysOfType(wayType, modelBounds)) {
-					way.fill(gc);
-				}
-			}
-			if (wayType.hasStroke()) {
-				gc.setLineDashes(wayType.getLineDash() / 10000);
-				gc.setStroke(wayType.getStrokeColor());
-				for (Drawable way : model.getWaysOfType(wayType, modelBounds)){
-					way.stroke(gc);
-				}
-			}
-		}
-	}
 
-	public void pan(double dx, double dy) {
-		transform.prependTranslation(dx, dy);
+	public void pan(double deltaX, double deltaY) {
+		transform.prependTranslation(deltaX, deltaY);
 		repaint();
 	}
 
@@ -86,19 +78,7 @@ public class MapCanvas extends Canvas {
 		repaint();
 	}
 
-	public Point2D modelCoords(double x, double y) {
-		try {
-			return transform.inverseTransform(x, y);
-		} catch (NonInvertibleTransformException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private Rectangle getModelBounds(){
-		Bounds bounds = this.getBoundsInLocal();
-		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
-		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
-		return new Rectangle((float)min.getX(), (float)min.getY(), (float)max.getX(), (float)max.getY());
+	public double getZoomFactor() {
+		return 1/Math.sqrt(Math.abs(transform.determinant()));
 	}
 }
