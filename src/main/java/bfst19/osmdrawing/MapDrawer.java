@@ -2,9 +2,9 @@ package bfst19.osmdrawing;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class MapDrawer {
-	GraphicsContext graphicsContext;
-	Model model;
+public class MapDrawer implements Drawer {
+	private GraphicsContext graphicsContext;
+	private Model model;
 
 	public MapDrawer(GraphicsContext graphicsContext, Model model) {
 		this.graphicsContext = graphicsContext;

@@ -1,27 +1,27 @@
 package bfst19.osmdrawing;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.stage.Stage;
 
 public class MapCanvas extends Canvas {
-	GraphicsContext gc = getGraphicsContext2D();
-	Affine transform = new Affine();
-	Model model;
-	MapDrawer mapDrawer;
+	private GraphicsContext graphicsContext = getGraphicsContext2D();
+	private Affine transform = new Affine();
+	private Model model;
+	private MapDrawer mapDrawer;
+	private ZoomIndicatorDrawer zoomIndicatorDrawer;
+
 	public void init(Model model) {
 		this.model = model;
-		mapDrawer = new MapDrawer(gc, model);
+		mapDrawer = new MapDrawer(graphicsContext, model);
+		zoomIndicatorDrawer = new ZoomIndicatorDrawer(graphicsContext);
 		panViewToModel();
 		transform.prependScale(1,-1, 0, 0);
-		gc.setFillRule(FillRule.EVEN_ODD);
+		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		model.addObserver(this::repaint);
 		makeCanvasUpdateOnResize();
 		repaint();
@@ -32,8 +32,9 @@ public class MapCanvas extends Canvas {
 	public void repaint() {
 		clearBackground();
 		updateLineWidth();
-		mapDrawer.draw();
-		//drawShapes();
+		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
+		zoomIndicatorDrawer.draw();
+		//mapDrawer.draw();
 	}
 
 	private void makeCanvasUpdateOnResize() {
@@ -42,14 +43,14 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void clearBackground() {
-		gc.setTransform(new Affine());
+		graphicsContext.setTransform(new Affine());
 		if (model.getWaysOfType(WayType.COASTLINE).iterator().hasNext()) {
-			gc.setFill(Color.BLUE);
+			graphicsContext.setFill(Color.BLUE);
 		} else {
-			gc.setFill(Color.GREEN);
+			graphicsContext.setFill(Color.GREEN);
 		}
-		gc.fillRect(0, 0, getWidth(), getHeight());
-		gc.setTransform(transform);
+		graphicsContext.fillRect(0, 0, getWidth(), getHeight());
+		graphicsContext.setTransform(transform);
 	}
 
 	private void panViewToModel() {
@@ -58,7 +59,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void updateLineWidth() {
-		gc.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
+		graphicsContext.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
 	}
 
 
