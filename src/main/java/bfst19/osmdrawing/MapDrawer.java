@@ -4,6 +4,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
 public class MapDrawer implements Drawer {
@@ -42,7 +43,10 @@ public class MapDrawer implements Drawer {
 		} else {
 			graphicsContext.setFill(WayType.COASTLINE.getFillColor());
 		}
-		graphicsContext.fillRect(0, 0, 4000, 4000);
+		Affine affine = graphicsContext.getTransform();
+		graphicsContext.setTransform(new Affine());
+		graphicsContext.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		graphicsContext.setTransform(affine);
 	}
 	private Rectangle getModelBounds(){
 		Bounds bounds = canvas.getBoundsInLocal();
