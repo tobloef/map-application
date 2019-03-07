@@ -34,8 +34,8 @@ public class MapCanvas extends Canvas {
 		clearBackground();
 		updateLineWidth();
 		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
+		mapDrawer.draw();
 		zoomIndicatorDrawer.draw();
-		//mapDrawer.draw();
 	}
 
 	private void makeCanvasUpdateOnResize() {
