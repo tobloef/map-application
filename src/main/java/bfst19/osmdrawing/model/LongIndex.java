@@ -1,4 +1,4 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;

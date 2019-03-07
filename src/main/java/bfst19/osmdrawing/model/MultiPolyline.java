@@ -1,7 +1,5 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.model;
 
-import bfst19.osmdrawing.Model.OSMRelation;
-import bfst19.osmdrawing.Model.OSMWay;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;

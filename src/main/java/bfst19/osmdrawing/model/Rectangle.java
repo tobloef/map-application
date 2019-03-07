@@ -1,4 +1,4 @@
-package bfst19.osmdrawing.Model;
+package bfst19.osmdrawing.model;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.view;
 
 
 public interface Drawer {

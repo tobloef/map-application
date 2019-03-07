@@ -1,7 +1,6 @@
-package bfst19.osmdrawing.Model;
+package bfst19.osmdrawing.model;
 
-import bfst19.osmdrawing.Drawable;
-import bfst19.osmdrawing.WayType;
+import bfst19.osmdrawing.view.WayType;
 
 import java.io.Serializable;
 

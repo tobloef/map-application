@@ -1,7 +1,7 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.view;
 
-import bfst19.osmdrawing.Controller.Controller;
-import bfst19.osmdrawing.Model.Model;
+import bfst19.osmdrawing.controller.Controller;
+import bfst19.osmdrawing.model.Model;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

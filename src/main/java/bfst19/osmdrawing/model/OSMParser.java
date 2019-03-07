@@ -1,9 +1,6 @@
-package bfst19.osmdrawing.Model;
+package bfst19.osmdrawing.model;
 
-import bfst19.osmdrawing.LongIndex;
-import bfst19.osmdrawing.MultiPolyline;
-import bfst19.osmdrawing.Polyline;
-import bfst19.osmdrawing.WayType;
+import bfst19.osmdrawing.view.WayType;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import bfst19.osmdrawing.MapCanvas?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.Scene?>
 <?import javafx.scene.layout.VBox?>
 
+<?import bfst19.osmdrawing.view.MapCanvas?>
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
-       fx:controller="bfst19.osmdrawing.Controller.Controller"
+       fx:controller="bfst19.osmdrawing.controller.Controller"
        fx:id="scene"
        onKeyPressed="#onKeyPressed">
         <VBox>

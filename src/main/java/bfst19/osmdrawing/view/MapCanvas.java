@@ -1,6 +1,6 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.view;
 
-import bfst19.osmdrawing.Model.Model;
+import bfst19.osmdrawing.model.Model;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.FillRule;
