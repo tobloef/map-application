@@ -14,9 +14,12 @@
             <fx:include source="TopMenu.fxml"/>
             <BorderPane prefHeight="600.0" prefWidth="800.0">
                 <center>
+                    <!-- The symbol mapCanvas.parent.width cannot be resolved.
+                         Dont be alarmed, this is not a problem, it works.
+                     -->
                     <MapCanvas fx:id="mapCanvas"
-                               width="${scene.width}"
-                               height="${scene.height}"
+                               width="${mapCanvas.parent.width}"
+                               height="${mapCanvas.parent.height}"
                                onScroll="#onScroll"
                                onMousePressed="#onMousePressed"
                                onMouseDragged="#onMouseDragged"
