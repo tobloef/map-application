@@ -1,29 +1,46 @@
 #WayType key value1, value2.... valueN
-ALLOTMENTS landuse allotments
+MARKING aeroway marking
+RUNWAY aeroway runway
+RUNWAY aeroway taxiway
 BARRIER barrier
-BASIN landuse basin
-BRIDGE man_made bridge
-BROWNFIELD landuse brownfield
 BUILDING building
-CANAL water canal pond reservoir
+PRIMARYROAD highway primary
+RESIDENTIALROAD highway residential
+SECONDARYROAD highway secondary
+MOTORWAY highway motorway
+SERVICEROAD highway service
+TRACK highway track
+SECONDARYROAD highway trunk
+ALLOTMENTS landuse allotments
+BASIN landuse basin
+BROWNFIELD landuse brownfield
 CEMETERY landuse cemetery
-COASTLINE natural coastline
 CONSTRUCTION landuse construction
-FERRY route ferry tour
+FARMLAND landuse farmland
+TREES landuse forest
 GRASS landuse grass
 INDUSTRIAL landuse industrial
-ISLAND place island
-PARK leisure park garden
-PIER man_made pier
+MEADOW landuse meadow
 PITCH leisure
+PARK leisure park garden
 PLAYGROUND leisure playground
-RAILWAY railway rail construction
-RESIDENTIAL residential
 SWIMMINGPOOL leisure swimming_pool
-TREES landuse forest
+BRIDGE man_made bridge
+GROYNE man_made groyne
+PIER man_made pier
+SAND natural beach
+COASTLINE natural coastline
+HEATH natural heath
+SCREE natural scree
 TREES natural tree
 WATER natural water
+WETLAND natural wetland
+WOOD natural wood
+ISLAND place island
+RAILWAY railway rail construction
+RESIDENTIAL residential
+FERRY route ferry tour
 WATER shrub water
-
+CANAL water canal pond reservoir
 #power is powerlines and such, they arent drawn on the web version either.
 IGNORE power
