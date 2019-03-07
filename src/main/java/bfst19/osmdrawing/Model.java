@@ -38,21 +38,13 @@ public class Model {
 	private void parseObj(String filename) throws IOException, ClassNotFoundException {
 		try (ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
 			drawableModel = (BasicDrawableModel) input.readObject();
-			modelBounds = new Rectangle();
-			modelBounds.ymin = input.readFloat();
-			modelBounds.xmin = input.readFloat();
-			modelBounds.ymax = input.readFloat();
-			modelBounds.xmax = input.readFloat();
+			modelBounds = drawableModel.getModelBounds();
 		}
 	}
 
 	private void serializeData(String filename) throws IOException {
 		try (ObjectOutputStream output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename + ".obj")))) {
 			output.writeObject(drawableModel);
-			output.writeFloat(modelBounds.ymin);
-			output.writeFloat(modelBounds.xmin);
-			output.writeFloat(modelBounds.ymax);
-			output.writeFloat(modelBounds.xmax);
 		}
 	}
 

@@ -1,6 +1,8 @@
 package bfst19.osmdrawing;
 
-public class Rectangle {
+import java.io.Serializable;
+
+public class Rectangle implements Serializable {
 	float xmin, ymin, xmax, ymax;
 
 	public Rectangle(float xmin, float ymin, float xmax, float ymax) {

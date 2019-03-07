@@ -181,6 +181,7 @@ public class OSMParser {
 		lonFactor = (float) Math.cos((bounds.ymax+bounds.ymin)/2*Math.PI/180);
 		bounds.xmin *= lonFactor;
 		bounds.xmax *= lonFactor;
+		drawableModel.setModelBounds(bounds);
 	}
 
 	private static Iterable<OSMWay> merge(List<OSMWay> coast) {

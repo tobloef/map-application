@@ -8,6 +8,7 @@ import java.util.Map;
 public class BasicDrawableModel implements DrawableModel {
 
 	Map<WayType, List<Drawable>> wayTypeEnumMap = new EnumMap<>(WayType.class);
+	Rectangle modelBounds;
 
 
 	public BasicDrawableModel(){
@@ -27,6 +28,16 @@ public class BasicDrawableModel implements DrawableModel {
 	@Override
 	public void doneAdding() {
 		return; //Does nothing in this model, but is needed for more complex models.
+	}
+
+	@Override
+	public void setModelBounds(Rectangle bounds) {
+		modelBounds = bounds;
+	}
+
+	@Override
+	public Rectangle getModelBounds() {
+		return modelBounds;
 	}
 
 	private void initializeWaysEnumMap() {
