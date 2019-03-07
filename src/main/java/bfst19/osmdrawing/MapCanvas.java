@@ -56,7 +56,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void updateLineWidth() {
-		graphicsContext.setLineWidth(1/Math.sqrt(Math.abs(transform.determinant())));
+		graphicsContext.setLineWidth(getZoomFactor());
 	}
 
 
@@ -68,5 +68,9 @@ public class MapCanvas extends Canvas {
 	public void zoom(double factor, double x, double y) {
 		transform.prependScale(factor, factor, x, y);
 		repaint();
+	}
+
+	public double getZoomFactor() {
+		return 1/Math.sqrt(Math.abs(transform.determinant()));
 	}
 }
