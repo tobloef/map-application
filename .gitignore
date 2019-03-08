@@ -1,5 +1,7 @@
 data
 
+/args.gradle
+
 # Created by https://www.gitignore.io/api/vim,java,linux,macos,gradle,windows,notepadpp,sublimetext,intellij+all,visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vim,java,linux,macos,gradle,windows,notepadpp,sublimetext,intellij+all,visualstudio,visualstudiocode
 
@@ -29,6 +31,7 @@ data
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+.idea/**/args.gradle
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -602,3 +605,4 @@ ASALocalRun/
 healthchecksdb
 
 # End of https://www.gitignore.io/api/vim,java,linux,macos,gradle,windows,notepadpp,sublimetext,intellij+all,visualstudio,visualstudiocode
+
