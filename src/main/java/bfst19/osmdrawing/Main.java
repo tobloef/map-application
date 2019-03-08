@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
+		System.out.print("hej");
 		Model model = new Model(getParameters().getRaw());
 		View view = new View(model, stage);
 	}
