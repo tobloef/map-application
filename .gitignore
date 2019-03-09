@@ -1,6 +1,5 @@
-data
-libs/
 /args.gradle
+/data
 
 # Created by https://www.gitignore.io/api/vim,java,linux,macos,gradle,windows,notepadpp,sublimetext,intellij+all,visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vim,java,linux,macos,gradle,windows,notepadpp,sublimetext,intellij+all,visualstudio,visualstudiocode
@@ -332,7 +331,6 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 *.meta
-*.obj
 *.iobj
 *.pch
 *.pdb
