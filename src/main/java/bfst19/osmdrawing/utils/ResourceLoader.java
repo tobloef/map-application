@@ -1,4 +1,6 @@
-package bfst19.osmdrawing;
+package bfst19.osmdrawing.utils;
+
+import bfst19.osmdrawing.Main;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -8,9 +10,9 @@ public class ResourceLoader {
         if (name.startsWith("/")) {
             name = name.substring(1);
         }
-        URL url = Main.class.getResource(name);
+        URL url = Main.class.getResource("/" + name);
         if (url == null) {
-            url = Main.class.getResource("/" + name);
+            url = Main.class.getResource(name);
         }
         return url;
     }
@@ -19,9 +21,9 @@ public class ResourceLoader {
         if (name.startsWith("/")) {
             name = name.substring(1);
         }
-        InputStream stream = Main.class.getResourceAsStream(name);
+        InputStream stream = Main.class.getResourceAsStream("/" + name);
         if (stream == null) {
-            stream = Main.class.getResourceAsStream("/" + name);
+            stream = Main.class.getResourceAsStream(name);
         }
         return stream;
     }

@@ -1,6 +1,6 @@
 package bfst19.osmdrawing.view;
 
-import bfst19.osmdrawing.ResourceLoader;
+import bfst19.osmdrawing.utils.ResourceLoader;
 import bfst19.osmdrawing.controller.Controller;
 import bfst19.osmdrawing.model.Model;
 import javafx.fxml.FXMLLoader;
