@@ -6,6 +6,7 @@ rmdir /s /q out
 
 dir /s /b src\main\java\bfst19\osmdrawing\*.java > sources.txt
 javac --module-path "%PATH_TO_FX%" --add-modules=javafx.controls,javafx.fxml -d out @sources.txt
+del sources.txt
 
 cd out
 jar xf "%PATH_TO_FX%\javafx.base.jar"
