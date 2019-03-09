@@ -16,16 +16,16 @@ plugins {
 }
 
 javafx {
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [
+            'javafx.fxml',
+            'javafx.controls'
+    ]
 }
 
 // Define the main class for the application
-mainClassName = 'bfst19.osmdrawing.Main'
+mainClassName = 'bfst19.osmdrawing.Launcher'
 
 dependencies {
-    // This dependency is found on compile classpath of this component and consumers.
-    compile 'com.google.guava:guava:23.0'
-
     // Use JUnit test framework
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
@@ -42,13 +42,14 @@ jar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
-
-
 
 test {
     testLogging {
