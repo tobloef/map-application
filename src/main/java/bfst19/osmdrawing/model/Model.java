@@ -5,8 +5,8 @@ import bfst19.osmdrawing.view.WayType;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Model {
 	DrawableModel drawableModel = new BasicDrawableModel();
