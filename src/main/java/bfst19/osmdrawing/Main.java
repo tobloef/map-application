@@ -12,4 +12,8 @@ public class Main extends Application {
 		Model model = new Model(getParameters().getRaw());
 		View view = new View(model, stage);
 	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }

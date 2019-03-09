@@ -15,7 +15,7 @@
             <BorderPane prefHeight="600.0" prefWidth="800.0">
                 <center>
                     <!-- The symbol mapCanvas.parent.width cannot be resolved.
-                         Dont be alarmed, this is not a problem, it works.
+                         Don't be alarmed, this is not a problem, it works.
                      -->
                     <MapCanvas fx:id="mapCanvas"
                                width="${mapCanvas.parent.width}"
