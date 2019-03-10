@@ -1,10 +1,12 @@
 package bfst19.osmdrawing.model;
 
+import bfst19.osmdrawing.utils.ResourceLoader;
 import bfst19.osmdrawing.view.WayType;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Model {
 	DrawableModel drawableModel = new BasicDrawableModel();
@@ -24,28 +26,50 @@ public class Model {
 	}
 
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
-		String filename = args.get(0);
 		long time = -System.nanoTime();
-		if (filename.endsWith(".obj")) {
-			parseObj(filename);
+		if (args.size() == 0) {
+			loadDefaultData();
 		} else {
-			OSMParser parser = new OSMParser(filename, drawableModel);
-			modelBounds = parser.getModelBounds();
-			serializeData(filename);
+			loadDataFromArgs(args);
 		}
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
 	}
 
-	private void parseObj(String filename) throws IOException, ClassNotFoundException {
-		try (ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+	private void loadDefaultData() throws IOException, ClassNotFoundException {
+		InputStream inputStream = ResourceLoader.getResourceAsStream("data/default.osm.obj");
+		parseObj(inputStream);
+	}
+
+	private void loadDataFromArgs(List<String> args) throws IOException, ClassNotFoundException, XMLStreamException {
+		String filename = args.get(0);
+		if (filename.endsWith(".obj")) {
+			parseObj(filename);
+		} else {
+			OSMParser parser = new OSMParser(filename, drawableModel);
+			modelBounds = parser.getModelBounds();
+			String path = filename + ".obj";
+			serializeData(path);
+		}
+	}
+
+	private void parseObj(String path) throws IOException, ClassNotFoundException {
+		InputStream inputStream = new FileInputStream(path);
+		parseObj(inputStream);
+	}
+
+	private void parseObj(InputStream inputStream) throws IOException, ClassNotFoundException {
+		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+		try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
 			drawableModel = (BasicDrawableModel) input.readObject();
 			modelBounds = drawableModel.getModelBounds();
 		}
 	}
 
-	private void serializeData(String filename) throws IOException {
-		try (ObjectOutputStream output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename + ".obj")))) {
+	private void serializeData(String path) throws IOException {
+		FileOutputStream fileOutputStream = new FileOutputStream(path);
+		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+		try (ObjectOutputStream output = new ObjectOutputStream(bufferedOutputStream)) {
 			output.writeObject(drawableModel);
 		}
 	}

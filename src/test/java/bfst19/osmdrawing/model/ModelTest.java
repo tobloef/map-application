@@ -26,15 +26,15 @@ class ModelTest {
 	@Test
 	void loadFromObj() throws IOException, XMLStreamException, ClassNotFoundException {
 		//Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
-		//NOTE: This test might get outdated as the model changes. It should be remade each time the model changes
-		// as the .obj file will get outdated.
-		String filePath = this.getClass().getResource("small.zip.obj").getPath();
+		String filePath = this.getClass().getResource("small.zip").getPath();
 		List<String> args = new ArrayList<String>();
 		args.add(filePath);
 		Model model = new Model(args);
-		assertEquals(55.6631 ,model.modelBounds.ymin, 0.02);
-		assertEquals(7.090 ,model.modelBounds.xmin, 0.02);
-		assertEquals(55.6804 ,model.modelBounds.ymax, 0.02);
-		assertEquals(7.1073 ,model.modelBounds.xmax, 0.02);
+		args.set(0, args.get(0) + ".obj");
+		Model objModel = new Model(args);
+		assertEquals(55.6631 ,objModel.modelBounds.ymin, 0.02);
+		assertEquals(7.090 ,objModel.modelBounds.xmin, 0.02);
+		assertEquals(55.6804 ,objModel.modelBounds.ymax, 0.02);
+		assertEquals(7.1073 ,objModel.modelBounds.xmax, 0.02);
 	}
 }

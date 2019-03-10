@@ -2,30 +2,32 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.Scene?>
-<?import javafx.scene.layout.VBox?>
 
 <?import bfst19.osmdrawing.view.MapCanvas?>
+<?import javafx.scene.layout.Pane?>
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
        fx:controller="bfst19.osmdrawing.controller.Controller"
        fx:id="scene"
        onKeyPressed="#onKeyPressed">
-        <VBox>
-            <fx:include source="TopMenu.fxml"/>
             <BorderPane prefHeight="600.0" prefWidth="800.0">
+                <top>
+                    <fx:include source="TopMenu.fxml"/>
+                </top>
                 <center>
                     <!-- The symbol mapCanvas.parent.width cannot be resolved.
-                         Dont be alarmed, this is not a problem, it works.
+                         Don't be alarmed, this is not a problem, it works.
                      -->
-                    <MapCanvas fx:id="mapCanvas"
-                               width="${mapCanvas.parent.width}"
-                               height="${mapCanvas.parent.height}"
-                               onScroll="#onScroll"
-                               onMousePressed="#onMousePressed"
-                               onMouseDragged="#onMouseDragged"
-                    />
+                    <Pane>
+                        <MapCanvas fx:id="mapCanvas"
+                                   width="${mapCanvas.parent.width}"
+                                   height="${mapCanvas.parent.height}"
+                                   onScroll="#onScroll"
+                                   onMousePressed="#onMousePressed"
+                                   onMouseDragged="#onMouseDragged"
+                        />
+                    </Pane>
                 </center>
             </BorderPane>
-        </VBox>
 </Scene>
 

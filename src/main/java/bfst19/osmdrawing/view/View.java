@@ -1,5 +1,6 @@
 package bfst19.osmdrawing.view;
 
+import bfst19.osmdrawing.utils.ResourceLoader;
 import bfst19.osmdrawing.controller.Controller;
 import bfst19.osmdrawing.model.Model;
 import javafx.fxml.FXMLLoader;
@@ -7,10 +8,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class View {
 	public View(Model model, Stage stage) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("View.fxml"));
+
+
+		URL url = ResourceLoader.getResource("view/View.fxml");
+		FXMLLoader loader = new FXMLLoader(url);
 		Scene scene = loader.load();
 		Controller controller = loader.getController();
 		stage.setScene(scene);
