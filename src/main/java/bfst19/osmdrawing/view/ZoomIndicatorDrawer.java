@@ -43,13 +43,21 @@ public class ZoomIndicatorDrawer implements Drawer {
 	}
 
 	private void drawText() {
-		double distance = (boxWidth - (margin * 2)) * canvas.getZoomFactor() * 111;
+		double distance = calculateDistance();
 		String unit = "km";
 		if (distance < 1) {
 			distance *= 1000;
 			unit = "m";
 		}
 		renderText(distance, unit);
+	}
+
+	private double calculateDistance() {
+		double radiusOfEarth = 6371;
+		double latitude = canvas.getBoundsInLocal().getMaxY(); //based on the bottom of the viewed window
+		System.out.println(latitude);
+		double kilometersPerLon = Math.PI / 180 * radiusOfEarth * Math.cos(latitude);
+		return (boxWidth - (margin * 2)) * canvas.getZoomFactor() * kilometersPerLon;
 	}
 
 	private void renderText(double distance, String unit) {

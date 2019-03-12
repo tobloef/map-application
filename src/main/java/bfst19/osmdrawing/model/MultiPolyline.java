@@ -12,20 +12,23 @@ public class MultiPolyline extends ArrayList<Polyline> implements Drawable, Seri
 	}
 
 	@Override
-	public void stroke(GraphicsContext gc) {
-		gc.beginPath();
-		trace(gc);
-		gc.stroke();
+	public void stroke(GraphicsContext graphicsContext) {
+		graphicsContext.beginPath();
+		trace(graphicsContext);
+		graphicsContext.stroke();
 	}
 
-	public void trace(GraphicsContext gc) {
-		for (Polyline p : this) p.trace(gc);
+	public void trace(GraphicsContext graphicsContext) {
+
+		for (Polyline polyline : this) {
+			polyline.trace(graphicsContext);
+		}
 	}
 
 	@Override
-	public void fill(GraphicsContext gc) {
-		gc.beginPath();
-		trace(gc);
-		gc.fill();
+	public void fill(GraphicsContext graphicsContext) {
+		graphicsContext.beginPath();
+		trace(graphicsContext);
+		graphicsContext.fill();
 	}
 }

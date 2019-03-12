@@ -43,11 +43,9 @@ public class OSMParser {
 	}
 
 	private InputStream getZipFile(String filename) throws IOException {
-		InputStream osmsource;
 		ZipInputStream zip = new ZipInputStream(new BufferedInputStream(new FileInputStream(filename)));
 		zip.getNextEntry();
-		osmsource = zip;
-		return osmsource;
+		return zip;
 	}
 
 
@@ -60,26 +58,26 @@ public class OSMParser {
 		while (reader.hasNext()) {
 			switch (reader.next()) {
 				case START_ELEMENT:
-					startElement(reader);
+					handleStartElementTag(reader);
 					break;
 				case END_ELEMENT:
-					endElement(reader);
+					handleEndElementTag(reader);
 					break;
 				case END_DOCUMENT:
-					endDocument();
+					handleEndDocumentTag();
 					break;
 			}
 		}
 	}
 
-	private void endDocument() {
+	private void handleEndDocumentTag() {
 		//Get a list of merged coastlines.
-		for (OSMWay c : merge(coastLines)) {
-			drawableModel.add(WayType.COASTLINE, new Polyline(c));
+		for (OSMWay coast : merge(coastLines)) {
+			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
 		}
 	}
 
-	private void endElement(XMLStreamReader reader) {
+	private void handleEndElementTag(XMLStreamReader reader) {
 		switch (reader.getLocalName()) {
 			case "way":
 				endElementWay();
@@ -106,7 +104,7 @@ public class OSMParser {
 		currentWay = null;
 	}
 
-	private void startElement(XMLStreamReader reader) {
+	private void handleStartElementTag(XMLStreamReader reader) {
 		switch (reader.getLocalName()) {
 			case "bounds":
 				startElementBounds(reader);

@@ -18,7 +18,7 @@ public class MapCanvas extends Canvas {
 	public void initialize(Model model) {
 		this.model = model;
 		initializeDrawers(model);
-		panViewToModel();
+		panViewToMapBounds();
 		transform.prependScale(1,-1, 0, 0);
 		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		model.addObserver(this::repaint);
@@ -54,7 +54,7 @@ public class MapCanvas extends Canvas {
 		graphicsContext.setTransform(transform);
 	}
 
-	private void panViewToModel() {
+	private void panViewToMapBounds() {
 		//This repaints the map twice.
 		pan(-model.modelBounds.xmin, -model.modelBounds.ymax);
 		zoom(getWidth()/(model.modelBounds.xmax-model.modelBounds.xmin), 0,0);
