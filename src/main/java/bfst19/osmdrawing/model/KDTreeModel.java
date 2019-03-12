@@ -2,18 +2,19 @@ package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.view.WayType;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class BasicDrawableModel implements DrawableModel {
-
+public class KDTreeModel implements DrawableModel {
 	Map<WayType, List<Drawable>> wayTypeEnumMap;
+	Map<WayType, KDTreeNode> wayTypeToKDTreeRoot;
 	Rectangle modelBounds;
 
+	private class KDTreeNode{
 
-	public BasicDrawableModel(){
+	}
+
+	public KDTreeModel(){
 		DrawableModel.initializeWaysEnumMap(wayTypeEnumMap);
 	}
 
@@ -29,7 +30,8 @@ public class BasicDrawableModel implements DrawableModel {
 
 	@Override
 	public void doneAdding() {
-		return; //Does nothing in this model, but is needed for more complex models.
+		//Construct the tree
+		return;
 	}
 
 	@Override
@@ -41,6 +43,4 @@ public class BasicDrawableModel implements DrawableModel {
 	public Rectangle getModelBounds() {
 		return modelBounds;
 	}
-
-
 }
