@@ -1,6 +1,9 @@
-package bfst19.osmdrawing.view;
+package bfst19.osmdrawing.view.controls;
 
 import bfst19.osmdrawing.model.Model;
+import bfst19.osmdrawing.view.drawers.ZoomIndicatorDrawer;
+import bfst19.osmdrawing.view.drawers.Drawer;
+import bfst19.osmdrawing.view.drawers.MapDrawer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.FillRule;
