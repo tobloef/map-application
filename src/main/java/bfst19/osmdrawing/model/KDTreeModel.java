@@ -12,7 +12,7 @@ public class KDTreeModel implements DrawableModel {
 	Map<WayType, KDTree> wayTypeToKDTreeRoot;
 	Rectangle modelBounds;
 	static Random r = new Random();
-	private final static int MAXNODESPERLEAF = 100; //Benchmark some different values
+	private final static int MAXNODESPERLEAF = 10; //Benchmark some different values
 
 
 	private class KDTree implements Serializable {
@@ -20,8 +20,10 @@ public class KDTreeModel implements DrawableModel {
 		List<Drawable> elements;
 		KDTree lower;
 		KDTree higher;
+		int depth;
 
-		private KDTree(List<Drawable> drawables, boolean odd){
+		private KDTree(List<Drawable> drawables, boolean odd, int depth){
+			this.depth = depth;
 			if (drawables.size() < MAXNODESPERLEAF){
 				this.elements = drawables;
 			}
@@ -38,35 +40,28 @@ public class KDTreeModel implements DrawableModel {
 						higherDrawables.add(drawable);
 					}
 				}
-				lower = new KDTree(lowerDrawables, !odd);
-				higher = new KDTree(higherDrawables, !odd);
+				lower = new KDTree(lowerDrawables, !odd, this.depth +1);
+				higher = new KDTree(higherDrawables, !odd, this.depth +1);
 			}
 		}
 
-		private List<Drawable> rangeQuery(Rectangle box, boolean odd){
-			if(axis == null){
-				return elements;
+		private List<Drawable> getContent(List<Drawable> drawables){
+			if (axis == null){
+				drawables.addAll(elements);
 			}
 			else {
-				List<Drawable> drawables = new ArrayList<>();
-				if (odd) {
-					if (box.xmax > axis.getCenterX()) {
-						drawables.addAll(higher.rangeQuery(box, !odd));
-					}
-					if (box.xmin < axis.getCenterX()) {
-						drawables.addAll(lower.rangeQuery(box, !odd));
-					}
-				}
-				else {
-					if (box.ymax > axis.getCenterY()) {
-						drawables.addAll(higher.rangeQuery(box, !odd));
-					}
-					if (box.ymin < axis.getCenterY()) {
-						drawables.addAll(lower.rangeQuery(box, !odd));
-					}
-				}
-				return drawables;
+				higher.getContent(drawables);
+				lower.getContent(drawables);
 			}
+			return drawables;
+		}
+
+		private List<Drawable> rangeQuery(Rectangle box, boolean odd){
+			if (axis == null){
+				return elements;
+			}
+			ArrayList<Drawable> list = new ArrayList<>();
+			return higher.getContent(list);
 		}
 
 
@@ -101,7 +96,7 @@ public class KDTreeModel implements DrawableModel {
 		for (WayType wayType : WayType.values()){
 			List<Drawable> drawables = wayTypeEnumMap.get(wayType);
 			if (drawables.size() > 0) {
-				KDTree newTree = new KDTree(drawables, true); //Its true so that the first node splits in x;
+				KDTree newTree = new KDTree(drawables, true, 1); //Its true so that the first node splits in x;
 				wayTypeToKDTreeRoot.put(wayType, newTree);
 			}
 		}

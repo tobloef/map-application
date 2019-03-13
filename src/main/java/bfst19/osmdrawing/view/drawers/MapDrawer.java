@@ -27,7 +27,6 @@ public class MapDrawer implements Drawer {
 	public void draw() {
 		fillBackground();
 		for (WayType wayType : WayType.values()){
-
 			if (wayType.hasFill()) {
 				graphicsContext.setFill(wayType.getFillColor());
 				for (Drawable way : model.getWaysOfType(wayType, getModelBounds())) {
