@@ -1,6 +1,7 @@
 package bfst19.osmdrawing.view.drawers;
 
 import bfst19.osmdrawing.model.Drawable;
+import bfst19.osmdrawing.model.KDTreeModel;
 import bfst19.osmdrawing.model.Model;
 import bfst19.osmdrawing.model.Rectangle;
 import bfst19.osmdrawing.view.WayType;
@@ -8,6 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
@@ -25,6 +27,7 @@ public class MapDrawer implements Drawer {
 	public void draw() {
 		fillBackground();
 		for (WayType wayType : WayType.values()){
+
 			if (wayType.hasFill()) {
 				graphicsContext.setFill(wayType.getFill());
 				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
@@ -58,6 +61,15 @@ public class MapDrawer implements Drawer {
 		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
 		return new Rectangle((float)min.getX(), (float)min.getY(), (float)max.getX(), (float)max.getY());
 	}
+
+	private Rectangle getSmallModelBounds(){
+		int boxsize = 100;
+		Bounds bounds = canvas.getBoundsInLocal();
+		Point2D min = modelCoords(bounds.getMinX() + bounds.getMaxX()/2 - boxsize, bounds.getMinY()+ bounds.getMaxY()/2 - boxsize);
+		Point2D max = modelCoords(bounds.getMaxX()/2 + boxsize, bounds.getMaxY()/2 + boxsize);
+		return new Rectangle((float)min.getX(), (float)min.getY(), (float)max.getX(), (float)max.getY());
+	}
+
 
 	public Point2D modelCoords(double x, double y) {
 		try {

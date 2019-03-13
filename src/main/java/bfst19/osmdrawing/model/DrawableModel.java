@@ -1,6 +1,7 @@
 package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.view.WayType;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
 import java.util.ArrayList;

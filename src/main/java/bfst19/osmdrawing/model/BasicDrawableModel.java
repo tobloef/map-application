@@ -1,6 +1,7 @@
 package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.view.WayType;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -41,6 +42,5 @@ public class BasicDrawableModel implements DrawableModel {
 	public Rectangle getModelBounds() {
 		return modelBounds;
 	}
-
 
 }
