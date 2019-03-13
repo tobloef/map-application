@@ -1,6 +1,8 @@
 package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.view.WayType;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.io.Serializable;
 import java.util.*;
@@ -14,7 +16,7 @@ public class KDTreeModel implements DrawableModel {
 
 
 	private class KDTree implements Serializable {
-		Drawable axis;
+		Drawable axis; //Muligvis bare gem kordinat.
 		List<Drawable> elements;
 		KDTree lower;
 		KDTree higher;
@@ -24,7 +26,7 @@ public class KDTreeModel implements DrawableModel {
 				this.elements = drawables;
 			}
 			else {
-				axis = quickMedian(drawables, odd );
+				axis = quickMedian(drawables, odd);
 				drawables.remove(axis);
 				List<Drawable> lowerDrawables = new ArrayList<>();
 				List<Drawable> higherDrawables = new ArrayList<>();
@@ -40,6 +42,34 @@ public class KDTreeModel implements DrawableModel {
 				higher = new KDTree(higherDrawables, !odd);
 			}
 		}
+
+		private List<Drawable> rangeQuery(Rectangle box, boolean odd){
+			if(axis == null){
+				return elements;
+			}
+			else {
+				List<Drawable> drawables = new ArrayList<>();
+				if (odd) {
+					if (box.xmax > axis.getCenterX()) {
+						drawables.addAll(higher.rangeQuery(box, !odd));
+					}
+					if (box.xmin < axis.getCenterX()) {
+						drawables.addAll(lower.rangeQuery(box, !odd));
+					}
+				}
+				else {
+					if (box.ymax > axis.getCenterY()) {
+						drawables.addAll(higher.rangeQuery(box, !odd));
+					}
+					if (box.ymin < axis.getCenterY()) {
+						drawables.addAll(lower.rangeQuery(box, !odd));
+					}
+				}
+				return drawables;
+			}
+		}
+
+
 	}
 
 	public KDTreeModel(){
@@ -53,7 +83,11 @@ public class KDTreeModel implements DrawableModel {
 
 	@Override
 	public Iterable<Drawable> getDrawablesOfType(WayType type, Rectangle bounds) {
-		return wayTypeEnumMap.get(type);
+		if (wayTypeToKDTreeRoot.containsKey(type))
+			return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, true);
+		else {
+			return new ArrayList<>();
+		}
 	}
 
 	@Override
@@ -86,8 +120,6 @@ public class KDTreeModel implements DrawableModel {
 	private static Drawable quickMedian(List<Drawable> list, boolean isCheckingForX){
 		return quickSelect(list, 0, list.size()-1, list.size()/2, isCheckingForX);
 	}
-
-	//NOTE: Remember to remove the node after finding it.
 
 	//These are both taken from wikipedia, They could possibly be more efficient, runs pretty fast right now through
 	private static Drawable quickSelect(List<Drawable> list, int left, int right, int k, boolean isCheckingForX){
@@ -157,4 +189,5 @@ public class KDTreeModel implements DrawableModel {
 			}
 		}
 	}
+
 }

@@ -2,6 +2,7 @@ package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.utils.ResourceLoader;
 import bfst19.osmdrawing.view.WayType;
+import javafx.scene.canvas.GraphicsContext;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
