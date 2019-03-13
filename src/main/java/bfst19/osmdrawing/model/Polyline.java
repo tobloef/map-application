@@ -34,5 +34,17 @@ public class Polyline implements Drawable, Serializable {
 		gc.fill();
 	}
 
+	@Override
+	public float getCenterX() {
+		//TODO: Make something better for these, this is merely for testing.
+		return coord[0];
+	}
+
+	@Override
+	public float getCenterY() {
+		//TODO: Make something better for these, this is merely for testing.
+		return coord[1];
+	}
+
 
 }

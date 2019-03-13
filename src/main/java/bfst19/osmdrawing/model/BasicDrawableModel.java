@@ -9,12 +9,12 @@ import java.util.Map;
 
 public class BasicDrawableModel implements DrawableModel {
 
-	Map<WayType, List<Drawable>> wayTypeEnumMap;
+	Map<WayType, List<Drawable>> wayTypeEnumMap = DrawableModel.initializeWaysEnumMap();
 	Rectangle modelBounds;
 
 
 	public BasicDrawableModel(){
-		DrawableModel.initializeWaysEnumMap(wayTypeEnumMap);
+
 	}
 
 	@Override

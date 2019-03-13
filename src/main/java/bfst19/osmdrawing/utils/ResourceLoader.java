@@ -10,22 +10,22 @@ import java.net.URL;
 // For .jar files we need the leading slash, but that won't work if we use Gradle.
 public class ResourceLoader {
     public static URL getResource(String name) {
-        if (name.startsWith("/")) {
-            name = name.substring(1);
-        }
         URL url = Main.class.getResource(name);
-        if (url == null) {
+        if (url == null && name.startsWith("/")) {
+            url = Main.class.getResource(name.substring(1));
+        }
+        else if (url == null && !name.startsWith("/")){
             url = Main.class.getResource("/" + name);
         }
         return url;
     }
 
     public static InputStream getResourceAsStream(String name) {
-        if (name.startsWith("/")) {
-            name = name.substring(1);
-        }
         InputStream stream = Main.class.getResourceAsStream(name);
-        if (stream == null) {
+        if (stream == null && name.startsWith("/")) {
+            stream = Main.class.getResourceAsStream(name.substring(1));
+        }
+        else if (stream == null && !name.startsWith("/")){
             stream = Main.class.getResourceAsStream("/" + name);
         }
         return stream;

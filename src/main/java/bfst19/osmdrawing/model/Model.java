@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-	DrawableModel drawableModel = new BasicDrawableModel();
+	DrawableModel drawableModel = new KDTreeModel();
 	List<Runnable> observers = new ArrayList<>();
 	public Rectangle modelBounds;
 

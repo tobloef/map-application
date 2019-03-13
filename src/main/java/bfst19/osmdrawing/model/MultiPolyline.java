@@ -28,4 +28,16 @@ public class MultiPolyline extends ArrayList<Polyline> implements Drawable, Seri
 		trace(gc);
 		gc.fill();
 	}
+
+	@Override
+	public float getCenterX() {
+		//TODO: Make something better for these, this is merely for testing.
+		return get(0).getCenterX();
+	}
+
+	@Override
+	public float getCenterY() {
+		//TODO: Make something better for these, this is merely for testing.
+		return get(0).getCenterY();
+	}
 }
