@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.Scene?>
 
-<?import bfst19.osmdrawing.view.MapCanvas?>
+<?import bfst19.osmdrawing.view.controls.MapCanvas?>
 <?import javafx.scene.layout.Pane?>
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
