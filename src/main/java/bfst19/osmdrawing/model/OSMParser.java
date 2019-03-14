@@ -18,12 +18,12 @@ public class OSMParser {
 	private float lonFactor = 1.0f;
 	private LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
 	private LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
-	private List<OSMWay> coastLines = new ArrayList<>();
+	private List<OSMWay> coastLines = new ArrayList<>(); //coastlines need extra work, which is why we have a list for them
 	private OSMWay currentWay = null;
 	private OSMRelation currentRelation = null;
 	private WayType currentType = null;
 	private DrawableModel drawableModel;
-	private Rectangle bounds = new Rectangle();
+	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmsource;
@@ -74,41 +74,8 @@ public class OSMParser {
 		}
 	}
 
-	private void handleEndDocumentTag() {
-		//Get a list of merged coastlines.
-		for (OSMWay coast : merge(coastLines)) {
-			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
-		}
-	}
-
-	private void handleEndElementTag(XMLStreamReader reader) {
-		switch (reader.getLocalName()) {
-			case "way":
-				handleEndWay();
-				break;
-			case "relation":
-				handleEndRelation();
-				break;
-		}
-	}
-
-	private void handleEndRelation() {
-		if (currentType == WayType.WATER) {
-			drawableModel.add(currentType, new MultiPolyline(currentRelation));
-			currentWay = null;
-		}
-	}
-
-	private void handleEndWay() {
-		if (currentType == WayType.COASTLINE) {
-			coastLines.add(currentWay);
-		} else {
-			drawableModel.add(currentType, new Polyline(currentWay));
-		}
-		currentWay = null;
-	}
-
 	private void handleStartElementTag(XMLStreamReader reader) {
+		// Delegates the task out to methods depending on the tag
 		switch (reader.getLocalName()) {
 			case "bounds":
 				handleStartBounds(reader);
@@ -137,11 +104,32 @@ public class OSMParser {
 		}
 	}
 
-	private void handleStartMember(XMLStreamReader reader) {
-		long ref;
-		ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
-		OSMWay member = idToWay.get(ref);
-		if (member != null) currentRelation.add(member);
+	private void handleEndElementTag(XMLStreamReader reader) {
+		// Delegates the task out to methods depending on the tag
+		switch (reader.getLocalName()) {
+			case "way":
+				handleEndWay();
+				break;
+			case "relation":
+				handleEndRelation();
+				break;
+		}
+	}
+
+	private void handleStartWay(XMLStreamReader reader) {
+		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
+		currentType = WayType.UNKNOWN;
+		currentWay = new OSMWay(id);
+		idToWay.add(currentWay);
+	}
+
+	private void handleEndWay() {
+		if (currentType == WayType.COASTLINE) {
+			coastLines.add(currentWay);
+		} else {
+			drawableModel.add(currentType, new Polyline(currentWay));
+		}
+		currentWay = null;
 	}
 
 	private void handleStartRelation() {
@@ -149,7 +137,20 @@ public class OSMParser {
 		currentRelation = new OSMRelation();
 	}
 
-	private void handleStartTag(XMLStreamReader reader) {
+	private void handleEndRelation() {
+		if (currentType == WayType.WATER) {
+			drawableModel.add(currentType, new MultiPolyline(currentRelation));
+			currentWay = null;
+		}
+	}
+
+	private void handleStartMember(XMLStreamReader reader) { // adds members to the current relation
+		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
+		OSMWay member = idToWay.get(ref);
+		if (member != null) currentRelation.add(member);
+	}
+
+	private void handleStartTag(XMLStreamReader reader) { // assigns waytype the current way, based on key and value
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
 		if (currentWay != null || currentRelation != null) {
@@ -160,17 +161,9 @@ public class OSMParser {
 		}
 	}
 
-	private void handleStartND(XMLStreamReader reader) {
+	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		currentWay.add(idToNode.get(ref));
-	}
-
-	private void handleStartWay(XMLStreamReader reader) {
-		long id;
-		id = Long.parseLong(reader.getAttributeValue(null, "id"));
-		currentType = WayType.UNKNOWN;
-		currentWay = new OSMWay(id);
-		idToWay.add(currentWay);
 	}
 
 	private void handleStartNode(XMLStreamReader reader) {
@@ -189,6 +182,13 @@ public class OSMParser {
 		bounds.xmin *= lonFactor;
 		bounds.xmax *= lonFactor;
 		drawableModel.setModelBounds(bounds);
+	}
+
+	private void handleEndDocumentTag() {
+		//Get a list of merged coastlines.
+		for (OSMWay coast : merge(coastLines)) {
+			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
+		}
 	}
 
 	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
