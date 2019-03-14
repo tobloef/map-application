@@ -1,7 +1,11 @@
 
 package bfst19.osmdrawing.view;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
+
 //The wayTypes are drawed in the order they are written in
 public enum WayType {
 	COASTLINE(Color.web("EEF0D5"),null ),
@@ -11,6 +15,10 @@ public enum WayType {
 	SCREE(Color.web("F1E5DC"),null),
 
 	//Natur
+	FAKE(new ImagePattern(new Image("bfst19/osmdrawing/view/forest-texture.jpg"), 0,0, 0.1, 0.1, true), null),
+	// The above is an example of how fill images are used. An image to be used as texture, x and y are likely
+	// uninmportant for us, width and height are the scale of the image (smaller number = smaller image), and propotional
+	// is whether or not the image is proportional
 	TREES(Color.DARKGREEN, null),
 	GRASS(Color.web("C4EDB2"), null),
 	SAND(Color.web("FFF1BA"), null),
@@ -80,21 +88,21 @@ public enum WayType {
 
 
 	private double lineDash;
-	private Color fillColor;
+	private Paint fill;
 	private Color strokeColor;
 
 
 
 
 
-	WayType(Color fillColor, Color strokeColor) {
-		this.fillColor = fillColor;
+	WayType(Paint fill, Color strokeColor) {
+		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = 0;
 	}
 
-	WayType(Color fillColor, Color strokeColor, double lineDash) {
-		this.fillColor = fillColor;
+	WayType(Paint fill, Color strokeColor, double lineDash) {
+		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = lineDash;
 	}
@@ -103,12 +111,12 @@ public enum WayType {
 		return this.lineDash;
 	}
 
-	public Color getFillColor() {
-		return fillColor;
+	public Paint getFill() {
+		return fill;
 	}
 
 	public boolean hasFill(){
-		return (fillColor != null);
+		return (fill != null);
 	}
 
 	public boolean hasStroke(){
