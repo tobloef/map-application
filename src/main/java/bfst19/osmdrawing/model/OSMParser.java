@@ -30,8 +30,12 @@ public class OSMParser {
 		this.drawableModel = drawableModel;
 		if (filename.endsWith(".zip")) {
 			osmsource = getZipFile(filename);
-		} else {
+		}
+		else if (filename.endsWith(".osm")){
 			osmsource = getOsmFile(filename);
+		}
+		else {
+			throw new IOException();
 		}
 		parseOSM(osmsource);
 		drawableModel.doneAdding();
