@@ -4,11 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MultiPolyline extends ArrayList<Polyline> implements Drawable, Serializable {
-	//TODO: Move the arraylist into a field
+public class MultiPolyline implements Drawable, Serializable {
+	List<Polyline> list;
 	public MultiPolyline(OSMRelation rel) {
-		for (OSMWay way : rel) add(new Polyline(way));
+		list = new ArrayList<>();
+		for (OSMWay way : rel.getList()) list.add(new Polyline(way));
 	}
 
 	@Override
@@ -19,8 +21,7 @@ public class MultiPolyline extends ArrayList<Polyline> implements Drawable, Seri
 	}
 
 	public void trace(GraphicsContext graphicsContext) {
-
-		for (Polyline polyline : this) {
+		for (Polyline polyline : list) {
 			polyline.trace(graphicsContext);
 		}
 	}
