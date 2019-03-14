@@ -15,15 +15,15 @@ import java.util.zip.ZipInputStream;
 import static javax.xml.stream.XMLStreamConstants.*;
 
 public class OSMParser {
-	float lonFactor = 1.0f;
-	LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
-	LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
-	List<OSMWay> coastLines = new ArrayList<>();
-	OSMWay currentWay = null;
-	OSMRelation currentRelation = null;
-	WayType currentType = null;
-	DrawableModel drawableModel;
-	Rectangle bounds = new Rectangle();
+	private float lonFactor = 1.0f;
+	private LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
+	private LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
+	private List<OSMWay> coastLines = new ArrayList<>();
+	private OSMWay currentWay = null;
+	private OSMRelation currentRelation = null;
+	private WayType currentType = null;
+	private DrawableModel drawableModel;
+	private Rectangle bounds = new Rectangle();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmsource;
