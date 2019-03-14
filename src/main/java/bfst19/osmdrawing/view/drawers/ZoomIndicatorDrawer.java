@@ -12,7 +12,8 @@ import javafx.scene.transform.Affine;
 public class ZoomIndicatorDrawer implements Drawer {
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
-	private int margin = 5;
+	private int outerMargin = 5;
+	private int innerMargin = outerMargin;
 	private int boxWidth = 100;
 	private int boxHeight = 20;
 	private int bottomOffset = 0;
@@ -41,7 +42,7 @@ public class ZoomIndicatorDrawer implements Drawer {
 	private void drawBackground() {
 		graphicsContext.setStroke(Color.BLACK);
 		graphicsContext.setFill(Color.WHITE);
-		graphicsContext.fillRect(margin, canvas.getHeight() - (margin + boxHeight + bottomOffset), boxWidth, boxHeight);
+		graphicsContext.fillRect(outerMargin, canvas.getHeight() - (outerMargin + boxHeight + bottomOffset), boxWidth, boxHeight);
 	}
 
 	private void drawText() {
@@ -55,11 +56,14 @@ public class ZoomIndicatorDrawer implements Drawer {
 	}
 
 	private double calculateDistance() {
-		double radiusOfEarth = 6371;
+		int pixelLength = boxWidth - (innerMargin * 2);
+		/*
+		double radiusOfEarth = 6371; // For use when we start taking longitude into account
 		double latitude = canvas.getBoundsInLocal().getMaxY(); //based on the bottom of the viewed window
-		System.out.println(latitude);
 		double kilometersPerLon = Math.PI / 180 * radiusOfEarth * Math.cos(latitude);
-		return (boxWidth - (margin * 2)) * canvas.getZoomFactor() * kilometersPerLon;
+		*/
+		int kilometersPerDegree = 111;
+		return pixelLength * canvas.getZoomFactor() * kilometersPerDegree;
 	}
 
 	private void renderText(double distance, String unit) {
@@ -67,16 +71,20 @@ public class ZoomIndicatorDrawer implements Drawer {
 		graphicsContext.setLineWidth(0);
 		graphicsContext.setFont(font);
 		graphicsContext.setTextAlign(TextAlignment.CENTER);
-		graphicsContext.strokeText(String.format("%.1f " + unit, distance), margin + boxWidth / 2f, canvas.getHeight() - (bottomOffset + margin + boxHeight / 2f));
+		graphicsContext.strokeText(String.format("%.1f " + unit, distance), outerMargin + boxWidth / 2f, canvas.getHeight() - (bottomOffset + outerMargin + boxHeight / 2f));
 	}
 
 	private void drawBlackBars() {
 		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.setLineWidth(1);
-		graphicsContext.moveTo(margin + margin, canvas.getHeight() - (margin + boxHeight + bottomOffset) + margin); // left line, top side
-		graphicsContext.lineTo(margin + margin, canvas.getHeight() - (margin + boxHeight + bottomOffset) + boxHeight - margin); //left line, bottom side
-		graphicsContext.lineTo(margin + boxWidth - margin, canvas.getHeight() - (margin + boxHeight + bottomOffset) + boxHeight - margin); // right line, bottom side
-		graphicsContext.lineTo(margin + boxWidth - margin, canvas.getHeight() - (margin + boxHeight + bottomOffset) + margin); //right line, top side
+		int barsLeftEdge = outerMargin + innerMargin;
+		int barsRightEdge = outerMargin + boxWidth - innerMargin;
+		double barsTopEdge = canvas.getHeight() - (outerMargin + boxHeight + bottomOffset) + innerMargin;
+		double barsBottomEdge = canvas.getHeight() - outerMargin - innerMargin - bottomOffset;
+		graphicsContext.moveTo(barsLeftEdge, barsTopEdge); // left line, top side
+		graphicsContext.lineTo(barsLeftEdge, barsBottomEdge); // left line, bottom side
+		graphicsContext.lineTo(barsRightEdge, barsBottomEdge); //right line, bottom side
+		graphicsContext.lineTo(barsRightEdge, barsTopEdge); //right line, top side
 		graphicsContext.stroke();
 	}
 }
