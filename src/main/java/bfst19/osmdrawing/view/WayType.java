@@ -1,6 +1,7 @@
 
 package bfst19.osmdrawing.view;
 
+import bfst19.osmdrawing.utils.ResourceLoader;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -15,7 +16,7 @@ public enum WayType {
 	SCREE(Color.web("F1E5DC"),null),
 
 	//Natur
-	FAKE(new ImagePattern(new Image("bfst19/osmdrawing/view/forest-texture.jpg"), 0,0, 0.1, 0.1, true), null),
+	FAKE(new ImagePattern(new Image(ResourceLoader.getResourceAsStream("view/forest-texture.jpg")), 0,0, 0.1, 0.1, true), null),
 	// The above is an example of how fill images are used. An image to be used as texture, x and y are likely
 	// uninmportant for us, width and height are the scale of the image (smaller number = smaller image), and propotional
 	// is whether or not the image is proportional
