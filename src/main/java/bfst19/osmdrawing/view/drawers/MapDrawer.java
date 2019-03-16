@@ -45,7 +45,7 @@ public class MapDrawer implements Drawer {
 		if (model.getWaysOfType(WayType.COASTLINE, getScreenBounds()).iterator().hasNext()) {
 			graphicsContext.setFill(WayType.WATER.getFillColor());
 		} else {
-			graphicsContext.setFill(WayType.COASTLINE.getFillColor());
+			graphicsContext.setFill(WayType.COASTLINE.getFill());
 		}
 		Affine affine = graphicsContext.getTransform();
 		graphicsContext.setTransform(new Affine());
