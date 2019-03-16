@@ -26,7 +26,7 @@ public class MapDrawer implements Drawer {
 		fillBackground();
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
-				graphicsContext.setFill(wayType.getFillColor());
+				graphicsContext.setFill(wayType.getFill());
 				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
 					way.fill(graphicsContext);
 				}
@@ -43,7 +43,7 @@ public class MapDrawer implements Drawer {
 
 	private void fillBackground() {
 		if (model.getWaysOfType(WayType.COASTLINE, getScreenBounds()).iterator().hasNext()) {
-			graphicsContext.setFill(WayType.WATER.getFillColor());
+			graphicsContext.setFill(WayType.WATER.getFill());
 		} else {
 			graphicsContext.setFill(WayType.COASTLINE.getFill());
 		}
