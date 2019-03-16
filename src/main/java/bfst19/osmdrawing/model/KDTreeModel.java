@@ -13,12 +13,12 @@ public class KDTreeModel implements DrawableModel {
 	Map<WayType, KDTree> wayTypeToKDTreeRoot;
 	Rectangle modelBounds;
 	static Random r = new Random();
-	private final static int MAXNODESPERLEAF = 10000; //Benchmark some different values
+	private final static int MAXNODESPERLEAF = 50; //Benchmark some different values
 
 
 	private class KDTree implements Serializable {
 		Drawable axis; //Muligvis bare gem kordinat.
-		Rectangle bbox; //Bounding box saved in just float so save the memory overhead.
+		Rectangle bbox; //Bounding box could be saved in just float so save the memory overhead.
 		List<Drawable> elements;
 		KDTree lower;
 		KDTree higher;
@@ -37,12 +37,12 @@ public class KDTreeModel implements DrawableModel {
 				Rectangle lowerBBox = new Rectangle(bbox);
 				Rectangle higherBBox = new Rectangle(bbox);
 				if (odd){
-					lowerBBox.xmax = bbox.xmax - axis.getCenterX();
-					higherBBox.xmin = bbox.xmin + axis.getCenterX();
+					lowerBBox.xmax = axis.getCenterX();
+					higherBBox.xmin = axis.getCenterX();
 				}
 				else {
-					lowerBBox.ymax = bbox.ymax - axis.getCenterY();
-					higherBBox.ymin = bbox.ymin + axis.getCenterY();
+					lowerBBox.ymax = axis.getCenterY();
+					higherBBox.ymin = axis.getCenterY();
 				}
 				List<Drawable> lowerDrawables = new ArrayList<>();
 				List<Drawable> higherDrawables = new ArrayList<>();
@@ -72,19 +72,13 @@ public class KDTreeModel implements DrawableModel {
 
 		private List<Drawable> rangeQuery(Rectangle queryBox, boolean odd, List<Drawable> drawables){
 			if (axis == null){
-				drawables.addAll(drawables);
+				drawables.addAll(elements);
 				return drawables;
 			}
-			if (queryBox.contains(lower.bbox)){
-				lower.getContent(drawables);
-			}
-			else if(queryBox.intersect(lower.bbox)){
+			if(queryBox.intersect(lower.bbox)){
 				lower.rangeQuery(queryBox, !odd, drawables);
 			}
-			if (queryBox.contains(higher.bbox)){
-				higher.getContent(drawables);
-			}
-			else if(queryBox.intersect(higher.bbox)){
+			if(queryBox.intersect(higher.bbox)){
 				higher.rangeQuery(queryBox, !odd, drawables);
 			}
 			return drawables;

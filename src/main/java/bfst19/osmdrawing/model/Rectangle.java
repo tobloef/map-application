@@ -56,4 +56,5 @@ public class Rectangle implements Serializable {
 			return false;
 		}
 	}
+
 }
