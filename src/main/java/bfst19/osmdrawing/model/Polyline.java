@@ -5,13 +5,13 @@ import javafx.scene.canvas.GraphicsContext;
 import java.io.Serializable;
 
 public class Polyline implements Drawable, Serializable {
-	private float[] coord;
+	private float[] coords;
 
 	public Polyline(OSMWay way) {
-		coord = new float[way.size() * 2];
+		coords = new float[way.size() * 2];
 		for (int i = 0 ; i < way.size() ; i++) {
-			coord[2*i] = way.get(i).getLon();
-			coord[2*i+1] = way.get(i).getLat();
+			coords[2*i] = way.get(i).getLon();
+			coords[2*i+1] = way.get(i).getLat();
 		}
 	}
 
@@ -22,9 +22,9 @@ public class Polyline implements Drawable, Serializable {
 	}
 
 	public void trace(GraphicsContext gc) {
-		gc.moveTo(coord[0], coord[1]);
-		for (int i = 2 ; i < coord.length ; i+=2) {
-			gc.lineTo(coord[i], coord[i+1]);
+		gc.moveTo(coords[0], coords[1]);
+		for (int i = 2; i < coords.length ; i+=2) {
+			gc.lineTo(coords[i], coords[i+1]);
 		}
 	}
 
@@ -37,13 +37,13 @@ public class Polyline implements Drawable, Serializable {
 	@Override
 	public float getCenterX() {
 		//TODO: Make something better for these, this is merely for testing.
-		return coord[0];
+		return coords[0];
 	}
 
 	@Override
 	public float getCenterY() {
 		//TODO: Make something better for these, this is merely for testing.
-		return coord[1];
+		return coords[1];
 	}
 
 

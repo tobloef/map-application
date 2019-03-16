@@ -5,32 +5,32 @@ import java.util.Comparator;
 import java.util.function.LongSupplier;
 
 public class LongIndex<T extends LongSupplier> {
-	private ArrayList<T> elms = new ArrayList<>();
+	private ArrayList<T> elements = new ArrayList<>();
 	private boolean sorted = false;
 
-	public void add(T elm) {
-		elms.add(elm);
+	public void add(T element) {
+		elements.add(element);
 		sorted = false;
 	}
 
 	public T get(long ref) {
 		if (!sorted) {
-			elms.sort(Comparator.comparing(T::getAsLong));
+			elements.sort(Comparator.comparing(T::getAsLong));
 			sorted = true;
 		}
-		int lo = 0;
-		int hi = elms.size();
-		while (hi - lo > 1) {
-			int mi = lo + (hi - lo) / 2;
-			if (ref < elms.get(mi).getAsLong()) {
-				hi = mi;
+		int low = 0;
+		int high = elements.size();
+		while (high - low > 1) {
+			int middle = low + (high - low) / 2;
+			if (ref < elements.get(middle).getAsLong()) {
+				high = middle;
 			} else {
-				lo = mi;
+				low = middle;
 			}
 		}
-		T elm = elms.get(lo);
-		if (elm.getAsLong() == ref) {
-			return elm;
+		T element = elements.get(low);
+		if (element.getAsLong() == ref) {
+			return element;
 		} else {
 			return null;
 		}

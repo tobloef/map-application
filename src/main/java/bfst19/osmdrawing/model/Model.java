@@ -62,7 +62,7 @@ public class Model {
 	private void parseObj(InputStream inputStream) throws IOException, ClassNotFoundException {
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 		try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
-			drawableModel = (BasicDrawableModel) input.readObject();
+			drawableModel = (KDTreeModel) input.readObject();
 			modelBounds = drawableModel.getModelBounds();
 		}
 	}
@@ -74,6 +74,4 @@ public class Model {
 			output.writeObject(drawableModel);
 		}
 	}
-
-
 }
