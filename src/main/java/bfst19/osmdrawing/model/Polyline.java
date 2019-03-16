@@ -37,13 +37,13 @@ public class Polyline implements Drawable, Serializable {
 	@Override
 	public float getCenterX() {
 		//TODO: Make something better for these, this is merely for testing.
-		return coord[0];
+		return coords[0];
 	}
 
 	@Override
 	public float getCenterY() {
 		//TODO: Make something better for these, this is merely for testing.
-		return coord[1];
+		return coords[1];
 	}
 
 

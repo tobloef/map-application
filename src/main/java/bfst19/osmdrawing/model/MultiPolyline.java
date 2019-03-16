@@ -36,12 +36,12 @@ public class MultiPolyline implements Drawable, Serializable {
 	@Override
 	public float getCenterX() {
 		//TODO: Make something better for these, this is merely for testing.
-		return get(0).getCenterX();
+		return list.get(0).getCenterX();
 	}
 
 	@Override
 	public float getCenterY() {
 		//TODO: Make something better for these, this is merely for testing.
-		return get(0).getCenterY();
+		return list.get(0).getCenterY();
 	}
 }
