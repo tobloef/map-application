@@ -27,6 +27,7 @@ public class KDTreeModel implements DrawableModel {
 		private KDTree(List<Drawable> drawables, boolean odd, int depth, Rectangle bbox){
 			this.depth = depth;
 			this.bbox = bbox;
+			//TODO: Grow the bounding to box to contain all its children.
 			if (drawables.size() < MAXNODESPERLEAF){
 				this.elements = drawables;
 			}
