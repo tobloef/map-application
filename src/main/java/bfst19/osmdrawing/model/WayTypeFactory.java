@@ -62,24 +62,24 @@ public class WayTypeFactory {
 	private static void initializeWayTypes(String filename) {
 		try {
 			keyValuesToType = new HashMap<>();
-			FileReader fr = new FileReader(filename);
-			BufferedReader br = new BufferedReader(fr);
-			while (br.ready()) {
-				String line = br.readLine();
+			FileReader fileReader = new FileReader(filename);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			while (bufferedReader.ready()) {
+				String line = bufferedReader.readLine();
 				if (line.trim().isEmpty() || lineIsComment(line)){
 					continue;
 				}
-				StringTokenizer st = new StringTokenizer(line);
-				String first = st.nextToken();
+				StringTokenizer stringTokenizer = new StringTokenizer(line);
+				String first = stringTokenizer.nextToken();
 				WayType currentType = getWayTypeFromString(first);
 				if (currentType == null) {
 					System.err.println("Wrong/Missing WayType: " + first);
 					continue;
 				}
-				String key = st.nextToken().trim();
+				String key = stringTokenizer.nextToken().trim();
 				List<String> values = new ArrayList<>();
-				while (st.hasMoreElements()) {
-					values.add(st.nextToken().trim());
+				while (stringTokenizer.hasMoreElements()) {
+					values.add(stringTokenizer.nextToken().trim());
 				}
 				addValues(currentType, key, values);
 			}

@@ -57,6 +57,11 @@ public class ZoomIndicatorDrawer implements Drawer {
 
 	private double calculateDistance() {
 		int pixelLength = boxWidth - (innerMargin * 2);
+		/*
+		double radiusOfEarth = 6371; // For use when we start taking longitude into account
+		double latitude = canvas.getBoundsInLocal().getMaxY(); //based on the bottom of the viewed window
+		double kilometersPerLon = Math.PI / 180 * radiusOfEarth * Math.cos(latitude);
+		*/
 		int kilometersPerDegree = 111;
 		return pixelLength * canvas.getZoomFactor() * kilometersPerDegree;
 	}

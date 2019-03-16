@@ -26,15 +26,15 @@ public class MapDrawer implements Drawer {
 		fillBackground();
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
-				graphicsContext.setFill(wayType.getFill());
-				for (Drawable way : model.getWaysOfType(wayType, getModelBounds())) {
+				graphicsContext.setFill(wayType.getFillColor());
+				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
 					way.fill(graphicsContext);
 				}
 			}
 			if (wayType.hasStroke()) {
 				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
 				graphicsContext.setStroke(wayType.getStrokeColor());
-				for (Drawable way : model.getWaysOfType(wayType, getModelBounds())){
+				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())){
 					way.stroke(graphicsContext);
 				}
 			}
@@ -42,8 +42,8 @@ public class MapDrawer implements Drawer {
 	}
 
 	private void fillBackground() {
-		if (model.getWaysOfType(WayType.COASTLINE, getModelBounds()).iterator().hasNext()) {
-			graphicsContext.setFill(WayType.WATER.getFill());
+		if (model.getWaysOfType(WayType.COASTLINE, getScreenBounds()).iterator().hasNext()) {
+			graphicsContext.setFill(WayType.WATER.getFillColor());
 		} else {
 			graphicsContext.setFill(WayType.COASTLINE.getFill());
 		}
@@ -52,7 +52,7 @@ public class MapDrawer implements Drawer {
 		graphicsContext.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		graphicsContext.setTransform(affine);
 	}
-	private Rectangle getModelBounds(){
+	private Rectangle getScreenBounds(){
 		Bounds bounds = canvas.getBoundsInLocal();
 		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
 		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());

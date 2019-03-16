@@ -73,6 +73,4 @@ public class Model {
 			output.writeObject(drawableModel);
 		}
 	}
-
-
 }
