@@ -3,6 +3,7 @@ package bfst19.osmdrawing.model;
 import bfst19.osmdrawing.view.WayType;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.w3c.dom.css.Rect;
 
 import java.io.Serializable;
 import java.util.*;
@@ -12,24 +13,37 @@ public class KDTreeModel implements DrawableModel {
 	Map<WayType, KDTree> wayTypeToKDTreeRoot;
 	Rectangle modelBounds;
 	static Random r = new Random();
-	private final static int MAXNODESPERLEAF = 10; //Benchmark some different values
+	private final static int MAXNODESPERLEAF = 10000; //Benchmark some different values
 
 
 	private class KDTree implements Serializable {
 		Drawable axis; //Muligvis bare gem kordinat.
+		Rectangle bbox; //Bounding box saved in just float so save the memory overhead.
 		List<Drawable> elements;
 		KDTree lower;
 		KDTree higher;
 		int depth;
 
-		private KDTree(List<Drawable> drawables, boolean odd, int depth){
+		private KDTree(List<Drawable> drawables, boolean odd, int depth, Rectangle bbox){
 			this.depth = depth;
+			this.bbox = bbox;
 			if (drawables.size() < MAXNODESPERLEAF){
 				this.elements = drawables;
 			}
 			else {
 				axis = quickMedian(drawables, odd);
 				drawables.remove(axis);
+				//TODO: Move creation of children into function, it appears to have code duplication.
+				Rectangle lowerBBox = new Rectangle(bbox);
+				Rectangle higherBBox = new Rectangle(bbox);
+				if (odd){
+					lowerBBox.xmax = bbox.xmax - axis.getCenterX();
+					higherBBox.xmin = bbox.xmin + axis.getCenterX();
+				}
+				else {
+					lowerBBox.ymax = bbox.ymax - axis.getCenterY();
+					higherBBox.ymin = bbox.ymin + axis.getCenterY();
+				}
 				List<Drawable> lowerDrawables = new ArrayList<>();
 				List<Drawable> higherDrawables = new ArrayList<>();
 				for (Drawable drawable : drawables){
@@ -40,8 +54,8 @@ public class KDTreeModel implements DrawableModel {
 						higherDrawables.add(drawable);
 					}
 				}
-				lower = new KDTree(lowerDrawables, !odd, this.depth +1);
-				higher = new KDTree(higherDrawables, !odd, this.depth +1);
+				lower = new KDTree(lowerDrawables, !odd, this.depth +1, lowerBBox);
+				higher = new KDTree(higherDrawables, !odd, this.depth +1, higherBBox);
 			}
 		}
 
@@ -56,12 +70,24 @@ public class KDTreeModel implements DrawableModel {
 			return drawables;
 		}
 
-		private List<Drawable> rangeQuery(Rectangle box, boolean odd){
+		private List<Drawable> rangeQuery(Rectangle queryBox, boolean odd, List<Drawable> drawables){
 			if (axis == null){
-				return elements;
+				drawables.addAll(drawables);
+				return drawables;
 			}
-			ArrayList<Drawable> list = new ArrayList<>();
-			return higher.getContent(list);
+			if (queryBox.contains(lower.bbox)){
+				lower.getContent(drawables);
+			}
+			else if(queryBox.intersect(lower.bbox)){
+				lower.rangeQuery(queryBox, !odd, drawables);
+			}
+			if (queryBox.contains(higher.bbox)){
+				higher.getContent(drawables);
+			}
+			else if(queryBox.intersect(higher.bbox)){
+				higher.rangeQuery(queryBox, !odd, drawables);
+			}
+			return drawables;
 		}
 
 
@@ -79,7 +105,7 @@ public class KDTreeModel implements DrawableModel {
 	@Override
 	public Iterable<Drawable> getDrawablesOfType(WayType type, Rectangle bounds) {
 		if (wayTypeToKDTreeRoot.containsKey(type))
-			return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, true);
+			return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, true, new ArrayList<Drawable>());
 		else {
 			return new ArrayList<>();
 		}
@@ -88,6 +114,7 @@ public class KDTreeModel implements DrawableModel {
 	@Override
 	public void doneAdding() {
 		initializeKDTree();
+		wayTypeEnumMap = null;
 		return;
 	}
 
@@ -96,7 +123,7 @@ public class KDTreeModel implements DrawableModel {
 		for (WayType wayType : WayType.values()){
 			List<Drawable> drawables = wayTypeEnumMap.get(wayType);
 			if (drawables.size() > 0) {
-				KDTree newTree = new KDTree(drawables, true, 1); //Its true so that the first node splits in x;
+				KDTree newTree = new KDTree(drawables, true, 1, getModelBounds()); //Its true so that the first node splits in x;
 				wayTypeToKDTreeRoot.put(wayType, newTree);
 			}
 		}

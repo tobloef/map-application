@@ -17,6 +17,13 @@ public class Rectangle implements Serializable {
 		//Empty on purpose
 	}
 
+	public Rectangle(Rectangle rect2) {
+		this.xmin = rect2.xmin;
+		this.ymin = rect2.ymin;
+		this.xmax = rect2.xmax;
+		this.ymax = rect2.ymax;
+	}
+
 	@Override
 	public String toString() {
 		return "" + xmin + " " + ymin + " " + xmax + " " + ymax;
