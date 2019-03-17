@@ -1,6 +1,19 @@
 # Changelog
 Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige releases.
 
+## v0.3 - 17/3/2019
+### Tilføjet
+- Flere kommentarer i koden overalt
+- Kan anvende textures som fill til waytypes
+- Alerts under menuen Program-> Help & About
+- KD-træ (ikke færdigt, ligger i seperat branch, punkt-baseret og ikke way-baseret lige nu)
+
+### Ændringer
+- Refaktoriseing fra projekt-start er færdig
+
+### Bugs osv.
+- \#56 og #14 er stadig ikke fixet
+
 ## v0.2 - 10/3/2019
 ### Tilføjet
 - Menubar igennem FXML, til senere brug

@@ -4,7 +4,20 @@
 <MenuBar xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          fx:controller="bfst19.osmdrawing.controller.TopMenu">
-        <Menu text="File">
-            <MenuItem text="Test" onAction="#onTest"/>
+        <Menu text="Program">
+            <MenuItem text="Help" onAction="#onHelp"/>
+            <MenuItem text="About" onAction="#onAbout"/>
+        </Menu>
+        <Menu text="Settings">
+            <MenuItem text="Waytypes" onAction="#onWaytypes"/>
+        </Menu>
+        <Menu text="Route">
+            <MenuItem text="Print to file" onAction="#onPrintToFile"/>
+            <MenuItem text="A*" onAction="#onAStar"/>
+            <MenuItem text="Djikstra" onAction="#onDjikstra"/>
+        </Menu>
+        <Menu text="Extra">
+            <MenuItem text="Points of Interest" onAction="#onPOI"/>
+            <MenuItem text="Easter Egg" onAction="#onEE"/>
         </Menu>
 </MenuBar>
