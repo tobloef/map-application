@@ -27,12 +27,12 @@ public class KDTree implements Serializable {
 			Rectangle lowerBBox = new Rectangle(bbox);
 			Rectangle higherBBox = new Rectangle(bbox);
 			if (odd){
-				lowerBBox.xmax = axis.getCenterX();
-				higherBBox.xmin = axis.getCenterX();
+				lowerBBox.xMax = axis.getCenterX();
+				higherBBox.xMin = axis.getCenterX();
 			}
 			else {
-				lowerBBox.ymax = axis.getCenterY();
-				higherBBox.ymin = axis.getCenterY();
+				lowerBBox.yMax = axis.getCenterY();
+				higherBBox.yMin = axis.getCenterY();
 			}
 			List<Drawable> lowerDrawables = new ArrayList<>();
 			List<Drawable> higherDrawables = new ArrayList<>();
@@ -78,7 +78,7 @@ public class KDTree implements Serializable {
 		return quickSelect(list, 0, list.size()-1, list.size()/2, isCheckingForX);
 	}
 
-	//These are both taken from wikipedia, They could possibly be more efficient, runs pretty fast right now through
+	//Quickselect and Partition are taken from wikipedia, They could possibly be more efficient, runs pretty fast right now through
 	private static Drawable quickSelect(List<Drawable> list, int left, int right, int k, boolean isCheckingForX){
 		if (left == right){
 			return list.get(left);

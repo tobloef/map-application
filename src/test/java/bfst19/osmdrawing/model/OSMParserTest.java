@@ -15,10 +15,10 @@ class OSMParserTest {
 		DrawableModel drawableModel = new BasicDrawableModel();
 		String filePath = this.getClass().getResource("small.osm").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
-		assertEquals(55.6631 ,osmParser.getModelBounds().ymin, 0.02);
-		assertEquals(7.090 ,osmParser.getModelBounds().xmin, 0.02);
-		assertEquals(55.6804 ,osmParser.getModelBounds().ymax, 0.02);
-		assertEquals(7.1073 ,osmParser.getModelBounds().xmax, 0.02);
+		assertEquals(55.6631 ,osmParser.getModelBounds().yMin, 0.02);
+		assertEquals(7.090 ,osmParser.getModelBounds().xMin, 0.02);
+		assertEquals(55.6804 ,osmParser.getModelBounds().yMax, 0.02);
+		assertEquals(7.1073 ,osmParser.getModelBounds().xMax, 0.02);
 	}
 
 	@Test
@@ -27,9 +27,9 @@ class OSMParserTest {
 		DrawableModel drawableModel = new BasicDrawableModel();
 		String filePath = this.getClass().getResource("small.zip").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
-		assertEquals(55.6631 ,osmParser.getModelBounds().ymin, 0.02);
-		assertEquals(7.090 ,osmParser.getModelBounds().xmin, 0.02);
-		assertEquals(55.6804 ,osmParser.getModelBounds().ymax, 0.02);
-		assertEquals(7.1073 ,osmParser.getModelBounds().xmax, 0.02);
+		assertEquals(55.6631 ,osmParser.getModelBounds().yMin, 0.02);
+		assertEquals(7.090 ,osmParser.getModelBounds().xMin, 0.02);
+		assertEquals(55.6804 ,osmParser.getModelBounds().yMax, 0.02);
+		assertEquals(7.1073 ,osmParser.getModelBounds().xMax, 0.02);
 	}
 }
