@@ -47,26 +47,26 @@ public enum WayType {
 	BRIDGE(Color.DARKKHAKI, Color.DARKKHAKI),
 	APRON(Color.web("DADAE0"),null),
 
-	//Veje
-	RESIDENTIALROAD(null, Color.web("FFFFFF")), //Skal have en tykkelse
-	PRIMARYROAD(null, Color.web("FFAD95")), //Skal have en tykkelse
-	RUNWAY(null, Color.web("BABACC")), //Skal have en tykkelse
-	RAILWAY(null, Color.LIGHTGRAY, 2),
-	MOTORWAY(null, Color.web("FEB9C3")), //Skal have en tykkelse
-	SECONDARYROAD(null, Color.web("F7FBBB")), //Skal have en tykkelse
-	TERTIARYROAD(null,Color.web("FFFFFF")), //Skal have en tykkelse
-	SERVICEROAD(null, Color.web("FFFFFF")), //Skal have en tykkelse
-	UNCLASSIFIEDROAD(null,Color.web("FFFFFF")), //Skal have en tykkelse
-	LIVING_STREET(null, Color.web("EDEEED")), //Skal have en tykkelse
-	PEDESTRIAN(null,Color.web("DDDDE9")), //Skal have en tykkelse
-	RACEWAY(null, Color.web(("FFBDC7"))), //Skal have en tykkelse
-	ROUNDABOUT(null, Color.web("FFFFFF")), //Skal have en tykkelse
-
 	//Afkørelser
-	MOTORWAYEXIT(null, Color.web("FC8A9C")), //Skal have en tykkelse
-	PRIMARYROADEXIT(null,Color.web("FFAD95")), //Skal have en tykkelse
-	SECONDARYROADEXIT(null, Color.web("F7FBBB")), //Skal have en tykkelse
-	TERTIARYROADEXIT(null, Color.web("FFFFFF")), //Skal have en tykkelse
+	TERTIARYROADEXIT(null, Color.web("FFFFFF"),0, 0.00008),
+	SECONDARYROADEXIT(null, Color.web("F7FBBB"), 0, 0.00012),
+	PRIMARYROADEXIT(null,Color.web("FFAD95"), 0, 0.00012),
+	MOTORWAYEXIT(null, Color.web("FEB9C3"), 0, 0.00014),
+
+	//Veje
+	RESIDENTIALROAD(null, Color.web("FFFFFF"), 0, 0.00006),
+	TERTIARYROAD(null,Color.web("FFFFFF"), 0, 0.00008),
+	SERVICEROAD(null, Color.web("FFFFFF"),0,0.00004),
+	UNCLASSIFIEDROAD(null,Color.web("FFFFFF"), 0, 0.00006),
+	ROUNDABOUT(null, Color.web("FFFFFF"),0,0.00008),
+	LIVING_STREET(null, Color.web("EDEEED"),0, 0.00006),
+	SECONDARYROAD(null, Color.web("F7FBBB"),0, 0.00012),
+	PRIMARYROAD(null, Color.web("FFAD95"), 0, 0.00012),
+	RUNWAY(null, Color.web("BABACC"),0,0.0005), //Det ser mærkeligt ud?
+	RAILWAY(null, Color.LIGHTGRAY, 2),
+	PEDESTRIAN(null,Color.web("DDDDE9"), 0,0.00005),
+	RACEWAY(null, Color.web(("FFBDC7")),0,0.00004),
+	MOTORWAY(null, Color.web("FEB9C3"),0,0.00014),
 
 	//Abstrakte ting såsom ruter
 	MARKING(null, Color.BLACK), //Skal have en tykkelse
@@ -93,10 +93,6 @@ public enum WayType {
 	private Paint fill;
 	private Color strokeColor;
 
-
-
-
-
 	WayType(Paint fill, Color strokeColor) {
 		this.fill = fill;
 		this.strokeColor = strokeColor;
@@ -111,11 +107,11 @@ public enum WayType {
 		this.lineWidth = -1;
 	}
 
-	WayType(Paint fill, Color strokeColor, double lineDash, double lineWidth){
+	WayType(Paint fill, Color strokeColor, double lineDash, double roadWidth){
 		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = lineDash;
-		this.lineWidth = lineWidth;
+		this.lineWidth = roadWidth;
 	}
 
 	public double getLineDash(){

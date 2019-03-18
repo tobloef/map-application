@@ -36,6 +36,7 @@ public class MapDrawer implements Drawer {
 			if (wayType.hasStroke()) {
 				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
 				graphicsContext.setStroke(wayType.getStrokeColor());
+
 				if(wayType.hasLineWidth()){
 					graphicsContext.setLineWidth(wayType.getLineWidth());
 				}
