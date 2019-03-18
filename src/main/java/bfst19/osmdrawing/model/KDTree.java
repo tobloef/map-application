@@ -14,7 +14,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private final static int MAXNODESPERLEAF = 50; //TODO: Benchmark some different values
 	private final static Random random = new Random();
 
-	public KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
+	public KDTree(List<T> inputElements, Rectangle bbox){
+		this(inputElements, true, bbox);
+	}
+
+	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
 		this.bbox = bbox;
 		//TODO: Grow the bounding to box to contain all its children.
 		if (inputElements.size() < MAXNODESPERLEAF){
@@ -44,8 +48,8 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 					higherElements.add(element);
 				}
 			}
-			lower = new KDTree(lowerElements, !odd, lowerBBox);
-			higher = new KDTree(higherElements, !odd, higherBBox);
+			lower = new KDTree<T>(lowerElements, !odd, lowerBBox);
+			higher = new KDTree<T>(higherElements, !odd, higherBBox);
 		}
 	}
 
@@ -60,11 +64,16 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		return returnElements;
 	}
 
-	public List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
+	public List<T> rangeQuery(Rectangle queryBox, List<T> returnElements){
+		return rangeQuery(queryBox, true, returnElements);
+	}
+
+	private List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
 		if (axis == null){
 			returnElements.addAll(elements);
 			return returnElements;
 		}
+		returnElements.add(axis); //TODO: Check if its faster to draw the element or check if it should be drawn.
 		if(queryBox.intersect(lower.bbox)){
 			lower.rangeQuery(queryBox, !odd, returnElements);
 		}
