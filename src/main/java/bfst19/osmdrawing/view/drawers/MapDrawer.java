@@ -1,7 +1,6 @@
 package bfst19.osmdrawing.view.drawers;
 
 import bfst19.osmdrawing.model.Drawable;
-import bfst19.osmdrawing.model.KDTreeModel;
 import bfst19.osmdrawing.model.Model;
 import bfst19.osmdrawing.model.Rectangle;
 import bfst19.osmdrawing.view.WayType;
@@ -9,7 +8,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 

@@ -2,7 +2,6 @@ package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.utils.ResourceLoader;
 import bfst19.osmdrawing.view.WayType;
-import javafx.scene.canvas.GraphicsContext;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-	DrawableModel drawableModel = new KDTreeModel();
+	DrawableModel drawableModel = new KDTreeDrawableModel();
 	List<Runnable> observers = new ArrayList<>();
 	public Rectangle modelBounds;
 
@@ -62,7 +61,7 @@ public class Model {
 	private void parseObj(InputStream inputStream) throws IOException, ClassNotFoundException {
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 		try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
-			drawableModel = (KDTreeModel) input.readObject();
+			drawableModel = (KDTreeDrawableModel) input.readObject();
 			modelBounds = drawableModel.getModelBounds();
 		}
 	}

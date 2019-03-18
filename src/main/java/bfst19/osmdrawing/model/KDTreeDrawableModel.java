@@ -8,7 +8,7 @@ import org.w3c.dom.css.Rect;
 import java.io.Serializable;
 import java.util.*;
 
-public class KDTreeModel implements DrawableModel {
+public class KDTreeDrawableModel implements DrawableModel {
 	Map<WayType, List<Drawable>> wayTypeEnumMap = DrawableModel.initializeWaysEnumMap();
 	Map<WayType, KDTree> wayTypeToKDTreeRoot;
 	Rectangle modelBounds;
@@ -16,7 +16,7 @@ public class KDTreeModel implements DrawableModel {
 
 
 
-	public KDTreeModel(){
+	public KDTreeDrawableModel(){
 
 	}
 

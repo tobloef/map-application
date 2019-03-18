@@ -5,24 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class KDTree implements Serializable {
-	Drawable axis;
+public class KDTree<T extends SpatialIndexable> implements Serializable {
+	T axis;
 	Rectangle bbox; //Bounding box could be saved in just float so save the memory overhead.
-	List<Drawable> elements;
+	List<T> elements;
 	KDTree lower;
 	KDTree higher;
 	private final static int MAXNODESPERLEAF = 50; //TODO: Benchmark some different values
 	private final static Random random = new Random();
 
-	public KDTree(List<Drawable> drawables, boolean odd, Rectangle bbox){
+	public KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
 		this.bbox = bbox;
 		//TODO: Grow the bounding to box to contain all its children.
-		if (drawables.size() < MAXNODESPERLEAF){
-			this.elements = drawables;
+		if (inputElements.size() < MAXNODESPERLEAF){
+			this.elements = inputElements;
 		}
 		else {
-			axis = quickMedian(drawables, odd);
-			drawables.remove(axis);
+			axis = quickMedian(inputElements, odd);
+			inputElements.remove(axis);
 			//TODO: Move creation of children into function, it appears to have code duplication.
 			Rectangle lowerBBox = new Rectangle(bbox);
 			Rectangle higherBBox = new Rectangle(bbox);
@@ -34,52 +34,52 @@ public class KDTree implements Serializable {
 				lowerBBox.yMax = axis.getCenterY();
 				higherBBox.yMin = axis.getCenterY();
 			}
-			List<Drawable> lowerDrawables = new ArrayList<>();
-			List<Drawable> higherDrawables = new ArrayList<>();
-			for (Drawable drawable : drawables){
-				if (drawableLessThen(drawable, axis, odd)){
-					lowerDrawables.add(drawable);
+			List<T> lowerElements = new ArrayList<>();
+			List<T> higherElements = new ArrayList<>();
+			for (T element : inputElements){
+				if (spatialLessThen(element, axis, odd)){
+					lowerElements.add(element);
 				}
 				else {
-					higherDrawables.add(drawable);
+					higherElements.add(element);
 				}
 			}
-			lower = new KDTree(lowerDrawables, !odd, lowerBBox);
-			higher = new KDTree(higherDrawables, !odd, higherBBox);
+			lower = new KDTree(lowerElements, !odd, lowerBBox);
+			higher = new KDTree(higherElements, !odd, higherBBox);
 		}
 	}
 
-	private List<Drawable> getContent(List<Drawable> drawables){
+	private List<T> getContent(List<T> returnElements){
 		if (axis == null){
-			drawables.addAll(elements);
+			returnElements.addAll(elements);
 		}
 		else {
-			higher.getContent(drawables);
-			lower.getContent(drawables);
+			higher.getContent(returnElements);
+			lower.getContent(returnElements);
 		}
-		return drawables;
+		return returnElements;
 	}
 
-	public List<Drawable> rangeQuery(Rectangle queryBox, boolean odd, List<Drawable> drawables){
+	public List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
 		if (axis == null){
-			drawables.addAll(elements);
-			return drawables;
+			returnElements.addAll(elements);
+			return returnElements;
 		}
 		if(queryBox.intersect(lower.bbox)){
-			lower.rangeQuery(queryBox, !odd, drawables);
+			lower.rangeQuery(queryBox, !odd, returnElements);
 		}
 		if(queryBox.intersect(higher.bbox)){
-			higher.rangeQuery(queryBox, !odd, drawables);
+			higher.rangeQuery(queryBox, !odd, returnElements);
 		}
-		return drawables;
+		return returnElements;
 	}
 
-	private static Drawable quickMedian(List<Drawable> list, boolean isCheckingForX){
+	private T quickMedian(List<T> list, boolean isCheckingForX){
 		return quickSelect(list, 0, list.size()-1, list.size()/2, isCheckingForX);
 	}
 
 	//Quickselect and Partition are taken from wikipedia, They could possibly be more efficient, runs pretty fast right now through
-	private static Drawable quickSelect(List<Drawable> list, int left, int right, int k, boolean isCheckingForX){
+	private T quickSelect(List<T> list, int left, int right, int k, boolean isCheckingForX){
 		if (left == right){
 			return list.get(left);
 		}
@@ -96,12 +96,12 @@ public class KDTree implements Serializable {
 		}
 	}
 
-	private static int partition(List<Drawable> list, int left, int right, int pivotIndex, boolean isCheckingForX){
-		Drawable pivotElement = list.get(pivotIndex);
+	private int partition(List<T> list, int left, int right, int pivotIndex, boolean isCheckingForX){
+		T pivotElement = list.get(pivotIndex);
 		swap(list, pivotIndex, right);
 		int storeIndex = left;
 		for (int i = left; i < right; i++){
-			if (drawableLessThen(list.get(i), pivotElement, isCheckingForX)){
+			if (spatialLessThen(list.get(i), pivotElement, isCheckingForX)){
 				swap(list, storeIndex, i);
 				storeIndex++;
 			}
@@ -110,13 +110,13 @@ public class KDTree implements Serializable {
 		return storeIndex;
 	}
 
-	private static final <T> void swap (List<T> a, int i, int j) {
+	private final <T> void swap (List<T> a, int i, int j) {
 		T t = a.get(i);
 		a.set(i, a.get(j));
 		a.set(j, t);
 	}
 
-	private static boolean drawableLessThen(Drawable left, Drawable right, boolean isCheckingForX){
+	private boolean spatialLessThen(T left, T right, boolean isCheckingForX){
 		if (isCheckingForX){
 			return left.getCenterX() < right.getCenterX();
 		}
@@ -125,10 +125,10 @@ public class KDTree implements Serializable {
 		}
 	}
 
-	private static int smallerElements(List<Drawable> list, Drawable element, boolean isCheckingForX){
+	private int smallerElements(List<T> list, T element, boolean isCheckingForX){
 		int numberSmaller = 0;
-		for (Drawable comp : list){
-			if (drawableLessThen(comp, element, isCheckingForX)){
+		for (T comp : list){
+			if (spatialLessThen(comp, element, isCheckingForX)){
 				numberSmaller++;
 			}
 		}

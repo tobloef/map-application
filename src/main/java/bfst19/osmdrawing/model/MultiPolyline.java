@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiPolyline implements Drawable, Serializable {
+public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	List<Polyline> list;
 	public MultiPolyline(OSMRelation rel) {
 		list = new ArrayList<>();
