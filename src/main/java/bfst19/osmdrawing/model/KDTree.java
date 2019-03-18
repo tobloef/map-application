@@ -92,22 +92,22 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		if (left == right){
 			return list.get(left);
 		}
-		int pivotIndex = left + (int)Math.floor(random.nextDouble() % (right - left + 1));
-		pivotIndex = partition(list, left, right, pivotIndex, isCheckingForX);
-		if (k == pivotIndex){
+		int partitionIndex = left + (int)Math.floor(random.nextDouble() % (right - left + 1));
+		partitionIndex = partition(list, left, right, partitionIndex, isCheckingForX);
+		if (k == partitionIndex){
 			return list.get(k);
 		}
-		else if( k < pivotIndex){
-			return quickSelect(list, left, pivotIndex - 1, k, isCheckingForX);
+		else if( k < partitionIndex){
+			return quickSelect(list, left, partitionIndex - 1, k, isCheckingForX);
 		}
 		else {
-			return quickSelect(list, pivotIndex + 1, right, k, isCheckingForX);
+			return quickSelect(list, partitionIndex + 1, right, k, isCheckingForX);
 		}
 	}
 
-	private int partition(List<T> list, int left, int right, int pivotIndex, boolean isCheckingForX){
-		T pivotElement = list.get(pivotIndex);
-		swap(list, pivotIndex, right);
+	private int partition(List<T> list, int left, int right, int partitionIndex, boolean isCheckingForX){
+		T pivotElement = list.get(partitionIndex);
+		swap(list, partitionIndex, right);
 		int storeIndex = left;
 		for (int i = left; i < right; i++){
 			if (spatialLessThen(list.get(i), pivotElement, isCheckingForX)){
@@ -132,16 +132,6 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		else {
 			return left.getRepresentativeY() < right.getRepresentativeY();
 		}
-	}
-
-	private int smallerElements(List<T> list, T element, boolean isCheckingForX){
-		int numberSmaller = 0;
-		for (T comp : list){
-			if (spatialLessThen(comp, element, isCheckingForX)){
-				numberSmaller++;
-			}
-		}
-		return numberSmaller;
 	}
 
 }
