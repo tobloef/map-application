@@ -27,12 +27,12 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			Rectangle lowerBBox = new Rectangle(bbox);
 			Rectangle higherBBox = new Rectangle(bbox);
 			if (odd){
-				lowerBBox.xMax = axis.getCenterX();
-				higherBBox.xMin = axis.getCenterX();
+				lowerBBox.xMax = axis.getRepresentativeX();
+				higherBBox.xMin = axis.getRepresentativeX();
 			}
 			else {
-				lowerBBox.yMax = axis.getCenterY();
-				higherBBox.yMin = axis.getCenterY();
+				lowerBBox.yMax = axis.getRepresentativeY();
+				higherBBox.yMin = axis.getRepresentativeY();
 			}
 			List<T> lowerElements = new ArrayList<>();
 			List<T> higherElements = new ArrayList<>();
@@ -118,10 +118,10 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 
 	private boolean spatialLessThen(T left, T right, boolean isCheckingForX){
 		if (isCheckingForX){
-			return left.getCenterX() < right.getCenterX();
+			return left.getRepresentativeX() < right.getRepresentativeX();
 		}
 		else {
-			return left.getCenterY() < right.getCenterY();
+			return left.getRepresentativeY() < right.getRepresentativeY();
 		}
 	}
 

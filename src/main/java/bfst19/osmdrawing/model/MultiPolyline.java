@@ -34,14 +34,23 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	}
 
 	@Override
-	public float getCenterX() {
+	public float getRepresentativeX() {
 		//TODO: Make something better for these, this is merely for testing.
-		return list.get(0).getCenterX();
+		return list.get(0).getRepresentativeX();
 	}
 
 	@Override
-	public float getCenterY() {
+	public float getRepresentativeY() {
 		//TODO: Make something better for these, this is merely for testing.
-		return list.get(0).getCenterY();
+		return list.get(0).getRepresentativeY();
+	}
+
+	@Override
+	public Rectangle getMinimumBoundingRectangle() {
+		Rectangle rectangle = new Rectangle();
+		for (Polyline polyline : list) {
+			rectangle.growToEncompass(polyline.getMinimumBoundingRectangle());
+		}
+		return rectangle;
 	}
 }

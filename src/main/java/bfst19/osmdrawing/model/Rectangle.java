@@ -65,4 +65,18 @@ public class Rectangle implements Serializable {
 		}
 	}
 
+	public void growToEncompass(Rectangle rectangle) {
+		if (rectangle.xMin < this.xMin) {
+			this.xMin = rectangle.xMin;
+		}
+		if (rectangle.xMax > this.xMax){
+			this.xMax = rectangle.xMax;
+		}
+		if (rectangle.yMin < this.yMin){
+			this.yMin = rectangle.yMin;
+		}
+		if (rectangle.yMax > this.yMax){
+			this.yMax = rectangle.yMax;
+		}
+	}
 }
