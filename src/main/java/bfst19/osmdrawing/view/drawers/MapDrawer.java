@@ -24,6 +24,8 @@ public class MapDrawer implements Drawer {
 
 	public void draw() {
 		fillBackground();
+		double defaultLineWidth = graphicsContext.getLineWidth();
+
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				graphicsContext.setFill(wayType.getFill());
@@ -34,9 +36,13 @@ public class MapDrawer implements Drawer {
 			if (wayType.hasStroke()) {
 				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
 				graphicsContext.setStroke(wayType.getStrokeColor());
+				if(wayType.hasLineWidth()){
+					graphicsContext.setLineWidth(wayType.getLineWidth());
+				}
 				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())){
 					way.stroke(graphicsContext);
 				}
+				graphicsContext.setLineWidth(defaultLineWidth);
 			}
 		}
 	}

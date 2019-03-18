@@ -89,6 +89,7 @@ public enum WayType {
 
 
 	private double lineDash;
+	private double lineWidth;
 	private Paint fill;
 	private Color strokeColor;
 
@@ -100,12 +101,21 @@ public enum WayType {
 		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = 0;
+		this.lineWidth = -1;
 	}
 
 	WayType(Paint fill, Color strokeColor, double lineDash) {
 		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = lineDash;
+		this.lineWidth = -1;
+	}
+
+	WayType(Paint fill, Color strokeColor, double lineDash, double lineWidth){
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+		this.lineDash = lineDash;
+		this.lineWidth = lineWidth;
 	}
 
 	public double getLineDash(){
@@ -127,4 +137,11 @@ public enum WayType {
 	public Color getStrokeColor() {
 		return strokeColor;
 	}
+
+	public boolean hasLineWidth(){ return (lineWidth != -1); }
+
+	public double getLineWidth() {
+		return lineWidth;
+	}
+
 }
