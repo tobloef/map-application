@@ -1,0 +1,234 @@
+---
+
+# The format is:
+# way type name:
+#   fillColor: "Web color"
+#   strokeColor: "Web color"
+#   lineDash: Number
+#   lineWidth: Number
+#   texture: Path
+#
+# For more about web color formats, see:
+# https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
+
+- COASTLINE:
+    fillColor: "EEF0D5"
+
+- ISLAND:
+    fillColor: "F4F0EA"
+
+- SCREE:
+    fillColor: "F1E5DC"
+
+- TREES:
+    fillColor: "006400"
+
+- GRASS:
+    fillColor: "C4EDB2"
+
+- SAND:
+    fillColor: "FFF1BA"
+
+- FARMLAND:
+    fillColor: "EFF1D5"
+
+- WOOD:
+    fillColor: "A1D29F"
+
+- HEATH:
+    fillColor: "D6D99F"
+
+- MEADOW:
+    fillColor: "C4EDB2"
+
+- PARK:
+    fillColor: "90EE90"
+
+- WETLAND:
+    fillColor: "ADD8E6"
+
+- BROWNFIELD:
+    fillColor: "D2B48C"
+
+- SHRUB:
+    fillColor: "90EE90"
+
+- CONSTRUCTION:
+    fillColor: "8FBC8F"
+
+- INDUSTRIAL:
+    fillColor: "D8BFD8"
+
+- CEMETERY:
+    fillColor: "6B8E23"
+
+- RESIDENTIAL:
+    fillColor: "E6E6FA"
+
+- ALLOTMENTS:
+    fillColor: "98FB98"
+
+- PLAYGROUND:
+    fillColor: "66CDAA"
+
+- BUILDING:
+    fillColor: "A9A9A9"
+
+- BARRIER:
+    strokeColor: "BC8F8F"
+
+- PITCH:
+    fillColor: "66CDAA"
+
+- GROYNE:
+    fillColor: "A9A9A9"
+
+- PIER:
+    fillColor: "FFFF00"
+    strokeColor: "FFFF00"
+
+- BRIDGE:
+    fillColor: "BDB76B"
+    strokeColor: "BDB76B"
+
+- APRON:
+    fillColor: "DADAE0"
+
+- TERTIARYROADEXIT:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00008
+
+- SECONDARYROADEXIT:
+    fillColor:
+    strokeColor: "F7FBBB"
+    lineWidth: 0.00012
+
+- PRIMARYROADEXIT:
+    fillColor:
+    strokeColor: "FFAD95"
+    lineWidth: 0.00012
+
+- MOTORWAYEXIT:
+    fillColor:
+    strokeColor: "FEB9C3"
+    lineWidth: 0.00014
+
+- RESIDENTIALROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00006
+
+- TERTIARYROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00008
+
+- SERVICEROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00004
+
+- UNCLASSIFIEDROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00006
+
+- ROUNDABOUT:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00008
+
+- LIVING_STREET:
+    fillColor:
+    strokeColor: "EDEEED"
+    lineWidth: 0.00006
+
+- SECONDARYROAD:
+    fillColor:
+    strokeColor: "F7FBBB"
+    lineWidth: 0.00012
+
+- PRIMARYROAD:
+    fillColor:
+    strokeColor: "FFAD95"
+    lineWidth: 0.00012
+
+- RUNWAY:
+    fillColor:
+    strokeColor: "BABACC"
+    lineWidth: 0.0005
+
+- RAILWAY:
+    fillColor:
+    strokeColor: "D3D3D3"
+    lineDash: 2
+
+- PEDESTRIAN:
+    fillColor:
+    strokeColor: "DDDDE9"
+    lineWidth: 0.00005
+
+- RACEWAY:
+    fillColor:
+    strokeColor: "FFBDC7"
+    lineWidth: 0.00004
+
+- MOTORWAY:
+    fillColor:
+    strokeColor: "FEB9C3"
+    lineWidth: 0.00014
+
+- MARKING:
+    fillColor:
+    strokeColor: "000000"
+
+- TRACK:
+    fillColor:
+    strokeColor: "B68235"
+    lineDash: 2
+
+- FERRY:
+    fillColor:
+    strokeColor: "0000FF"
+    lineDash: 2
+
+- TOUR:
+    fillColor:
+    strokeColor: "000000"
+    lineDash: 2
+
+- BUS_GUIDEWAY:
+    fillColor:
+    strokeColor: "6066FF"
+    lineDash: 2
+
+- FOOTWAY:
+    fillColor:
+    strokeColor: "FE9E93"
+    lineDash: 2
+
+- BRIDLEWAY:
+    fillColor:
+    strokeColor: "A8D7B6"
+    lineDash: 2
+
+- CYCLEWAY:
+    fillColor:
+    strokeColor: "7B7EF8"
+    lineDash: 2
+
+- WATER:
+    fillColor: "87CEFA"
+
+- SWIMMINGPOOL:
+    fillColor: "87CEFA"
+
+- CANAL:
+    fillColor: "87CEFA"
+
+- BASIN:
+    fillColor: "87CEFA"
+
+- UNKNOWN:
+    strokeColor: "000000"

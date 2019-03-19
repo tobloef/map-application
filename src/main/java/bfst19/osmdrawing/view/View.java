@@ -14,7 +14,7 @@ public class View {
 	public View(Model model, Stage stage) throws IOException {
 
 
-		URL url = ResourceLoader.getResource("view/View.fxml");
+		URL url = ResourceLoader.getResource("views/View.fxml");
 		FXMLLoader loader = new FXMLLoader(url);
 		Scene scene = loader.load();
 		Controller controller = loader.getController();

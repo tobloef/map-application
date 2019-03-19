@@ -1,0 +1,79 @@
+
+package bfst19.osmdrawing.model;
+
+// The wayTypes are drawn in the order they are written in
+public enum WayType {
+	COASTLINE,
+
+	// Islands
+	ISLAND,
+	SCREE,
+
+	// Water
+	TREES,
+	GRASS,
+	SAND,
+	FARMLAND,
+	WOOD,
+	HEATH,
+	MEADOW,
+	PARK,
+	WETLAND, //TODO: Skal have en texture
+	BROWNFIELD,
+	SHRUB,
+
+	// Buildings
+	CONSTRUCTION,
+	INDUSTRIAL,
+	CEMETERY,
+	RESIDENTIAL,
+	ALLOTMENTS,
+	PLAYGROUND,
+	BUILDING,
+	BARRIER,
+	PITCH,
+	GROYNE,
+	PIER,
+	BRIDGE,
+	APRON,
+
+	// Exits
+	TERTIARYROADEXIT,
+	SECONDARYROADEXIT,
+	PRIMARYROADEXIT,
+	MOTORWAYEXIT,
+
+	// Roads
+	RESIDENTIALROAD,
+	TERTIARYROAD,
+	SERVICEROAD,
+	UNCLASSIFIEDROAD,
+	ROUNDABOUT,
+	LIVING_STREET,
+	SECONDARYROAD,
+	PRIMARYROAD,
+	RUNWAY, //TODO:Det ser mærkeligt ud?
+	RAILWAY,
+	PEDESTRIAN,
+	RACEWAY,
+	MOTORWAY,
+
+	// Abstract Paths
+	MARKING, //TODO: Skal have en tykkelse
+	TRACK,
+	FERRY,
+	TOUR,
+	BUS_GUIDEWAY,
+	FOOTWAY,
+	BRIDLEWAY,
+	CYCLEWAY,
+
+	// Water
+	WATER,
+	SWIMMINGPOOL,
+	CANAL,
+	BASIN,
+
+	// Misc.
+	UNKNOWN,
+}

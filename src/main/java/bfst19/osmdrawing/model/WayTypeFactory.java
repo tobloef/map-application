@@ -1,10 +1,11 @@
 package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.utils.ResourceLoader;
-import bfst19.osmdrawing.view.WayType;
 import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;
 import java.util.*;
+
+import static bfst19.osmdrawing.utils.EnumHelper.stringToWayType;
 
 @SuppressWarnings("unchecked")
 public class WayTypeFactory {
@@ -31,20 +32,6 @@ public class WayTypeFactory {
 			if (values.containsKey(value)) {
 				return values.get(value);
 			}
-		}
-		return null;
-	}
-
-	/**
-	 * Convert a string to a WayType, returning null of it fails.
-	 * @param name The name of the enum.
-	 * @return The corresponding enum or null.
-	 */
-	private static WayType stringToWayType(String name){
-		try {
-			return WayType.valueOf(name);
-		} catch (IllegalArgumentException e){
-			e.printStackTrace();
 		}
 		return null;
 	}
