@@ -58,7 +58,10 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void panViewToMapBounds() {
-		//This repaints the map twice.
+		//FIXME: This repaints the map twice.
+		if (model.modelBounds == null) {
+			return;
+		}
 		pan(-model.modelBounds.xmin, -model.modelBounds.ymax);
 		zoom(getWidth()/(model.modelBounds.xmax-model.modelBounds.xmin), 0,0);
 	}
