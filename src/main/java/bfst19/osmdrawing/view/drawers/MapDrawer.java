@@ -4,6 +4,7 @@ import bfst19.osmdrawing.model.Drawable;
 import bfst19.osmdrawing.model.Model;
 import bfst19.osmdrawing.model.Rectangle;
 import bfst19.osmdrawing.view.WayType;
+import bfst19.osmdrawing.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -12,11 +13,11 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
 public class MapDrawer implements Drawer {
-	private Canvas canvas;
+	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
 
-	public MapDrawer(Canvas canvas, Model model) {
+	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
@@ -28,14 +29,14 @@ public class MapDrawer implements Drawer {
 			if (wayType.hasFill()) {
 				graphicsContext.setFill(wayType.getFill());
 				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-					way.fill(graphicsContext);
+					way.fill(graphicsContext, canvas.getZoomFactor());
 				}
 			}
 			if (wayType.hasStroke()) {
 				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
 				graphicsContext.setStroke(wayType.getStrokeColor());
 				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())){
-					way.stroke(graphicsContext);
+					way.stroke(graphicsContext, canvas.getZoomFactor());
 				}
 			}
 		}

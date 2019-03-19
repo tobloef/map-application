@@ -14,22 +14,22 @@ public class MultiPolyline implements Drawable, Serializable {
 	}
 
 	@Override
-	public void stroke(GraphicsContext graphicsContext) {
+	public void stroke(GraphicsContext graphicsContext, double zoomFactor) {
 		graphicsContext.beginPath();
-		trace(graphicsContext);
+		trace(graphicsContext, zoomFactor);
 		graphicsContext.stroke();
 	}
 
-	public void trace(GraphicsContext graphicsContext) {
+	public void trace(GraphicsContext graphicsContext, double zoomFactor) {
 		for (Polyline polyline : list) {
-			polyline.trace(graphicsContext);
+			polyline.trace(graphicsContext, zoomFactor);
 		}
 	}
 
 	@Override
-	public void fill(GraphicsContext graphicsContext) {
+	public void fill(GraphicsContext graphicsContext, double zoomFactor) {
 		graphicsContext.beginPath();
-		trace(graphicsContext);
+		trace(graphicsContext, zoomFactor);
 		graphicsContext.fill();
 	}
 }
