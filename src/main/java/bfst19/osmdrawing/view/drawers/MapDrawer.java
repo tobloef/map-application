@@ -27,14 +27,14 @@ public class MapDrawer implements Drawer {
 		for (WayType wayType : WayType.values()){
 			if (wayType.hasFill()) {
 				graphicsContext.setFill(wayType.getFill());
-				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
+				for (Drawable way : model.getWaysOfType(wayType, getSmallModelBounds())) {
 					way.fill(graphicsContext);
 				}
 			}
 			if (wayType.hasStroke()) {
 				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
 				graphicsContext.setStroke(wayType.getStrokeColor());
-				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())){
+				for (Drawable way : model.getWaysOfType(wayType, getSmallModelBounds())){
 					way.stroke(graphicsContext);
 				}
 			}

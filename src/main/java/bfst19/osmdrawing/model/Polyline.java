@@ -48,7 +48,7 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 
 	@Override
 	public Rectangle getMinimumBoundingRectangle() { //TODO:Write a test for this function.
-		Rectangle rectangle = new Rectangle(coords[0], coords[0], coords[1], coords[1]);
+		Rectangle rectangle = new Rectangle(coords[0],  coords[1], coords[0], coords[1]);
 		for (int i = 2; i < coords.length ; i+=2) {
 			if (rectangle.xMin > coords[i]) {
 				rectangle.xMin = coords[i];

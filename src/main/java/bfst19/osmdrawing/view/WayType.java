@@ -9,11 +9,11 @@ import javafx.scene.paint.Paint;
 
 //The wayTypes are drawed in the order they are written in
 public enum WayType {
-	COASTLINE(Color.web("EEF0D5"),null ),
+	COASTLINE(Color.web("EEF0D5"),null, true ),
 
 	//Ø-ting
-	ISLAND(Color.web("F4F0EA"), null),
-	SCREE(Color.web("F1E5DC"),null),
+	ISLAND(Color.web("F4F0EA"), null, true),
+	SCREE(Color.web("F1E5DC"),null, true),
 
 	//Natur
 	FAKE(new ImagePattern(new Image(ResourceLoader.getResourceAsStream("view/forest-texture.jpg")), 0,0, 0.1, 0.1, true), null),
@@ -91,7 +91,7 @@ public enum WayType {
 	private double lineDash;
 	private Paint fill;
 	private Color strokeColor;
-
+	private boolean alwaysDraw;
 
 
 
@@ -100,6 +100,14 @@ public enum WayType {
 		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = 0;
+		alwaysDraw = false;
+	}
+
+	WayType(Paint fill, Color strokeColor, boolean alwaysDraw) {
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+		this.lineDash = 0;
+		this.alwaysDraw = alwaysDraw;
 	}
 
 	WayType(Paint fill, Color strokeColor, double lineDash) {
@@ -126,5 +134,9 @@ public enum WayType {
 
 	public Color getStrokeColor() {
 		return strokeColor;
+	}
+
+	public boolean alwaysDraw() {
+		return alwaysDraw;
 	}
 }

@@ -3,30 +3,35 @@ package bfst19.osmdrawing.model;
 import bfst19.osmdrawing.view.WayType;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class KDTree<T extends SpatialIndexable> implements Serializable {
 	T element;
-	Rectangle bbox; //Bounding box could be saved in just float so save the memory overhead.
+	//Bounding box could be saved in just float so save the memory overhead.
+	private Rectangle bbox;
 	List<T> leafElements;
 	KDTree lower;
 	KDTree higher;
-	private static Map<WayType, List<Rectangle>> minimumBoundingRectangles;
-	private final static int MAX_NODES_PER_LEAF = 50; //TODO: Benchmark some different values
+	private final static int MAX_NODES_PER_LEAF = 5; //TODO: Benchmark some different values
 	private final static Random random = new Random();
 
 	public KDTree(List<T> inputElements, Rectangle bbox){
-		this(inputElements, true, bbox);
+		this(inputElements, true, bbox, getMinimumBoundingRectangles(inputElements));
 	}
 
-	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
-		this.bbox = bbox;
-		//TODO: Grow the bounding to box to contain all its children.
+	private static <T extends SpatialIndexable> Map<T, Rectangle> getMinimumBoundingRectangles(List<T> inputElements) {
+		Map<T, Rectangle> rectangleMap = new HashMap<>();
+		for (T inputElement : inputElements){
+			rectangleMap.put(inputElement, inputElement.getMinimumBoundingRectangle());
+		}
+		return rectangleMap;
+	}
+
+	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox, Map<T, Rectangle> minimumBoundingRectangles){
+		this.bbox = new Rectangle(bbox);
 		if (inputElements.size() < MAX_NODES_PER_LEAF){
 			this.leafElements = inputElements;
+			growToEncompassLeafElements(inputElements, minimumBoundingRectangles);
 		}
 		else {
 			element = quickMedian(inputElements, odd);
@@ -52,16 +57,25 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 					higherElements.add(element);
 				}
 			}
-			lower = new KDTree<T>(lowerElements, !odd, lowerBBox);
-			higher = new KDTree<T>(higherElements, !odd, higherBBox);
+			lower = new KDTree<T>(lowerElements, !odd, lowerBBox, minimumBoundingRectangles);
+			higher = new KDTree<T>(higherElements, !odd, higherBBox, minimumBoundingRectangles);
+			this.bbox.growToEncompass(lower.bbox);
+			this.bbox.growToEncompass(higher.bbox);
 		}
 	}
 
-	private List<T> getContent(List<T> returnElements){
+	private void growToEncompassLeafElements(List<T> inputElements, Map<T, Rectangle> minimumBoundingRectangles) {
+		for (T inputElement: inputElements){
+			this.bbox.growToEncompass(minimumBoundingRectangles.get(inputElement));
+		}
+	}
+
+	public List<T> getContent(List<T> returnElements){
 		if (element == null){
 			returnElements.addAll(leafElements);
 		}
 		else {
+			returnElements.add(element);
 			higher.getContent(returnElements);
 			lower.getContent(returnElements);
 		}
@@ -74,10 +88,17 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 
 	private List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
 		if (element == null){
-			returnElements.addAll(leafElements);
+			for (T ellamenta : leafElements){
+				if (ellamenta.getMinimumBoundingRectangle().intersect(queryBox)){
+					returnElements.add(ellamenta);
+				}
+			}
+			//returnElements.addAll(leafElements);
 			return returnElements;
 		}
-		returnElements.add(element); //TODO: Check if its faster to draw the element or check if it should be drawn.
+		if (element.getMinimumBoundingRectangle().intersect(queryBox)){
+			returnElements.add(element);
+		}//TODO: Check if its faster to draw the element or check if it should be drawn.
 		if(queryBox.intersect(lower.bbox)){
 			lower.rangeQuery(queryBox, !odd, returnElements);
 		}
