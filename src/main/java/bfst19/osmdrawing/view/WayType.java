@@ -56,7 +56,7 @@ public enum WayType {
 	//Veje
 	RESIDENTIALROAD(null, Color.web("FFFFFF"), 0, 0.00006),
 	TERTIARYROAD(null,Color.web("FFFFFF"), 0, 0.00008),
-	SERVICEROAD(6.570464146288649E-5,null, null, Color.web("FFFFFF"),0,0.00004),
+	SERVICEROAD(6.570464146288649E-5, null, Color.web("FFFFFF"),0,0.00004),
 	UNCLASSIFIEDROAD(null,Color.web("FFFFFF"), 0, 0.00006),
 	ROUNDABOUT(null, Color.web("FFFFFF"),0,0.00008),
 	LIVING_STREET(null, Color.web("EDEEED"),0, 0.00006),
@@ -108,11 +108,19 @@ public enum WayType {
 		this.lineWidth = -1;
 	}
 
-	WayType(Paint fill, Color strokeColor, double lineDash, double roadWidth){
+	WayType(Paint fill, Color strokeColor, double lineDash, double lineWidth){
 		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = lineDash;
-		this.lineWidth = roadWidth;
+		this.lineWidth = lineWidth;
+	}
+
+	WayType(double zoomLevel, Paint fill, Color strokeColor, double lineDash, double lineWidth) {
+		this.lineDash = lineDash;
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+		this.zoomLevel = zoomLevel;
+		this.lineWidth = lineWidth;
 	}
 
 	WayType(double zoomLevel, Paint fill, Color strokeColor, double lineDash) {
