@@ -1,17 +1,21 @@
 package bfst19.osmdrawing.model;
 
+import bfst19.osmdrawing.view.WayType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class KDTree<T extends SpatialIndexable> implements Serializable {
-	T axis;
+	T element;
 	Rectangle bbox; //Bounding box could be saved in just float so save the memory overhead.
-	List<T> elements;
+	List<T> leafElements;
 	KDTree lower;
 	KDTree higher;
-	private final static int MAXNODESPERLEAF = 50; //TODO: Benchmark some different values
+	private static Map<WayType, List<Rectangle>> minimumBoundingRectangles;
+	private final static int MAX_NODES_PER_LEAF = 50; //TODO: Benchmark some different values
 	private final static Random random = new Random();
 
 	public KDTree(List<T> inputElements, Rectangle bbox){
@@ -21,27 +25,27 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
 		this.bbox = bbox;
 		//TODO: Grow the bounding to box to contain all its children.
-		if (inputElements.size() < MAXNODESPERLEAF){
-			this.elements = inputElements;
+		if (inputElements.size() < MAX_NODES_PER_LEAF){
+			this.leafElements = inputElements;
 		}
 		else {
-			axis = quickMedian(inputElements, odd);
-			inputElements.remove(axis);
+			element = quickMedian(inputElements, odd);
+			inputElements.remove(element);
 			//TODO: Move creation of children into function, it appears to have code duplication.
 			Rectangle lowerBBox = new Rectangle(bbox);
 			Rectangle higherBBox = new Rectangle(bbox);
 			if (odd){
-				lowerBBox.xMax = axis.getRepresentativeX();
-				higherBBox.xMin = axis.getRepresentativeX();
+				lowerBBox.xMax = element.getRepresentativeX();
+				higherBBox.xMin = element.getRepresentativeX();
 			}
 			else {
-				lowerBBox.yMax = axis.getRepresentativeY();
-				higherBBox.yMin = axis.getRepresentativeY();
+				lowerBBox.yMax = element.getRepresentativeY();
+				higherBBox.yMin = element.getRepresentativeY();
 			}
 			List<T> lowerElements = new ArrayList<>();
 			List<T> higherElements = new ArrayList<>();
 			for (T element : inputElements){
-				if (spatialLessThen(element, axis, odd)){
+				if (spatialLessThen(element, this.element, odd)){
 					lowerElements.add(element);
 				}
 				else {
@@ -54,8 +58,8 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	private List<T> getContent(List<T> returnElements){
-		if (axis == null){
-			returnElements.addAll(elements);
+		if (element == null){
+			returnElements.addAll(leafElements);
 		}
 		else {
 			higher.getContent(returnElements);
@@ -69,11 +73,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	private List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
-		if (axis == null){
-			returnElements.addAll(elements);
+		if (element == null){
+			returnElements.addAll(leafElements);
 			return returnElements;
 		}
-		returnElements.add(axis); //TODO: Check if its faster to draw the element or check if it should be drawn.
+		returnElements.add(element); //TODO: Check if its faster to draw the element or check if it should be drawn.
 		if(queryBox.intersect(lower.bbox)){
 			lower.rangeQuery(queryBox, !odd, returnElements);
 		}
