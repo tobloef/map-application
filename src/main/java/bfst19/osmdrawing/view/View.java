@@ -20,7 +20,7 @@ public class View {
 		Controller controller = loader.getController();
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("Førsteårsprojekt: Danmarkskort");
+		stage.setTitle("First year project: Map");
 		controller.init(model);
 	}
 }

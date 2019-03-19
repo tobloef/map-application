@@ -42,7 +42,11 @@ public class ZoomIndicatorDrawer implements Drawer {
 	private void drawBackground() {
 		graphicsContext.setStroke(Color.BLACK);
 		graphicsContext.setFill(Color.WHITE);
-		graphicsContext.fillRect(outerMargin, canvas.getHeight() - (outerMargin + boxHeight + bottomOffset), boxWidth, boxHeight);
+		double y = canvas.getHeight() - (outerMargin + boxHeight + bottomOffset);
+		double x = outerMargin;
+		double w = boxWidth;
+		double h = boxHeight;
+		graphicsContext.fillRect(x, y, w, h);
 	}
 
 	private void drawText() {
@@ -71,7 +75,10 @@ public class ZoomIndicatorDrawer implements Drawer {
 		graphicsContext.setLineWidth(0);
 		graphicsContext.setFont(font);
 		graphicsContext.setTextAlign(TextAlignment.CENTER);
-		graphicsContext.strokeText(String.format("%.1f " + unit, distance), outerMargin + boxWidth / 2f, canvas.getHeight() - (bottomOffset + outerMargin + boxHeight / 2f));
+		String text = String.format("%.1f " + unit, distance);
+		double x = outerMargin + boxWidth / 2f;
+		double y = canvas.getHeight() - (bottomOffset + outerMargin + boxHeight / 2f);
+		graphicsContext.strokeText(text, x, y);
 	}
 
 	private void drawBlackBars() {
