@@ -28,27 +28,25 @@ public class MapDrawer implements Drawer {
 		double defaultLineWidth = graphicsContext.getLineWidth();
 
 		for (WayType wayType : WayType.values()){
-			if (wayType.hasFill()) {
-				graphicsContext.setFill(wayType.getFill());
-				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-					if (visibleAtCurrentZoom(wayType)) {
+			if (visibleAtCurrentZoom(wayType)) {
+				if (wayType.hasFill()) {
+					graphicsContext.setFill(wayType.getFill());
+					for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
 						way.fill(graphicsContext);
 					}
 				}
-			}
-			if (wayType.hasStroke()) {
-				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
-				graphicsContext.setStroke(wayType.getStrokeColor());
+				if (wayType.hasStroke()) {
+					graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
+					graphicsContext.setStroke(wayType.getStrokeColor());
 
-				if(wayType.hasLineWidth()){
-					graphicsContext.setLineWidth(wayType.getLineWidth());
-				}
-				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())){
-					if (visibleAtCurrentZoom(wayType)){
+					if (wayType.hasLineWidth()) {
+						graphicsContext.setLineWidth(wayType.getLineWidth());
+					}
+					for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
 						way.stroke(graphicsContext);
 					}
+					graphicsContext.setLineWidth(defaultLineWidth);
 				}
-				graphicsContext.setLineWidth(defaultLineWidth);
 			}
 		}
 	}
