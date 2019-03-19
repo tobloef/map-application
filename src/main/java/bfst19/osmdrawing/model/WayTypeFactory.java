@@ -3,19 +3,26 @@ package bfst19.osmdrawing.model;
 import bfst19.osmdrawing.utils.ResourceLoader;
 import bfst19.osmdrawing.view.WayType;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.*;
 
+@SuppressWarnings("unchecked")
 public class WayTypeFactory {
 	private static final String wayTypesConfigPath = "config/wayTypes.yaml";
 
+	/**
+	 * Maps cartographic feature keys to maps that map feature values to WayType.
+	 * Uses null feature value to indicate the key has no values, but still correspond to a WayType.
+	 */
 	private static Map<String, Map<String, WayType>> keyToValueWayTypeMap;
 
-	public static WayType getType(String key, String value) {
+	/***
+	 * Get the WayType for a given OSM key and value.
+	 * @param key Key of the cartographic feature
+	 * @param value Optional value of the feature
+	 * @return The corresponding WayType
+	 */
+	public static WayType getWayType(String key, String value) {
 		if (keyToValueWayTypeMap == null) {
 			initializeWayTypes();
 		}
@@ -28,17 +35,23 @@ public class WayTypeFactory {
 		return null;
 	}
 
+	/**
+	 * Convert a string to a WayType, returning null of it fails.
+	 * @param name The name of the enum.
+	 * @return The corresponding enum or null.
+	 */
 	private static WayType stringToWayType(String name){
 		try {
-			WayType type = WayType.valueOf(name);
-			return type;
+			return WayType.valueOf(name);
 		} catch (IllegalArgumentException e){
 			e.printStackTrace();
 		}
-		// If it does exist then we return null (Which is what java should do anyway...)
 		return null;
 	}
 
+	/**
+	 * Initialize the map of WayTypes by reading a config file from disk.
+	 */
 	private static void initializeWayTypes() {
 		keyToValueWayTypeMap = new HashMap<>();
 		// Read the YAML file
@@ -46,6 +59,7 @@ public class WayTypeFactory {
 		InputStream inputStream = ResourceLoader.getResourceAsStream(wayTypesConfigPath);
 		List<Map> wayTypeMaps = yaml.load(inputStream);
 
+		// Read each WayType in the file
 		for (Map wayTypeMap : wayTypeMaps) {
 			for (Object wayTypeEntryObj : wayTypeMap.entrySet()) {
 				try {
@@ -83,6 +97,7 @@ public class WayTypeFactory {
 			} else {
 				throw new Exception("Invalid type for key: " + keyObj.getClass());
 			}
+			// Add the WayType, key and possible values to the map.
 			addValues(wayType, key, values);
 		}
 	}
@@ -99,9 +114,5 @@ public class WayTypeFactory {
 			// Default case for when there's no values, only key.
 			keyToValueWayTypeMap.get(key).put(null, wayType);
 		}
-	}
-
-	private static boolean lineIsComment(String line) {
-		return (line.trim().charAt(0) == '#');
 	}
 }
