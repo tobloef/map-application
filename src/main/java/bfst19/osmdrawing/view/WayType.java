@@ -55,7 +55,7 @@ public enum WayType {
 	MOTORWAY(null, Color.web("FEB9C3")), //Skal have en tykkelse
 	SECONDARYROAD(null, Color.web("F7FBBB")), //Skal have en tykkelse
 	TERTIARYROAD(null,Color.web("FFFFFF")), //Skal have en tykkelse
-	SERVICEROAD(null, Color.web("FFFFFF")), //Skal have en tykkelse
+	SERVICEROAD(6.570464146288649E-5,null, Color.web("FFFFFF")), //Skal have en tykkelse
 	UNCLASSIFIEDROAD(null,Color.web("FFFFFF")), //Skal have en tykkelse
 	LIVING_STREET(null, Color.web("EDEEED")), //Skal have en tykkelse
 	PEDESTRIAN(null,Color.web("DDDDE9")), //Skal have en tykkelse
@@ -91,11 +91,7 @@ public enum WayType {
 	private double lineDash;
 	private Paint fill;
 	private Color strokeColor;
-	private
-
-
-
-
+	private double zoomLevel = 4;
 
 	WayType(Paint fill, Color strokeColor) {
 		this.fill = fill;
@@ -109,12 +105,29 @@ public enum WayType {
 		this.lineDash = lineDash;
 	}
 
+	WayType(double zoomLevel, Paint fill, Color strokeColor, double lineDash) {
+		this.lineDash = lineDash;
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+		this.zoomLevel = zoomLevel;
+	}
+
+	WayType(double zoomLevel, Paint fill, Color strokeColor) {
+		this.zoomLevel = zoomLevel;
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+	}
+
 	public double getLineDash(){
 		return this.lineDash;
 	}
 
 	public Paint getFill() {
 		return fill;
+	}
+
+	public double getZoomLevel() {
+		return zoomLevel;
 	}
 
 	public boolean hasFill(){

@@ -29,7 +29,6 @@ public class MapCanvas extends Canvas {
 		model.addObserver(this::repaint);
 		makeCanvasUpdateOnResize();
 		repaint();
-
 	}
 
 	private void initializeDrawers(Model model) {
@@ -83,6 +82,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	public void updateDegreesPerPixel() {
+		//TODO make this a static method
 		degreesPerPixel = 1/Math.sqrt(Math.abs(transform.determinant()));
 	}
 
