@@ -1,92 +1,103 @@
 package bfst19.osmdrawing.model;
 
+import bfst19.osmdrawing.utils.ResourceLoader;
 import bfst19.osmdrawing.view.WayType;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class WayTypeFactory {
-	private static Map<String, Map<String, WayType>> keyValuesToType;
+	private static final String wayTypesConfigPath = "config/wayTypes.yaml";
 
+	private static Map<String, Map<String, WayType>> keyToValueWayTypeMap;
 
-	private static void addValues(WayType type, String key, List<String> values){
-		addKeyIfNotPresent(key);
-		if (values.size() != 0){
-			for (String s : values){
-				keyValuesToType.get(key).put(s, type);
-			}
+	public static WayType getType(String key, String value) {
+		if (keyToValueWayTypeMap == null) {
+			initializeWayTypes();
 		}
-		else {
-			addNullKey(type, key);
-		}
-	}
-
-	private static void addNullKey(WayType type, String key) {
-		addKeyIfNotPresent(key);
-		keyValuesToType.get(key).put(null, type);
-	}
-
-	private static void addKeyIfNotPresent(String key) {
-		if (!keyValuesToType.containsKey(key)) {
-			keyValuesToType.put(key, new HashMap<>());
-		}
-	}
-
-	public static WayType getType(String key, String value){
-		if (keyValuesToType == null) initializeWayTypes("wayTypes.txt");
-		if (keyValuesToType.containsKey(key)){
-			Map<String, WayType> keys = keyValuesToType.get(key);
-			if (keys.containsKey(null)){
-				return keys.get(null);
-			}
-			else if (keys.containsKey(value)){
-				return keys.get(value);
+		if (keyToValueWayTypeMap.containsKey(key)) {
+			Map<String, WayType> values = keyToValueWayTypeMap.get(key);
+			if (values.containsKey(value)) {
+				return values.get(value);
 			}
 		}
 		return null;
 	}
 
-	private static WayType getWayTypeFromString(String name){
+	private static WayType stringToWayType(String name){
 		try {
 			WayType type = WayType.valueOf(name);
 			return type;
-		}
-		catch (IllegalArgumentException e){
+		} catch (IllegalArgumentException e){
 			e.printStackTrace();
-			//If it does exist then we return null (Which is what java should do.
 		}
+		// If it does exist then we return null (Which is what java should do anyway...)
 		return null;
 	}
 
-	private static void initializeWayTypes(String filename) {
-		try {
-			keyValuesToType = new HashMap<>();
-			FileReader fileReader = new FileReader(filename);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			while (bufferedReader.ready()) {
-				String line = bufferedReader.readLine();
-				if (line.trim().isEmpty() || lineIsComment(line)){
-					continue;
+	private static void initializeWayTypes() {
+		keyToValueWayTypeMap = new HashMap<>();
+		// Read the YAML file
+		Yaml yaml = new Yaml();
+		InputStream inputStream = ResourceLoader.getResourceAsStream(wayTypesConfigPath);
+		List<Map> wayTypeMaps = yaml.load(inputStream);
+
+		for (Map wayTypeMap : wayTypeMaps) {
+			for (Object wayTypeEntryObj : wayTypeMap.entrySet()) {
+				try {
+					Map.Entry<String, Object> wayTypeEntry = (Map.Entry<String, Object>) wayTypeEntryObj;
+					parseWayTypeEntry(wayTypeEntry);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				StringTokenizer stringTokenizer = new StringTokenizer(line);
-				String first = stringTokenizer.nextToken();
-				WayType currentType = getWayTypeFromString(first);
-				if (currentType == null) {
-					System.err.println("Wrong/Missing WayType: " + first);
-					continue;
-				}
-				String key = stringTokenizer.nextToken().trim();
-				List<String> values = new ArrayList<>();
-				while (stringTokenizer.hasMoreElements()) {
-					values.add(stringTokenizer.nextToken().trim());
-				}
-				addValues(currentType, key, values);
 			}
 		}
-		catch (Exception e){
-			e.printStackTrace();
-			//Uncle bob is gonna find us and kill us all
+	}
+
+	private static void parseWayTypeEntry(Map.Entry<String, Object> entry) throws Exception {
+		// Get WayType
+		String wayTypeStr = entry.getKey();
+		WayType wayType = stringToWayType(entry.getKey());
+		if (wayType == null) {
+			throw new Exception("Wrong/Missing WayType: " + wayTypeStr);
+		}
+		// Load the keys
+		ArrayList<Object> keys = (ArrayList<Object>) entry.getValue();
+		for (Object keyObj : keys) {
+			String key = null;
+			List<String> values = null;
+			// Check if the key is just a string, or if it maps to a list of values
+			if (keyObj instanceof String) {
+				key = (String) keyObj;
+			} else if (keyObj instanceof LinkedHashMap) {
+				LinkedHashMap<String, Object> subTagMap = (LinkedHashMap<String, Object>) keyObj;
+				for (Object valueObj : subTagMap.entrySet()) {
+					Map.Entry<String, ArrayList<String>> tagSubTagEntry = (Map.Entry<String, ArrayList<String>>) valueObj;
+					key = tagSubTagEntry.getKey();
+					values = tagSubTagEntry.getValue();
+				}
+			} else {
+				throw new Exception("Invalid type for key: " + keyObj.getClass());
+			}
+			addValues(wayType, key, values);
+		}
+	}
+
+	private static void addValues(WayType wayType, String key, List<String> values) {
+		if (!keyToValueWayTypeMap.containsKey(key)) {
+			keyToValueWayTypeMap.put(key, new HashMap<>());
+		}
+		if (values != null && values.size() > 0) {
+			for (String value : values) {
+				keyToValueWayTypeMap.get(key).put(value, wayType);
+			}
+		} else {
+			// Default case for when there's no values, only key.
+			keyToValueWayTypeMap.get(key).put(null, wayType);
 		}
 	}
 

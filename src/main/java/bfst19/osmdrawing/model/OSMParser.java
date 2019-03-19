@@ -54,10 +54,10 @@ public class OSMParser {
 
 
 
-	private void parseOSM(InputStream osmsource) throws XMLStreamException {
+	private void parseOSM(InputStream osmSource) throws XMLStreamException {
 		XMLStreamReader reader = XMLInputFactory
 				.newInstance()
-				.createXMLStreamReader(osmsource);
+				.createXMLStreamReader(osmSource);
 
 		while (reader.hasNext()) {
 			switch (reader.next()) {
