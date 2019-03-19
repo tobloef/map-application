@@ -1,6 +1,6 @@
 @echo off
 
-set PATH_TO_FX=D:\libs\javafx-sdk-11.0.2\lib
+set PATH_TO_FX=C:\Program Files\javafx-sdk-11.0.2\lib
 
 rmdir /s /q out
 
