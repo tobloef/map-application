@@ -1,7 +1,6 @@
 package bfst19.osmdrawing.view.drawers;
 
 import bfst19.osmdrawing.view.controls.MapCanvas;
-import bfst19.osmdrawing.view.drawers.Drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -63,7 +62,7 @@ public class ZoomIndicatorDrawer implements Drawer {
 		double kilometersPerLon = Math.PI / 180 * radiusOfEarth * Math.cos(latitude);
 		*/
 		int kilometersPerDegree = 111;
-		return pixelLength * canvas.getZoomFactor() * kilometersPerDegree;
+		return pixelLength * canvas.getDegreesPerPixel() * kilometersPerDegree;
 	}
 
 	private void renderText(double distance, String unit) {

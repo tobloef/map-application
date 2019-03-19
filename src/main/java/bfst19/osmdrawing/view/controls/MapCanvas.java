@@ -17,12 +17,14 @@ public class MapCanvas extends Canvas {
 	private Affine transform = new Affine();
 	private Model model;
 	private List<Drawer> drawers;
+	private double degreesPerPixel;
 
 	public void initialize(Model model) {
 		this.model = model;
 		initializeDrawers(model);
 		panViewToMapBounds();
 		transform.prependScale(1,-1, 0, 0);
+		updateDegreesPerPixel();
 		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		model.addObserver(this::repaint);
 		makeCanvasUpdateOnResize();
@@ -33,7 +35,7 @@ public class MapCanvas extends Canvas {
 	private void initializeDrawers(Model model) {
 		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
 		drawers = new ArrayList<>();
-		drawers.add( new MapDrawer(this, model));
+		drawers.add(new MapDrawer(this, model));
 		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
@@ -44,6 +46,7 @@ public class MapCanvas extends Canvas {
 		for (Drawer drawer : drawers) {
 			drawer.draw();
 		}
+		System.out.println(getDegreesPerPixel());
 	}
 
 	private void makeCanvasUpdateOnResize() {
@@ -64,7 +67,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void updateLineWidth() {
-		graphicsContext.setLineWidth(getZoomFactor());
+		graphicsContext.setLineWidth(getDegreesPerPixel());
 	}
 
 
@@ -75,10 +78,15 @@ public class MapCanvas extends Canvas {
 
 	public void zoom(double factor, double x, double y) {
 		transform.prependScale(factor, factor, x, y);
+		updateDegreesPerPixel();
 		repaint();
 	}
 
-	public double getZoomFactor() {
-		return 1/Math.sqrt(Math.abs(transform.determinant()));
+	public void updateDegreesPerPixel() {
+		degreesPerPixel = 1/Math.sqrt(Math.abs(transform.determinant()));
+	}
+
+	public double getDegreesPerPixel() {
+		return degreesPerPixel;
 	}
 }

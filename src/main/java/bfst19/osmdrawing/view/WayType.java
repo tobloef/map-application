@@ -91,6 +91,7 @@ public enum WayType {
 	private double lineDash;
 	private Paint fill;
 	private Color strokeColor;
+	private
 
 
 
