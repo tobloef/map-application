@@ -138,10 +138,8 @@ public class OSMParser {
 	}
 
 	private void handleEndRelation() {
-		if (currentType == WayType.WATER) {
 			drawableModel.add(currentType, new MultiPolyline(currentRelation));
 			currentWay = null;
-		}
 	}
 
 	private void handleStartMember(XMLStreamReader reader) { // adds members to the current relation
