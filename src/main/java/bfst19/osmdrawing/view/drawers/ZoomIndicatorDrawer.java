@@ -1,7 +1,6 @@
 package bfst19.osmdrawing.view.drawers;
 
 import bfst19.osmdrawing.view.controls.MapCanvas;
-import bfst19.osmdrawing.view.drawers.Drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -12,6 +11,10 @@ import javafx.scene.transform.Affine;
 public class ZoomIndicatorDrawer implements Drawer {
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
+	private boolean leftAligned = false;
+	private boolean topAligned = false;
+	private double xOrigin;
+	private double yOrigin;
 	private int outerMargin = 5;
 	private int innerMargin = outerMargin;
 	private int boxWidth = 100;
@@ -34,6 +37,8 @@ public class ZoomIndicatorDrawer implements Drawer {
 	}
 
 	private void drawIndicator() {
+		xOrigin = leftAligned ? outerMargin : canvas.getWidth() - outerMargin - boxWidth;
+		yOrigin = topAligned ? outerMargin : canvas.getHeight() - outerMargin - boxHeight;
 		drawBackground();
 		drawBlackBars();
 		drawText();
@@ -41,12 +46,8 @@ public class ZoomIndicatorDrawer implements Drawer {
 
 	private void drawBackground() {
 		graphicsContext.setStroke(Color.BLACK);
-		graphicsContext.setFill(Color.WHITE);
-		double y = canvas.getHeight() - (outerMargin + boxHeight + bottomOffset);
-		double x = outerMargin;
-		double w = boxWidth;
-		double h = boxHeight;
-		graphicsContext.fillRect(x, y, w, h);
+		graphicsContext.setFill(Color.color(255, 255, 255, 0.5));
+		graphicsContext.fillRect(xOrigin, yOrigin, boxWidth, boxHeight);
 	}
 
 	private void drawText() {
@@ -76,18 +77,18 @@ public class ZoomIndicatorDrawer implements Drawer {
 		graphicsContext.setFont(font);
 		graphicsContext.setTextAlign(TextAlignment.CENTER);
 		String text = String.format("%.1f " + unit, distance);
-		double x = outerMargin + boxWidth / 2f;
-		double y = canvas.getHeight() - (bottomOffset + outerMargin + boxHeight / 2f);
+		double x = xOrigin + boxWidth / 2f;
+		double y = yOrigin + boxHeight / 2f;
 		graphicsContext.strokeText(text, x, y);
 	}
 
 	private void drawBlackBars() {
 		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.setLineWidth(1);
-		int barsLeftEdge = outerMargin + innerMargin;
-		int barsRightEdge = outerMargin + boxWidth - innerMargin;
-		double barsTopEdge = canvas.getHeight() - (outerMargin + boxHeight + bottomOffset) + innerMargin;
-		double barsBottomEdge = canvas.getHeight() - outerMargin - innerMargin - bottomOffset;
+		double barsLeftEdge = xOrigin + innerMargin;
+		double barsRightEdge = xOrigin + boxWidth - innerMargin;
+		double barsTopEdge = yOrigin + innerMargin;
+		double barsBottomEdge = yOrigin + boxHeight - innerMargin;
 		graphicsContext.moveTo(barsLeftEdge, barsTopEdge); // left line, top side
 		graphicsContext.lineTo(barsLeftEdge, barsBottomEdge); // left line, bottom side
 		graphicsContext.lineTo(barsRightEdge, barsBottomEdge); //right line, bottom side
