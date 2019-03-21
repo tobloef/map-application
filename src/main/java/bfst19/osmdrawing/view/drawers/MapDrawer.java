@@ -7,7 +7,6 @@ import bfst19.osmdrawing.view.WayType;
 import bfst19.osmdrawing.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
@@ -28,25 +27,38 @@ public class MapDrawer implements Drawer {
 		double defaultLineWidth = graphicsContext.getLineWidth();
 
 		for (WayType wayType : WayType.values()){
-			if (wayType.hasFill()) {
-				graphicsContext.setFill(wayType.getFill());
-				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-					way.fill(graphicsContext, canvas.getZoomFactor());
+			if (visibleAtCurrentZoom(wayType)) {
+				if (wayType.hasFill()) {
+					fillWays(wayType);
 				}
-			}
-			if (wayType.hasStroke()) {
-				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
-				graphicsContext.setStroke(wayType.getStrokeColor());
-
-				if(wayType.hasLineWidth()){
-					graphicsContext.setLineWidth(wayType.getLineWidth());
+				if (wayType.hasStroke()) {
+					strokeWays(defaultLineWidth, wayType);
 				}
-				for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())){
-					way.stroke(graphicsContext, canvas.getZoomFactor());
-				}
-				graphicsContext.setLineWidth(defaultLineWidth);
 			}
 		}
+	}
+
+	private void strokeWays(double defaultLineWidth, WayType wayType) {
+		graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
+		graphicsContext.setStroke(wayType.getStrokeColor());
+		if (wayType.hasLineWidth()) {
+			graphicsContext.setLineWidth(wayType.getLineWidth());
+		}
+		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
+			way.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
+		}
+		graphicsContext.setLineWidth(defaultLineWidth);
+	}
+
+	private void fillWays(WayType wayType) {
+		graphicsContext.setFill(wayType.getFill());
+		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
+			way.fill(graphicsContext, canvas.getDegreesLatitudePerPixel());
+		}
+	}
+
+	private boolean visibleAtCurrentZoom(WayType wayType) {
+		return wayType.getZoomLevel() > canvas.getDegreesLatitudePerPixel();
 	}
 
 	private void fillBackground() {

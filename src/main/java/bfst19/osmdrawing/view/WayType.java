@@ -33,50 +33,50 @@ public enum WayType {
 	SHRUB(Color.LIGHTGREEN, null),
 
 	//Bygningsting?
-	CONSTRUCTION(Color.DARKSEAGREEN, null),
-	INDUSTRIAL(Color.THISTLE, null),
-	CEMETERY(Color.OLIVEDRAB, null),
-	RESIDENTIAL(Color.LAVENDER, null),
-	ALLOTMENTS(Color.PALEGREEN, null),
-	PLAYGROUND(Color.MEDIUMAQUAMARINE, null),
-	BUILDING(Color.DARKGRAY, null),
+	CONSTRUCTION(0.003036274142973914, Color.DARKSEAGREEN, null),
+	INDUSTRIAL(0.003036274142973914, Color.THISTLE, null),
+	CEMETERY(0.003036274142973914, Color.OLIVEDRAB, null),
+	RESIDENTIAL(0.003036274142973914, Color.LAVENDER, null),
+	ALLOTMENTS(0.003036274142973914, Color.PALEGREEN, null),
+	PLAYGROUND(0.003036274142973914,Color.MEDIUMAQUAMARINE, null),
+	BUILDING(0.003036274142973914, Color.DARKGRAY, null),
 	BARRIER(null, Color.BROWN),
-	PITCH(Color.MEDIUMAQUAMARINE, null),
-	GROYNE(Color.web("A9A9A9"), null),
-	PIER(Color.YELLOW, Color.YELLOW),
+	PITCH(0.003036274142973914,Color.MEDIUMAQUAMARINE, null),
+	GROYNE(0.003036274142973914, Color.web("A9A9A9"), null),
+	PIER(0.003036274142973914, Color.YELLOW, Color.YELLOW),
 	BRIDGE(Color.DARKKHAKI, Color.DARKKHAKI),
-	APRON(Color.web("DADAE0"),null),
+	APRON(0.003036274142973914, Color.web("DADAE0"),null),
 
 	//Afkørelser
-	TERTIARYROADEXIT(null, Color.web("FFFFFF"),0, 0.00008),
-	SECONDARYROADEXIT(null, Color.web("F7FBBB"), 0, 0.00012),
-	PRIMARYROADEXIT(null,Color.web("FFAD95"), 0, 0.00012),
-	MOTORWAYEXIT(null, Color.web("FEB9C3"), 0, 0.00014),
+	TERTIARYROADEXIT(3.9127643402560167E-4, null, Color.web("FFFFFF"),0, 0.00008),
+	SECONDARYROADEXIT(0.0021356850333129405, null, Color.web("F7FBBB"), 0, 0.00012),
+	PRIMARYROADEXIT(0.0021356850333129405, null,Color.web("FFAD95"), 0, 0.00012),
+	MOTORWAYEXIT(0.005420230931152298, null, Color.web("FEB9C3"), 0, 0.00014),
 
 	//Veje
-	RESIDENTIALROAD(null, Color.web("FFFFFF"), 0, 0.00006),
-	TERTIARYROAD(null,Color.web("FFFFFF"), 0, 0.00008),
-	SERVICEROAD(null, Color.web("FFFFFF"),0,0.00004),
-	UNCLASSIFIEDROAD(null,Color.web("FFFFFF"), 0, 0.00006),
-	ROUNDABOUT(null, Color.web("FFFFFF"),0,0.00008),
-	LIVING_STREET(null, Color.web("EDEEED"),0, 0.00006),
-	SECONDARYROAD(null, Color.web("F7FBBB"),0, 0.00012),
-	PRIMARYROAD(null, Color.web("FFAD95"), 0, 0.00012),
-	RUNWAY(null, Color.web("BABACC"),0,0.0005), //Det ser mærkeligt ud?
-	RAILWAY(null, Color.LIGHTGRAY, 2),
-	PEDESTRIAN(null,Color.web("DDDDE9"), 0,0.00005),
-	RACEWAY(null, Color.web(("FFBDC7")),0,0.00004),
-	MOTORWAY(null, Color.web("FEB9C3"),0,0.00014),
+	RESIDENTIALROAD(4.2504755435936523E-4,null, Color.web("FFFFFF"), 0, 0.00006),
+	TERTIARYROAD(3.9127643402560167E-4, null,Color.web("FFFFFF"), 0, 0.00008),
+	SERVICEROAD(6.570464146288649E-5, null, Color.web("FFFFFF"),0,0.00004),
+	UNCLASSIFIEDROAD(4.2504755435936523E-4, null,Color.web("FFFFFF"), 0, 0.00006),
+	ROUNDABOUT(1.8573734058326716E-4, null, Color.web("FFFFFF"),0,0.00008),
+	LIVING_STREET(4.2504755435936523E-4,null, Color.web("EDEEED"),0, 0.00006),
+	SECONDARYROAD(0.0021356850333129405,null, Color.web("F7FBBB"),0, 0.00012),
+	PRIMARYROAD(0.0021356850333129405,null, Color.web("FFAD95"), 0, 0.00012),
+	RUNWAY(0.002853485097237559,null, Color.web("BABACC"),0,0.0005), //Det ser mærkeligt ud?
+	RAILWAY(0.002853485097237559, null, Color.LIGHTGRAY, 2),
+	PEDESTRIAN(4.2504755435936523E-4, null,Color.web("DDDDE9"), 0,0.00005),
+	RACEWAY(6.570464146288649E-5, null, Color.web(("FFBDC7")),0,0.00004),
+	MOTORWAY(0.005420230931152298, null, Color.web("FEB9C3"),0,0.00014),
 
 	//Abstrakte ting såsom ruter
-	MARKING(null, Color.BLACK), //Skal have en tykkelse
-	TRACK(null, Color.web("B68235"), 2),
-	FERRY(null, Color.BLUE, 2),
-	TOUR(null, Color.BLACK, 2),
-	BUS_GUIDEWAY(null, Color.web("6066FF"), 2),
-	FOOTWAY(null, Color.web("FE9E93"),2),
-	BRIDLEWAY(null, Color.web("A8D7B6"), 2),
-	CYCLEWAY(null, Color.web("7B7EF8"), 2),
+	MARKING(5.797815402773365E-4,null, Color.BLACK), //Skal have en tykkelse
+	TRACK(5.797815402773365E-4, null, Color.web("B68235"), 2),
+	FERRY(5.797815402773365E-4, null, Color.BLUE, 2),
+	TOUR(5.797815402773365E-4, null, Color.BLACK, 2),
+	BUS_GUIDEWAY(5.797815402773365E-4, null, Color.web("6066FF"), 2),
+	FOOTWAY(5.797815402773365E-4,null, Color.web("FE9E93"),2),
+	BRIDLEWAY(5.797815402773365E-4,null, Color.web("A8D7B6"), 2),
+	CYCLEWAY(5.797815402773365E-4,null, Color.web("7B7EF8"), 2),
 
 	//Vand
 	WATER(Color.LIGHTSKYBLUE, null),
@@ -92,6 +92,7 @@ public enum WayType {
 	private double lineWidth;
 	private Paint fill;
 	private Color strokeColor;
+	private double zoomLevel = 4;
 
 	WayType(Paint fill, Color strokeColor) {
 		this.fill = fill;
@@ -107,11 +108,32 @@ public enum WayType {
 		this.lineWidth = -1;
 	}
 
-	WayType(Paint fill, Color strokeColor, double lineDash, double roadWidth){
+	WayType(Paint fill, Color strokeColor, double lineDash, double lineWidth){
 		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = lineDash;
-		this.lineWidth = roadWidth;
+		this.lineWidth = lineWidth;
+	}
+
+	WayType(double zoomLevel, Paint fill, Color strokeColor, double lineDash, double lineWidth) {
+		this.lineDash = lineDash;
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+		this.zoomLevel = zoomLevel;
+		this.lineWidth = lineWidth;
+	}
+
+	WayType(double zoomLevel, Paint fill, Color strokeColor, double lineDash) {
+		this.lineDash = lineDash;
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+		this.zoomLevel = zoomLevel;
+	}
+
+	WayType(double zoomLevel, Paint fill, Color strokeColor) {
+		this.zoomLevel = zoomLevel;
+		this.fill = fill;
+		this.strokeColor = strokeColor;
 	}
 
 	public double getLineDash(){
@@ -120,6 +142,10 @@ public enum WayType {
 
 	public Paint getFill() {
 		return fill;
+	}
+
+	public double getZoomLevel() {
+		return zoomLevel;
 	}
 
 	public boolean hasFill(){

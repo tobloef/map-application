@@ -67,7 +67,7 @@ public class ZoomIndicatorDrawer implements Drawer {
 		double kilometersPerLon = Math.PI / 180 * radiusOfEarth * Math.cos(latitude);
 		*/
 		int kilometersPerDegree = 111;
-		return pixelLength * canvas.getZoomFactor() * kilometersPerDegree;
+		return pixelLength * canvas.getDegreesLatitudePerPixel() * kilometersPerDegree;
 	}
 
 	private void renderText(double distance, String unit) {
