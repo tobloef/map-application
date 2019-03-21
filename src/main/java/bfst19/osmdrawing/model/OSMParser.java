@@ -26,18 +26,18 @@ public class OSMParser {
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
-		InputStream osmsource;
+		InputStream osmSource;
 		this.drawableModel = drawableModel;
 		if (filename.endsWith(".zip")) {
-			osmsource = getZipFile(filename);
+			osmSource = getZipFile(filename);
 		}
 		else if (filename.endsWith(".osm")){
-			osmsource = getOsmFile(filename);
+			osmSource = getOsmFile(filename);
 		}
 		else {
 			throw new IOException();
 		}
-		parseOSM(osmsource);
+		parseOSM(osmSource);
 		drawableModel.doneAdding();
 	}
 
@@ -54,10 +54,10 @@ public class OSMParser {
 
 
 
-	private void parseOSM(InputStream osmsource) throws XMLStreamException {
+	private void parseOSM(InputStream osmSource) throws XMLStreamException {
 		XMLStreamReader reader = XMLInputFactory
 				.newInstance()
-				.createXMLStreamReader(osmsource);
+				.createXMLStreamReader(osmSource);
 
 		while (reader.hasNext()) {
 			switch (reader.next()) {

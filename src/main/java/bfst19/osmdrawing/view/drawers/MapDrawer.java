@@ -4,19 +4,19 @@ import bfst19.osmdrawing.model.Drawable;
 import bfst19.osmdrawing.model.Model;
 import bfst19.osmdrawing.model.Rectangle;
 import bfst19.osmdrawing.view.WayType;
+import bfst19.osmdrawing.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
 public class MapDrawer implements Drawer {
-	private Canvas canvas;
+	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
 
-	public MapDrawer(Canvas canvas, Model model) {
+	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
@@ -24,21 +24,41 @@ public class MapDrawer implements Drawer {
 
 	public void draw() {
 		fillBackground();
+		double defaultLineWidth = graphicsContext.getLineWidth();
+
 		for (WayType wayType : WayType.values()){
-			if (wayType.hasFill()) {
-				graphicsContext.setFill(wayType.getFill());
-				for (Drawable way : model.getWaysOfType(wayType, getSmallModelBounds())) {
-					way.fill(graphicsContext);
+			if (visibleAtCurrentZoom(wayType)) {
+				if (wayType.hasFill()) {
+					fillWays(wayType);
 				}
-			}
-			if (wayType.hasStroke()) {
-				graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
-				graphicsContext.setStroke(wayType.getStrokeColor());
-				for (Drawable way : model.getWaysOfType(wayType, getSmallModelBounds())){
-					way.stroke(graphicsContext);
+				if (wayType.hasStroke()) {
+					strokeWays(defaultLineWidth, wayType);
 				}
 			}
 		}
+	}
+
+	private void strokeWays(double defaultLineWidth, WayType wayType) {
+		graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
+		graphicsContext.setStroke(wayType.getStrokeColor());
+		if (wayType.hasLineWidth()) {
+			graphicsContext.setLineWidth(wayType.getLineWidth());
+		}
+		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
+			way.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
+		}
+		graphicsContext.setLineWidth(defaultLineWidth);
+	}
+
+	private void fillWays(WayType wayType) {
+		graphicsContext.setFill(wayType.getFill());
+		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
+			way.fill(graphicsContext, canvas.getDegreesLatitudePerPixel());
+		}
+	}
+
+	private boolean visibleAtCurrentZoom(WayType wayType) {
+		return wayType.getZoomLevel() > canvas.getDegreesLatitudePerPixel();
 	}
 
 	private void fillBackground() {
