@@ -28,32 +28,51 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		else {
 			element = quickMedian(inputElements, odd);
 			inputElements.remove(element);
-			//TODO: Move creation of children into function, it appears to have code duplication.
-			Rectangle lowerBBox = new Rectangle(bbox);
-			Rectangle higherBBox = new Rectangle(bbox);
-			if (odd){
-				lowerBBox.xMax = element.getRepresentativeX();
-				higherBBox.xMin = element.getRepresentativeX();
-			}
-			else {
-				lowerBBox.yMax = element.getRepresentativeY();
-				higherBBox.yMin = element.getRepresentativeY();
-			}
-			List<T> lowerElements = new ArrayList<>();
-			List<T> higherElements = new ArrayList<>();
-			for (T element : inputElements){
-				if (spatialLessThen(element, this.element, odd)){
-					lowerElements.add(element);
-				}
-				else {
-					higherElements.add(element);
-				}
-			}
-			lower = new KDTree<T>(lowerElements, !odd, lowerBBox);
-			higher = new KDTree<T>(higherElements, !odd, higherBBox);
-			this.bbox.growToEncompass(lower.bbox);
-			this.bbox.growToEncompass(higher.bbox);
+			makeSubTrees(inputElements, odd, bbox);
 		}
+	}
+
+	private void makeSubTrees(List<T> inputElements, boolean odd, Rectangle bbox) {
+		makeLowerTree(odd, bbox, inputElements);
+		makeHigherTree(odd, bbox, inputElements);
+
+	}
+
+	private void makeHigherTree(boolean odd, Rectangle bbox, List<T> inputElements) {
+		Rectangle higherBBox = new Rectangle(bbox);
+		if (odd){
+			higherBBox.xMin = element.getRepresentativeX();
+		}
+		else {
+			higherBBox.yMin = element.getRepresentativeY();
+		}
+		List<T> higherElements = new ArrayList<>();
+		for (T element : inputElements){
+			if (!spatialLessThen(element, this.element, odd)){
+				higherElements.add(element);
+			}
+		}
+		higher = new KDTree<T>(higherElements, !odd, higherBBox);
+		this.bbox.growToEncompass(higher.bbox);
+	}
+
+	private void makeLowerTree(boolean odd, Rectangle bbox, List<T> inputElements) {
+		//TODO: Move creation of children into function, it appears to have code duplication.
+		Rectangle lowerBBox = new Rectangle(bbox);
+		if (odd){
+			lowerBBox.xMax = element.getRepresentativeX();
+		}
+		else {
+			lowerBBox.yMax = element.getRepresentativeY();
+		}
+		List<T> lowerElements = new ArrayList<>();
+		for (T element : inputElements){
+			if (spatialLessThen(element, this.element, odd)){
+				lowerElements.add(element);
+			}
+		}
+		lower = new KDTree<T>(lowerElements, !odd, lowerBBox);
+		this.bbox.growToEncompass(lower.bbox);
 	}
 
 	private void growToEncompassLeafElements(List<T> inputElements) {
@@ -86,11 +105,12 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 				}
 			}
 			//returnElements.addAll(leafElements);
+			//TODO: Check if its faster to draw the element or check if it should be drawn.
 			return returnElements;
 		}
 		if (element.getMinimumBoundingRectangle().intersect(queryBox)){
 			returnElements.add(element);
-		}//TODO: Check if its faster to draw the element or check if it should be drawn.
+		}
 		if(queryBox.intersect(lower.bbox)){
 			lower.rangeQuery(queryBox, !odd, returnElements);
 		}
