@@ -54,7 +54,7 @@ public class WayTypeFactory {
 		}
 		catch (IllegalArgumentException e){
 			e.printStackTrace();
-			//If it does exist then we return null (Which is what java should do.
+			//If it doesnt exist then we return null (Which is what java should do.
 		}
 		return null;
 	}

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiPolyline implements Drawable, Serializable {
+public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	List<Polyline> list;
 	public MultiPolyline(OSMRelation rel) {
 		list = new ArrayList<>();
@@ -31,5 +31,26 @@ public class MultiPolyline implements Drawable, Serializable {
 		graphicsContext.beginPath();
 		trace(graphicsContext, zoomFactor);
 		graphicsContext.fill();
+	}
+
+	@Override
+	public float getRepresentativeX() {
+		//TODO: Make something more representative then just the first coords.
+		return list.get(0).getRepresentativeX();
+	}
+
+	@Override
+	public float getRepresentativeY() {
+		//TODO: Make something more representative then just the first coords.
+		return list.get(0).getRepresentativeY();
+	}
+
+	@Override
+	public Rectangle getMinimumBoundingRectangle() {
+		Rectangle rectangle = new Rectangle();
+		for (Polyline polyline : list) {
+			rectangle.growToEncompass(polyline.getMinimumBoundingRectangle());
+		}
+		return rectangle;
 	}
 }

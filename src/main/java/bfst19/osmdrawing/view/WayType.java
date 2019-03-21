@@ -1,19 +1,25 @@
 
 package bfst19.osmdrawing.view;
 
+import bfst19.osmdrawing.model.Drawable;
 import bfst19.osmdrawing.utils.ResourceLoader;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+
 //The wayTypes are drawed in the order they are written in
 public enum WayType {
-	COASTLINE(Color.web("EEF0D5"),null ),
+	COASTLINE(Color.web("EEF0D5"),null, true ),
 
 	//Ø-ting
-	ISLAND(Color.web("F4F0EA"), null),
-	SCREE(Color.web("F1E5DC"),null),
+	ISLAND(Color.web("F4F0EA"), null, true),
+	SCREE(Color.web("F1E5DC"),null, true),
 
 	//Natur
 	FAKE(new ImagePattern(new Image(ResourceLoader.getResourceAsStream("view/forest-texture.jpg")), 0,0, 0.1, 0.1, true), null),
@@ -92,12 +98,22 @@ public enum WayType {
 	private double lineWidth;
 	private Paint fill;
 	private Color strokeColor;
+	private boolean alwaysDraw;
+
 	private double zoomLevel = 4;
 
 	WayType(Paint fill, Color strokeColor) {
 		this.fill = fill;
 		this.strokeColor = strokeColor;
 		this.lineDash = 0;
+		alwaysDraw = false;
+	}
+
+	WayType(Paint fill, Color strokeColor, boolean alwaysDraw) {
+		this.fill = fill;
+		this.strokeColor = strokeColor;
+		this.lineDash = 0;
+		this.alwaysDraw = alwaysDraw;
 		this.lineWidth = -1;
 	}
 
@@ -160,10 +176,21 @@ public enum WayType {
 		return strokeColor;
 	}
 
+	public boolean alwaysDraw() {
+		return alwaysDraw;
+	}
 	public boolean hasLineWidth(){ return (lineWidth != -1); }
 
 	public double getLineWidth() {
 		return lineWidth;
+	}
+
+	public static Map<WayType, List<Drawable>> initializeWaysEnumMap() {
+		Map<WayType, List<Drawable>> wayTypeEnumMap = new EnumMap<WayType, List<Drawable>>(WayType.class);
+		for (WayType type : WayType.values()) {
+			wayTypeEnumMap.put(type, new ArrayList<>());
+		}
+		return wayTypeEnumMap;
 	}
 
 }

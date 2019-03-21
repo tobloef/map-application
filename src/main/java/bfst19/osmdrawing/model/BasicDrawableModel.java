@@ -1,6 +1,7 @@
 package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.view.WayType;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -9,12 +10,12 @@ import java.util.Map;
 
 public class BasicDrawableModel implements DrawableModel {
 
-	Map<WayType, List<Drawable>> wayTypeEnumMap = new EnumMap<>(WayType.class);
+	Map<WayType, List<Drawable>> wayTypeEnumMap = WayType.initializeWaysEnumMap();
 	Rectangle modelBounds;
 
 
 	public BasicDrawableModel(){
-		initializeWaysEnumMap();
+
 	}
 
 	@Override
@@ -42,10 +43,4 @@ public class BasicDrawableModel implements DrawableModel {
 		return modelBounds;
 	}
 
-	private void initializeWaysEnumMap() {
-		wayTypeEnumMap = new EnumMap<>(WayType.class);
-		for (WayType type : WayType.values()) {
-			wayTypeEnumMap.put(type, new ArrayList<>());
-		}
-	}
 }
