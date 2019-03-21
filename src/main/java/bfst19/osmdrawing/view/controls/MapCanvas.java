@@ -45,7 +45,6 @@ public class MapCanvas extends Canvas {
 		for (Drawer drawer : drawers) {
 			drawer.draw();
 		}
-		System.out.println(getDegreesLatitudePerPixel());
 	}
 
 	private void makeCanvasUpdateOnResize() {
