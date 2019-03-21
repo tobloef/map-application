@@ -4,7 +4,7 @@ import bfst19.osmdrawing.view.WayType;
 import java.util.*;
 
 public class KDTreeDrawableModel implements DrawableModel {
-	Map<WayType, List<Drawable>> wayTypeEnumMap = DrawableModel.initializeWaysEnumMap();
+	Map<WayType, List<Drawable>> wayTypeEnumMap = WayType.initializeWaysEnumMap();
 	Map<WayType, KDTree> wayTypeToKDTreeRoot;
 	Rectangle modelBounds;
 

@@ -1,11 +1,17 @@
 
 package bfst19.osmdrawing.view;
 
+import bfst19.osmdrawing.model.Drawable;
 import bfst19.osmdrawing.utils.ResourceLoader;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 //The wayTypes are drawed in the order they are written in
 public enum WayType {
@@ -177,6 +183,14 @@ public enum WayType {
 
 	public double getLineWidth() {
 		return lineWidth;
+	}
+
+	public static Map<WayType, List<Drawable>> initializeWaysEnumMap() {
+		Map<WayType, List<Drawable>> wayTypeEnumMap = new EnumMap<WayType, List<Drawable>>(WayType.class);
+		for (WayType type : WayType.values()) {
+			wayTypeEnumMap.put(type, new ArrayList<>());
+		}
+		return wayTypeEnumMap;
 	}
 
 }

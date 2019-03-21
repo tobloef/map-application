@@ -57,7 +57,6 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	private void makeLowerTree(boolean odd, Rectangle bbox, List<T> inputElements) {
-		//TODO: Move creation of children into function, it appears to have code duplication.
 		Rectangle lowerBBox = new Rectangle(bbox);
 		if (odd){
 			lowerBBox.xMax = element.getRepresentativeX();
@@ -141,11 +140,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	private int partition(List<T> list, int left, int right, int partitionIndex, boolean isCheckingForX){
-		T pivotElement = list.get(partitionIndex);
+		T partitionElement = list.get(partitionIndex);
 		swap(list, partitionIndex, right);
 		int storeIndex = left;
 		for (int i = left; i < right; i++){
-			if (spatialLessThen(list.get(i), pivotElement, isCheckingForX)){
+			if (spatialLessThen(list.get(i), partitionElement, isCheckingForX)){
 				swap(list, storeIndex, i);
 				storeIndex++;
 			}

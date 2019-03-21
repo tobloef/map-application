@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class BasicDrawableModel implements DrawableModel {
 
-	Map<WayType, List<Drawable>> wayTypeEnumMap = DrawableModel.initializeWaysEnumMap();
+	Map<WayType, List<Drawable>> wayTypeEnumMap = WayType.initializeWaysEnumMap();
 	Rectangle modelBounds;
 
 
