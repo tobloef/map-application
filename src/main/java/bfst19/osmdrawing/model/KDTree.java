@@ -99,13 +99,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 
 	private List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
 		if (element == null){
-			for (T ellamenta : leafElements){
-				if (ellamenta.getMinimumBoundingRectangle().intersect(queryBox)){
-					returnElements.add(ellamenta);
+			for (T leafElement : leafElements){
+				if (leafElement.getMinimumBoundingRectangle().intersect(queryBox)){
+					returnElements.add(leafElement);
 				}
 			}
-			//returnElements.addAll(leafElements);
-			//TODO: Check if its faster to draw the element or check if it should be drawn.
 			return returnElements;
 		}
 		if (element.getMinimumBoundingRectangle().intersect(queryBox)){

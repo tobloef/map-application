@@ -15,6 +15,8 @@ public class MapDrawer implements Drawer {
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
+	static long totalDuration = 0;
+	static int totalRepaints = 0;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
@@ -23,6 +25,7 @@ public class MapDrawer implements Drawer {
 	}
 
 	public void draw() {
+		long startTime = System.nanoTime();
 		fillBackground();
 		double defaultLineWidth = graphicsContext.getLineWidth();
 
@@ -36,6 +39,10 @@ public class MapDrawer implements Drawer {
 				}
 			}
 		}
+		long endTime = System.nanoTime();
+		totalDuration += (endTime - startTime)/1000000;
+		totalRepaints++;
+		System.out.println("Time to draw: " + totalDuration/totalRepaints);
 	}
 
 	private void strokeWays(double defaultLineWidth, WayType wayType) {
