@@ -17,7 +17,8 @@ public class MapCanvas extends Canvas {
 	private Affine transform = new Affine();
 	private Model model;
 	private List<Drawer> drawers;
-	private double degreesPerPixel;
+	private double degreesPerPixel; //the width of a pixel in degrees latitude/longitude. Used to draw the
+									//zoomIndicator, and to check current zoom, despite not actually being a zoomfactor
 
 	public void initialize(Model model) {
 		this.model = model;
