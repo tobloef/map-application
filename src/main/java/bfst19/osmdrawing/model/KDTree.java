@@ -16,22 +16,14 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private final static Random random = new Random();
 
 	public KDTree(List<T> inputElements, Rectangle bbox){
-		this(inputElements, true, bbox, getMinimumBoundingRectangles(inputElements));
+		this(inputElements, true, bbox);
 	}
 
-	private static <T extends SpatialIndexable> Map<T, Rectangle> getMinimumBoundingRectangles(List<T> inputElements) {
-		Map<T, Rectangle> rectangleMap = new HashMap<>();
-		for (T inputElement : inputElements){
-			rectangleMap.put(inputElement, inputElement.getMinimumBoundingRectangle());
-		}
-		return rectangleMap;
-	}
-
-	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox, Map<T, Rectangle> minimumBoundingRectangles){
+	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
 		this.bbox = new Rectangle(bbox);
 		if (inputElements.size() < MAX_NODES_PER_LEAF){
 			this.leafElements = inputElements;
-			growToEncompassLeafElements(inputElements, minimumBoundingRectangles);
+			growToEncompassLeafElements(inputElements);
 		}
 		else {
 			element = quickMedian(inputElements, odd);
@@ -57,16 +49,16 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 					higherElements.add(element);
 				}
 			}
-			lower = new KDTree<T>(lowerElements, !odd, lowerBBox, minimumBoundingRectangles);
-			higher = new KDTree<T>(higherElements, !odd, higherBBox, minimumBoundingRectangles);
+			lower = new KDTree<T>(lowerElements, !odd, lowerBBox);
+			higher = new KDTree<T>(higherElements, !odd, higherBBox);
 			this.bbox.growToEncompass(lower.bbox);
 			this.bbox.growToEncompass(higher.bbox);
 		}
 	}
 
-	private void growToEncompassLeafElements(List<T> inputElements, Map<T, Rectangle> minimumBoundingRectangles) {
+	private void growToEncompassLeafElements(List<T> inputElements) {
 		for (T inputElement: inputElements){
-			this.bbox.growToEncompass(minimumBoundingRectangles.get(inputElement));
+			this.bbox.growToEncompass(inputElement.getMinimumBoundingRectangle());
 		}
 	}
 
