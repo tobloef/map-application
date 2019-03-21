@@ -9,6 +9,7 @@ import java.util.List;
 public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	List<Polyline> list;
 	public MultiPolyline(OSMRelation rel) {
+		rel.merge();
 		list = new ArrayList<>();
 		for (OSMWay way : rel.getList()) list.add(new Polyline(way));
 	}
