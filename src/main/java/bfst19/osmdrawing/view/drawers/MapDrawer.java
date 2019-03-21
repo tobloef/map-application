@@ -30,24 +30,31 @@ public class MapDrawer implements Drawer {
 		for (WayType wayType : WayType.values()){
 			if (visibleAtCurrentZoom(wayType)) {
 				if (wayType.hasFill()) {
-					graphicsContext.setFill(wayType.getFill());
-					for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-						way.fill(graphicsContext);
-					}
+					fillWays(wayType);
 				}
 				if (wayType.hasStroke()) {
-					graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
-					graphicsContext.setStroke(wayType.getStrokeColor());
-
-					if (wayType.hasLineWidth()) {
-						graphicsContext.setLineWidth(wayType.getLineWidth());
-					}
-					for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-						way.stroke(graphicsContext);
-					}
-					graphicsContext.setLineWidth(defaultLineWidth);
+					strokeWays(defaultLineWidth, wayType);
 				}
 			}
+		}
+	}
+
+	private void strokeWays(double defaultLineWidth, WayType wayType) {
+		graphicsContext.setLineDashes(wayType.getLineDash() / 10000);
+		graphicsContext.setStroke(wayType.getStrokeColor());
+		if (wayType.hasLineWidth()) {
+			graphicsContext.setLineWidth(wayType.getLineWidth());
+		}
+		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
+			way.stroke(graphicsContext);
+		}
+		graphicsContext.setLineWidth(defaultLineWidth);
+	}
+
+	private void fillWays(WayType wayType) {
+		graphicsContext.setFill(wayType.getFill());
+		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
+			way.fill(graphicsContext);
 		}
 	}
 
