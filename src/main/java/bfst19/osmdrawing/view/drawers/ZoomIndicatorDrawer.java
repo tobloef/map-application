@@ -19,7 +19,6 @@ public class ZoomIndicatorDrawer implements Drawer {
 	private int innerMargin = outerMargin;
 	private int boxWidth = 100;
 	private int boxHeight = 20;
-	private int bottomOffset = 0;
 
 	public ZoomIndicatorDrawer(MapCanvas canvas) {
 		this.canvas = canvas;
@@ -46,7 +45,7 @@ public class ZoomIndicatorDrawer implements Drawer {
 
 	private void drawBackground() {
 		graphicsContext.setStroke(Color.BLACK);
-		graphicsContext.setFill(Color.color(255, 255, 255, 0.5));
+		graphicsContext.setFill(Color.color(1, 1, 1, 0.9));
 		graphicsContext.fillRect(xOrigin, yOrigin, boxWidth, boxHeight);
 	}
 
