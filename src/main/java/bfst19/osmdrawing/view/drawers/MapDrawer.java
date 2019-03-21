@@ -7,7 +7,6 @@ import bfst19.osmdrawing.view.WayType;
 import bfst19.osmdrawing.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
@@ -46,7 +45,7 @@ public class MapDrawer implements Drawer {
 			graphicsContext.setLineWidth(wayType.getLineWidth());
 		}
 		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-			way.stroke(graphicsContext, canvas.getDegreesPerPixel());
+			way.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
 		}
 		graphicsContext.setLineWidth(defaultLineWidth);
 	}
@@ -54,12 +53,12 @@ public class MapDrawer implements Drawer {
 	private void fillWays(WayType wayType) {
 		graphicsContext.setFill(wayType.getFill());
 		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-			way.fill(graphicsContext, canvas.getDegreesPerPixel());
+			way.fill(graphicsContext, canvas.getDegreesLatitudePerPixel());
 		}
 	}
 
 	private boolean visibleAtCurrentZoom(WayType wayType) {
-		return wayType.getZoomLevel() > canvas.getDegreesPerPixel();
+		return wayType.getZoomLevel() > canvas.getDegreesLatitudePerPixel();
 	}
 
 	private void fillBackground() {

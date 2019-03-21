@@ -17,8 +17,7 @@ public class MapCanvas extends Canvas {
 	private Affine transform = new Affine();
 	private Model model;
 	private List<Drawer> drawers;
-	private double degreesPerPixel; //the width of a pixel in degrees latitude/longitude. Used to draw the
-									//zoomIndicator, and to check current zoom, despite not actually being a zoomfactor
+	private double degreesLatitudePerPixel;
 
 	public void initialize(Model model) {
 		this.model = model;
@@ -46,7 +45,7 @@ public class MapCanvas extends Canvas {
 		for (Drawer drawer : drawers) {
 			drawer.draw();
 		}
-		System.out.println(getDegreesPerPixel());
+		System.out.println(getDegreesLatitudePerPixel());
 	}
 
 	private void makeCanvasUpdateOnResize() {
@@ -70,7 +69,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void updateLineWidth() {
-		graphicsContext.setLineWidth(getDegreesPerPixel());
+		graphicsContext.setLineWidth(getDegreesLatitudePerPixel());
 	}
 
 
@@ -87,10 +86,10 @@ public class MapCanvas extends Canvas {
 
 	public void updateDegreesPerPixel() {
 		//TODO make this a static method
-		degreesPerPixel = 1/Math.sqrt(Math.abs(transform.determinant()));
+		degreesLatitudePerPixel = 1/Math.sqrt(Math.abs(transform.determinant()));
 	}
 
-	public double getDegreesPerPixel() {
-		return degreesPerPixel;
+	public double getDegreesLatitudePerPixel() {
+		return degreesLatitudePerPixel;
 	}
 }
