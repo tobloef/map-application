@@ -46,7 +46,7 @@ public class MapDrawer implements Drawer {
 			graphicsContext.setLineWidth(wayType.getLineWidth());
 		}
 		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-			way.stroke(graphicsContext);
+			way.stroke(graphicsContext, canvas.getDegreesPerPixel());
 		}
 		graphicsContext.setLineWidth(defaultLineWidth);
 	}
@@ -54,7 +54,7 @@ public class MapDrawer implements Drawer {
 	private void fillWays(WayType wayType) {
 		graphicsContext.setFill(wayType.getFill());
 		for (Drawable way : model.getWaysOfType(wayType, getScreenBounds())) {
-			way.fill(graphicsContext);
+			way.fill(graphicsContext, canvas.getDegreesPerPixel());
 		}
 	}
 
