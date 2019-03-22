@@ -27,6 +27,7 @@ public class MapDrawer implements Drawer {
 		double defaultLineWidth = graphicsContext.getLineWidth();
 
 		for (WayType wayType : WayType.values()){
+			graphicsContext.save();
 			if (visibleAtCurrentZoom(wayType)) {
 				if (wayType.hasFill()) {
 					fillWays(wayType);
@@ -35,6 +36,7 @@ public class MapDrawer implements Drawer {
 					strokeWays(defaultLineWidth, wayType);
 				}
 			}
+			graphicsContext.restore();
 		}
 	}
 
@@ -58,7 +60,7 @@ public class MapDrawer implements Drawer {
 	}
 
 	private boolean visibleAtCurrentZoom(WayType wayType) {
-		return wayType.getZoomLevel() > canvas.getDegreesLatitudePerPixel();
+		return wayType.getZoomLevel()/10 > canvas.getDegreesLatitudePerPixel();
 	}
 
 	private void fillBackground() {
