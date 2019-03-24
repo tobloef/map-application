@@ -1,4 +1,4 @@
-package bfst19.osmdrawing.model;
+package bfst19.osmdrawing.model.parsing;
 
 import java.util.*;
 
@@ -35,5 +35,9 @@ public class OSMRelation {
 			pieces.put(res.getLast(), res);
 		}
 		list = pieces.values();
+	}
+
+	public boolean hasMembers() {
+		return list.size() > 0;
 	}
 }

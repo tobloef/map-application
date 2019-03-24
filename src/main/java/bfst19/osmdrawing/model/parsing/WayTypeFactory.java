@@ -1,4 +1,4 @@
-package bfst19.osmdrawing.model;
+package bfst19.osmdrawing.model.parsing;
 
 import bfst19.osmdrawing.view.WayType;
 

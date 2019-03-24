@@ -1,5 +1,6 @@
-package bfst19.osmdrawing.model;
+package bfst19.osmdrawing.model.parsing;
 
+import bfst19.osmdrawing.model.*;
 import bfst19.osmdrawing.view.WayType;
 
 import javax.xml.stream.XMLInputFactory;
@@ -30,11 +31,9 @@ public class OSMParser {
 		this.drawableModel = drawableModel;
 		if (filename.endsWith(".zip")) {
 			osmSource = getZipFile(filename);
-		}
-		else if (filename.endsWith(".osm")){
+		} else if (filename.endsWith(".osm")) {
 			osmSource = getOsmFile(filename);
-		}
-		else {
+		} else {
 			throw new IOException();
 		}
 		parseOSM(osmSource);
@@ -51,7 +50,6 @@ public class OSMParser {
 		zip.getNextEntry();
 		return zip;
 	}
-
 
 
 	private void parseOSM(InputStream osmSource) throws XMLStreamException {
@@ -138,8 +136,10 @@ public class OSMParser {
 	}
 
 	private void handleEndRelation() {
+		if (currentRelation.hasMembers()) {
 			drawableModel.add(currentType, new MultiPolyline(currentRelation));
-			currentWay = null;
+		}
+		currentRelation = null;
 	}
 
 	private void handleStartMember(XMLStreamReader reader) { // adds members to the current relation
@@ -153,7 +153,7 @@ public class OSMParser {
 		String v = reader.getAttributeValue(null, "v");
 		if (currentWay != null || currentRelation != null) {
 			WayType type = WayTypeFactory.getType(k, v);
-			if (type != null){
+			if (type != null) {
 				this.currentType = type;
 			}
 		}
@@ -168,7 +168,7 @@ public class OSMParser {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		float lat = Float.parseFloat(reader.getAttributeValue(null, "lat"));
 		float lon = lonFactor * Float.parseFloat(reader.getAttributeValue(null, "lon"));
-		idToNode.add(new OSMNode(id,lon, lat));
+		idToNode.add(new OSMNode(id, lon, lat));
 	}
 
 	private void handleStartBounds(XMLStreamReader reader) {
@@ -176,7 +176,7 @@ public class OSMParser {
 		bounds.xMin = Float.parseFloat(reader.getAttributeValue(null, "minlon"));
 		bounds.yMax = Float.parseFloat(reader.getAttributeValue(null, "maxlat"));
 		bounds.xMax = Float.parseFloat(reader.getAttributeValue(null, "maxlon"));
-		lonFactor = (float) Math.cos((bounds.yMax +bounds.yMin)/2*Math.PI/180);
+		lonFactor = (float) Math.cos((bounds.yMax + bounds.yMin) / 2 * Math.PI / 180);
 		bounds.xMin *= lonFactor;
 		bounds.xMax *= lonFactor;
 		drawableModel.setModelBounds(bounds);
@@ -190,13 +190,13 @@ public class OSMParser {
 	}
 
 	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
-		Map<OSMNode,OSMWay> pieces = new HashMap<>();
+		Map<OSMNode, OSMWay> pieces = new HashMap<>();
 		for (OSMWay way : coast) {
 			OSMWay res = new OSMWay(0);
 			OSMWay before = pieces.remove(way.getFirst());
 			if (before != null) {
 				pieces.remove(before.getFirst());
-				for (int i = 0 ; i < before.size() - 1 ; i++) {
+				for (int i = 0; i < before.size() - 1; i++) {
 					res.add(before.get(i));
 				}
 			}
@@ -204,7 +204,7 @@ public class OSMParser {
 			OSMWay after = pieces.remove(way.getLast());
 			if (after != null) {
 				pieces.remove(after.getLast());
-				for (int i = 1 ; i < after.size() ; i++) {
+				for (int i = 1; i < after.size(); i++) {
 					res.add(after.get(i));
 				}
 			}
