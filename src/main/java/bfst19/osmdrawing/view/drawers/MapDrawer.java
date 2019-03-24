@@ -27,7 +27,7 @@ public class MapDrawer implements Drawer {
 		double defaultLineWidth = graphicsContext.getLineWidth();
 
 		for (WayType wayType : WayType.values()){
-			if (visibleAtCurrentZoom(wayType)) {
+			if (visibleAtCurrentZoom(wayType) && wayType == WayType.COASTLINE) {
 				if (wayType.hasFill()) {
 					fillWays(wayType);
 				}

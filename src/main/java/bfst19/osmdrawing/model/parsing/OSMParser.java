@@ -19,7 +19,6 @@ public class OSMParser {
 	private float lonFactor = 1.0f;
 	private LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
 	private LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
-	private List<OSMWay> coastLines = new ArrayList<>(); //coastlines need extra work, which is why we have a list for them
 	private OSMWay currentWay = null;
 	private OSMRelation currentRelation = null;
 	private WayType currentType = null;
@@ -64,9 +63,6 @@ public class OSMParser {
 					break;
 				case END_ELEMENT:
 					handleEndElementTag(reader);
-					break;
-				case END_DOCUMENT:
-					handleEndDocumentTag();
 					break;
 			}
 		}
@@ -122,11 +118,7 @@ public class OSMParser {
 	}
 
 	private void handleEndWay() {
-		if (currentType == WayType.COASTLINE) {
-			coastLines.add(currentWay);
-		} else {
-			drawableModel.add(currentType, new Polyline(currentWay));
-		}
+		drawableModel.add(currentType, new Polyline(currentWay));
 		currentWay = null;
 	}
 
@@ -151,6 +143,15 @@ public class OSMParser {
 	private void handleStartTag(XMLStreamReader reader) { // assigns waytype the current way, based on key and value
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
+		if (currentWay != null){
+			currentWay.addTag(k, v);
+		}
+		else if (currentRelation != null){
+			currentRelation.addTag(k, v);
+		}
+		if (k.equals("name") && v.equals("Amager")){
+			System.out.println(currentRelation);
+		}
 		if (currentWay != null || currentRelation != null) {
 			WayType type = WayTypeFactory.getType(k, v);
 			if (type != null) {
@@ -180,38 +181,6 @@ public class OSMParser {
 		bounds.xMin *= lonFactor;
 		bounds.xMax *= lonFactor;
 		drawableModel.setModelBounds(bounds);
-	}
-
-	private void handleEndDocumentTag() {
-		//Get a list of merged coastlines.
-		for (OSMWay coast : merge(coastLines)) {
-			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
-		}
-	}
-
-	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
-		Map<OSMNode, OSMWay> pieces = new HashMap<>();
-		for (OSMWay way : coast) {
-			OSMWay res = new OSMWay(0);
-			OSMWay before = pieces.remove(way.getFirst());
-			if (before != null) {
-				pieces.remove(before.getFirst());
-				for (int i = 0; i < before.size() - 1; i++) {
-					res.add(before.get(i));
-				}
-			}
-			res.addAll(way);
-			OSMWay after = pieces.remove(way.getLast());
-			if (after != null) {
-				pieces.remove(after.getLast());
-				for (int i = 1; i < after.size(); i++) {
-					res.add(after.get(i));
-				}
-			}
-			pieces.put(res.getFirst(), res);
-			pieces.put(res.getLast(), res);
-		}
-		return pieces.values();
 	}
 
 	public Rectangle getModelBounds() {

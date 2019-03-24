@@ -4,6 +4,11 @@ import java.util.*;
 
 public class OSMRelation {
 	private Collection<OSMWay> list = new ArrayList<>();
+	private Map<String, String> tags = new HashMap<>();
+
+	public void addTag(String key, String value){
+		tags.put(key, value);
+	}
 
 	public Collection<OSMWay> getList() {
 		return list;
@@ -13,6 +18,7 @@ public class OSMRelation {
 	}
 
 	public void merge() {
+		//Currently produces two equal lists it appears.
 		Map<OSMNode,OSMWay> pieces = new HashMap<>();
 		for (OSMWay way : list) {
 			OSMWay res = new OSMWay(0);

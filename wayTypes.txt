@@ -45,14 +45,14 @@ BRIDGE man_made bridge
 GROYNE man_made groyne
 PIER man_made pier
 SAND natural beach
-COASTLINE natural coastline
+#COASTLINE natural coastline
 HEATH natural heath
 SCREE natural scree
 TREES natural tree
 WATER natural water
 WETLAND natural wetland
 WOOD natural wood
-ISLAND place island
+COASTLINE place island islet continent archipelago peninsula
 RAILWAY railway rail construction
 RESIDENTIAL residential
 FERRY route ferry tour
