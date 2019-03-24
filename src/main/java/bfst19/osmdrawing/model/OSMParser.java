@@ -24,18 +24,18 @@ public class OSMParser {
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
-		InputStream osmsource;
+		InputStream osmSource;
 		this.drawableModel = drawableModel;
 		if (filename.endsWith(".zip")) {
-			osmsource = getZipFile(filename);
+			osmSource = getZipFile(filename);
 		}
 		else if (filename.endsWith(".osm")){
-			osmsource = getOsmFile(filename);
+			osmSource = getOsmFile(filename);
 		}
 		else {
 			throw new IOException();
 		}
-		parseOSM(osmsource);
+		parseOSM(osmSource);
 		drawableModel.doneAdding();
 	}
 
@@ -172,13 +172,13 @@ public class OSMParser {
 	}
 
 	private void handleStartBounds(XMLStreamReader reader) {
-		bounds.ymin = Float.parseFloat(reader.getAttributeValue(null, "minlat"));
-		bounds.xmin = Float.parseFloat(reader.getAttributeValue(null, "minlon"));
-		bounds.ymax = Float.parseFloat(reader.getAttributeValue(null, "maxlat"));
-		bounds.xmax = Float.parseFloat(reader.getAttributeValue(null, "maxlon"));
-		lonFactor = (float) Math.cos((bounds.ymax+bounds.ymin)/2*Math.PI/180);
-		bounds.xmin *= lonFactor;
-		bounds.xmax *= lonFactor;
+		bounds.yMin = Float.parseFloat(reader.getAttributeValue(null, "minlat"));
+		bounds.xMin = Float.parseFloat(reader.getAttributeValue(null, "minlon"));
+		bounds.yMax = Float.parseFloat(reader.getAttributeValue(null, "maxlat"));
+		bounds.xMax = Float.parseFloat(reader.getAttributeValue(null, "maxlon"));
+		lonFactor = (float) Math.cos((bounds.yMax +bounds.yMin)/2*Math.PI/180);
+		bounds.xMin *= lonFactor;
+		bounds.xMax *= lonFactor;
 		drawableModel.setModelBounds(bounds);
 	}
 

@@ -1,18 +1,19 @@
 package bfst19.osmdrawing.model;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
+
+import bfst19.osmdrawing.utils.EnumHelper;
+
 import java.util.List;
 import java.util.Map;
 
 public class BasicDrawableModel implements DrawableModel {
 
-	Map<WayType, List<Drawable>> wayTypeEnumMap = new EnumMap<>(WayType.class);
+	Map<WayType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
 	Rectangle modelBounds;
 
 
 	public BasicDrawableModel(){
-		initializeWaysEnumMap();
+
 	}
 
 	@Override
@@ -27,7 +28,8 @@ public class BasicDrawableModel implements DrawableModel {
 
 	@Override
 	public void doneAdding() {
-		return; //Does nothing in this model, but is needed for more complex models.
+		//Does nothing in this model, but is needed for more complex models.
+		return;
 	}
 
 	@Override
@@ -40,10 +42,4 @@ public class BasicDrawableModel implements DrawableModel {
 		return modelBounds;
 	}
 
-	private void initializeWaysEnumMap() {
-		wayTypeEnumMap = new EnumMap<>(WayType.class);
-		for (WayType type : WayType.values()) {
-			wayTypeEnumMap.put(type, new ArrayList<>());
-		}
-	}
 }

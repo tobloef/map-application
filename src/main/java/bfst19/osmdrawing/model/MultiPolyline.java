@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiPolyline implements Drawable, Serializable {
+public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	List<Polyline> list;
 	public MultiPolyline(OSMRelation rel) {
 		list = new ArrayList<>();
@@ -14,22 +14,43 @@ public class MultiPolyline implements Drawable, Serializable {
 	}
 
 	@Override
-	public void stroke(GraphicsContext graphicsContext) {
+	public void stroke(GraphicsContext graphicsContext, double zoomFactor) {
 		graphicsContext.beginPath();
-		trace(graphicsContext);
+		trace(graphicsContext, zoomFactor);
 		graphicsContext.stroke();
 	}
 
-	public void trace(GraphicsContext graphicsContext) {
+	public void trace(GraphicsContext graphicsContext, double zoomFactor) {
 		for (Polyline polyline : list) {
-			polyline.trace(graphicsContext);
+			polyline.trace(graphicsContext, zoomFactor);
 		}
 	}
 
 	@Override
-	public void fill(GraphicsContext graphicsContext) {
+	public void fill(GraphicsContext graphicsContext, double zoomFactor) {
 		graphicsContext.beginPath();
-		trace(graphicsContext);
+		trace(graphicsContext, zoomFactor);
 		graphicsContext.fill();
+	}
+
+	@Override
+	public float getRepresentativeX() {
+		//TODO: Make something more representative then just the first coords.
+		return list.get(0).getRepresentativeX();
+	}
+
+	@Override
+	public float getRepresentativeY() {
+		//TODO: Make something more representative then just the first coords.
+		return list.get(0).getRepresentativeY();
+	}
+
+	@Override
+	public Rectangle getMinimumBoundingRectangle() {
+		Rectangle rectangle = new Rectangle();
+		for (Polyline polyline : list) {
+			rectangle.growToEncompass(polyline.getMinimumBoundingRectangle());
+		}
+		return rectangle;
 	}
 }
