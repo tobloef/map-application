@@ -6,6 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -14,17 +17,23 @@ import java.util.Map;
 import static bfst19.osmdrawing.utils.EnumHelper.stringToWayType;
 
 public class LoadWayTypeThemeMap {
-    private static final double DEFAULT_ZOOM_LEVEL = 0.001;
-    private static final String THEME_PATH = "config/themes/default.yaml";
 
-    public static Map<WayType, DrawingInfo> loadWayTypeThemeMap() {
-        Map<WayType, DrawingInfo> wayTypeThemeMap = new HashMap<>();
+    public static Map<WayType, DrawingInfo> loadWayTypeThemeMap(String path, Map<WayType, DrawingInfo> existingMap) throws YAMLException {
+        Map<WayType, DrawingInfo> wayTypeThemeMap = existingMap;
+        if (existingMap == null) {
+            wayTypeThemeMap = new HashMap<>();
+        }
         // Read the YAML file
         Yaml yaml = new Yaml();
-        InputStream inputStream = ResourceLoader.getResourceAsStream(THEME_PATH);
-        List<Map> themeMaps = yaml.load(inputStream);
+        List<Map> themeMaps;
+        InputStream inputStream = ResourceLoader.getResourceAsStream(path);
+        themeMaps = yaml.load(inputStream);
+        if (themeMaps == null) {
+            return wayTypeThemeMap;
+        }
         for (Map themeMap : themeMaps) {
             for (Object themeEntryObj : themeMap.entrySet()) {
+                // Don't fail entire parsing if one entry fails.
                 try {
                     Map.Entry<String, Object> themeEntry = (Map.Entry<String, Object>) themeEntryObj;
                     parseThemeEntry(themeEntry, wayTypeThemeMap);
@@ -50,19 +59,19 @@ public class LoadWayTypeThemeMap {
         Map<String, Object> themeValuesMap = (Map<String, Object>) themeEntry.getValue();
         DrawingInfo theme = parseThemeValueMap(themeValuesMap);
         // Add WayType and theme to the map
+        if (wayTypeThemeMap.containsKey(wayType)) {
+            theme = wayTypeThemeMap.get(wayType).mergeWith(theme);
+        }
         wayTypeThemeMap.put(wayType, theme);
     }
 
     private static DrawingInfo parseThemeValueMap(Map<String, Object> themeValuesMap) {
         Color fillColor = parseColor(themeValuesMap, "fillColor");
         Color strokeColor = parseColor(themeValuesMap, "strokeColor");
-        double lineDash = parseDouble(themeValuesMap, "lineDash");
-        double lineWidth = parseDouble(themeValuesMap, "lineWidth");
-        double zoomLevel = parseDouble(themeValuesMap, "zoomLevel");
-        if (zoomLevel == 0) {
-            zoomLevel = DEFAULT_ZOOM_LEVEL;
-        }
-        boolean alwaysDraw = parseBoolean(themeValuesMap, "alwaysDraw");
+        Double lineDash = parseDouble(themeValuesMap, "lineDash");
+        Double lineWidth = parseDouble(themeValuesMap, "lineWidth");
+        Double zoomLevel = parseDouble(themeValuesMap, "zoomLevel");
+        Boolean alwaysDraw = parseBoolean(themeValuesMap, "alwaysDraw");
         ImagePattern texture = parseTexture(themeValuesMap, "texture");
         // Create theme
         return new DrawingInfo(
@@ -85,22 +94,22 @@ public class LoadWayTypeThemeMap {
         return null;
     }
 
-    private static double parseDouble(Map<String, Object> themeValuesMap, String key) {
+    private static Double parseDouble(Map<String, Object> themeValuesMap, String key) {
         Object value = themeValuesMap.get(key);
         if (value instanceof Double) {
             return (Double) value;
         } else if (value instanceof Integer) {
             return Double.valueOf((Integer) value);
         }
-        return 0;
+        return null;
     }
 
-    private static boolean parseBoolean(Map<String, Object> themeValuesMap, String key) {
+    private static Boolean parseBoolean(Map<String, Object> themeValuesMap, String key) {
         Object value = themeValuesMap.get(key);
         if (value instanceof Boolean) {
             return (Boolean) value;
         }
-        return false;
+        return null;
     }
 
     private static Color parseColor(Map<String, Object> themeValuesMap, String key) {

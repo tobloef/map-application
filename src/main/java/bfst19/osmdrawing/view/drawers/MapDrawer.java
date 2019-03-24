@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.Map;
 
@@ -27,10 +28,25 @@ public class MapDrawer implements Drawer {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
-		drawableDrawingInfoMap = loadWayTypeThemeMap();
+		// TODO: This should be done somewhere else
+		String defaultPath = "config/themes/default.yaml";
+		try {
+			drawableDrawingInfoMap = loadWayTypeThemeMap(defaultPath, null);
+		} catch (YAMLException e) {
+			throw new RuntimeException("Couldn't read default theme from path \"" + defaultPath + "\", can't continue.", e);
+		}
+		String testPath = "config/themes/bloody-waters.yaml";
+		try {
+			drawableDrawingInfoMap = loadWayTypeThemeMap(testPath, drawableDrawingInfoMap);
+		} catch (YAMLException e) {
+			System.err.println("Couldn't load theme from path \"" + testPath + "\", but we can still continue with the default theme.");
+		}
 	}
 
 	public void draw() {
+		if (drawableDrawingInfoMap == null) {
+			return;
+		}
 		double currentZoomLevel = canvas.getDegreesLatitudePerPixel();
 		fillBackground(drawableDrawingInfoMap);
 		for (WayType wayType : WayType.values()){
@@ -45,8 +61,9 @@ public class MapDrawer implements Drawer {
 				continue;
 			}
 			// Skip if not visible at zoom level
-			boolean isZoomedInEnough = theme.getZoomLevel() > currentZoomLevel;
-			if (!theme.getAlwaysDraw() && !isZoomedInEnough) {
+			boolean isZoomedInEnough = theme.getZoomLevel() == null || theme.getZoomLevel() > currentZoomLevel;
+			boolean alwaysDraw = theme.getAlwaysDraw() != null && theme.getAlwaysDraw();
+			if (!alwaysDraw && !isZoomedInEnough) {
 				continue;
 			}
 			drawDrawables(drawablesToDraw, theme, currentZoomLevel);
@@ -72,10 +89,10 @@ public class MapDrawer implements Drawer {
 		if (theme.getStrokeColor() != null) {
 			graphicsContext.setStroke(theme.getStrokeColor());
 
-			if (theme.getLineDash() > 0) {
+			if (theme.getLineDash() != null) {
 				graphicsContext.setLineDashes(theme.getLineDash() / 10000);
 			}
-			if(theme.getLineWidth() > 0){
+			if(theme.getLineWidth() != null){
 				graphicsContext.setLineWidth(theme.getLineWidth());
 			}
 			for (Drawable drawable : drawables){

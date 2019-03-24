@@ -298,10 +298,10 @@
 - CANAL:
     fillColor: "87CEFA"
 
-# Misc.
-
 - BASIN:
     fillColor: "87CEFA"
+
+# Misc.
 
 - UNKNOWN:
     strokeColor: "000000"
