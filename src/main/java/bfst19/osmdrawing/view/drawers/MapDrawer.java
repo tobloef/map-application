@@ -8,6 +8,7 @@ import bfst19.osmdrawing.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
@@ -20,26 +21,26 @@ public class MapDrawer implements Drawer {
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
-	private Map<WayType, DrawingInfo> wayTypeThemeMap;
+	private Map<WayType, DrawingInfo> drawableDrawingInfoMap;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
-		wayTypeThemeMap = loadWayTypeThemeMap();
+		drawableDrawingInfoMap = loadWayTypeThemeMap();
 	}
 
 	public void draw() {
 		double currentZoomLevel = canvas.getDegreesLatitudePerPixel();
-		fillBackground(wayTypeThemeMap);
+		fillBackground(drawableDrawingInfoMap);
 		for (WayType wayType : WayType.values()){
-			Iterable<Drawable> waysToDraw = model.getWaysOfType(wayType, getScreenBounds());
-			// Skip if no ways to draw
-			if (!waysToDraw.iterator().hasNext()) {
+			Iterable<Drawable> drawablesToDraw = model.getWaysOfType(wayType, getScreenBounds());
+			// Skip if no drawables to draw
+			if (!drawablesToDraw.iterator().hasNext()) {
 				continue;
 			}
 			// Skip if no theme found
-			DrawingInfo theme = wayTypeThemeMap.get(wayType);
+			DrawingInfo theme = drawableDrawingInfoMap.get(wayType);
 			if (theme == null) {
 				continue;
 			}
@@ -48,39 +49,44 @@ public class MapDrawer implements Drawer {
 			if (!theme.getAlwaysDraw() && !isZoomedInEnough) {
 				continue;
 			}
-			graphicsContext.save();
-			Paint fill = null;
-			if (theme.getFillColor() != null) {
-				fill = theme.getFillColor();
-			}
-			// TODO: Add clause to see if textures are enabled.
-			if (theme.getTexture() != null) {
-				fill = theme.getTexture();
-			}
-			if (fill != null) {
-				graphicsContext.setFill(fill);
-				for (Drawable way : waysToDraw) {
-					way.fill(graphicsContext, currentZoomLevel);
-				}
-			}
-			if (theme.getStrokeColor() != null) {
-				graphicsContext.setStroke(theme.getStrokeColor());
-
-				if (theme.getLineDash() > 0) {
-					graphicsContext.setLineDashes(theme.getLineDash() / 10000);
-				}
-				if(theme.getLineWidth() > 0){
-					graphicsContext.setLineWidth(theme.getLineWidth());
-				}
-				for (Drawable way : waysToDraw){
-					way.stroke(graphicsContext, currentZoomLevel);
-				}
-			}
-			graphicsContext.restore();
+			drawDrawables(drawablesToDraw, theme, currentZoomLevel);
 		}
 	}
 
+	private void drawDrawables(Iterable<Drawable> drawables, DrawingInfo theme, double currentZoomLevel) {
+		graphicsContext.save();
+		Paint fill = null;
+		if (theme.getFillColor() != null) {
+			fill = theme.getFillColor();
+		}
+		// TODO: Add clause to see if textures are enabled.
+		if (theme.getTexture() != null) {
+			fill = theme.getTexture();
+		}
+		if (fill != null) {
+			graphicsContext.setFill(fill);
+			for (Drawable drawable : drawables) {
+				drawable.fill(graphicsContext, currentZoomLevel);
+			}
+		}
+		if (theme.getStrokeColor() != null) {
+			graphicsContext.setStroke(theme.getStrokeColor());
+
+			if (theme.getLineDash() > 0) {
+				graphicsContext.setLineDashes(theme.getLineDash() / 10000);
+			}
+			if(theme.getLineWidth() > 0){
+				graphicsContext.setLineWidth(theme.getLineWidth());
+			}
+			for (Drawable drawable : drawables){
+				drawable.stroke(graphicsContext, currentZoomLevel);
+			}
+		}
+		graphicsContext.restore();
+	}
+
 	private void fillBackground(Map<WayType, DrawingInfo> themeMap) {
+		graphicsContext.save();
 		boolean coastlineVisible = model.getWaysOfType(WayType.COASTLINE, getScreenBounds())
 				.iterator()
 				.hasNext();
@@ -91,10 +97,9 @@ public class MapDrawer implements Drawer {
 		if (theme != null && theme.getFillColor() != null) {
 			graphicsContext.setFill(theme.getFillColor());
 		}
-		Affine affine = graphicsContext.getTransform();
 		graphicsContext.setTransform(new Affine());
 		graphicsContext.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		graphicsContext.setTransform(affine);
+		graphicsContext.restore();
 	}
 
 	private Rectangle getScreenBounds(){

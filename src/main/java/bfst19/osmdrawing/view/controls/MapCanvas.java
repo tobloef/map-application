@@ -14,18 +14,19 @@ import java.util.List;
 
 public class MapCanvas extends Canvas {
 	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
-	private Affine transform = new Affine();
 	private Model model;
 	private List<Drawer> drawers;
 	private double degreesLatitudePerPixel;
 
 	public void initialize(Model model) {
 		this.model = model;
+		Affine affine = new Affine();
+		affine.prependScale(1,-1, 0, 0);
+		graphicsContext.setTransform(affine);
+		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		initializeDrawers(model);
-		transform.prependScale(1,-1, 0, 0);
 		panViewToMapBounds();
 		updateDegreesPerPixel();
-		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		model.addObserver(this::repaint);
 		makeCanvasUpdateOnResize();
 		repaint();
@@ -53,9 +54,10 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void clearBackground() {
+		graphicsContext.save();
 		graphicsContext.setTransform(new Affine());
 		graphicsContext.clearRect(0,0, getWidth(), getHeight());
-		graphicsContext.setTransform(transform);
+		graphicsContext.restore();
 	}
 
 	private void panViewToMapBounds() {
@@ -73,19 +75,24 @@ public class MapCanvas extends Canvas {
 
 
 	public void pan(double deltaX, double deltaY) {
+		Affine transform = graphicsContext.getTransform();
 		transform.prependTranslation(deltaX, deltaY);
+		graphicsContext.setTransform(transform);
 		repaint();
 	}
 
 	public void zoom(double factor, double x, double y) {
+		Affine transform = graphicsContext.getTransform();
 		transform.prependScale(factor, factor, x, y);
+		graphicsContext.setTransform(transform);
 		updateDegreesPerPixel();
 		repaint();
 	}
 
 	public void updateDegreesPerPixel() {
 		//TODO make this a static method
-		degreesLatitudePerPixel = 1/Math.sqrt(Math.abs(transform.determinant()));
+		double determinant = graphicsContext.getTransform().determinant();
+		degreesLatitudePerPixel = 1/Math.sqrt(Math.abs(determinant));
 	}
 
 	public double getDegreesLatitudePerPixel() {
