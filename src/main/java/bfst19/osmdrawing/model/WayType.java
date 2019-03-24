@@ -2,6 +2,7 @@
 package bfst19.osmdrawing.model;
 
 // The wayTypes are drawn in the order they are written in
+@SuppressWarnings("unused")
 public enum WayType {
 	COASTLINE,
 

@@ -11,14 +11,36 @@
 # For more about web color formats, see:
 # https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
 
+# Constants, won't get parsed but are used for anchor references
+
+- constants:
+  - zoomLevels:
+    - level1: &level1 0.00001
+    - level2: &level2 0.00002
+    - level3: &level3 0.00003
+    - level4: &level4 0.00005
+    - level5: &level5 0.000002
+    - level6: &level6 0.000004
+    - level7: &level7 0.000006
+    - level8: &level8 0.00000065
+
+# Coastline, always draw first
+
 - COASTLINE:
     fillColor: "EEF0D5"
+    alwaysDraw: true
+
+# Island stuff
 
 - ISLAND:
     fillColor: "F4F0EA"
+    alwaysDraw: true
 
 - SCREE:
     fillColor: "F1E5DC"
+    alwaysDraw: true
+
+# Nature
 
 - TREES:
     fillColor: "006400"
@@ -53,170 +75,219 @@
 - SHRUB:
     fillColor: "90EE90"
 
+# Buildings
+
 - CONSTRUCTION:
     fillColor: "8FBC8F"
+    zoomLevel: *level3
 
 - INDUSTRIAL:
     fillColor: "D8BFD8"
+    zoomLevel: *level3
 
 - CEMETERY:
     fillColor: "6B8E23"
+    zoomLevel: *level3
 
 - RESIDENTIAL:
     fillColor: "E6E6FA"
+    zoomLevel: *level3
 
 - ALLOTMENTS:
     fillColor: "98FB98"
+    zoomLevel: *level3
 
 - PLAYGROUND:
     fillColor: "66CDAA"
+    zoomLevel: *level3
 
 - BUILDING:
     fillColor: "A9A9A9"
+    zoomLevel: *level3
 
 - BARRIER:
     strokeColor: "BC8F8F"
+    zoomLevel: *level3
 
 - PITCH:
     fillColor: "66CDAA"
+    zoomLevel: *level3
 
 - GROYNE:
     fillColor: "A9A9A9"
+    zoomLevel: *level3
 
 - PIER:
     fillColor: "FFFF00"
     strokeColor: "FFFF00"
+    zoomLevel: *level3
 
 - BRIDGE:
     fillColor: "BDB76B"
     strokeColor: "BDB76B"
+    zoomLevel: *level3
 
 - APRON:
     fillColor: "DADAE0"
+    zoomLevel: *level3
+
+# Road exits
 
 - TERTIARYROADEXIT:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
+    zoomLevel: *level6
 
 - SECONDARYROADEXIT:
     fillColor:
     strokeColor: "F7FBBB"
     lineWidth: 0.00012
+    zoomLevel: *level2
 
 - PRIMARYROADEXIT:
     fillColor:
     strokeColor: "FFAD95"
     lineWidth: 0.00012
+    zoomLevel: *level2
 
 - MOTORWAYEXIT:
     fillColor:
     strokeColor: "FEB9C3"
     lineWidth: 0.00014
+    zoomLevel: *level4
+
+# Roads
 
 - RESIDENTIALROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00006
+    zoomLevel: *level6
 
 - TERTIARYROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
+    zoomLevel: *level6
 
 - SERVICEROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00004
+    zoomLevel: *level8
 
 - UNCLASSIFIEDROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00006
+    zoomLevel: *level6
+
 
 - ROUNDABOUT:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
+    zoomLevel: *level5
 
 - LIVING_STREET:
     fillColor:
     strokeColor: "EDEEED"
     lineWidth: 0.00006
+    zoomLevel: *level6
 
 - SECONDARYROAD:
     fillColor:
     strokeColor: "F7FBBB"
     lineWidth: 0.00012
+    zoomLevel: *level2
 
 - PRIMARYROAD:
     fillColor:
     strokeColor: "FFAD95"
     lineWidth: 0.00012
+    zoomLevel: *level2
 
 - RUNWAY:
     fillColor:
     strokeColor: "BABACC"
     lineWidth: 0.0005
+    zoomLevel: *level2
 
 - RAILWAY:
     fillColor:
     strokeColor: "D3D3D3"
     lineDash: 2
+    zoomLevel: *level2
 
 - PEDESTRIAN:
     fillColor:
     strokeColor: "DDDDE9"
     lineWidth: 0.00005
+    zoomLevel: *level6
 
 - RACEWAY:
     fillColor:
     strokeColor: "FFBDC7"
     lineWidth: 0.00004
+    zoomLevel: *level8
 
 - MOTORWAY:
     fillColor:
     strokeColor: "FEB9C3"
     lineWidth: 0.00014
+    zoomLevel: *level4
+
+# Abstract routes
 
 - MARKING:
     fillColor:
     strokeColor: "000000"
+    zoomLevel: *level7
 
 - TRACK:
     fillColor:
     strokeColor: "B68235"
     lineDash: 2
+    zoomLevel: *level7
 
 - FERRY:
     fillColor:
     strokeColor: "0000FF"
     lineDash: 2
+    zoomLevel: *level7
 
 - TOUR:
     fillColor:
     strokeColor: "000000"
     lineDash: 2
+    zoomLevel: *level7
 
 - BUS_GUIDEWAY:
     fillColor:
     strokeColor: "6066FF"
     lineDash: 2
+    zoomLevel: *level7
 
 - FOOTWAY:
     fillColor:
     strokeColor: "FE9E93"
     lineDash: 2
+    zoomLevel: *level7
 
 - BRIDLEWAY:
     fillColor:
     strokeColor: "A8D7B6"
     lineDash: 2
+    zoomLevel: *level7
 
 - CYCLEWAY:
     fillColor:
     strokeColor: "7B7EF8"
     lineDash: 2
+    zoomLevel: *level7
+
+# Water
 
 - WATER:
     fillColor: "87CEFA"
@@ -226,6 +297,8 @@
 
 - CANAL:
     fillColor: "87CEFA"
+
+# Misc.
 
 - BASIN:
     fillColor: "87CEFA"

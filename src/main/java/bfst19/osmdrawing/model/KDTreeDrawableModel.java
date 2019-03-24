@@ -1,10 +1,10 @@
 package bfst19.osmdrawing.model;
 
-import bfst19.osmdrawing.view.WayType;
+import bfst19.osmdrawing.utils.EnumHelper;
 import java.util.*;
 
 public class KDTreeDrawableModel implements DrawableModel {
-	Map<WayType, List<Drawable>> wayTypeEnumMap = WayType.initializeWaysEnumMap();
+	Map<WayType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
 	Map<WayType, KDTree> wayTypeToKDTreeRoot;
 	Rectangle modelBounds;
 
@@ -20,7 +20,8 @@ public class KDTreeDrawableModel implements DrawableModel {
 	@Override
 	public Iterable<Drawable> getDrawablesOfType(WayType type, Rectangle bounds) {
 		if (wayTypeToKDTreeRoot.containsKey(type))
-			if (!type.alwaysDraw())
+			//if (!type.alwaysDraw())
+			if (true)
 				return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, new ArrayList<Drawable>());
 			else {
 				return wayTypeToKDTreeRoot.get(type).getContent(new ArrayList<Drawable>());

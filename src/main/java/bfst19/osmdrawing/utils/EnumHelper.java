@@ -1,6 +1,12 @@
 package bfst19.osmdrawing.utils;
 
+import bfst19.osmdrawing.model.Drawable;
 import bfst19.osmdrawing.model.WayType;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 public class EnumHelper {
     /**
@@ -12,8 +18,18 @@ public class EnumHelper {
         try {
             return WayType.valueOf(name);
         } catch (IllegalArgumentException e){
-            e.printStackTrace();
+            return null;
         }
-        return null;
+    }
+
+
+
+
+    public static Map<WayType, List<Drawable>> createWayTypeDrawablesMap() {
+        java.util.Map<WayType, List<Drawable>> wayTypeEnumMap = new EnumMap<>(WayType.class);
+        for (WayType type : WayType.values()) {
+            wayTypeEnumMap.put(type, new ArrayList<>());
+        }
+        return wayTypeEnumMap;
     }
 }
