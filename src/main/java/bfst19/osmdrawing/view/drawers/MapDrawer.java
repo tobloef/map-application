@@ -45,7 +45,6 @@ public class MapDrawer implements Drawer {
 			}
 			// Skip if not visible at zoom level
 			boolean isZoomedInEnough = theme.getZoomLevel() > currentZoomLevel;
-			System.out.println(wayType + " always: " + theme.getAlwaysDraw() + " enough: " + isZoomedInEnough + " cur: " + currentZoomLevel + " thresh: " + theme.getZoomLevel());
 			if (!theme.getAlwaysDraw() && !isZoomedInEnough) {
 				continue;
 			}
