@@ -106,17 +106,17 @@ public class MapDrawer implements Drawer {
 		graphicsContext.restore();
 	}
 
-	private void fillBackground(Map<WayType, DrawingInfo> themeMap) {
+	private void fillBackground(Map<WayType, DrawingInfo> drawingInfoMap) {
 		graphicsContext.save();
 		boolean coastlineVisible = model.getWaysOfType(WayType.COASTLINE, getScreenBounds())
 				.iterator()
 				.hasNext();
-		DrawingInfo theme = themeMap.get(WayType.COASTLINE);
+		DrawingInfo drawingInfo = drawingInfoMap.get(WayType.COASTLINE);
 		if (coastlineVisible) {
-			theme = themeMap.get(WayType.WATER);
+			drawingInfo = drawingInfoMap.get(WayType.WATER);
 		}
-		if (theme != null && theme.hasFillColor()) {
-			graphicsContext.setFill(theme.getFillColor());
+		if (drawingInfo != null && drawingInfo.hasFillColor()) {
+			graphicsContext.setFill(drawingInfo.getFillColor());
 		}
 		graphicsContext.setTransform(new Affine());
 		graphicsContext.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());

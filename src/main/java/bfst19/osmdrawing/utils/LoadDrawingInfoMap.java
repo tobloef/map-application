@@ -17,9 +17,9 @@ import static bfst19.osmdrawing.utils.EnumHelper.stringToWayType;
 public class LoadDrawingInfoMap {
 
     public static Map<WayType, DrawingInfo> loadDrawingInfoMap(String path, Map<WayType, DrawingInfo> existingMap) throws YAMLException {
-        Map<WayType, DrawingInfo> wayTypeThemeMap = existingMap;
+        Map<WayType, DrawingInfo> wayTypeDrawingInfoMap = existingMap;
         if (existingMap == null) {
-            wayTypeThemeMap = new HashMap<>();
+            wayTypeDrawingInfoMap = new HashMap<>();
         }
         // Read the YAML file
         Yaml yaml = new Yaml();
@@ -27,14 +27,14 @@ public class LoadDrawingInfoMap {
         InputStream inputStream = ResourceLoader.getResourceAsStream(path);
         themeMaps = yaml.load(inputStream);
         if (themeMaps == null) {
-            return wayTypeThemeMap;
+            return wayTypeDrawingInfoMap;
         }
         for (Map themeMap : themeMaps) {
             for (Object themeEntryObj : themeMap.entrySet()) {
                 // Don't fail entire parsing if one entry fails.
                 try {
                     Map.Entry<String, Object> themeEntry = (Map.Entry<String, Object>) themeEntryObj;
-                    parseThemeEntry(themeEntry, wayTypeThemeMap);
+                    parseThemeEntry(themeEntry, wayTypeDrawingInfoMap);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -42,7 +42,7 @@ public class LoadDrawingInfoMap {
         }
 
         // Return the final theme map
-        return wayTypeThemeMap;
+        return wayTypeDrawingInfoMap;
     }
 
     private static void parseThemeEntry(Map.Entry<String, Object> themeEntry, Map<WayType, DrawingInfo> wayTypeThemeMap) throws Exception {
