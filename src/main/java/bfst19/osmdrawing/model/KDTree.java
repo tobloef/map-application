@@ -1,9 +1,9 @@
 package bfst19.osmdrawing.model;
 
-import bfst19.osmdrawing.view.WayType;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class KDTree<T extends SpatialIndexable> implements Serializable {
 	T element;
