@@ -31,13 +31,13 @@ public class DrawingInfo {
     }
 
     public DrawingInfo mergeWith(DrawingInfo other) {
-        Color fillColor = other.getFillColor() != null ? other.getFillColor() : this.fillColor;
-        Color strokeColor = other.getStrokeColor() != null ? other.getStrokeColor() : this.strokeColor;
-        Double lineDash = other.getLineDash() != null ? other.getLineDash() : this.lineDash;
-        Double lineWidth = other.getLineWidth() != null ? other.getLineWidth() : this.lineWidth;
-        Double zoomLevel = other.getZoomLevel() != null ? other.getZoomLevel() : this.zoomLevel;
-        Boolean alwaysDraw = other.getAlwaysDraw() != null ? other.getAlwaysDraw() : this.alwaysDraw;
-        ImagePattern texture = other.getTexture() != null ? other.getTexture() : this.texture;
+        Color fillColor = tryPickNotNull(other.getFillColor(), this.fillColor);
+        Color strokeColor = tryPickNotNull(other.getStrokeColor(), this.strokeColor);
+        Double lineDash = tryPickNotNull(other.getLineDash(), this.lineDash);
+        Double lineWidth = tryPickNotNull(other.getLineWidth(), this.lineWidth);
+        Double zoomLevel = tryPickNotNull(other.getZoomLevel(), this.zoomLevel);
+        Boolean alwaysDraw = tryPickNotNull(other.getAlwaysDraw(), this.alwaysDraw);
+        ImagePattern texture = tryPickNotNull(other.getTexture(), this.texture);
 
         return new DrawingInfo(
                 fillColor,
@@ -48,6 +48,13 @@ public class DrawingInfo {
                 alwaysDraw,
                 texture
         );
+    }
+
+    private <T> T tryPickNotNull(T thing1, T thing2) {
+        if (thing1 != null) {
+            return thing1;
+        }
+        return thing2;
     }
 
     public Color getFillColor() {
@@ -71,10 +78,42 @@ public class DrawingInfo {
     }
 
     public Boolean getAlwaysDraw() {
+        if (alwaysDraw == null) {
+            return false;
+        }
         return alwaysDraw;
     }
 
     public ImagePattern getTexture() {
         return texture;
     }
+
+    public boolean hasFillColor() {
+        return fillColor != null;
+    }
+
+    public boolean hasStrokeColor() {
+        return strokeColor != null;
+    }
+
+    public boolean hasLineDash() {
+        return lineDash != null;
+    }
+
+    public boolean hasLineWidth() {
+        return lineWidth != null;
+    }
+
+    public boolean hasZoomLevel() {
+        return zoomLevel != null;
+    }
+
+    public boolean hasAlwaysDraw() {
+        return alwaysDraw != null;
+    }
+
+    public boolean hasTexture() {
+        return texture != null;
+    }
+
 }

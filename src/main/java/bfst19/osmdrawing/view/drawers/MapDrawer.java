@@ -8,7 +8,6 @@ import bfst19.osmdrawing.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
@@ -16,7 +15,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.Map;
 
-import static bfst19.osmdrawing.utils.LoadWayTypeThemeMap.loadWayTypeThemeMap;
+import static bfst19.osmdrawing.utils.LoadDrawingInfoMap.loadDrawingInfoMap;
 
 public class MapDrawer implements Drawer {
 	private MapCanvas canvas;
@@ -31,15 +30,9 @@ public class MapDrawer implements Drawer {
 		// TODO: This should be done somewhere else
 		String defaultPath = "config/themes/default.yaml";
 		try {
-			drawableDrawingInfoMap = loadWayTypeThemeMap(defaultPath, null);
+			drawableDrawingInfoMap = loadDrawingInfoMap(defaultPath, null);
 		} catch (YAMLException e) {
 			throw new RuntimeException("Couldn't read default theme from path \"" + defaultPath + "\", can't continue.", e);
-		}
-		String testPath = "config/themes/bloody-waters.yaml";
-		try {
-			drawableDrawingInfoMap = loadWayTypeThemeMap(testPath, drawableDrawingInfoMap);
-		} catch (YAMLException e) {
-			System.err.println("Couldn't load theme from path \"" + testPath + "\", but we can still continue with the default theme.");
 		}
 	}
 
@@ -56,29 +49,40 @@ public class MapDrawer implements Drawer {
 				continue;
 			}
 			// Skip if no theme found
-			DrawingInfo theme = drawableDrawingInfoMap.get(wayType);
-			if (theme == null) {
+			DrawingInfo drawingInfo = drawableDrawingInfoMap.get(wayType);
+			if (drawingInfo == null) {
 				continue;
 			}
-			// Skip if not visible at zoom level
-			boolean isZoomedInEnough = theme.getZoomLevel() == null || theme.getZoomLevel() > currentZoomLevel;
-			boolean alwaysDraw = theme.getAlwaysDraw() != null && theme.getAlwaysDraw();
-			if (!alwaysDraw && !isZoomedInEnough) {
+			boolean visibleAtZoom = isVisibleAtZoom(drawingInfo, currentZoomLevel);
+			if (!visibleAtZoom) {
 				continue;
 			}
-			drawDrawables(drawablesToDraw, theme, currentZoomLevel);
+			drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
 		}
 	}
 
-	private void drawDrawables(Iterable<Drawable> drawables, DrawingInfo theme, double currentZoomLevel) {
+	private boolean isVisibleAtZoom(DrawingInfo drawingInfo, double zoomLevel) {
+		// If no zoom level specified, just draw it.
+		if (!drawingInfo.hasZoomLevel()) {
+			return true;
+		}
+		// If the element should be visible at the current zoom level
+		if (drawingInfo.getZoomLevel() > zoomLevel) {
+			return true;
+		}
+		// If the element should always be drawn, draw it regardless of zoom.
+		return drawingInfo.getAlwaysDraw();
+	}
+
+	private void drawDrawables(Iterable<Drawable> drawables, DrawingInfo drawingInfo, double currentZoomLevel) {
 		graphicsContext.save();
 		Paint fill = null;
-		if (theme.getFillColor() != null) {
-			fill = theme.getFillColor();
+		if (drawingInfo.hasFillColor()) {
+			fill = drawingInfo.getFillColor();
 		}
 		// TODO: Add clause to see if textures are enabled.
-		if (theme.getTexture() != null) {
-			fill = theme.getTexture();
+		if (drawingInfo.hasTexture()) {
+			fill = drawingInfo.getTexture();
 		}
 		if (fill != null) {
 			graphicsContext.setFill(fill);
@@ -86,14 +90,14 @@ public class MapDrawer implements Drawer {
 				drawable.fill(graphicsContext, currentZoomLevel);
 			}
 		}
-		if (theme.getStrokeColor() != null) {
-			graphicsContext.setStroke(theme.getStrokeColor());
+		if (drawingInfo.hasStrokeColor()) {
+			graphicsContext.setStroke(drawingInfo.getStrokeColor());
 
-			if (theme.getLineDash() != null) {
-				graphicsContext.setLineDashes(theme.getLineDash() / 10000);
+			if (drawingInfo.hasLineDash()) {
+				graphicsContext.setLineDashes(drawingInfo.getLineDash() / 10000);
 			}
-			if(theme.getLineWidth() != null){
-				graphicsContext.setLineWidth(theme.getLineWidth());
+			if(drawingInfo.hasLineWidth()){
+				graphicsContext.setLineWidth(drawingInfo.getLineWidth());
 			}
 			for (Drawable drawable : drawables){
 				drawable.stroke(graphicsContext, currentZoomLevel);
@@ -111,7 +115,7 @@ public class MapDrawer implements Drawer {
 		if (coastlineVisible) {
 			theme = themeMap.get(WayType.WATER);
 		}
-		if (theme != null && theme.getFillColor() != null) {
+		if (theme != null && theme.hasFillColor()) {
 			graphicsContext.setFill(theme.getFillColor());
 		}
 		graphicsContext.setTransform(new Affine());

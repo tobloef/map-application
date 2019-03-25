@@ -1,14 +1,12 @@
 package bfst19.osmdrawing.utils;
 
-import bfst19.osmdrawing.model.WayType;
 import bfst19.osmdrawing.model.DrawingInfo;
+import bfst19.osmdrawing.model.WayType;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +14,9 @@ import java.util.Map;
 
 import static bfst19.osmdrawing.utils.EnumHelper.stringToWayType;
 
-public class LoadWayTypeThemeMap {
+public class LoadDrawingInfoMap {
 
-    public static Map<WayType, DrawingInfo> loadWayTypeThemeMap(String path, Map<WayType, DrawingInfo> existingMap) throws YAMLException {
+    public static Map<WayType, DrawingInfo> loadDrawingInfoMap(String path, Map<WayType, DrawingInfo> existingMap) throws YAMLException {
         Map<WayType, DrawingInfo> wayTypeThemeMap = existingMap;
         if (existingMap == null) {
             wayTypeThemeMap = new HashMap<>();
