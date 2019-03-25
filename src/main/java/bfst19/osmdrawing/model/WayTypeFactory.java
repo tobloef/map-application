@@ -29,11 +29,12 @@ public class WayTypeFactory {
 		}
 		if (keyToValueWayTypeMap.containsKey(key)) {
 			Map<String, WayType> values = keyToValueWayTypeMap.get(key);
-			if (values.containsKey(null)){
-				return values.get(null);
-			}
+
 			if (values.containsKey(value)) {
 				return values.get(value);
+			}
+			else if (values.containsKey(null)){
+				return values.get(null);
 			}
 		}
 		return null;
