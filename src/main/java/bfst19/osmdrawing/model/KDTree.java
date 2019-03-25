@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public class KDTree<T extends SpatialIndexable> implements Serializable {
-	T element;
+	T splitElement;
 	//Bounding box could be saved in just float so save the memory overhead.
 	private Rectangle bbox;
 	List<T> leafElements;
@@ -26,9 +26,9 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			growToEncompassLeafElements(inputElements);
 		}
 		else {
-			element = quickMedian(inputElements, odd);
-			inputElements.remove(element);
-			this.bbox.growToEncompass(element.getMinimumBoundingRectangle());
+			splitElement = quickMedian(inputElements, odd);
+			inputElements.remove(splitElement);
+			this.bbox.growToEncompass(splitElement.getMinimumBoundingRectangle());
 			makeSubTrees(inputElements, odd, bbox);
 		}
 	}
@@ -42,14 +42,14 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private void makeHigherTree(boolean odd, Rectangle bbox, List<T> inputElements) {
 		Rectangle higherBBox = new Rectangle(bbox);
 		if (odd){
-			higherBBox.xMin = element.getRepresentativeX();
+			higherBBox.xMin = splitElement.getRepresentativeX();
 		}
 		else {
-			higherBBox.yMin = element.getRepresentativeY();
+			higherBBox.yMin = splitElement.getRepresentativeY();
 		}
 		List<T> higherElements = new ArrayList<>();
 		for (T element : inputElements){
-			if (!spatialLessThen(element, this.element, odd)){
+			if (!spatialLessThen(element, this.splitElement, odd)){
 				higherElements.add(element);
 			}
 		}
@@ -60,14 +60,14 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private void makeLowerTree(boolean odd, Rectangle bbox, List<T> inputElements) {
 		Rectangle lowerBBox = new Rectangle(bbox);
 		if (odd){
-			lowerBBox.xMax = element.getRepresentativeX();
+			lowerBBox.xMax = splitElement.getRepresentativeX();
 		}
 		else {
-			lowerBBox.yMax = element.getRepresentativeY();
+			lowerBBox.yMax = splitElement.getRepresentativeY();
 		}
 		List<T> lowerElements = new ArrayList<>();
 		for (T element : inputElements){
-			if (spatialLessThen(element, this.element, odd)){
+			if (spatialLessThen(element, this.splitElement, odd)){
 				lowerElements.add(element);
 			}
 		}
@@ -82,11 +82,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	public List<T> getContent(List<T> returnElements){
-		if (element == null){
+		if (splitElement == null){
 			returnElements.addAll(leafElements);
 		}
 		else {
-			returnElements.add(element);
+			returnElements.add(splitElement);
 			higher.getContent(returnElements);
 			lower.getContent(returnElements);
 		}
@@ -98,7 +98,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	private List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
-		if (element == null){
+		if (splitElement == null){
 			for (T leafElement : leafElements){
 				if (leafElement.getMinimumBoundingRectangle().intersect(queryBox)){
 					returnElements.add(leafElement);
@@ -106,8 +106,8 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			}
 			return returnElements;
 		}
-		if (element.getMinimumBoundingRectangle().intersect(queryBox)){
-			returnElements.add(element);
+		if (splitElement.getMinimumBoundingRectangle().intersect(queryBox)){
+			returnElements.add(splitElement);
 		}
 		if(queryBox.intersect(lower.bbox)){
 			lower.rangeQuery(queryBox, !odd, returnElements);
