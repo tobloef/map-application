@@ -1,6 +1,7 @@
 package bfst19.osmdrawing.utils;
 
 import bfst19.osmdrawing.model.DrawingInfo;
+import bfst19.osmdrawing.model.Theme;
 import bfst19.osmdrawing.model.WayType;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -8,18 +9,17 @@ import javafx.scene.paint.ImagePattern;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static bfst19.osmdrawing.utils.EnumHelper.stringToWayType;
 
-public class LoadDrawingInfoMap {
+public class ThemeLoader {
 
-    public static Map<WayType, DrawingInfo> loadDrawingInfoMap(String path, Map<WayType, DrawingInfo> existingMap) throws YAMLException {
-        Map<WayType, DrawingInfo> wayTypeDrawingInfoMap = existingMap;
-        if (existingMap == null) {
-            wayTypeDrawingInfoMap = new HashMap<>();
+    public static Theme loadTheme(String path, Theme existingTheme) throws YAMLException {
+        Theme theme = existingTheme;
+        if (theme == null) {
+            theme = new Theme();
         }
         // Read the YAML file
         Yaml yaml = new Yaml();
@@ -27,14 +27,14 @@ public class LoadDrawingInfoMap {
         InputStream inputStream = ResourceLoader.getResourceAsStream(path);
         themeMaps = yaml.load(inputStream);
         if (themeMaps == null) {
-            return wayTypeDrawingInfoMap;
+            return theme;
         }
         for (Map themeMap : themeMaps) {
             for (Object themeEntryObj : themeMap.entrySet()) {
                 // Don't fail entire parsing if one entry fails.
                 try {
                     Map.Entry<String, Object> themeEntry = (Map.Entry<String, Object>) themeEntryObj;
-                    parseThemeEntry(themeEntry, wayTypeDrawingInfoMap);
+                    parseThemeEntry(themeEntry, theme);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -42,10 +42,10 @@ public class LoadDrawingInfoMap {
         }
 
         // Return the final theme map
-        return wayTypeDrawingInfoMap;
+        return theme;
     }
 
-    private static void parseThemeEntry(Map.Entry<String, Object> themeEntry, Map<WayType, DrawingInfo> wayTypeThemeMap) throws Exception {
+    private static void parseThemeEntry(Map.Entry<String, Object> themeEntry, Theme theme) throws Exception {
         String wayTypeStr = themeEntry.getKey();
         if (wayTypeStr.equals("constants")) {
             return;
@@ -55,12 +55,9 @@ public class LoadDrawingInfoMap {
             throw new Exception("Wrong/Missing WayType: " + wayTypeStr);
         }
         Map<String, Object> themeValuesMap = (Map<String, Object>) themeEntry.getValue();
-        DrawingInfo theme = parseThemeValueMap(themeValuesMap);
+        DrawingInfo drawingInfo = parseThemeValueMap(themeValuesMap);
         // Add WayType and theme to the map
-        if (wayTypeThemeMap.containsKey(wayType)) {
-            theme = wayTypeThemeMap.get(wayType).mergeWith(theme);
-        }
-        wayTypeThemeMap.put(wayType, theme);
+        theme.addDrawingInfo(wayType, drawingInfo);
     }
 
     private static DrawingInfo parseThemeValueMap(Map<String, Object> themeValuesMap) {

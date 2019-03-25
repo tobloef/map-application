@@ -13,15 +13,13 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import org.yaml.snakeyaml.error.YAMLException;
 
-import java.util.Map;
-
-import static bfst19.osmdrawing.utils.LoadDrawingInfoMap.loadDrawingInfoMap;
+import static bfst19.osmdrawing.utils.ThemeLoader.loadTheme;
 
 public class MapDrawer implements Drawer {
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
-	private Map<WayType, DrawingInfo> drawableDrawingInfoMap;
+	private Theme theme;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
@@ -30,18 +28,18 @@ public class MapDrawer implements Drawer {
 		// TODO: This should be done somewhere else
 		String defaultPath = "config/themes/default.yaml";
 		try {
-			drawableDrawingInfoMap = loadDrawingInfoMap(defaultPath, null);
+			theme = loadTheme(defaultPath, null);
 		} catch (YAMLException e) {
 			throw new RuntimeException("Couldn't read default theme from path \"" + defaultPath + "\", can't continue.", e);
 		}
 	}
 
 	public void draw() {
-		if (drawableDrawingInfoMap == null) {
+		if (theme == null) {
 			return;
 		}
 		double currentZoomLevel = canvas.getDegreesLatitudePerPixel();
-		fillBackground(drawableDrawingInfoMap);
+		fillBackground(theme);
 		for (WayType wayType : WayType.values()){
 			Iterable<Drawable> drawablesToDraw = model.getWaysOfType(wayType, getScreenBounds());
 			// Skip if no drawables to draw
@@ -49,10 +47,11 @@ public class MapDrawer implements Drawer {
 				continue;
 			}
 			// Skip if no theme found
-			DrawingInfo drawingInfo = drawableDrawingInfoMap.get(wayType);
+			DrawingInfo drawingInfo = theme.getDrawingInfo(wayType);
 			if (drawingInfo == null) {
 				continue;
 			}
+			// Skip if not visible at zoom level
 			boolean visibleAtZoom = isVisibleAtZoom(drawingInfo, currentZoomLevel);
 			if (!visibleAtZoom) {
 				continue;
@@ -76,6 +75,12 @@ public class MapDrawer implements Drawer {
 
 	private void drawDrawables(Iterable<Drawable> drawables, DrawingInfo drawingInfo, double currentZoomLevel) {
 		graphicsContext.save();
+		fillDrawables(drawables, drawingInfo, currentZoomLevel);
+		strokeDrawables(drawables, drawingInfo, currentZoomLevel);
+		graphicsContext.restore();
+	}
+
+	private void fillDrawables(Iterable<Drawable> drawables, DrawingInfo drawingInfo, double currentZoomLevel) {
 		Paint fill = null;
 		if (drawingInfo.hasFillColor()) {
 			fill = drawingInfo.getFillColor();
@@ -84,36 +89,39 @@ public class MapDrawer implements Drawer {
 		if (drawingInfo.hasTexture()) {
 			fill = drawingInfo.getTexture();
 		}
-		if (fill != null) {
-			graphicsContext.setFill(fill);
-			for (Drawable drawable : drawables) {
-				drawable.fill(graphicsContext, currentZoomLevel);
-			}
+		if (fill == null) {
+			return;
 		}
-		if (drawingInfo.hasStrokeColor()) {
-			graphicsContext.setStroke(drawingInfo.getStrokeColor());
-
-			if (drawingInfo.hasLineDash()) {
-				graphicsContext.setLineDashes(drawingInfo.getLineDash() / 10000);
-			}
-			if(drawingInfo.hasLineWidth()){
-				graphicsContext.setLineWidth(drawingInfo.getLineWidth());
-			}
-			for (Drawable drawable : drawables){
-				drawable.stroke(graphicsContext, currentZoomLevel);
-			}
+		graphicsContext.setFill(fill);
+		for (Drawable drawable : drawables) {
+			drawable.fill(graphicsContext, currentZoomLevel);
 		}
-		graphicsContext.restore();
 	}
 
-	private void fillBackground(Map<WayType, DrawingInfo> drawingInfoMap) {
+	private void strokeDrawables(Iterable<Drawable> drawables, DrawingInfo drawingInfo, double currentZoomLevel) {
+		if (!drawingInfo.hasStrokeColor()) {
+			return;
+		}
+		graphicsContext.setStroke(drawingInfo.getStrokeColor());
+		if (drawingInfo.hasLineDash()) {
+			graphicsContext.setLineDashes(drawingInfo.getLineDash() / 10000);
+		}
+		if (drawingInfo.hasLineWidth()){
+			graphicsContext.setLineWidth(drawingInfo.getLineWidth());
+		}
+		for (Drawable drawable : drawables){
+			drawable.stroke(graphicsContext, currentZoomLevel);
+		}
+	}
+
+	private void fillBackground(Theme theme) {
 		graphicsContext.save();
 		boolean coastlineVisible = model.getWaysOfType(WayType.COASTLINE, getScreenBounds())
 				.iterator()
 				.hasNext();
-		DrawingInfo drawingInfo = drawingInfoMap.get(WayType.COASTLINE);
+		DrawingInfo drawingInfo = theme.getDrawingInfo(WayType.COASTLINE);
 		if (coastlineVisible) {
-			drawingInfo = drawingInfoMap.get(WayType.WATER);
+			drawingInfo = theme.getDrawingInfo(WayType.WATER);
 		}
 		if (drawingInfo != null && drawingInfo.hasFillColor()) {
 			graphicsContext.setFill(drawingInfo.getFillColor());
