@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 public class Polyline implements Drawable, Serializable, SpatialIndexable {
 	private float[] coords;
+	private float xMin, yMin, xMax, yMax;
 
 	public Polyline(OSMWay way) {
 		coords = new float[way.size() * 2];
@@ -14,7 +15,29 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 			coords[2*i] = way.get(i).getLon();
 			coords[2*i+1] = way.get(i).getLat();
 		}
+		createMinimumBoundingRectangle();
 
+	}
+
+	private void createMinimumBoundingRectangle() {
+		xMin = coords[0];
+		xMax = coords[0];
+		yMin = coords[1];
+		yMax = coords[1];
+		for (int i = 2; i < coords.length ; i+=2) {
+			if (xMin > coords[i]) {
+				xMin = coords[i];
+			}
+			else if (xMax < coords[i]) {
+				xMax = coords[i];
+			}
+			if (yMin > coords[i+1]) {
+				yMin = coords[i+1];
+			}
+			else if (yMax < coords[i+1]) {
+				yMax = coords[i+1];
+			}
+		}
 	}
 
 	public void stroke(GraphicsContext gc, double zoomFactor) {
@@ -54,22 +77,7 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 
 	@Override
 	public Rectangle getMinimumBoundingRectangle() { //TODO:Write a test for this function.
-		Rectangle rectangle = new Rectangle(coords[0],  coords[1], coords[0], coords[1]);
-		for (int i = 2; i < coords.length ; i+=2) {
-			if (rectangle.xMin > coords[i]) {
-				rectangle.xMin = coords[i];
-			}
-			else if (rectangle.xMax < coords[i]) {
-				rectangle.xMax = coords[i];
-			}
-			if (rectangle.yMin > coords[i+1]) {
-				rectangle.yMin = coords[i+1];
-			}
-			else if (rectangle.yMax < coords[i+1]) {
-				rectangle.yMax = coords[i+1];
-			}
-		}
-		return rectangle;
+		return new Rectangle(xMin,  yMin, xMax, yMax);
 	}
 
 	public void traceWithoutSubpixel(float x, float y, double zoomFactor, GraphicsContext gc, float lastCoords[]){
