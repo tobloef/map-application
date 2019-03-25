@@ -28,6 +28,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		else {
 			element = quickMedian(inputElements, odd);
 			inputElements.remove(element);
+			this.bbox.growToEncompass(element.getMinimumBoundingRectangle());
 			makeSubTrees(inputElements, odd, bbox);
 		}
 	}
