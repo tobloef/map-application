@@ -16,11 +16,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private final static Random random = new Random();
 
 	public KDTree(List<T> inputElements, Rectangle bbox){
-		this(inputElements, true, bbox);
+		this(inputElements, true, new Rectangle(bbox));
 	}
 
 	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
-		this.bbox = new Rectangle(bbox);
+		this.bbox = bbox;
 		if (inputElements.size() < MAX_NODES_PER_LEAF){
 			this.leafElements = inputElements;
 			growToEncompassLeafElements(inputElements);
