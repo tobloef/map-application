@@ -13,6 +13,8 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import org.yaml.snakeyaml.error.YAMLException;
 
+import java.util.ArrayList;
+
 import static bfst19.osmdrawing.utils.ThemeLoader.loadTheme;
 
 public class MapDrawer implements Drawer {
@@ -41,21 +43,25 @@ public class MapDrawer implements Drawer {
 		double currentZoomLevel = canvas.getDegreesLatitudePerPixel();
 		fillBackground(theme);
 		for (WayType wayType : WayType.values()){
-			Iterable<Drawable> drawablesToDraw = model.getWaysOfType(wayType, getScreenBounds());
-			// Skip if no drawables to draw
-			if (!drawablesToDraw.iterator().hasNext()) {
-				continue;
-			}
-			// Skip if no theme found
+
+			//Skip if no theme found
 			DrawingInfo drawingInfo = theme.getDrawingInfo(wayType);
 			if (drawingInfo == null) {
 				continue;
 			}
-			// Skip if not visible at zoom level
-			boolean visibleAtZoom = isVisibleAtZoom(drawingInfo, currentZoomLevel);
-			if (!visibleAtZoom) {
+
+
+			Iterable<Drawable> drawablesToDraw;
+			if (drawingInfo.getAlwaysDraw()) {
+				drawablesToDraw = model.getWaysOfType(wayType);
+			}
+			else if (isVisibleAtZoom(drawingInfo, currentZoomLevel)) {
+				drawablesToDraw = model.getWaysOfType(wayType, getScreenBounds());
+			}
+			else {
 				continue;
 			}
+
 			drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
 		}
 	}

@@ -18,14 +18,19 @@ public class KDTreeDrawableModel implements DrawableModel {
 	}
 
 	@Override
-	public Iterable<Drawable> getDrawablesOfType(WayType type, Rectangle bounds) {
+	public Iterable<Drawable> getDrawablesOfTypeInBounds(WayType type, Rectangle bounds) {
 		if (wayTypeToKDTreeRoot.containsKey(type))
-			//if (!type.alwaysDraw())
-			if (true)
-				return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, new ArrayList<Drawable>());
-			else {
-				return wayTypeToKDTreeRoot.get(type).getContent(new ArrayList<Drawable>());
-			}
+			return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, new ArrayList<Drawable>());
+		else {
+			return new ArrayList<>();
+		}
+	}
+
+	@Override
+	public Iterable<Drawable> getAllDrawablesOfType(WayType type) {
+		if (wayTypeToKDTreeRoot.containsKey(type)){
+			return wayTypeToKDTreeRoot.get(type).getContent(new ArrayList<Drawable>());
+		}
 		else {
 			return new ArrayList<>();
 		}

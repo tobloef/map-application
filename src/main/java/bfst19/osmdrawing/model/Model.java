@@ -13,7 +13,11 @@ public class Model {
 	public Rectangle modelBounds;
 
 	public Iterable<Drawable> getWaysOfType(WayType type, Rectangle modelBounds) {
-		return drawableModel.getDrawablesOfType(type, modelBounds);
+		return drawableModel.getDrawablesOfTypeInBounds(type, modelBounds);
+	}
+
+	public Iterable<Drawable> getWaysOfType(WayType type) {
+		return drawableModel.getAllDrawablesOfType(type);
 	}
 
 	public void addObserver(Runnable observer) {
