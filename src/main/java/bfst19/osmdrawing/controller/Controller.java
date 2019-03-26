@@ -16,15 +16,8 @@ public class Controller {
 	double x, y;
 	@FXML
 	private MapCanvas mapCanvas;
-	@FXML
-	private WaytypeUIController waytypeController;
-	@FXML
-	private SettingsController settingsController;
 
 	public void init(Model model) {
-		//Do ui setup first
-		settingsController.init(waytypeController);
-		//Then initialize model
 		this.model = model;
 		mapCanvas.initialize(model);
 	}
