@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      prefWidth="200.0"
+      fx:id="layoutBox"
+      fx:controller="bfst19.osmdrawing.controller.WaytypeUIController">
+      <style>
+            -fx-background-color: #F5F5DC;
+            -fx-border-color: #000000;
+            -fx-border-width: 0px 0px 0px 2px;
+      </style>
+      <Label text="Hide way types" style="-fx-font-size: 1.5em; -fx-font-weight: bold;"/>
+</VBox>

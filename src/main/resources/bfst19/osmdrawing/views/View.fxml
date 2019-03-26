@@ -28,6 +28,9 @@
                         />
                     </Pane>
                 </center>
+                <right>
+                    <fx:include source="WaytypeUI.fxml"/>
+                </right>
             </BorderPane>
 </Scene>
 
