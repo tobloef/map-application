@@ -15,7 +15,7 @@
 
 - constants:
   - zoomLevels:
-    - level1: &level1 0.00005
+    - level1: &level1 0.001
     - level2: &level2 0.00003
     - level3: &level3 0.00002
     - level4: &level4 0.00001
@@ -44,6 +44,7 @@
 
 - TREES:
     fillColor: "006400"
+    zoomLevel: *level1
 
 - GRASS:
     fillColor: "C4EDB2"
@@ -53,9 +54,11 @@
 
 - FARMLAND:
     fillColor: "EFF1D5"
+    zoomLevel: *level1
 
 - WOOD:
     fillColor: "A1D29F"
+    zoomLevel: *level1
 
 - HEATH:
     fillColor: "D6D99F"
@@ -236,7 +239,7 @@
     fillColor:
     strokeColor: "FEB9C3"
     lineWidth: 0.00014
-    zoomLevel: *level1
+    zoomLevel: 0.001
 
 # Abstract routes
 
