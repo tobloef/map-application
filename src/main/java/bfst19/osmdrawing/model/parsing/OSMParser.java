@@ -1,7 +1,6 @@
 package bfst19.osmdrawing.model.parsing;
 
 import bfst19.osmdrawing.model.*;
-import bfst19.osmdrawing.view.WayType;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -153,7 +152,7 @@ public class OSMParser {
 			System.out.println(currentRelation);
 		}
 		if (currentWay != null || currentRelation != null) {
-			WayType type = WayTypeFactory.getType(k, v);
+			WayType type = WayTypeFactory.getWayType(k, v);
 			if (type != null) {
 				this.currentType = type;
 			}
