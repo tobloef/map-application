@@ -21,4 +21,8 @@ public class OSMRoadNode extends OSMNode{
 	public void addNode(Connection connection) {
 		connections.add(connection);
 	}
+
+	public int getConnectionAmount() {
+		return connections.size();
+	}
 }

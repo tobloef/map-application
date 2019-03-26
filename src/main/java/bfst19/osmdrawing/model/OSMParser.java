@@ -27,6 +27,7 @@ public class OSMParser {
 	private NavigationGraph navigationGraph = new NavigationGraph();
 	private Map<String, String> tags = new HashMap<>();
 	private Map<String, Integer> speedLimits = new HashMap<>();
+	private List<OSMRoadNode> roadNodes = new ArrayList<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
@@ -188,6 +189,7 @@ public class OSMParser {
 			else {
 				newNode = new OSMRoadNode(node);
 				idToNode.replace(newNode);
+				roadNodes.add(newNode);
 			}
 			if (lastNode != null) {
 				double distance = findDistanceBetween(lastNode, newNode);
