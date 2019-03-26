@@ -5,6 +5,8 @@
 
 <?import bfst19.osmdrawing.view.controls.MapCanvas?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
        fx:controller="bfst19.osmdrawing.controller.Controller"
@@ -12,7 +14,11 @@
        onKeyPressed="#onKeyPressed">
             <BorderPane prefHeight="600.0" prefWidth="800.0">
                 <top>
-                    <fx:include source="TopMenu.fxml"/>
+                    <HBox>
+                        <fx:include source="TopMenu.fxml"/>
+                        <Region HBox.hgrow="ALWAYS" styleClass="menu-bar"/>
+                        <fx:include fx:id="settingsController" source="TopRightMenu.fxml" />
+                    </HBox>
                 </top>
                 <center>
                     <!-- The symbol mapCanvas.parent.width cannot be resolved.
@@ -29,7 +35,7 @@
                     </Pane>
                 </center>
                 <right>
-                    <fx:include source="WaytypeUI.fxml"/>
+                    <fx:include fx:id="waytypeController" source="WaytypeUI.fxml"/>
                 </right>
             </BorderPane>
 </Scene>

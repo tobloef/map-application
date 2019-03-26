@@ -34,11 +34,6 @@ public class TopMenu {
 	}
 
 	@FXML
-	private void onWaytypes(final ActionEvent event){
-		//TODO: Seperat vindue med checkboxe
-	}
-
-	@FXML
 	private void onPrintToFile(final ActionEvent event){
 		//TODO: Tænker der kan være en alert med et indtastningsfelt, til filnavn fx
 	}
