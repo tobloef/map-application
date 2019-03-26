@@ -5,10 +5,10 @@ import javafx.fxml.FXML;
 
 public class SettingsController {
 
-	private WaytypeUIController waytypeController;
+	private static WaytypeUIController waytypeController;
 
-	public void init(WaytypeUIController wayTypeController){
-		this.waytypeController = waytypeController;
+	public static void init(WaytypeUIController waytypeControllerParam){
+		waytypeController = waytypeControllerParam;
 	}
 
 	@FXML

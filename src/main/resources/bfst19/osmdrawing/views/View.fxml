@@ -17,7 +17,7 @@
                     <HBox>
                         <fx:include source="TopMenu.fxml"/>
                         <Region HBox.hgrow="ALWAYS" styleClass="menu-bar"/>
-                        <fx:include fx:id="settingsController" source="TopRightMenu.fxml" />
+                        <fx:include source="TopRightMenu.fxml" />
                     </HBox>
                 </top>
                 <center>
@@ -35,7 +35,7 @@
                     </Pane>
                 </center>
                 <right>
-                    <fx:include fx:id="waytypeController" source="WaytypeUI.fxml"/>
+                    <fx:include source="WaytypeUI.fxml"/>
                 </right>
             </BorderPane>
 </Scene>
