@@ -4,6 +4,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,10 +23,14 @@ public class OSMParser {
 	private WayType currentType = null;
 	private DrawableModel drawableModel;
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
+
 	private NavigationGraph navigationGraph = new NavigationGraph();
+	private Map<String, String> tags = new HashMap<>();
+	private Map<String, Integer> speedLimits = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
+		initSpeedLimits();
 		this.drawableModel = drawableModel;
 		if (filename.endsWith(".zip")) {
 			osmSource = getZipFile(filename);
@@ -40,6 +45,14 @@ public class OSMParser {
 		drawableModel.doneAdding();
 	}
 
+	private void initSpeedLimits() {
+		speedLimits.put("residential", 50);
+		speedLimits.put("unclassified", 50);
+		speedLimits.put("tertiary", 65);
+		speedLimits.put("secondary", 80);
+		speedLimits.put("trunk", 90);
+		speedLimits.put("motorway", 130);
+	}
 
 	private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
 		return new BufferedInputStream(new FileInputStream(filename));
@@ -120,9 +133,13 @@ public class OSMParser {
 		currentType = WayType.UNKNOWN;
 		currentWay = new OSMWay(id);
 		idToWay.add(currentWay);
+		tags = new HashMap<>();
 	}
 
 	private void handleEndWay() {
+		if (tags.containsKey("highway")) {
+			addNodesToRoadNodes(currentWay);
+		}
 		if (currentType == WayType.COASTLINE) {
 			coastLines.add(currentWay);
 		} else {
@@ -152,10 +169,8 @@ public class OSMParser {
 	private void handleStartTag(XMLStreamReader reader) { // assigns waytype the current way, based on key and value
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
+		tags.put(k, v);
 		if (currentWay != null || currentRelation != null) {
-			if (k == "highway") {
-				addNodesToRoadNodes(currentWay);
-			}
 			WayType type = WayTypeFactory.getWayType(k, v);
 			if (type != null){
 				this.currentType = type;
@@ -164,10 +179,46 @@ public class OSMParser {
 	}
 
 	private void addNodesToRoadNodes(OSMWay currentWay) {
-		OSMNode lastNode = null;
+		OSMRoadNode lastNode = null;
 		for (OSMNode node : currentWay) {
-
+			OSMRoadNode newNode;
+			if (node instanceof OSMRoadNode) {
+				newNode = (OSMRoadNode) node;
+			}
+			else {
+				newNode = new OSMRoadNode(node);
+				idToNode.replace(newNode);
+			}
+			if (lastNode != null) {
+				double distance = findDistanceBetween(lastNode, newNode);
+				int maxSpeed = getMaxSpeed();
+				lastNode.addNode(new Connection(newNode, distance, maxSpeed));
+				newNode.addNode(new Connection(lastNode, distance, maxSpeed));
+			}
+			lastNode = newNode;
 		}
+	}
+
+	private int getMaxSpeed() {
+		int maxSpeed;
+		if (tags.containsKey("maxspeed")) {
+			maxSpeed = Integer.parseInt(tags.get("maxspped"));
+		}
+		else {
+			if (speedLimits.get(tags.get("highway")) != null){
+				maxSpeed = speedLimits.get(tags.get("highway"));
+			}
+			else {
+				maxSpeed = 30; //If we have absolutely no idea how fast we can drive on a road, we just give it the speed 30. //todo handle this better
+			}
+		}
+		return maxSpeed;
+	}
+
+	private double findDistanceBetween(OSMRoadNode lastNode, OSMRoadNode newNode) {
+		double deltaX = lastNode.getLon() - newNode.getLon();
+		double deltaY = lastNode.getLat() - newNode.getLat();
+		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
 	}
 
 	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable

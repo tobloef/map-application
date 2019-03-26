@@ -14,6 +14,25 @@ public class LongIndex<T extends LongSupplier> {
 	}
 
 	public T get(long ref) {
+		T element = elements.get(findIndex(ref));
+		if (element.getAsLong() == ref) {
+			return element;
+		} else {
+			return null;
+		}
+	}
+
+	public void replace(T element) {
+		int index = findIndex(element.getAsLong());
+		if (elements.get(index).getAsLong() == element.getAsLong()) {
+			elements.set(index, element);
+		}
+		else {
+			add(element);
+		}
+	}
+
+	private int findIndex(long ref) {
 		if (!sorted) {
 			elements.sort(Comparator.comparing(T::getAsLong));
 			sorted = true;
@@ -28,11 +47,8 @@ public class LongIndex<T extends LongSupplier> {
 				low = middle;
 			}
 		}
-		T element = elements.get(low);
-		if (element.getAsLong() == ref) {
-			return element;
-		} else {
-			return null;
-		}
+		return low;
 	}
+
+
 }

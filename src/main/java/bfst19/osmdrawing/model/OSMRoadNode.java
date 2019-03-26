@@ -10,6 +10,10 @@ public class OSMRoadNode extends OSMNode{
 		this.connections = connections;
 	}
 
+	public OSMRoadNode(OSMNode node) {
+		super(node.getAsLong(), node.getLon(), node.getLat());
+	}
+
 	public List<Connection> getConnections() {
 		return connections;
 	}
