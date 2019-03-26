@@ -22,6 +22,7 @@ public class OSMParser {
 	private WayType currentType = null;
 	private DrawableModel drawableModel;
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
+	private NavigationGraph navigationGraph = new NavigationGraph();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
@@ -152,6 +153,9 @@ public class OSMParser {
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
 		if (currentWay != null || currentRelation != null) {
+			if (k == "highway") {
+				addNodesToRoadNodes(currentWay);
+			}
 			WayType type = WayTypeFactory.getWayType(k, v);
 			if (type != null){
 				this.currentType = type;
@@ -159,9 +163,17 @@ public class OSMParser {
 		}
 	}
 
+	private void addNodesToRoadNodes(OSMWay currentWay) {
+		OSMNode lastNode = null;
+		for (OSMNode node : currentWay) {
+
+		}
+	}
+
 	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		currentWay.add(idToNode.get(ref));
+
 	}
 
 	private void handleStartNode(XMLStreamReader reader) {
