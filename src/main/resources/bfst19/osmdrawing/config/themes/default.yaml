@@ -15,10 +15,10 @@
 
 - constants:
   - zoomLevels:
-    - level1: &level1 0.00001
-    - level2: &level2 0.00002
-    - level3: &level3 0.00003
-    - level4: &level4 0.00005
+    - level1: &level1 0.00005
+    - level2: &level2 0.00003
+    - level3: &level3 0.00002
+    - level4: &level4 0.00001
     - level5: &level5 0.000002
     - level6: &level6 0.000004
     - level7: &level7 0.000006
@@ -79,57 +79,57 @@
 
 - CONSTRUCTION:
     fillColor: "8FBC8F"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - INDUSTRIAL:
     fillColor: "D8BFD8"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - CEMETERY:
     fillColor: "6B8E23"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - RESIDENTIAL:
     fillColor: "E6E6FA"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - ALLOTMENTS:
     fillColor: "98FB98"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - PLAYGROUND:
     fillColor: "66CDAA"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - BUILDING:
     fillColor: "A9A9A9"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - BARRIER:
     strokeColor: "BC8F8F"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - PITCH:
     fillColor: "66CDAA"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - GROYNE:
     fillColor: "A9A9A9"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - PIER:
     fillColor: "FFFF00"
     strokeColor: "FFFF00"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - BRIDGE:
     fillColor: "BDB76B"
     strokeColor: "BDB76B"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 - APRON:
     fillColor: "DADAE0"
-    zoomLevel: *level3
+    zoomLevel: *level2
 
 # Road exits
 
@@ -137,13 +137,13 @@
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
-    zoomLevel: *level6
+    zoomLevel: *level4
 
 - SECONDARYROADEXIT:
     fillColor:
     strokeColor: "F7FBBB"
     lineWidth: 0.00012
-    zoomLevel: *level2
+    zoomLevel: *level3
 
 - PRIMARYROADEXIT:
     fillColor:
@@ -155,7 +155,7 @@
     fillColor:
     strokeColor: "FEB9C3"
     lineWidth: 0.00014
-    zoomLevel: *level4
+    zoomLevel: *level1
 
 # Roads
 
@@ -163,19 +163,19 @@
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00006
-    zoomLevel: *level6
+    zoomLevel: *level4
 
 - TERTIARYROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
-    zoomLevel: *level6
+    zoomLevel: *level4
 
 - SERVICEROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00004
-    zoomLevel: *level8
+    zoomLevel: *level5
 
 - UNCLASSIFIEDROAD:
     fillColor:
@@ -188,19 +188,19 @@
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
-    zoomLevel: *level5
+    zoomLevel: *level3
 
 - LIVING_STREET:
     fillColor:
     strokeColor: "EDEEED"
     lineWidth: 0.00006
-    zoomLevel: *level6
+    zoomLevel: *level4
 
 - SECONDARYROAD:
     fillColor:
     strokeColor: "F7FBBB"
     lineWidth: 0.00012
-    zoomLevel: *level2
+    zoomLevel: *level3
 
 - PRIMARYROAD:
     fillColor:
@@ -212,13 +212,13 @@
     fillColor:
     strokeColor: "BABACC"
     lineWidth: 0.0005
-    zoomLevel: *level2
+    zoomLevel: *level3
 
 - RAILWAY:
     fillColor:
     strokeColor: "D3D3D3"
     lineDash: 2
-    zoomLevel: *level2
+    zoomLevel: *level3
 
 - PEDESTRIAN:
     fillColor:
@@ -236,7 +236,7 @@
     fillColor:
     strokeColor: "FEB9C3"
     lineWidth: 0.00014
-    zoomLevel: *level4
+    zoomLevel: *level1
 
 # Abstract routes
 
@@ -272,7 +272,6 @@
 - FOOTWAY:
     fillColor:
     strokeColor: "FE9E93"
-    lineDash: 2
     zoomLevel: *level7
 
 - BRIDLEWAY:
@@ -284,7 +283,6 @@
 - CYCLEWAY:
     fillColor:
     strokeColor: "7B7EF8"
-    lineDash: 2
     zoomLevel: *level7
 
 # Water
@@ -302,6 +300,3 @@
     fillColor: "87CEFA"
 
 # Misc.
-
-- UNKNOWN:
-    strokeColor: "000000"
