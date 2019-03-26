@@ -2,7 +2,6 @@ package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.model.parsing.OSMParser;
 import bfst19.osmdrawing.utils.ResourceLoader;
-import bfst19.osmdrawing.view.WayType;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -15,7 +14,11 @@ public class Model {
 	public Rectangle modelBounds;
 
 	public Iterable<Drawable> getWaysOfType(WayType type, Rectangle modelBounds) {
-		return drawableModel.getDrawablesOfType(type, modelBounds);
+		return drawableModel.getDrawablesOfTypeInBounds(type, modelBounds);
+	}
+
+	public Iterable<Drawable> getWaysOfType(WayType type) {
+		return drawableModel.getAllDrawablesOfType(type);
 	}
 
 	public void addObserver(Runnable observer) {

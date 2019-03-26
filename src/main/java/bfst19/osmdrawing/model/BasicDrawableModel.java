@@ -1,16 +1,14 @@
 package bfst19.osmdrawing.model;
 
-import bfst19.osmdrawing.view.WayType;
-import javafx.scene.canvas.GraphicsContext;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
+import bfst19.osmdrawing.utils.EnumHelper;
+
 import java.util.List;
 import java.util.Map;
 
 public class BasicDrawableModel implements DrawableModel {
 
-	Map<WayType, List<Drawable>> wayTypeEnumMap = WayType.initializeWaysEnumMap();
+	Map<WayType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
 	Rectangle modelBounds;
 
 
@@ -24,13 +22,19 @@ public class BasicDrawableModel implements DrawableModel {
 	}
 
 	@Override
-	public Iterable<Drawable> getDrawablesOfType(WayType type, Rectangle bounds) {
+	public Iterable<Drawable> getDrawablesOfTypeInBounds(WayType type, Rectangle bounds) {
+		return wayTypeEnumMap.get(type);
+	}
+
+	@Override
+	public Iterable<Drawable> getAllDrawablesOfType(WayType type) {
 		return wayTypeEnumMap.get(type);
 	}
 
 	@Override
 	public void doneAdding() {
-		return; //Does nothing in this model, but is needed for more complex models.
+		//Does nothing in this model, but is needed for more complex models.
+		return;
 	}
 
 	@Override

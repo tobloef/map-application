@@ -27,12 +27,10 @@ public class ZoomIndicatorDrawer implements Drawer {
 
 	@Override
 	public void draw() {
-		Affine affine = graphicsContext.getTransform();
-		double oldLineWidth = graphicsContext.getLineWidth();
+		graphicsContext.save();
 		graphicsContext.setTransform(new Affine());
 		drawIndicator();
-		graphicsContext.setLineWidth(oldLineWidth);
-		graphicsContext.setTransform(affine);
+		graphicsContext.restore();
 	}
 
 	private void drawIndicator() {
