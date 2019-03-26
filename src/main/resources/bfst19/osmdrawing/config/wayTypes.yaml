@@ -178,8 +178,8 @@
     - beach
 
 - COASTLINE:
-  - natural:
-    - coastline
+  - place:
+    - island
 
 - HEATH:
   - natural:
@@ -208,10 +208,6 @@
 - WOOD:
   - natural:
     - wood
-
-- ISLAND:
-  - place:
-    - island
 
 - RAILWAY:
   - railway:
