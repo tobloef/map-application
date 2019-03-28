@@ -1,17 +1,17 @@
 package bfst19.osmdrawing.model;
 
 public class Connection {
-	private OSMNode node;
+	private OSMRoadNode node;
 	private double distance;
 	private double speedLimit;
 
-	public Connection(OSMNode node, double distance, double speedLimit) {
+	public Connection(OSMRoadNode node, double distance, double speedLimit) {
 		this.node = node;
 		this.distance = distance;
 		this.speedLimit = speedLimit;
 	}
 
-	public OSMNode getNode() {
+	public OSMRoadNode getNode() {
 		return node;
 	}
 

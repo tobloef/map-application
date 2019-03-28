@@ -11,6 +11,7 @@ public class Model {
 	DrawableModel drawableModel = new KDTreeDrawableModel();
 	List<Runnable> observers = new ArrayList<>();
 	public Rectangle modelBounds;
+	private NavigationGraph navigationGraph;
 
 	public Iterable<Drawable> getWaysOfType(WayType type, Rectangle modelBounds) {
 		return drawableModel.getDrawablesOfTypeInBounds(type, modelBounds);
@@ -59,6 +60,7 @@ public class Model {
 		} else {
 			OSMParser parser = new OSMParser(filename, drawableModel);
 			modelBounds = parser.getModelBounds();
+			navigationGraph = parser.getNavigationGraph();
 			String path = filename + ".obj";
 			serializeData(path);
 		}

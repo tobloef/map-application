@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,5 +32,13 @@ class OSMParserTest {
 		assertEquals(7.090 ,osmParser.getModelBounds().xMin, 0.02);
 		assertEquals(55.6804 ,osmParser.getModelBounds().yMax, 0.02);
 		assertEquals(7.1073 ,osmParser.getModelBounds().xMax, 0.02);
+	}
+
+	@Test
+	void testRoadnodesCreation() throws IOException, XMLStreamException {
+		DrawableModel drawableModel = new BasicDrawableModel();
+		String filePath = this.getClass().getResource("small.osm").getPath();
+		OSMParser osmParser = new OSMParser(filePath, drawableModel);
+		List<OSMRoadNode> nodes = osmParser.getRoadNodes();
 	}
 }

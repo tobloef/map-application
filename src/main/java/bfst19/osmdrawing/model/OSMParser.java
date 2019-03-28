@@ -4,7 +4,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +23,10 @@ public class OSMParser {
 	private DrawableModel drawableModel;
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
 
-	private NavigationGraph navigationGraph = new NavigationGraph();
 	private Map<String, String> tags = new HashMap<>();
 	private Map<String, Integer> speedLimits = new HashMap<>();
 	private List<OSMRoadNode> roadNodes = new ArrayList<>();
+	private NavigationGraph navigationGraph;
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
@@ -139,7 +138,7 @@ public class OSMParser {
 
 	private void handleEndWay() {
 		if (tags.containsKey("highway")) {
-			addNodesToRoadNodes(currentWay);
+			convertWayToRoadNodes(currentWay); //Since currentWay is a list of nodes,
 		}
 		if (currentType == WayType.COASTLINE) {
 			coastLines.add(currentWay);
@@ -179,7 +178,7 @@ public class OSMParser {
 		}
 	}
 
-	private void addNodesToRoadNodes(OSMWay currentWay) {
+	private void convertWayToRoadNodes(OSMWay currentWay) {
 		OSMRoadNode lastNode = null;
 		for (OSMNode node : currentWay) {
 			OSMRoadNode newNode;
@@ -187,18 +186,28 @@ public class OSMParser {
 				newNode = (OSMRoadNode) node;
 			}
 			else {
-				newNode = new OSMRoadNode(node);
-				idToNode.replace(newNode);
-				roadNodes.add(newNode);
+				newNode = convertNodeToRoadNode(node);
 			}
-			if (lastNode != null) {
-				double distance = findDistanceBetween(lastNode, newNode);
-				int maxSpeed = getMaxSpeed();
-				lastNode.addNode(new Connection(newNode, distance, maxSpeed));
-				newNode.addNode(new Connection(lastNode, distance, maxSpeed));
-			}
+			addConnection(lastNode, newNode);
 			lastNode = newNode;
 		}
+	}
+
+	private void addConnection(OSMRoadNode lastNode, OSMRoadNode newNode) {
+		if (lastNode != null) {
+			double distance = findDistanceBetween(lastNode, newNode);
+			int maxSpeed = getMaxSpeed();
+			lastNode.addConnection(new Connection(newNode, distance, maxSpeed));
+			newNode.addConnection(new Connection(lastNode, distance, maxSpeed));
+		}
+	}
+
+	private OSMRoadNode convertNodeToRoadNode(OSMNode node) {
+		OSMRoadNode newNode;
+		newNode = new OSMRoadNode(node);
+		idToNode.replace(newNode);
+		roadNodes.add(newNode);
+		return newNode;
 	}
 
 	private int getMaxSpeed() {
@@ -252,6 +261,7 @@ public class OSMParser {
 		for (OSMWay coast : merge(coastLines)) {
 			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
 		}
+		navigationGraph = new NavigationGraph(roadNodes);
 	}
 
 	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
@@ -281,5 +291,13 @@ public class OSMParser {
 
 	public Rectangle getModelBounds() {
 		return bounds;
+	}
+
+	public NavigationGraph getNavigationGraph() {
+		return navigationGraph;
+	}
+
+	public List<OSMRoadNode> getRoadNodes() {
+		return roadNodes;
 	}
 }

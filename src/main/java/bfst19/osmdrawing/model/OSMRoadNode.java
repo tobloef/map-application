@@ -18,11 +18,29 @@ public class OSMRoadNode extends OSMNode{
 		return connections;
 	}
 
-	public void addNode(Connection connection) {
+	public void addConnection(Connection connection) {
 		connections.add(connection);
 	}
 
 	public int getConnectionAmount() {
 		return connections.size();
+	}
+
+	public Connection getOtherConnection(OSMRoadNode node) {
+		for (Connection connection : connections) {
+			if (connection.getNode() != node) {
+				return connection;
+			}
+		}
+		return null;
+	}
+
+	public void removeConnectionToNode(OSMRoadNode node) {
+		for (Connection connection : connections) {
+			if (connection.getNode() == node) {
+				connections.remove(connection);
+				break;
+			}
+		}
 	}
 }
