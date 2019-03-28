@@ -20,7 +20,7 @@ public class OSMRelation {
 	public void merge() {
 		//Currently produces two equal lists it appears.
 		/*
-		Check for each road if it connects in the end ofr the start. 
+		Check for each road if it connects in the end ofr the start.
 		*/
 		Map<OSMNode,OSMWay> pieces = new HashMap<>();
 		for (OSMWay way : list) {

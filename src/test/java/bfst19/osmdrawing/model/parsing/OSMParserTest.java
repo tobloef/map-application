@@ -1,5 +1,7 @@
-package bfst19.osmdrawing.model;
+package bfst19.osmdrawing.model.parsing;
 
+import bfst19.osmdrawing.model.BasicDrawableModel;
+import bfst19.osmdrawing.model.DrawableModel;
 import bfst19.osmdrawing.model.parsing.OSMParser;
 import org.junit.jupiter.api.Test;
 
