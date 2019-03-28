@@ -136,25 +136,25 @@
 
 # Road exits
 
-- TERTIARYROADEXIT:
+- TERTIARY_ROAD_EXIT:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
     zoomLevel: *level4
 
-- SECONDARYROADEXIT:
+- SECONDARY_ROAD_EXIT:
     fillColor:
     strokeColor: "F7FBBB"
     lineWidth: 0.00012
     zoomLevel: *level3
 
-- PRIMARYROADEXIT:
+- PRIMARY_ROAD_EXIT:
     fillColor:
     strokeColor: "FFAD95"
     lineWidth: 0.00012
     zoomLevel: *level2
 
-- MOTORWAYEXIT:
+- MOTORWAY_EXIT:
     fillColor:
     strokeColor: "FEB9C3"
     lineWidth: 0.00014
@@ -162,25 +162,25 @@
 
 # Roads
 
-- RESIDENTIALROAD:
+- RESIDENTIAL_ROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00006
     zoomLevel: *level4
 
-- TERTIARYROAD:
+- TERTIARY_ROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00008
     zoomLevel: *level4
 
-- SERVICEROAD:
+- SERVICE_ROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00004
     zoomLevel: *level5
 
-- UNCLASSIFIEDROAD:
+- UNCLASSIFIED_ROAD:
     fillColor:
     strokeColor: "FFFFFF"
     lineWidth: 0.00006
@@ -199,13 +199,13 @@
     lineWidth: 0.00006
     zoomLevel: *level4
 
-- SECONDARYROAD:
+- SECONDARY_ROAD:
     fillColor:
     strokeColor: "F7FBBB"
     lineWidth: 0.00012
     zoomLevel: *level3
 
-- PRIMARYROAD:
+- PRIMARY_ROAD:
     fillColor:
     strokeColor: "FFAD95"
     lineWidth: 0.00012
