@@ -144,7 +144,7 @@ public class OSMParser {
 		else if (currentRelation != null){
 			currentRelation.addTag(k, v);
 		}
-		if (k.equals("name") && v.equals("Amager")){
+		if (k.equals("name") && v.equals("Bornholm")){
 			System.out.println(currentRelation);
 		}
 		if (currentWay != null || currentRelation != null) {

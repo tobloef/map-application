@@ -180,6 +180,7 @@
 - COASTLINE:
   - place:
     - island
+    - peninsula
 
 - HEATH:
   - natural:

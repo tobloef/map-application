@@ -1,4 +1,4 @@
-package bfst19.osmdrawing.model.parsing;
+package bfst19.osmdrawing.model;
 
 import bfst19.osmdrawing.model.BasicDrawableModel;
 import bfst19.osmdrawing.model.DrawableModel;

@@ -47,7 +47,15 @@ public class OSMWay implements LongSupplier {
 		}
 	}
 
-	private List<OSMNode> getNodes() {
+	public List<OSMNode> getNodes() {
 		return list;
+	}
+
+	public void reverse() {
+		Collections.reverse(list);
+	}
+
+	public boolean contains(OSMNode node) {
+		return list.contains(node);
 	}
 }
