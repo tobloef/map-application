@@ -213,7 +213,7 @@ public class OSMParser {
 	private int getMaxSpeed() {
 		int maxSpeed;
 		if (tags.containsKey("maxspeed")) {
-			maxSpeed = Integer.parseInt(tags.get("maxspped"));
+			maxSpeed = Integer.parseInt(tags.get("maxspeed"));
 		}
 		else {
 			if (speedLimits.get(tags.get("highway")) != null){

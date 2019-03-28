@@ -1,5 +1,6 @@
 package bfst19.osmdrawing.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OSMRoadNode extends OSMNode{
@@ -12,6 +13,7 @@ public class OSMRoadNode extends OSMNode{
 
 	public OSMRoadNode(OSMNode node) {
 		super(node.getAsLong(), node.getLon(), node.getLat());
+		connections = new ArrayList<>();
 	}
 
 	public List<Connection> getConnections() {
