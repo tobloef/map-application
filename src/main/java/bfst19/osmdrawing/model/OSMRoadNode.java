@@ -2,6 +2,7 @@ package bfst19.osmdrawing.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class OSMRoadNode extends OSMNode{
 	List<Connection> connections;
@@ -37,6 +38,31 @@ public class OSMRoadNode extends OSMNode{
 		return null;
 	}
 
+	public List<OSMRoadNode> getConnectedNodes() {
+		List<OSMRoadNode> results = new ArrayList();
+		for (Connection connection : connections) {
+			results.add(connection.getNode());
+		}
+		return results;
+	}
+
+	public boolean isConnected(OSMRoadNode otherNode) {
+		return getConnectedNodes().contains(otherNode) || this == otherNode;
+	}
+
+	public boolean isConnected(OSMRoadNode otherNode, int depth, Set<OSMRoadNode> triedNodes) {
+		if (isConnected(otherNode)) return true;
+		if (depth > 0) {
+			triedNodes.add(this);
+			for (OSMRoadNode node : getConnectedNodes()) {
+				if (!triedNodes.contains(node)) {
+					 if(node.isConnected(otherNode, depth - 1, triedNodes)) return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public void removeConnectionToNode(OSMRoadNode node) {
 		for (Connection connection : connections) {
 			if (connection.getNode() == node) {
@@ -44,5 +70,9 @@ public class OSMRoadNode extends OSMNode{
 				break;
 			}
 		}
+	}
+
+	public String toString() {
+		return "" + getAsLong();
 	}
 }

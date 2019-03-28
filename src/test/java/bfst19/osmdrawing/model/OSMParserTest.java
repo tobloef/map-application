@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,19 +40,18 @@ class OSMParserTest {
 		DrawableModel drawableModel = new BasicDrawableModel();
 		String filePath = this.getClass().getResource("small.osm").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
-		List<OSMRoadNode> nodes = osmParser.getRoadNodes();
-		OSMNode connectedA = osmParser.getNodeFromID(8099312); //Christianshavns Voldgade
+		OSMNode connectedA = osmParser.getNodeFromID(1434961346); //Christianshavns Voldgade
 		OSMNode connectedB = osmParser.getNodeFromID(1027406335);
-		OSMNode unconnected = osmParser.getNodeFromID(8099316);
-		assert connectedA instanceof OSMRoadNode;
-		assert connectedB instanceof OSMRoadNode;
-		assert (((OSMRoadNode) connectedA).getConnections().get(0).getNode() == (OSMRoadNode) connectedB
-				|| ((OSMRoadNode) connectedA).getConnections().get(1).getNode() == (OSMRoadNode) connectedB );
-		assert (((OSMRoadNode) connectedB).getConnections().get(0).getNode() == (OSMRoadNode) connectedA
-				|| ((OSMRoadNode) connectedB).getConnections().get(1).getNode() == (OSMRoadNode) connectedA );
-		assert (!(((OSMRoadNode) connectedA).getConnections().get(0).getNode() == (OSMRoadNode) connectedA
-				|| ((OSMRoadNode) connectedA).getConnections().get(1).getNode() == (OSMRoadNode) connectedA ));
-		assert (!(((OSMRoadNode) connectedA).getConnections().get(0).getNode() == (OSMRoadNode) unconnected
-				|| ((OSMRoadNode) connectedA).getConnections().get(1).getNode() == (OSMRoadNode) unconnected ));
+		OSMNode connectedC = osmParser.getNodeFromID(1235730161);
+		OSMNode unconnected = osmParser.getNodeFromID(444999894);
+		assertTrue(connectedA instanceof OSMRoadNode);
+		assertTrue(connectedB instanceof OSMRoadNode);
+		assertTrue(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) connectedB));
+		assertTrue(((OSMRoadNode) connectedB).isConnected((OSMRoadNode) connectedA));
+		assertTrue(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) connectedA));
+		assertFalse(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) unconnected));
+		assertFalse(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) unconnected, 8, new HashSet<>()));
+		assertTrue(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) connectedC, 2, new HashSet<>()));
+		assertFalse(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) connectedC, 1, new HashSet<>()));
 	}
 }

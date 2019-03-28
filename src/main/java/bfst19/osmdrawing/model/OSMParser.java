@@ -261,7 +261,7 @@ public class OSMParser {
 		for (OSMWay coast : merge(coastLines)) {
 			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
 		}
-		navigationGraph = new NavigationGraph(roadNodes);
+		//navigationGraph = new NavigationGraph(roadNodes);
 	}
 
 	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
