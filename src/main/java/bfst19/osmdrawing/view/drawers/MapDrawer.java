@@ -13,8 +13,6 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import org.yaml.snakeyaml.error.YAMLException;
 
-import java.util.ArrayList;
-
 import static bfst19.osmdrawing.utils.ThemeLoader.loadTheme;
 
 public class MapDrawer implements Drawer {
@@ -49,7 +47,9 @@ public class MapDrawer implements Drawer {
 			if (drawingInfo == null) {
 				continue;
 			}
-
+			if (model.dontDraw(wayType)){
+				continue;
+			}
 
 			Iterable<Drawable> drawablesToDraw;
 			if (drawingInfo.getAlwaysDraw()) {

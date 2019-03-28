@@ -20,6 +20,7 @@ public class Controller {
 	public void init(Model model) {
 		this.model = model;
 		mapCanvas.initialize(model);
+		WaytypeUIController.init(model);
 	}
 
 	@FXML
