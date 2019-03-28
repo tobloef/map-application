@@ -2,6 +2,7 @@ package bfst19.osmdrawing.controller;
 
 import bfst19.osmdrawing.model.Model;
 import bfst19.osmdrawing.model.WayType;
+import bfst19.osmdrawing.utils.EnumHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -34,13 +35,13 @@ public class WaytypeUIController{
 		scrollPane.setContent(layoutBox);
 		scrollPane.setPannable(true);
 
-		for (WayType wt: WayType.values()) {
-			CheckBox checkBox = new CheckBox(wt.name());
+		for (WayType wayType: WayType.values()) {
+			CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
 			checkBox.setSelected(true);
 			ChangeListener<Boolean> listener = new ChangeListener<>() {
 				@Override
 				public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-					model.toggleBlacklistWaytype(wt);
+					model.toggleBlacklistWaytype(wayType);
 				}
 			};
 			checkBox.selectedProperty().addListener(listener);
