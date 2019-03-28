@@ -38,7 +38,9 @@ public class MapDrawer implements Drawer {
 			if (drawingInfo == null) {
 				continue;
 			}
-
+			if (model.dontDraw(wayType)){
+				continue;
+			}
 
 			Iterable<Drawable> drawablesToDraw;
 			if (drawingInfo.hasAlwaysDraw() && drawingInfo.getAlwaysDraw()) {

@@ -12,7 +12,7 @@ public class SettingsController {
 	}
 
 	@FXML
-	private void onHideElementsBar(final ActionEvent event){
+	private void onToggleWaytypes(final ActionEvent event){
 		waytypeController.togglePanel();
 	}
 }

@@ -5,12 +5,19 @@ import bfst19.osmdrawing.utils.ResourceLoader;
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Model {
 	DrawableModel drawableModel = new KDTreeDrawableModel();
 	List<Runnable> observers = new ArrayList<>();
+	Set<WayType> blacklistedWaytypes = new HashSet<>();
 	public Rectangle modelBounds;
+
+	public boolean dontDraw(WayType waytype){
+		return blacklistedWaytypes.contains(waytype);
+	}
 
 	public Iterable<Drawable> getWaysOfType(WayType type, Rectangle modelBounds) {
 		return drawableModel.getDrawablesOfTypeInBounds(type, modelBounds);
@@ -22,6 +29,15 @@ public class Model {
 
 	public void addObserver(Runnable observer) {
 		observers.add(observer);
+	}
+
+	public void toggleBlacklistWaytype(WayType waytype){
+		if (!blacklistedWaytypes.contains(waytype)) {
+			blacklistedWaytypes.add(waytype);
+		} else {
+			blacklistedWaytypes.remove(waytype);
+		}
+		notifyObservers();
 	}
 
 	public void notifyObservers() {

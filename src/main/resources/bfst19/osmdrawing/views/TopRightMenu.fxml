@@ -5,6 +5,6 @@
          xmlns:fx="http://javafx.com/fxml"
          fx:controller="bfst19.osmdrawing.controller.SettingsController">
          <Menu text="Settings">
-            <MenuItem text="Hide elements panel" onAction="#onHideElementsBar"/>
+            <MenuItem text="Way types" onAction="#onToggleWaytypes"/>
          </Menu>
 </MenuBar>
