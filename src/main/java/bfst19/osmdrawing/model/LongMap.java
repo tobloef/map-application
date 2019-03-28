@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.function.LongSupplier;
 
-public class LongIndex<T extends LongSupplier> {
+public class LongMap<T extends LongSupplier> {
 	private ArrayList<T> elements = new ArrayList<>();
 	private boolean sorted = false;
 

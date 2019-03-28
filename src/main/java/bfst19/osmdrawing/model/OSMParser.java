@@ -14,8 +14,8 @@ import static javax.xml.stream.XMLStreamConstants.*;
 
 public class OSMParser {
 	private float lonFactor = 1.0f;
-	private LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
-	private LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
+	private LongMap<OSMNode> idToNode = new LongMap<OSMNode>();
+	private LongMap<OSMWay> idToWay = new LongMap<OSMWay>();
 	private List<OSMWay> coastLines = new ArrayList<>(); //coastlines need extra work, which is why we have a list for them
 	private OSMWay currentWay = null;
 	private OSMRelation currentRelation = null;
@@ -299,5 +299,9 @@ public class OSMParser {
 
 	public List<OSMRoadNode> getRoadNodes() {
 		return roadNodes;
+	}
+
+	public OSMNode getNodeFromID(long ref) {
+		return idToNode.get(ref);
 	}
 }

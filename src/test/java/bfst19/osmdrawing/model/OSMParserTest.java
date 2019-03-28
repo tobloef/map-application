@@ -40,5 +40,18 @@ class OSMParserTest {
 		String filePath = this.getClass().getResource("small.osm").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
 		List<OSMRoadNode> nodes = osmParser.getRoadNodes();
+		OSMNode connectedA = osmParser.getNodeFromID(8099312); //Christianshavns Voldgade
+		OSMNode connectedB = osmParser.getNodeFromID(1027406335);
+		OSMNode unconnected = osmParser.getNodeFromID(8099316);
+		assert connectedA instanceof OSMRoadNode;
+		assert connectedB instanceof OSMRoadNode;
+		assert (((OSMRoadNode) connectedA).getConnections().get(0).getNode() == (OSMRoadNode) connectedB
+				|| ((OSMRoadNode) connectedA).getConnections().get(1).getNode() == (OSMRoadNode) connectedB );
+		assert (((OSMRoadNode) connectedB).getConnections().get(0).getNode() == (OSMRoadNode) connectedA
+				|| ((OSMRoadNode) connectedB).getConnections().get(1).getNode() == (OSMRoadNode) connectedA );
+		assert (!(((OSMRoadNode) connectedA).getConnections().get(0).getNode() == (OSMRoadNode) connectedA
+				|| ((OSMRoadNode) connectedA).getConnections().get(1).getNode() == (OSMRoadNode) connectedA ));
+		assert (!(((OSMRoadNode) connectedA).getConnections().get(0).getNode() == (OSMRoadNode) unconnected
+				|| ((OSMRoadNode) connectedA).getConnections().get(1).getNode() == (OSMRoadNode) unconnected ));
 	}
 }
