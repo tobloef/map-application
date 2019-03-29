@@ -54,4 +54,33 @@ class OSMParserTest {
 		assertTrue(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) connectedC, 2, new HashSet<>()));
 		assertFalse(((OSMRoadNode) connectedA).isConnected((OSMRoadNode) connectedC, 1, new HashSet<>()));
 	}
+
+	@Test
+	void testNavigationGraph() throws IOException, XMLStreamException {
+		DrawableModel drawableModel = new BasicDrawableModel();
+		String filePath = this.getClass().getResource("small.osm").getPath();
+		OSMParser osmParser = new OSMParser(filePath, drawableModel);
+
+		//fixme we have a bug with cyclical ways, see voldboligerne (18811922)
+
+		OSMRoadNode connectedA = (OSMRoadNode) osmParser.getNodeFromID(8099319);//Christianshavns Voldgade. a <=> b, b<=> c, a !<=> c
+		OSMRoadNode connectedB = (OSMRoadNode) osmParser.getNodeFromID(1235730161);
+		OSMRoadNode connectedC = (OSMRoadNode) osmParser.getNodeFromID(1027406335);
+		OSMRoadNode removedNode = (OSMRoadNode) osmParser.getNodeFromID(1015286457);
+		NavigationGraph navigationGraph = osmParser.makeNavigationGraph();
+		System.out.println(connectedB.getConnectedNodes());
+		System.out.println(connectedC);
+		assertTrue(connectedA.isConnected(connectedB));
+		assertTrue(connectedB.isConnected(connectedA));
+		assertTrue(connectedB.isConnected(connectedC));
+		assertTrue(connectedC.isConnected(connectedB));
+		assertFalse(connectedA.isConnected(connectedC));
+		assertFalse(connectedC.isConnected(connectedA));
+		assertTrue(connectedA.isConnected(connectedC, 2, new HashSet<>()));
+		assertFalse(navigationGraph.getNodes().contains(removedNode));
+		assertFalse(connectedA.isConnected(removedNode));
+		assertFalse(connectedB.isConnected(removedNode));
+		assertFalse(connectedC.isConnected(removedNode));
+		System.out.println(connectedC.getConnectedNodes());
+	}
 }

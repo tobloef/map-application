@@ -2,6 +2,8 @@ package bfst19.osmdrawing.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.LongSupplier;
 
 public class LongMap<T extends LongSupplier> {
@@ -50,5 +52,27 @@ public class LongMap<T extends LongSupplier> {
 		return low;
 	}
 
+	public boolean hasDuplicates() {
+		Set<Long> foundLongs = new HashSet<>();
+		for (T element : elements) {
+			if (foundLongs.contains(element.getAsLong())) return true;
+			foundLongs.add(element.getAsLong());
+		}
+		return false;
+	}
+
+	public ArrayList<T> getAll(long ref) {
+		int index = findIndex(ref);
+		ArrayList<T> results = new ArrayList<>();
+		while (elements.get(index).getAsLong() == ref) {
+			results.add(elements.get(index));
+			index++;
+		}
+		return results;
+	}
+
+	public void deleteDuplicates() {
+
+	}
 
 }

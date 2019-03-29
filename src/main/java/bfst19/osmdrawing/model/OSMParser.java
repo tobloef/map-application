@@ -261,7 +261,6 @@ public class OSMParser {
 		for (OSMWay coast : merge(coastLines)) {
 			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
 		}
-		//navigationGraph = new NavigationGraph(roadNodes);
 	}
 
 	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
@@ -303,5 +302,10 @@ public class OSMParser {
 
 	public OSMNode getNodeFromID(long ref) {
 		return idToNode.get(ref);
+	}
+	public LongMap<OSMNode> getLongMap() {return idToNode;}
+
+	public NavigationGraph makeNavigationGraph() {
+		return new NavigationGraph(roadNodes);
 	}
 }
