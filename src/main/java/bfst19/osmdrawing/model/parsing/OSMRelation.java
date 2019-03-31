@@ -4,6 +4,7 @@ import java.util.*;
 
 public class OSMRelation {
 	private Collection<OSMWay> list = new ArrayList<>();
+	public String debugName;
 
 	public Collection<OSMWay> getList() {
 		return list;
@@ -14,6 +15,11 @@ public class OSMRelation {
 	}
 
 	public void merge() {
+		if (debugName != null && debugName.equals("Fyn")){
+			printOverLaps(list);
+			System.out.println("This is it");
+			//printOverLaps(newMerge(list));
+		}
 		list =  newMerge(list);
 	}
 
@@ -42,6 +48,9 @@ public class OSMRelation {
 		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
 		for (OSMWay way : list){
 			OSMWay res = new OSMWay(0);
+			if (way.id == 291753728){
+				System.out.println("Is");
+			}
 			if (piecesStarts.containsKey(way.getFirst()) || piecesEnds.containsKey(way.getLast())){
 				way.reverse();
 			}
@@ -56,7 +65,17 @@ public class OSMRelation {
 				piecesEnds.remove(after.getLast());
 				addNormal(res, after);
 			}
+			if (piecesStarts.containsKey(res.getFirst())){
+				OSMWay duplicate = piecesStarts.remove(res.getFirst());
+				duplicate.reverse();
+				addNormal(res, duplicate);
+			}
 			piecesStarts.put(res.getFirst(), res);
+			if (piecesEnds.containsKey(res.getLast())){
+				OSMWay duplicate = piecesEnds.remove(res.getLast());
+				duplicate.reverse();
+				addNormal(res, duplicate);
+			}
 			piecesEnds.put(res.getLast(), res);
 		}
 		return piecesEnds.values();
