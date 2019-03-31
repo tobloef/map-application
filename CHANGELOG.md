@@ -1,6 +1,19 @@
 # Changelog
 Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige releases.
 
+## v0.4 - 24/3/2019
+### Tilføjet
+- KD-Træ mergede ind i.
+- Forskellige tykkelser på veje
+- Level of Detail drawing tilføjet. Værdierne er dog lidt optimistike lige nu.
+
+### Ændringer
+- Farver er ved at blive rykket ud i en seperat config fil
+
+### Bugs osv.
+- \#14 er delvis fixet, men kræver stadig arbejde
+- Fixede bug med langsom drawing der stammede fra settings der ikke blev slettede.
+
 ## v0.3 - 17/3/2019
 ### Tilføjet
 - Flere kommentarer i koden overalt

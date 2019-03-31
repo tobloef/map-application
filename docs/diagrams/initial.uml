@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="110.0" y="80.0">bfst19.osmdrawing.model.MultiPolyline</node>
+    <node x="181.0" y="235.0">bfst19.osmdrawing.model.OSMRelation</node>
+    <node x="0.0" y="235.0">bfst19.osmdrawing.model.WayTypeFactory</node>
+    <node x="0.0" y="310.0">bfst19.osmdrawing.model.LongIndex</node>
+    <node x="7.5" y="160.0">bfst19.osmdrawing.model.Road</node>
+    <node x="58.5" y="0.0">bfst19.osmdrawing.model.Drawable</node>
+    <node x="142.0" y="385.0">bfst19.osmdrawing.model.Model</node>
+    <node x="0.0" y="80.0">bfst19.osmdrawing.model.Polyline</node>
+    <node x="296.0" y="310.0">bfst19.osmdrawing.model.Rectangle</node>
+    <node x="286.5" y="0.0">bfst19.osmdrawing.model.DrawableModel</node>
+    <node x="343.0" y="235.0">bfst19.osmdrawing.model.OSMParser</node>
+    <node x="273.0" y="80.0">bfst19.osmdrawing.model.BasicDrawableModel</node>
+    <node x="148.0" y="310.0">bfst19.osmdrawing.model.OSMNode</node>
+    <node x="0.0" y="385.0">bfst19.osmdrawing.model.OSMWay</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="bfst19.osmdrawing.model.Road" target="bfst19.osmdrawing.model.Polyline">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="bfst19.osmdrawing.model.Polyline" target="bfst19.osmdrawing.model.Drawable">
+      <point x="0.0" y="-15.0" />
+      <point x="45.0" y="55.0" />
+      <point x="82.75" y="55.0" />
+      <point x="-24.25" y="15.0" />
+    </edge>
+    <edge source="bfst19.osmdrawing.model.BasicDrawableModel" target="bfst19.osmdrawing.model.DrawableModel">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="bfst19.osmdrawing.model.MultiPolyline" target="bfst19.osmdrawing.model.Drawable">
+      <point x="0.0" y="-15.0" />
+      <point x="169.0" y="55.0" />
+      <point x="131.25" y="55.0" />
+      <point x="24.25" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="738.0" y="414.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

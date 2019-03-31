@@ -29,6 +29,7 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    implementation 'org.yaml:snakeyaml:1.24'
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -36,15 +37,6 @@ repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
 
 tasks.withType(JavaCompile) {
@@ -58,6 +50,15 @@ test {
 }
 test {
     useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 apply from: 'args.gradle'

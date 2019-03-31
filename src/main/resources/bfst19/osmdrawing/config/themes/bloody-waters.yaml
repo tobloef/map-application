@@ -1,0 +1,24 @@
+---
+
+# The format is:
+# way type name:
+#   fillColor: "Web color"
+#   strokeColor: "Web color"
+#   lineDash: Number
+#   lineWidth: Number
+#   texture: Path
+#
+# For more about web color formats, see:
+# https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
+
+- WATER:
+      fillColor: "FF0000"
+
+- SWIMMINGPOOL:
+      fillColor: "FF0000"
+
+- CANAL:
+      fillColor: "FF0000"
+
+- BASIN:
+      fillColor: "FF0000"
