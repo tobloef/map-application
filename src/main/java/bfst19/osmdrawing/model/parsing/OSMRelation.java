@@ -39,12 +39,14 @@ public class OSMRelation {
 			}
 			if (piecesStarts.containsKey(res.getFirst())){
 				OSMWay duplicate = piecesStarts.remove(res.getFirst());
+				piecesEnds.remove(duplicate.getLast());
 				duplicate.reverse();
 				addNormal(res, duplicate);
 			}
 			piecesStarts.put(res.getFirst(), res);
 			if (piecesEnds.containsKey(res.getLast())){
 				OSMWay duplicate = piecesEnds.remove(res.getLast());
+				piecesStarts.remove(duplicate.getFirst());
 				duplicate.reverse();
 				addNormal(res, duplicate);
 			}
