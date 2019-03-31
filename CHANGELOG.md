@@ -1,6 +1,20 @@
 # Changelog
 Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige releases.
 
+## v0.5 - 31/3/2019
+### Tilføjet
+- Data om waytypes rykket fra Enum til .yaml filer, så der også anvendes temaer
+- Toggle waytypes om de skal vises eller ej (ikke færdig, på seperat branch)
+- Nodegraf er lavet så veje hænger sammen som data (der er stadig bugs, på seperat branch)
+
+### Ændringer
+- Level of detail værdier er blevet tweaked en smule
+- Rykket information om tegning af waytypes ud i DrawingInfo
+
+### Bugs osv.
+- \#95 ny bug, temaer overrider ikke korrekt
+- Meget arbejde på \#14 i den her uge, stadig ikke helt færdig
+
 ## v0.4 - 24/3/2019
 ### Tilføjet
 - KD-Træ mergede ind i.
