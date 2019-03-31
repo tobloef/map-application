@@ -8,10 +8,6 @@ public class OSMWay implements LongSupplier {
 	long id;
 	public Map<String, String> tags = new HashMap<>();
 
-	public void addTag(String key, String value){
-		tags.put(key, value);
-	}
-
 	public OSMWay(long id) {
 		this.id = id;
 	}

@@ -10,7 +10,7 @@ import static bfst19.osmdrawing.utils.EnumHelper.stringToWayType;
 
 @SuppressWarnings("unchecked")
 public class WayTypeFactory {
-	private static final String wayTypesConfigPath = "config/relMergeTest.yaml";
+	private static final String wayTypesConfigPath = "config/wayTypes.yaml";
 
 	/**
 	 * Maps cartographic feature keys to maps that map feature values to WayType.

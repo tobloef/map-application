@@ -181,6 +181,8 @@
   - place:
     - island
     - peninsula
+    - islet
+    - archipelago
 
 - HEATH:
   - natural:

@@ -4,12 +4,6 @@ import java.util.*;
 
 public class OSMRelation {
 	private Collection<OSMWay> list = new ArrayList<>();
-	private Map<String, String> tags = new HashMap<>();
-	public String debugName;
-
-	public void addTag(String key, String value) {
-		tags.put(key, value);
-	}
 
 	public Collection<OSMWay> getList() {
 		return list;
@@ -20,15 +14,6 @@ public class OSMRelation {
 	}
 
 	public void merge() {
-		if (debugName != null){
-			System.out.println(debugName);
-		}
-		if (debugName != null && debugName.equals("Bornholm")){
-			printOverLaps(list);
-			System.out.println("ewf");
-			printOverLaps(newMerge(list));
-		}
-
 		list =  newMerge(list);
 	}
 

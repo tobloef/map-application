@@ -138,15 +138,6 @@ public class OSMParser {
 	private void handleStartTag(XMLStreamReader reader) { // assigns waytype the current way, based on key and value
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
-		if (currentWay != null){
-			currentWay.addTag(k, v);
-		}
-		else if (currentRelation != null){
-			currentRelation.addTag(k, v);
-		}
-		if (currentRelation != null && k.equals("name")){
-			currentRelation.debugName = v;
-		}
 		if (currentWay != null || currentRelation != null) {
 			WayType type = WayTypeFactory.getWayType(k, v);
 			if (type != null) {
