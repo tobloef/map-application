@@ -63,8 +63,8 @@ public class OSMParser {
 		}
 	}
 
+	// Delegates the task out to methods depending on the tag
 	private void handleStartElementTag(XMLStreamReader reader) {
-		// Delegates the task out to methods depending on the tag
 		switch (reader.getLocalName()) {
 			case "bounds":
 				handleStartBounds(reader);
@@ -93,8 +93,8 @@ public class OSMParser {
 		}
 	}
 
+	// Delegates the task out to methods depending on the tag
 	private void handleEndElementTag(XMLStreamReader reader) {
-		// Delegates the task out to methods depending on the tag
 		switch (reader.getLocalName()) {
 			case "way":
 				handleEndWay();
@@ -129,13 +129,15 @@ public class OSMParser {
 		currentRelation = null;
 	}
 
-	private void handleStartMember(XMLStreamReader reader) { // adds members to the current relation
+	// adds members to the current relation
+	private void handleStartMember(XMLStreamReader reader) {
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		OSMWay member = idToWay.get(ref);
 		if (member != null) currentRelation.add(member);
 	}
 
-	private void handleStartTag(XMLStreamReader reader) { // assigns waytype the current way, based on key and value
+	// assigns waytype the current way, based on key and value
+	private void handleStartTag(XMLStreamReader reader) {
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
 		if (currentRelation != null && k.equals("name")){
@@ -149,7 +151,8 @@ public class OSMParser {
 		}
 	}
 
-	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
+	//TODO find out what ND stands for and change the name to something readable
+	private void handleStartND(XMLStreamReader reader) {
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		currentWay.add(idToNode.get(ref));
 	}

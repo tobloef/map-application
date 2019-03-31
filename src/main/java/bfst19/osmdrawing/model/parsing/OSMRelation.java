@@ -15,32 +15,7 @@ public class OSMRelation {
 	}
 
 	public void merge() {
-		if (debugName != null && debugName.equals("Fyn")){
-			printOverLaps(list);
-			System.out.println("This is it");
-			//printOverLaps(newMerge(list));
-		}
 		list =  newMerge(list);
-	}
-
-	private void printOverLaps(Collection<OSMWay> list) {
-		int correctOverlaps = 0;
-		int wrongOverLaps = 0;
-		for (OSMWay way : list){
-			for (OSMWay otherWay : list){
-				if (way == otherWay) {
-					continue;
-				}
-				if (way.getFirst() == otherWay.getLast()){
-					correctOverlaps++;
-				}
-				if(way.getFirst() == otherWay.getFirst() || way.getLast() == otherWay.getLast()){
-					wrongOverLaps++;
-				}
-			}
-		}
-		System.out.println("Number of ways: " + list.size());
-		System.out.println("Correct: " + correctOverlaps + " Wrong: " + wrongOverLaps);
 	}
 
 	private static Collection<OSMWay> newMerge(Collection<OSMWay> list){
@@ -48,9 +23,6 @@ public class OSMRelation {
 		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
 		for (OSMWay way : list){
 			OSMWay res = new OSMWay(0);
-			if (way.id == 291753728){
-				System.out.println("Is");
-			}
 			if (piecesStarts.containsKey(way.getFirst()) || piecesEnds.containsKey(way.getLast())){
 				way.reverse();
 			}
