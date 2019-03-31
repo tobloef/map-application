@@ -5,6 +5,7 @@ import java.util.*;
 public class OSMRelation {
 	private Collection<OSMWay> list = new ArrayList<>();
 	private Map<String, String> tags = new HashMap<>();
+	public String debugName;
 
 	public void addTag(String key, String value) {
 		tags.put(key, value);
@@ -19,64 +20,54 @@ public class OSMRelation {
 	}
 
 	public void merge() {
-		Collection<OSMWay> oldList =  oldMerge(list);
-		Collection<OSMWay> newList =  newMerge(list);
-		if (oldList.size() > newList.size()){
-			list = newList;
+		if (debugName != null){
+			System.out.println(debugName);
 		}
-		else {
-			list = oldList;
+		if (debugName != null && debugName.equals("Bornholm")){
+			printOverLaps(list);
+			System.out.println("ewf");
+			printOverLaps(newMerge(list));
 		}
+
+		list =  newMerge(list);
 	}
 
-	private Collection<OSMWay> oldMerge(Collection<OSMWay> list) {
-		//Currently produces two equal lists it appears.
-		/*
-		Check for each road if it connects in the end ofr the start.
-		*/
-		Map<OSMNode, OSMWay> pieces = new HashMap<>();
-		for (OSMWay way : list) {
-			OSMWay res = new OSMWay(0);
-			OSMWay before = pieces.remove(way.getFirst());
-			if (before != null) {
-				pieces.remove(before.getFirst());
-				for (int i = 0; i < before.size() - 1; i++) {
-					res.add(before.get(i));
+	private void printOverLaps(Collection<OSMWay> list) {
+		int correctOverlaps = 0;
+		int wrongOverLaps = 0;
+		for (OSMWay way : list){
+			for (OSMWay otherWay : list){
+				if (way == otherWay) {
+					continue;
+				}
+				if (way.getFirst() == otherWay.getLast()){
+					correctOverlaps++;
+				}
+				if(way.getFirst() == otherWay.getFirst() || way.getLast() == otherWay.getLast()){
+					wrongOverLaps++;
 				}
 			}
-			res.addAll(way);
-			OSMWay after = pieces.remove(way.getLast());
-			if (after != null) {
-				pieces.remove(after.getLast());
-				for (int i = 1; i < after.size(); i++) {
-					res.add(after.get(i));
-				}
-			}
-			pieces.put(res.getFirst(), res);
-			pieces.put(res.getLast(), res);
 		}
-		return pieces.values();
+		System.out.println("Number of ways: " + list.size());
+		System.out.println("Correct: " + correctOverlaps + " Wrong: " + wrongOverLaps);
 	}
 
-	public Collection<OSMWay> newMerge(Collection<OSMWay> list){
+	private static Collection<OSMWay> newMerge(Collection<OSMWay> list){
 		Map<OSMNode, OSMWay> piecesStarts = new HashMap<>();
 		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
 		for (OSMWay way : list){
 			OSMWay res = new OSMWay(0);
-			if (piecesStarts.containsKey(way.getFirst()) && piecesEnds.containsKey(way.getLast()) && false){
-				throw new RuntimeException("A way with duplicate ending points existed in " + this);
-			}
 			if (piecesStarts.containsKey(way.getFirst()) || piecesEnds.containsKey(way.getLast())){
 				way.reverse();
 			}
-			if (piecesEnds.containsKey(way.getFirst())){
-				OSMWay before = piecesEnds.remove(way.getFirst());
+			OSMWay before = piecesEnds.remove(way.getFirst());
+			if (before != null){
 				piecesStarts.remove(before.getFirst());
 				addNormal(res, before);
 			}
 			addNormal(res, way);
-			if (piecesStarts.containsKey(way.getLast())){
-				OSMWay after = piecesStarts.remove(way.getLast());
+			OSMWay after = piecesStarts.remove(way.getLast());
+			if (after != null){
 				piecesEnds.remove(after.getLast());
 				addNormal(res, after);
 			}
@@ -86,18 +77,11 @@ public class OSMRelation {
 		return piecesEnds.values();
 	}
 
-	private void addNormal(OSMWay res, OSMWay addition) {
-		for (int i = 0; i < addition.size() - 1; i++) {
+	private static void addNormal(OSMWay res, OSMWay addition) {
+		for (int i = 0; i < addition.size(); i++) {
 			res.add(addition.get(i));
 		}
 	}
-
-	private void addInReverse(OSMWay res, OSMWay addition) {
-		for (int i = addition.size() - 1; i >= 0 ; i--) {
-			res.add(addition.get(i));
-		}
-	}
-
 
 	public boolean hasMembers() {
 		return list.size() > 0;

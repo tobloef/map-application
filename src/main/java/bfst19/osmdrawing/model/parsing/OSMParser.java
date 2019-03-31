@@ -144,8 +144,8 @@ public class OSMParser {
 		else if (currentRelation != null){
 			currentRelation.addTag(k, v);
 		}
-		if (k.equals("name") && v.equals("Bornholm")){
-			System.out.println(currentRelation);
+		if (currentRelation != null && k.equals("name")){
+			currentRelation.debugName = v;
 		}
 		if (currentWay != null || currentRelation != null) {
 			WayType type = WayTypeFactory.getWayType(k, v);
