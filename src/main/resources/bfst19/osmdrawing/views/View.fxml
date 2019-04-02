@@ -12,7 +12,7 @@
        fx:controller="bfst19.osmdrawing.controller.Controller"
        fx:id="scene"
        onKeyPressed="#onKeyPressed">
-            <BorderPane prefHeight="600.0" prefWidth="800.0">
+            <BorderPane prefHeight="600.0" prefWidth="800.0" fx:id="borderPane">
                 <top>
                     <HBox>
                         <fx:include source="TopMenu.fxml"/>

@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class WaytypeUIController{
@@ -15,15 +16,17 @@ public class WaytypeUIController{
 	private VBox layoutBox;
 	@FXML
 	private ScrollPane scrollPane;
+	private BorderPane borderPane;
 
 	private boolean enabled = true;
 	private static Model model;
 	private static WaytypeUIController singletonInstance;
 
-	public static void init(Model modelParam){
+	public static void init(Model modelParam, BorderPane borderPane){
+		singletonInstance.borderPane = borderPane;
 		model = modelParam;
-		singletonInstance.togglePanel();
 		singletonInstance.loadWaytypes();
+		singletonInstance.togglePanel();
 	}
 
 	public WaytypeUIController(){
@@ -32,9 +35,12 @@ public class WaytypeUIController{
 	}
 
 	private void loadWaytypes(){
+		borderPane.setRight(scrollPane);
 		scrollPane.setContent(layoutBox);
 		scrollPane.setPannable(true);
 
+
+		//TODO: Rebuild korrekt ud fra om de eksisterer i blacklist
 		for (WayType wayType: WayType.values()) {
 			CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
 			checkBox.setSelected(true);
@@ -51,9 +57,11 @@ public class WaytypeUIController{
 
 	public void togglePanel(){
 		if (enabled){
-			scrollPane.setPrefWidth(0);
+			layoutBox.getChildren().removeAll();
+			scrollPane.setContent(null);
+			borderPane.setRight(null);
 		} else {
-			scrollPane.setPrefWidth(200);
+			loadWaytypes();
 		}
 		enabled = !enabled;
 	}
