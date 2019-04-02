@@ -1,5 +1,6 @@
-package bfst19.osmdrawing.model;
+package bfst19.osmdrawing.model.parsing;
 
+import bfst19.osmdrawing.model.WayType;
 import bfst19.osmdrawing.utils.ResourceLoader;
 import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;

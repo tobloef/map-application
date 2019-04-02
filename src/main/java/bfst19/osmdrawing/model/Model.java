@@ -1,5 +1,6 @@
 package bfst19.osmdrawing.model;
 
+import bfst19.osmdrawing.model.parsing.OSMParser;
 import bfst19.osmdrawing.utils.ResourceLoader;
 
 import javax.xml.stream.XMLStreamException;

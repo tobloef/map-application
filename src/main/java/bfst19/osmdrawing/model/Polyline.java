@@ -1,5 +1,6 @@
 package bfst19.osmdrawing.model;
 
+import bfst19.osmdrawing.model.parsing.OSMWay;
 import javafx.scene.canvas.GraphicsContext;
 import java.io.Serializable;
 
@@ -49,8 +50,7 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 		float[] lastCoords = new float[2];
 		lastCoords[0] = coords[0];
 		lastCoords[1] = coords[1];
-
-		for (int i = 2; i < coords.length ; i+=2) {
+		for (int i = 2; i < coords.length; i+=2) {
 			traceWithoutSubpixel(coords[i], coords[i+1], zoomFactor, gc, lastCoords);
 		}
 	}

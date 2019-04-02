@@ -28,17 +28,16 @@
 
 - COASTLINE:
     fillColor: "EEF0D5"
-    alwaysDraw: true
+    strokeColor: "000000"
 
 # Island stuff
 
 - ISLAND:
     fillColor: "F4F0EA"
-    alwaysDraw: true
 
 - SCREE:
     fillColor: "F1E5DC"
-    alwaysDraw: true
+    zoomLevel: *level1
 
 # Nature
 

@@ -1,5 +1,7 @@
 package bfst19.osmdrawing.model;
 
+import bfst19.osmdrawing.model.parsing.OSMRelation;
+import bfst19.osmdrawing.model.parsing.OSMWay;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
@@ -8,9 +10,28 @@ import java.util.List;
 
 public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	List<Polyline> list;
+	private float xMin, yMin, xMax, yMax;
 	public MultiPolyline(OSMRelation rel) {
+		rel.merge();
 		list = new ArrayList<>();
-		for (OSMWay way : rel.getList()) list.add(new Polyline(way));
+		for (OSMWay way : rel.getList()){
+			list.add(new Polyline(way));
+		}
+		createMinimumBoundingRectangle();
+	}
+
+	private void createMinimumBoundingRectangle() {
+		if (list.size() == 0){
+			return;
+		}
+		Rectangle boundingRectangle = list.get(0).getMinimumBoundingRectangle();
+		for (Polyline line : list){
+			boundingRectangle.growToEncompass(line.getMinimumBoundingRectangle());
+		}
+		this.xMin = boundingRectangle.xMin;
+		this.yMin = boundingRectangle.yMin;
+		this.xMax = boundingRectangle.xMax;
+		this.yMax = boundingRectangle.yMax;
 	}
 
 	@Override
@@ -47,10 +68,6 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 
 	@Override
 	public Rectangle getMinimumBoundingRectangle() {
-		Rectangle rectangle = new Rectangle();
-		for (Polyline polyline : list) {
-			rectangle.growToEncompass(polyline.getMinimumBoundingRectangle());
-		}
-		return rectangle;
+		return new Rectangle(xMin,yMin,xMax,yMax);
 	}
 }

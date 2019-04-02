@@ -1,13 +1,11 @@
-package bfst19.osmdrawing.model;
+package bfst19.osmdrawing.model.parsing;
+
+import bfst19.osmdrawing.model.*;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipInputStream;
 
 import static javax.xml.stream.XMLStreamConstants.*;
@@ -16,7 +14,6 @@ public class OSMParser {
 	private float lonFactor = 1.0f;
 	private LongIndex<OSMNode> idToNode = new LongIndex<OSMNode>();
 	private LongIndex<OSMWay> idToWay = new LongIndex<OSMWay>();
-	private List<OSMWay> coastLines = new ArrayList<>(); //coastlines need extra work, which is why we have a list for them
 	private OSMWay currentWay = null;
 	private OSMRelation currentRelation = null;
 	private WayType currentType = null;
@@ -28,11 +25,9 @@ public class OSMParser {
 		this.drawableModel = drawableModel;
 		if (filename.endsWith(".zip")) {
 			osmSource = getZipFile(filename);
-		}
-		else if (filename.endsWith(".osm")){
+		} else if (filename.endsWith(".osm")) {
 			osmSource = getOsmFile(filename);
-		}
-		else {
+		} else {
 			throw new IOException();
 		}
 		parseOSM(osmSource);
@@ -51,7 +46,6 @@ public class OSMParser {
 	}
 
 
-
 	private void parseOSM(InputStream osmSource) throws XMLStreamException {
 		XMLStreamReader reader = XMLInputFactory
 				.newInstance()
@@ -65,35 +59,30 @@ public class OSMParser {
 				case END_ELEMENT:
 					handleEndElementTag(reader);
 					break;
-				case END_DOCUMENT:
-					handleEndDocumentTag();
-					break;
 			}
 		}
 	}
 
+	// Delegates the task out to methods depending on the tag
 	private void handleStartElementTag(XMLStreamReader reader) {
-		// Delegates the task out to methods depending on the tag
 		switch (reader.getLocalName()) {
 			case "bounds":
 				handleStartBounds(reader);
 				break;
 			case "node":
 				handleStartNode(reader);
-				long id;
 				break;
 			case "way":
 				handleStartWay(reader);
 				break;
 			case "nd":
 				handleStartND(reader);
-				long ref;
 				break;
 			case "tag":
 				handleStartTag(reader);
 				break;
 			case "relation":
-				handleStartRelation();
+				handleStartRelation(reader);
 				break;
 			case "member":
 				handleStartMember(reader);
@@ -102,8 +91,8 @@ public class OSMParser {
 		}
 	}
 
+	// Delegates the task out to methods depending on the tag
 	private void handleEndElementTag(XMLStreamReader reader) {
-		// Delegates the task out to methods depending on the tag
 		switch (reader.getLocalName()) {
 			case "way":
 				handleEndWay();
@@ -122,44 +111,47 @@ public class OSMParser {
 	}
 
 	private void handleEndWay() {
-		if (currentType == WayType.COASTLINE) {
-			coastLines.add(currentWay);
-		} else {
-			drawableModel.add(currentType, new Polyline(currentWay));
-		}
+		drawableModel.add(currentType, new Polyline(currentWay));
 		currentWay = null;
 	}
 
-	private void handleStartRelation() {
+	private void handleStartRelation(XMLStreamReader reader) {
+		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		currentType = WayType.UNKNOWN;
-		currentRelation = new OSMRelation();
+		currentRelation = new OSMRelation(id);
 	}
 
 	private void handleEndRelation() {
-		if (currentType == WayType.WATER) {
+		if (currentRelation.hasMembers()) {
 			drawableModel.add(currentType, new MultiPolyline(currentRelation));
-			currentWay = null;
 		}
+		currentRelation = null;
 	}
 
-	private void handleStartMember(XMLStreamReader reader) { // adds members to the current relation
+	// adds members to the current relation
+	private void handleStartMember(XMLStreamReader reader) {
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		OSMWay member = idToWay.get(ref);
 		if (member != null) currentRelation.add(member);
 	}
 
-	private void handleStartTag(XMLStreamReader reader) { // assigns waytype the current way, based on key and value
+	// assigns waytype the current way, based on key and value
+	private void handleStartTag(XMLStreamReader reader) {
 		String k = reader.getAttributeValue(null, "k");
 		String v = reader.getAttributeValue(null, "v");
+		if (currentRelation != null && k.equals("name")){
+			currentRelation.debugName = v;
+		}
 		if (currentWay != null || currentRelation != null) {
 			WayType type = WayTypeFactory.getWayType(k, v);
-			if (type != null){
+			if (type != null) {
 				this.currentType = type;
 			}
 		}
 	}
 
-	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
+	//TODO find out what ND stands for and change the name to something readable
+	private void handleStartND(XMLStreamReader reader) {
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		currentWay.add(idToNode.get(ref));
 	}
@@ -168,7 +160,7 @@ public class OSMParser {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		float lat = Float.parseFloat(reader.getAttributeValue(null, "lat"));
 		float lon = lonFactor * Float.parseFloat(reader.getAttributeValue(null, "lon"));
-		idToNode.add(new OSMNode(id,lon, lat));
+		idToNode.add(new OSMNode(id, lon, lat));
 	}
 
 	private void handleStartBounds(XMLStreamReader reader) {
@@ -176,42 +168,10 @@ public class OSMParser {
 		bounds.xMin = Float.parseFloat(reader.getAttributeValue(null, "minlon"));
 		bounds.yMax = Float.parseFloat(reader.getAttributeValue(null, "maxlat"));
 		bounds.xMax = Float.parseFloat(reader.getAttributeValue(null, "maxlon"));
-		lonFactor = (float) Math.cos((bounds.yMax +bounds.yMin)/2*Math.PI/180);
+		lonFactor = (float) Math.cos((bounds.yMax + bounds.yMin) / 2 * Math.PI / 180);
 		bounds.xMin *= lonFactor;
 		bounds.xMax *= lonFactor;
 		drawableModel.setModelBounds(bounds);
-	}
-
-	private void handleEndDocumentTag() {
-		//Get a list of merged coastlines.
-		for (OSMWay coast : merge(coastLines)) {
-			drawableModel.add(WayType.COASTLINE, new Polyline(coast));
-		}
-	}
-
-	private static Iterable<OSMWay> merge(List<OSMWay> coast) {
-		Map<OSMNode,OSMWay> pieces = new HashMap<>();
-		for (OSMWay way : coast) {
-			OSMWay res = new OSMWay(0);
-			OSMWay before = pieces.remove(way.getFirst());
-			if (before != null) {
-				pieces.remove(before.getFirst());
-				for (int i = 0 ; i < before.size() - 1 ; i++) {
-					res.add(before.get(i));
-				}
-			}
-			res.addAll(way);
-			OSMWay after = pieces.remove(way.getLast());
-			if (after != null) {
-				pieces.remove(after.getLast());
-				for (int i = 1 ; i < after.size() ; i++) {
-					res.add(after.get(i));
-				}
-			}
-			pieces.put(res.getFirst(), res);
-			pieces.put(res.getLast(), res);
-		}
-		return pieces.values();
 	}
 
 	public Rectangle getModelBounds() {
