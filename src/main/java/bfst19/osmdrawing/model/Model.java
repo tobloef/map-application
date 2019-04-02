@@ -29,6 +29,7 @@ public class Model {
 	}
 
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
+		System.out.println("Loading data...");
 		long time = -System.nanoTime();
 		if (args.size() == 0) {
 			loadDefaultData();

@@ -3,199 +3,154 @@ package bfst19.osmdrawing.model;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import static bfst19.osmdrawing.utils.Misc.pickNotNull;
 
 public class DrawingInfo {
-    private Color fillColor;
-    private Color strokeColor;
-    private Double lineDash;
-    private Double lineWidth;
-    private Double zoomLevel;
-    private Boolean alwaysDraw;
-    private ImagePattern texture;
+    private Wrapper<Color> fillColorWrapper;
+    private Wrapper<Color> strokeColorWrapper;
+    private Wrapper<Double> lineDashWrapper;
+    private Wrapper<Double> lineWidthWrapper;
+    private Wrapper<Double> zoomLevelWrapper;
+    private Wrapper<Boolean> alwaysDrawWrapper;
+    private Wrapper<ImagePattern> textureWrapper;
 
-    private boolean fillColorSet;
-    private boolean strokeColorSet;
-    private boolean lineDashSet;
-    private boolean lineWidthSet;
-    private boolean zoomLevelSet;
-    private boolean alwaysDrawSet;
-    private boolean textureSet;
-
-    public DrawingInfo() {
+    public DrawingInfo(
+            Wrapper<Color> fillColorWrapper,
+            Wrapper<Color> strokeColorWrapper,
+            Wrapper<Double> lineDashWrapper,
+            Wrapper<Double> lineWidthWrapper,
+            Wrapper<Double> zoomLevelWrapper,
+            Wrapper<Boolean> alwaysDrawWrapper,
+            Wrapper<ImagePattern> textureWrapper
+    ) {
+        this.fillColorWrapper = fillColorWrapper;
+        this.strokeColorWrapper = strokeColorWrapper;
+        this.lineDashWrapper = lineDashWrapper;
+        this.lineWidthWrapper = lineWidthWrapper;
+        this.zoomLevelWrapper = zoomLevelWrapper;
+        this.alwaysDrawWrapper = alwaysDrawWrapper;
+        this.textureWrapper = textureWrapper;
     }
 
     DrawingInfo createMerged(DrawingInfo other) {
-        DrawingInfo result = new DrawingInfo();
-        setMergeProp(result::setFillColor, this::getFillColor, this::isFillColorSet, other::getFillColor, other::isFillColorSet);
-        setMergeProp(result::setFillColor, this::getFillColor, this::isFillColorSet, other::getFillColor, other::isFillColorSet);
-        setMergeProp(result::setStrokeColor, this::getStrokeColor, this::isStrokeColorSet, other::getStrokeColor, other::isStrokeColorSet);
-        setMergeProp(result::setLineDash, this::getLineDash, this::isLineDashSet, other::getLineDash, other::isLineDashSet);
-        setMergeProp(result::setLineWidth, this::getLineWidth, this::isLineWidthSet, other::getLineWidth, other::isLineWidthSet);
-        setMergeProp(result::setZoomLevel, this::getZoomLevel, this::isZoomLevelSet, other::getZoomLevel, other::isZoomLevelSet);
-        setMergeProp(result::setAlwaysDraw, this::getAlwaysDraw, this::isAlwaysDrawSet, other::getAlwaysDraw, other::isAlwaysDrawSet);
-        setMergeProp(result::setTexture, this::getTexture, this::isTextureSet, other::getTexture, other::isTextureSet);
-        return result;
-    }
-
-    /***
-     * Sets a property based on whether another object's property has been set.
-     *
-     * For example:
-     * setMergeProp(
-     *      result::setFillColor,
-     *      this::getFillColor,
-     *      this::isFillColorSet,
-     *      other::getFillColor,
-     *      other::isFillColorSet
-     * );
-     *
-     * @param setter Setter for the resulting property
-     * @param getter1 Getter for the first objects property
-     * @param isSet1 Getter to check whether the first object's property has been set
-     * @param getter2 Getter for the second objects property
-     * @param isSet2 Getter to check whether the second object's property has been set
-     * @param <T> Type of the property
-     */
-    private <T> void setMergeProp(
-            BiConsumer<T, Boolean> setter,
-            Supplier<T> getter1,
-            Supplier<Boolean> isSet1,
-            Supplier<T> getter2,
-            Supplier<Boolean> isSet2
-    ) {
-        if (isSet2.get()) {
-            setter.accept(getter2.get(), isSet2.get());
-        } else {
-            setter.accept(getter1.get(), isSet1.get());
-        }
+        return new DrawingInfo(
+                pickNotNull(other.getFillColorWrapper(), this.getFillColorWrapper()),
+                pickNotNull(other.getStrokeColorWrapper(), this.getStrokeColorWrapper()),
+                pickNotNull(other.getLineDashWrapper(), this.getLineDashWrapper()),
+                pickNotNull(other.getLineWidthWrapper(), this.getLineWidthWrapper()),
+                pickNotNull(other.getZoomLevelWrapper(), this.getZoomLevelWrapper()),
+                pickNotNull(other.getAlwaysDrawWrapper(), this.getAlwaysDrawWrapper()),
+                pickNotNull(other.getTextureWrapper(), this.getTextureWrapper())
+        );
     }
 
     // Getters
 
     public Color getFillColor() {
-        return fillColor;
+        if (fillColorWrapper == null) {
+            return null;
+        }
+        return fillColorWrapper.getValue();
     }
 
     public Color getStrokeColor() {
-        return strokeColor;
+        if (strokeColorWrapper == null) {
+            return null;
+        }
+        return strokeColorWrapper.getValue();
     }
 
     public Double getLineDash() {
-        return lineDash;
+        if (lineDashWrapper == null) {
+            return null;
+        }
+        return lineDashWrapper.getValue();
     }
 
     public Double getLineWidth() {
-        return lineWidth;
+        if (lineWidthWrapper == null) {
+            return null;
+        }
+        return lineWidthWrapper.getValue();
     }
 
     public Double getZoomLevel() {
-        return zoomLevel;
+        if (zoomLevelWrapper == null) {
+            return null;
+        }
+        return zoomLevelWrapper.getValue();
     }
 
     public Boolean getAlwaysDraw() {
-        return alwaysDraw;
+        if (alwaysDrawWrapper == null) {
+            return null;
+        }
+        return alwaysDrawWrapper.getValue();
     }
 
     public ImagePattern getTexture() {
-        return texture;
+        if (textureWrapper == null) {
+            return null;
+        }
+        return textureWrapper.getValue();
     }
 
-    private Boolean isFillColorSet() {
-        return fillColorSet;
+    public Wrapper<Color> getFillColorWrapper() {
+        return fillColorWrapper;
     }
 
-    private Boolean isStrokeColorSet() {
-        return strokeColorSet;
+    public Wrapper<Color> getStrokeColorWrapper() {
+        return strokeColorWrapper;
     }
 
-    private Boolean isLineDashSet() {
-        return lineDashSet;
+    public Wrapper<Double> getLineDashWrapper() {
+        return lineDashWrapper;
     }
 
-    private Boolean isLineWidthSet() {
-        return lineWidthSet;
+    public Wrapper<Double> getLineWidthWrapper() {
+        return lineWidthWrapper;
     }
 
-    private Boolean isZoomLevelSet() {
-        return zoomLevelSet;
+    public Wrapper<Double> getZoomLevelWrapper() {
+        return zoomLevelWrapper;
     }
 
-    private Boolean isAlwaysDrawSet() {
-        return alwaysDrawSet;
+    public Wrapper<Boolean> getAlwaysDrawWrapper() {
+        return alwaysDrawWrapper;
     }
 
-    private Boolean isTextureSet() {
-        return textureSet;
-    }
-
-    // Setters
-
-    public void setFillColor(Color fillColor, boolean isFillColorSet) {
-        this.fillColor = fillColor;
-        fillColorSet = isFillColorSet;
-    }
-
-    public void setStrokeColor(Color strokeColor, boolean isStrokeColorSet) {
-        this.strokeColor = strokeColor;
-        strokeColorSet = isStrokeColorSet;
-    }
-
-    public void setLineDash(Double lineDash, boolean isLineDashSet) {
-        this.lineDash = lineDash;
-        lineDashSet = isLineDashSet;
-    }
-
-    public void setLineWidth(Double lineWidth, boolean isLineWidthSet) {
-        this.lineWidth = lineWidth;
-        lineWidthSet = isLineWidthSet;
-    }
-
-    public void setZoomLevel(Double zoomLevel, boolean isZoomLevelSet) {
-        this.zoomLevel = zoomLevel;
-        zoomLevelSet = isZoomLevelSet;
-    }
-
-    public void setAlwaysDraw(Boolean alwaysDraw, boolean isAlwaysDrawSet) {
-        this.alwaysDraw = alwaysDraw;
-        alwaysDrawSet = isAlwaysDrawSet;
-    }
-
-    public void setTexture(ImagePattern texture, boolean isTextureSet) {
-        this.texture = texture;
-        textureSet = isTextureSet;
+    public Wrapper<ImagePattern> getTextureWrapper() {
+        return textureWrapper;
     }
 
     // Hassers
 
     public boolean hasFillColor() {
-        return fillColor != null;
+        return fillColorWrapper != null && fillColorWrapper.getValue() != null;
     }
 
     public boolean hasStrokeColor() {
-        return strokeColor != null;
+        return strokeColorWrapper != null && strokeColorWrapper.getValue() != null;
     }
 
     public boolean hasLineDash() {
-        return lineDash != null;
+        return lineDashWrapper != null && lineDashWrapper.getValue() != null;
     }
 
     public boolean hasLineWidth() {
-        return lineWidth != null;
+        return lineWidthWrapper != null && lineWidthWrapper.getValue() != null;
     }
 
     public boolean hasZoomLevel() {
-        return zoomLevel != null;
+        return zoomLevelWrapper != null && zoomLevelWrapper.getValue() != null;
     }
 
     public boolean hasAlwaysDraw() {
-        return alwaysDraw != null;
+        return alwaysDrawWrapper != null && alwaysDrawWrapper.getValue() != null;
     }
 
     public boolean hasTexture() {
-        return texture != null;
+        return textureWrapper != null && textureWrapper.getValue() != null;
     }
 
 }

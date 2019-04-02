@@ -1,6 +1,7 @@
 package bfst19.osmdrawing.utils;
 
 import bfst19.osmdrawing.model.DrawingInfo;
+import bfst19.osmdrawing.model.Wrapper;
 import bfst19.osmdrawing.model.Theme;
 import bfst19.osmdrawing.model.WayType;
 import javafx.scene.image.Image;
@@ -61,29 +62,43 @@ public class ThemeLoader {
     }
 
     private static DrawingInfo parseThemeValueMap(Map<String, Object> themeValuesMap) {
-        DrawingInfo drawingInfo = new DrawingInfo();
+        Wrapper<Color> fillColor = null;
+        Wrapper<Color> strokeColor = null;
+        Wrapper<Double> lineDash = null;
+        Wrapper<Double> lineWidth = null;
+        Wrapper<Double> zoomLevel = null;
+        Wrapper<Boolean> alwaysDraw = null;
+        Wrapper<ImagePattern> texture = null;
         if (themeValuesMap.containsKey("fillColor")) {
-            drawingInfo.setFillColor(parseColor(themeValuesMap, "fillColor"), true);
+            fillColor = new Wrapper<>(parseColor(themeValuesMap, "fillColor"));
         }
         if (themeValuesMap.containsKey("strokeColor")) {
-            drawingInfo.setStrokeColor(parseColor(themeValuesMap, "strokeColor"), true);
+            strokeColor = new Wrapper<>(parseColor(themeValuesMap, "strokeColor"));
         }
         if (themeValuesMap.containsKey("lineDash")) {
-            drawingInfo.setLineDash(parseDouble(themeValuesMap, "lineDash"), true);
+            lineDash = new Wrapper<>(parseDouble(themeValuesMap, "lineDash"));
         }
         if (themeValuesMap.containsKey("lineWidth")) {
-            drawingInfo.setLineWidth(parseDouble(themeValuesMap, "lineWidth"), true);
+            lineWidth = new Wrapper<>(parseDouble(themeValuesMap, "lineWidth"));
         }
         if (themeValuesMap.containsKey("zoomLevel")) {
-            drawingInfo.setZoomLevel(parseDouble(themeValuesMap, "zoomLevel"), true);
+            zoomLevel = new Wrapper<>(parseDouble(themeValuesMap, "zoomLevel"));
         }
         if (themeValuesMap.containsKey("alwaysDraw")) {
-            drawingInfo.setAlwaysDraw(parseBoolean(themeValuesMap, "alwaysDraw"), true);
+            alwaysDraw = new Wrapper<>(parseBoolean(themeValuesMap, "alwaysDraw"));
         }
         if (themeValuesMap.containsKey("texture")) {
-            drawingInfo.setTexture(parseTexture(themeValuesMap, "texture"), true);
+            texture = new Wrapper<>(parseTexture(themeValuesMap, "texture"));
         }
-        return drawingInfo;
+        return new DrawingInfo(
+                fillColor,
+                strokeColor,
+                lineDash,
+                lineWidth,
+                zoomLevel,
+                alwaysDraw,
+                texture
+        );
     }
 
     private static ImagePattern parseTexture(Map<String, Object> themeValuesMap, String key) {
