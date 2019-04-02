@@ -71,14 +71,12 @@ public class OSMParser {
 				break;
 			case "node":
 				handleStartNode(reader);
-				long id;
 				break;
 			case "way":
 				handleStartWay(reader);
 				break;
 			case "nd":
 				handleStartND(reader);
-				long ref;
 				break;
 			case "tag":
 				handleStartTag(reader);
