@@ -1,9 +1,6 @@
 package bfst19.osmdrawing.view.drawers;
 
 import bfst19.osmdrawing.model.*;
-import bfst19.osmdrawing.model.Drawable;
-import bfst19.osmdrawing.model.Model;
-import bfst19.osmdrawing.model.Rectangle;
 import bfst19.osmdrawing.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -11,9 +8,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import org.yaml.snakeyaml.error.YAMLException;
-
-import java.util.ArrayList;
 
 import static bfst19.osmdrawing.utils.ThemeLoader.loadTheme;
 
@@ -28,12 +22,7 @@ public class MapDrawer implements Drawer {
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
 		// TODO: This should be done somewhere else
-		String defaultPath = "config/themes/default.yaml";
-		try {
-			theme = loadTheme(defaultPath, null);
-		} catch (YAMLException e) {
-			throw new RuntimeException("Couldn't read default theme from path \"" + defaultPath + "\", can't continue.", e);
-		}
+		theme = loadTheme("config/themes/default.yaml", null);
 	}
 
 	public void draw() {
@@ -52,7 +41,7 @@ public class MapDrawer implements Drawer {
 
 
 			Iterable<Drawable> drawablesToDraw;
-			if (drawingInfo.getAlwaysDraw()) {
+			if (drawingInfo.hasAlwaysDraw() && drawingInfo.getAlwaysDraw()) {
 				drawablesToDraw = model.getWaysOfType(wayType);
 			}
 			else if (isVisibleAtZoom(drawingInfo, currentZoomLevel)) {
@@ -76,7 +65,7 @@ public class MapDrawer implements Drawer {
 			return true;
 		}
 		// If the element should always be drawn, draw it regardless of zoom.
-		return drawingInfo.getAlwaysDraw();
+		return drawingInfo.hasAlwaysDraw() && drawingInfo.getAlwaysDraw();
 	}
 
 	private void drawDrawables(Iterable<Drawable> drawables, DrawingInfo drawingInfo, double currentZoomLevel) {

@@ -61,23 +61,29 @@ public class ThemeLoader {
     }
 
     private static DrawingInfo parseThemeValueMap(Map<String, Object> themeValuesMap) {
-        Color fillColor = parseColor(themeValuesMap, "fillColor");
-        Color strokeColor = parseColor(themeValuesMap, "strokeColor");
-        Double lineDash = parseDouble(themeValuesMap, "lineDash");
-        Double lineWidth = parseDouble(themeValuesMap, "lineWidth");
-        Double zoomLevel = parseDouble(themeValuesMap, "zoomLevel");
-        Boolean alwaysDraw = parseBoolean(themeValuesMap, "alwaysDraw");
-        ImagePattern texture = parseTexture(themeValuesMap, "texture");
-        // Create theme
-        return new DrawingInfo(
-                fillColor,
-                strokeColor,
-                lineDash,
-                lineWidth,
-                zoomLevel,
-                alwaysDraw,
-                texture
-        );
+        DrawingInfo drawingInfo = new DrawingInfo();
+        if (themeValuesMap.containsKey("fillColor")) {
+            drawingInfo.setFillColor(parseColor(themeValuesMap, "fillColor"), true);
+        }
+        if (themeValuesMap.containsKey("strokeColor")) {
+            drawingInfo.setStrokeColor(parseColor(themeValuesMap, "strokeColor"), true);
+        }
+        if (themeValuesMap.containsKey("lineDash")) {
+            drawingInfo.setLineDash(parseDouble(themeValuesMap, "lineDash"), true);
+        }
+        if (themeValuesMap.containsKey("lineWidth")) {
+            drawingInfo.setLineWidth(parseDouble(themeValuesMap, "lineWidth"), true);
+        }
+        if (themeValuesMap.containsKey("zoomLevel")) {
+            drawingInfo.setZoomLevel(parseDouble(themeValuesMap, "zoomLevel"), true);
+        }
+        if (themeValuesMap.containsKey("alwaysDraw")) {
+            drawingInfo.setAlwaysDraw(parseBoolean(themeValuesMap, "alwaysDraw"), true);
+        }
+        if (themeValuesMap.containsKey("texture")) {
+            drawingInfo.setTexture(parseTexture(themeValuesMap, "texture"), true);
+        }
+        return drawingInfo;
     }
 
     private static ImagePattern parseTexture(Map<String, Object> themeValuesMap, String key) {

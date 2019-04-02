@@ -20,7 +20,7 @@ public class Theme {
 
     public void addDrawingInfo(WayType wayType, DrawingInfo drawingInfo) {
         if (drawingInfoMap.containsKey(wayType)) {
-            drawingInfo = getDrawingInfo(wayType).mergeWith(drawingInfo);
+            drawingInfo = getDrawingInfo(wayType).createMerged(drawingInfo);
         }
         drawingInfoMap.put(wayType, drawingInfo);
     }
