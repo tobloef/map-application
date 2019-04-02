@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,11 +17,13 @@ public class Controller {
 	double x, y;
 	@FXML
 	private MapCanvas mapCanvas;
+	@FXML
+	private BorderPane borderPane;
 
 	public void init(Model model) {
 		this.model = model;
 		mapCanvas.initialize(model);
-		WaytypeUIController.init(model);
+		WaytypeUIController.init(model, borderPane);
 	}
 
 	@FXML
