@@ -39,18 +39,15 @@ public class WaytypeUIController{
 		scrollPane.setContent(layoutBox);
 		scrollPane.setPannable(true);
 
-
 		//TODO: Rebuild korrekt ud fra om de eksisterer i blacklist
 		for (WayType wayType: WayType.values()) {
 			CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
-			checkBox.setSelected(true);
-			ChangeListener<Boolean> listener = new ChangeListener<>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-					model.toggleBlacklistWaytype(wayType);
-				}
-			};
-			checkBox.selectedProperty().addListener(listener);
+			checkBox.setSelected(!model.dontDraw(wayType));
+			checkBox.selectedProperty().addListener(
+					//The parameters are not used, only for syntax
+					(observable, oldValue, newValue) -> {
+						model.toggleBlacklistWaytype(wayType);
+					});
 			layoutBox.getChildren().add(checkBox);
 		}
 	}
