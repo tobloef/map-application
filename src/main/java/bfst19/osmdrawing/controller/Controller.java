@@ -23,7 +23,7 @@ public class Controller {
 	public void init(Model model) {
 		this.model = model;
 		mapCanvas.initialize(model);
-		WaytypeUIController.init(model, borderPane);
+		waytypeSelectorController.init(model, borderPane);
 	}
 
 	@FXML

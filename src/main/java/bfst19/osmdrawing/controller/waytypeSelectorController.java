@@ -3,15 +3,13 @@ package bfst19.osmdrawing.controller;
 import bfst19.osmdrawing.model.Model;
 import bfst19.osmdrawing.model.WayType;
 import bfst19.osmdrawing.utils.EnumHelper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-public class WaytypeUIController{
+public class waytypeSelectorController {
 	@FXML
 	private VBox layoutBox;
 	@FXML
@@ -20,7 +18,7 @@ public class WaytypeUIController{
 
 	private boolean enabled = true;
 	private static Model model;
-	private static WaytypeUIController singletonInstance;
+	private static waytypeSelectorController singletonInstance;
 
 	public static void init(Model modelParam, BorderPane borderPane){
 		singletonInstance.borderPane = borderPane;
@@ -29,7 +27,7 @@ public class WaytypeUIController{
 		singletonInstance.togglePanel();
 	}
 
-	public WaytypeUIController(){
+	public waytypeSelectorController(){
 		singletonInstance = this;
 		SettingsController.init(this);
 	}

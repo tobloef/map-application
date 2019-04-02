@@ -5,9 +5,9 @@ import javafx.fxml.FXML;
 
 public class SettingsController {
 
-	private static WaytypeUIController waytypeController;
+	private static waytypeSelectorController waytypeController;
 
-	public static void init(WaytypeUIController waytypeControllerParam){
+	public static void init(waytypeSelectorController waytypeControllerParam){
 		waytypeController = waytypeControllerParam;
 	}
 

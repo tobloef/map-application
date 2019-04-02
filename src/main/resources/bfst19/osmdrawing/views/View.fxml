@@ -35,7 +35,7 @@
                     </Pane>
                 </center>
                 <right>
-                    <fx:include source="WaytypeUI.fxml"/>
+                    <fx:include source="WaytypeSelector.fxml"/>
                 </right>
             </BorderPane>
 </Scene>
