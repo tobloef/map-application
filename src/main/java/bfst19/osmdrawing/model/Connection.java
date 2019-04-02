@@ -1,19 +1,19 @@
 package bfst19.osmdrawing.model;
 
 public class Connection {
-	private OSMRoadNode node;
-	private double distance;
-	private double speedLimit;
+	private OSMRoadNode firstNode, secondNode;
+	private double distance, speedLimit;
 
-	public Connection(OSMRoadNode node, double distance, double speedLimit) {
-		this.node = node;
+	public Connection(OSMRoadNode firstNode, OSMRoadNode secondNode, double distance, double speedLimit) {
+		this.firstNode = firstNode;
+		this.secondNode = secondNode;
 		this.distance = distance;
 		this.speedLimit = speedLimit;
 	}
 
-	public OSMRoadNode getNode() {
-		return node;
-	}
+	public OSMRoadNode getFirstNode() {return firstNode;}
+
+	public OSMRoadNode getSecondNode() {return secondNode;}
 
 	public double getDistance() {
 		return distance;
@@ -24,7 +24,7 @@ public class Connection {
 	}
 
 	public boolean equals(Connection connection) {
-		if (node == connection.getNode() && Math.abs(distance - connection.getDistance()) < 0.01 && Math.abs(speedLimit - connection.getSpeedLimit()) < 0.01) return true;
+		if (firstNode == connection.getFirstNode() && secondNode == connection.getSecondNode() && Math.abs(distance - connection.getDistance()) < 0.01 && Math.abs(speedLimit - connection.getSpeedLimit()) < 0.01) return true;
 		return false;
 	}
 }

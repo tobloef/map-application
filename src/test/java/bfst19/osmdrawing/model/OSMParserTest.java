@@ -68,8 +68,6 @@ class OSMParserTest {
 		OSMRoadNode connectedC = (OSMRoadNode) osmParser.getNodeFromID(1027406335);
 		OSMRoadNode removedNode = (OSMRoadNode) osmParser.getNodeFromID(1015286457);
 		NavigationGraph navigationGraph = osmParser.makeNavigationGraph();
-		System.out.println(connectedB.getConnectedNodes());
-		System.out.println(connectedC);
 		assertTrue(connectedA.isConnected(connectedB));
 		assertTrue(connectedB.isConnected(connectedA));
 		assertTrue(connectedB.isConnected(connectedC));
@@ -81,6 +79,5 @@ class OSMParserTest {
 		assertFalse(connectedA.isConnected(removedNode));
 		assertFalse(connectedB.isConnected(removedNode));
 		assertFalse(connectedC.isConnected(removedNode));
-		System.out.println(connectedC.getConnectedNodes());
 	}
 }
