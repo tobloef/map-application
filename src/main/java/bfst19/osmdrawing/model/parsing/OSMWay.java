@@ -2,11 +2,11 @@ package bfst19.osmdrawing.model.parsing;
 
 import java.util.*;
 import java.util.function.LongSupplier;
+import java.util.stream.Collectors;
 
 public class OSMWay implements LongSupplier {
 	List<OSMNode> list = new ArrayList<>();
 	long id;
-	public Map<String, String> tags = new HashMap<>();
 
 	public OSMWay(long id) {
 		this.id = id;
@@ -53,5 +53,9 @@ public class OSMWay implements LongSupplier {
 
 	public boolean contains(OSMNode node) {
 		return list.contains(node);
+	}
+
+	public void removeDuplicates() {
+		list = list.stream().distinct().collect(Collectors.toList());
 	}
 }

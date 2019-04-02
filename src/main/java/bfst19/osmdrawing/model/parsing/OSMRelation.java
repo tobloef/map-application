@@ -1,6 +1,7 @@
 package bfst19.osmdrawing.model.parsing;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OSMRelation {
 	private Collection<OSMWay> list = new ArrayList<>();
@@ -15,14 +16,17 @@ public class OSMRelation {
 	}
 
 	public void merge() {
-		list =  newMerge(list);
+		list = newMerge(list);
 	}
 
-	private static Collection<OSMWay> newMerge(Collection<OSMWay> list){
+	private Collection<OSMWay> newMerge(Collection<OSMWay> list){
 		Map<OSMNode, OSMWay> piecesStarts = new HashMap<>();
 		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
 		for (OSMWay way : list){
 			OSMWay res = new OSMWay(0);
+			if (way.getFirst().getAsLong() == 5034957969l || way.getLast().getAsLong() == 5034957969l){
+				System.out.println(this.debugName);
+			}
 			if (piecesStarts.containsKey(way.getFirst()) || piecesEnds.containsKey(way.getLast())){
 				way.reverse();
 			}
@@ -52,6 +56,21 @@ public class OSMRelation {
 			}
 			piecesEnds.put(res.getLast(), res);
 		}
+		//Duplicates stem from nodes existing in both ways that get added together.
+		for (OSMWay way : piecesEnds.values()){
+			way.removeDuplicates();
+		}
+		/*
+		TODO: Fix the relation merging. It currently produces relations that overlap, as this code shows if you run it.
+		for (OSMWay way : piecesEnds.values()){
+			for (OSMWay otherWay : piecesEnds.values()){
+				if (way == otherWay) continue;
+				if (otherWay.contains(way.getFirst()) || otherWay.contains(way.getLast())){
+					System.out.println("Wrong fulmerge in " + debugName);
+				}
+			}
+		}
+		*/
 		return piecesEnds.values();
 	}
 
