@@ -82,7 +82,7 @@ public class OSMParser {
 				handleStartTag(reader);
 				break;
 			case "relation":
-				handleStartRelation();
+				handleStartRelation(reader);
 				break;
 			case "member":
 				handleStartMember(reader);
@@ -115,9 +115,10 @@ public class OSMParser {
 		currentWay = null;
 	}
 
-	private void handleStartRelation() {
+	private void handleStartRelation(XMLStreamReader reader) {
+		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		currentType = WayType.UNKNOWN;
-		currentRelation = new OSMRelation();
+		currentRelation = new OSMRelation(id);
 	}
 
 	private void handleEndRelation() {

@@ -43,6 +43,12 @@ public class OSMWay implements LongSupplier {
 		}
 	}
 
+
+	public void addAllAtStart(OSMWay duplicate) {
+		duplicate.addAll(this);
+		this.list = duplicate.getNodes();
+	}
+
 	public List<OSMNode> getNodes() {
 		return list;
 	}
@@ -58,4 +64,5 @@ public class OSMWay implements LongSupplier {
 	public void removeDuplicates() {
 		list = list.stream().distinct().collect(Collectors.toList());
 	}
+
 }

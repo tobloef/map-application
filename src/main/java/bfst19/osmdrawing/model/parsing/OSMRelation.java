@@ -1,11 +1,15 @@
 package bfst19.osmdrawing.model.parsing;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class OSMRelation {
 	private Collection<OSMWay> list = new ArrayList<>();
 	public String debugName;
+	long id;
+
+	public OSMRelation(long id) {
+		this.id = id;
+	}
 
 	public Collection<OSMWay> getList() {
 		return list;
@@ -15,72 +19,107 @@ public class OSMRelation {
 		list.add(item);
 	}
 
+	public boolean hasMembers() {
+		return list.size() > 0;
+	}
+
+
 	public void merge() {
 		list = newMerge(list);
 	}
 
-	private Collection<OSMWay> newMerge(Collection<OSMWay> list){
+	private static Collection<OSMWay> newMerge(Collection<OSMWay> inputList){
 		Map<OSMNode, OSMWay> piecesStarts = new HashMap<>();
 		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
-		for (OSMWay way : list){
-			OSMWay res = new OSMWay(0);
-			if (way.getFirst().getAsLong() == 5034957969l || way.getLast().getAsLong() == 5034957969l){
-				System.out.println(this.debugName);
-			}
-			if (piecesStarts.containsKey(way.getFirst()) || piecesEnds.containsKey(way.getLast())){
-				way.reverse();
-			}
-			OSMWay before = piecesEnds.remove(way.getFirst());
-			if (before != null){
-				piecesStarts.remove(before.getFirst());
-				addNormal(res, before);
-			}
-			addNormal(res, way);
-			OSMWay after = piecesStarts.remove(way.getLast());
-			if (after != null){
-				piecesEnds.remove(after.getLast());
-				addNormal(res, after);
-			}
-			if (piecesStarts.containsKey(res.getFirst())){
-				OSMWay duplicate = piecesStarts.remove(res.getFirst());
-				piecesEnds.remove(duplicate.getLast());
-				duplicate.reverse();
-				addNormal(res, duplicate);
-			}
-			piecesStarts.put(res.getFirst(), res);
-			if (piecesEnds.containsKey(res.getLast())){
-				OSMWay duplicate = piecesEnds.remove(res.getLast());
-				piecesStarts.remove(duplicate.getFirst());
-				duplicate.reverse();
-				addNormal(res, duplicate);
-			}
-			piecesEnds.put(res.getLast(), res);
+		for (OSMWay currentWay : inputList){
+			OSMWay result = new OSMWay(0);
+			reverseIfWayIsWrongDirection(piecesStarts, piecesEnds, currentWay);
+			//If there is exists a way that is before current way, add that before.
+			addWayBefore(piecesStarts, piecesEnds, currentWay, result);
+			//add current way to relation
+			addNormal(result, currentWay);
+			//If there is one after.
+			addWayAfter(piecesStarts, piecesEnds, currentWay, result);
+
+			//Some results end up in the wrong order, so they have to merged as a special case.
+			mergeWithPriorResults(piecesStarts, piecesEnds, result);
+
+			//Add current result to the map of pieces.
+			piecesStarts.put(result.getFirst(), result);
+			piecesEnds.put(result.getLast(), result);
 		}
+
+		List<OSMWay> finalElements = mergeMaps(piecesEnds);
 		//Duplicates stem from nodes existing in both ways that get added together.
-		for (OSMWay way : piecesEnds.values()){
+		removeDuplicateNodes(finalElements);
+		return finalElements;
+	}
+
+	//Merge the the results of the two maps, should be the same elements in both, but just to be sure.
+	private static List<OSMWay> mergeMaps(Map<OSMNode, OSMWay> piecesEnds) {
+		Set<OSMWay> finalElementsSet = new LinkedHashSet<>();
+		finalElementsSet.addAll(piecesEnds.values());
+		finalElementsSet.addAll(piecesEnds.values());
+		return new ArrayList<>(finalElementsSet);
+	}
+
+	private static void reverseIfWayIsWrongDirection(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay way) {
+		if (piecesStarts.containsKey(way.getFirst()) || piecesEnds.containsKey(way.getLast())){
+			way.reverse();
+		}
+	}
+
+	private static void mergeWithPriorResults(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay res) {
+		mergeResultsBefore(piecesStarts, piecesEnds, res);
+		mergeResultsAfter(piecesStarts, piecesEnds, res);
+	}
+
+	private static void mergeResultsBefore(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay res) {
+		if (piecesStarts.containsKey(res.getFirst())){
+			OSMWay duplicate = piecesStarts.remove(res.getFirst());
+			piecesEnds.remove(duplicate.getLast());
+			duplicate.reverse();
+			addAtStart(res, duplicate);
+		}
+	}
+
+	private static void mergeResultsAfter(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay res) {
+		if (piecesEnds.containsKey(res.getLast())){
+			OSMWay duplicate = piecesEnds.remove(res.getLast());
+			piecesStarts.remove(duplicate.getFirst());
+			duplicate.reverse();
+			addNormal(res, duplicate);
+		}
+	}
+
+	private static void addWayAfter(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay way, OSMWay res) {
+		OSMWay after = piecesStarts.remove(way.getLast());
+		if (after != null){
+			piecesEnds.remove(after.getLast());
+			addNormal(res, after);
+		}
+	}
+
+	private static void addWayBefore(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay way, OSMWay res) {
+		OSMWay before = piecesEnds.remove(way.getFirst());
+		if (before != null){
+			piecesStarts.remove(before.getFirst());
+			addNormal(res, before);
+		}
+	}
+
+	private static void removeDuplicateNodes(List<OSMWay> pieces) {
+		for (OSMWay way : pieces){
 			way.removeDuplicates();
 		}
-		/*
-		TODO: Fix the relation merging. It currently produces relations that overlap, as this code shows if you run it.
-		for (OSMWay way : piecesEnds.values()){
-			for (OSMWay otherWay : piecesEnds.values()){
-				if (way == otherWay) continue;
-				if (otherWay.contains(way.getFirst()) || otherWay.contains(way.getLast())){
-					System.out.println("Wrong fulmerge in " + debugName);
-				}
-			}
-		}
-		*/
-		return piecesEnds.values();
 	}
 
 	private static void addNormal(OSMWay res, OSMWay addition) {
-		for (int i = 0; i < addition.size(); i++) {
-			res.add(addition.get(i));
-		}
+		res.addAll(addition);
 	}
 
-	public boolean hasMembers() {
-		return list.size() > 0;
+	private static void addAtStart(OSMWay res, OSMWay duplicate) {
+		res.addAllAtStart(duplicate);
 	}
+
 }
