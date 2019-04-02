@@ -11,6 +11,11 @@ public class Connection {
 		this.speedLimit = speedLimit;
 	}
 
+	public OSMRoadNode getOtherNode(OSMRoadNode origin) {
+		if (firstNode == origin) return secondNode;
+		return firstNode;
+	}
+
 	public OSMRoadNode getFirstNode() {return firstNode;}
 
 	public OSMRoadNode getSecondNode() {return secondNode;}
