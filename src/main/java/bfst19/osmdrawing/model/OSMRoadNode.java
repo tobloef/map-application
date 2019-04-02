@@ -5,12 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 public class OSMRoadNode extends OSMNode{
-	List<Connection> connections;
-
-	public OSMRoadNode(long id, float lon, float lat, List<Connection> connections) {
-		super(id, lon, lat);
-		this.connections = connections;
-	}
+	private List<Connection> connections;
 
 	public OSMRoadNode(OSMNode node) {
 		super(node.getAsLong(), node.getLon(), node.getLat());
@@ -32,9 +27,9 @@ public class OSMRoadNode extends OSMNode{
 		return connections.size();
 	}
 
-	public Connection getOtherConnection(OSMRoadNode origin) {
+	public Connection getOtherConnection(Connection origin) {
 		for (Connection connection : connections) {
-			if (connection.getNode() != origin) {
+			if (connection != origin) {
 				return connection;
 			}
 		}
@@ -44,7 +39,7 @@ public class OSMRoadNode extends OSMNode{
 	public List<OSMRoadNode> getConnectedNodes() {
 		List<OSMRoadNode> results = new ArrayList();
 		for (Connection connection : connections) {
-			results.add(connection.getNode());
+			results.add(getNodeFromConnection(connection));
 		}
 		return results;
 	}
@@ -62,16 +57,16 @@ public class OSMRoadNode extends OSMNode{
 		}
 		triedNodes.add(this);
 		for (OSMRoadNode node : getConnectedNodes()) {
-			if (!triedNodes.contains(node)) {
-				if(node.isConnected(otherNode, depth - 1, triedNodes)) return true;
+			if (!triedNodes.contains(node) && node.isConnected(otherNode, depth - 1, triedNodes)) {
+				return true;
 			}
 		}
 		return false;
 	}
 
-	public void removeConnectionToNode(OSMRoadNode node) {
+	public void removeConnectionToNode(OSMRoadNode removedNode) {
 		for (Connection connection : connections) {
-			if (connection.getNode() == node) {
+			if (getNodeFromConnection(connection) == removedNode) {
 				connections.remove(connection);
 				break;
 			}
@@ -80,5 +75,9 @@ public class OSMRoadNode extends OSMNode{
 
 	public String toString() {
 		return "" + getAsLong();
+	}
+
+	public OSMRoadNode getNodeFromConnection(Connection connection) {
+		return connection.getOtherNode(this);
 	}
 }

@@ -12,13 +12,22 @@ public class Connection {
 	}
 
 	public OSMRoadNode getOtherNode(OSMRoadNode origin) {
-		if (firstNode == origin) return secondNode;
+		if (firstNode == origin) {
+			return secondNode;
+		}
+		if (secondNode == origin) {
+			return firstNode;
+		}
+		throw new RuntimeException("Given node is not part of this connection");
+	}
+
+	public OSMRoadNode getFirstNode() {
 		return firstNode;
 	}
 
-	public OSMRoadNode getFirstNode() {return firstNode;}
-
-	public OSMRoadNode getSecondNode() {return secondNode;}
+	public OSMRoadNode getSecondNode() {
+		return secondNode;
+	}
 
 	public double getDistance() {
 		return distance;
@@ -29,15 +38,15 @@ public class Connection {
 	}
 
 	public boolean equals(Connection connection) {
-		return  (
-				firstNode == connection.getFirstNode() &&
-						secondNode == connection.getSecondNode() &&
-						hasSameCharacteristics(connection)
-		);
+		return  hasSameNodes(connection) && hasCloseCharacteristics(connection);
 	}
 
-	private boolean hasSameCharacteristics(Connection connection) {
-		return Math.abs(distance - connection.getDistance()) < 0.01 &&
-				Math.abs(speedLimit - connection.getSpeedLimit()) < 0.01;
+	private boolean hasSameNodes(Connection connection) {
+		return firstNode == connection.getFirstNode() &&
+				secondNode == connection.getSecondNode();
+	}
+
+	private boolean hasCloseCharacteristics(Connection connection) {
+		return Math.abs(distance - connection.getDistance()) < 0.01 && Math.abs(speedLimit - connection.getSpeedLimit()) < 0.01;
 	}
 }
