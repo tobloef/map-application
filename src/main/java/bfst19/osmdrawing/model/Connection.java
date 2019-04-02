@@ -29,7 +29,15 @@ public class Connection {
 	}
 
 	public boolean equals(Connection connection) {
-		if (firstNode == connection.getFirstNode() && secondNode == connection.getSecondNode() && Math.abs(distance - connection.getDistance()) < 0.01 && Math.abs(speedLimit - connection.getSpeedLimit()) < 0.01) return true;
-		return false;
+		return  (
+				firstNode == connection.getFirstNode() &&
+						secondNode == connection.getSecondNode() &&
+						hasSameCharacteristics(connection)
+		);
+	}
+
+	private boolean hasSameCharacteristics(Connection connection) {
+		return Math.abs(distance - connection.getDistance()) < 0.01 &&
+				Math.abs(speedLimit - connection.getSpeedLimit()) < 0.01;
 	}
 }

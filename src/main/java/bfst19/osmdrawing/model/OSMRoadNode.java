@@ -54,13 +54,16 @@ public class OSMRoadNode extends OSMNode{
 	}
 
 	public boolean isConnected(OSMRoadNode otherNode, int depth, Set<OSMRoadNode> triedNodes) {
-		if (isConnected(otherNode)) return true;
-		if (depth > 0) {
-			triedNodes.add(this);
-			for (OSMRoadNode node : getConnectedNodes()) {
-				if (!triedNodes.contains(node)) {
-					 if(node.isConnected(otherNode, depth - 1, triedNodes)) return true;
-				}
+		if (isConnected(otherNode)) {
+			return true;
+		}
+		if (depth <= 0) {
+			return false;
+		}
+		triedNodes.add(this);
+		for (OSMRoadNode node : getConnectedNodes()) {
+			if (!triedNodes.contains(node)) {
+				if(node.isConnected(otherNode, depth - 1, triedNodes)) return true;
 			}
 		}
 		return false;
