@@ -75,6 +75,7 @@ public class MapDrawer implements Drawer {
 		graphicsContext.restore();
 	}
 
+
 	private void fillDrawables(Iterable<Drawable> drawables, DrawingInfo drawingInfo, double currentZoomLevel) {
 		Paint fill = null;
 		if (drawingInfo.hasFillColor()) {
@@ -91,7 +92,20 @@ public class MapDrawer implements Drawer {
 		for (Drawable drawable : drawables) {
 			drawable.fill(graphicsContext, currentZoomLevel);
 		}
+		dontStrokeLastFill();
 	}
+
+	private void dontStrokeLastFill() {
+		/*
+		There appears to be a bug in javafx that if there is no stroke, it just strokes the last fill with black.
+		So the avoid this bug we have to make stroke somewhere. The values for where is arbitrary and dont matter.
+		*/
+		graphicsContext.beginPath();
+		graphicsContext.moveTo(-2000000, -2000000);
+		graphicsContext.lineTo(-2000000, -2000000);
+		graphicsContext.stroke();
+	}
+
 
 	private void strokeDrawables(Iterable<Drawable> drawables, DrawingInfo drawingInfo, double currentZoomLevel) {
 		if (!drawingInfo.hasStrokeColor()) {
