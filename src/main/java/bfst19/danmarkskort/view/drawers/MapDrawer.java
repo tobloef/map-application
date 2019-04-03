@@ -111,19 +111,22 @@ public class MapDrawer implements Drawer {
 
 	private void fillBackground(Theme theme) {
 		graphicsContext.save();
-		boolean coastlineVisible = model.getWaysOfType(WayType.COASTLINE, getScreenBounds())
-				.iterator()
-				.hasNext();
-		DrawingInfo drawingInfo = theme.getDrawingInfo(WayType.COASTLINE);
-		if (coastlineVisible) {
-			drawingInfo = theme.getDrawingInfo(WayType.WATER);
+		DrawingInfo backgroundDrawingInfo = theme.getDrawingInfo(WayType.COASTLINE);
+		if (coastlineIsVisible()) {
+			backgroundDrawingInfo = theme.getDrawingInfo(WayType.WATER);
 		}
-		if (drawingInfo != null && drawingInfo.hasFillColor()) {
-			graphicsContext.setFill(drawingInfo.getFillColor());
+		if (backgroundDrawingInfo != null && backgroundDrawingInfo.hasFillColor()) {
+			graphicsContext.setFill(backgroundDrawingInfo.getFillColor());
 		}
 		graphicsContext.setTransform(new Affine());
 		graphicsContext.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		graphicsContext.restore();
+	}
+
+	private boolean coastlineIsVisible() {
+		return model.getWaysOfType(WayType.COASTLINE, getScreenBounds())
+					.iterator()
+					.hasNext();
 	}
 
 	private Rectangle getScreenBounds(){
