@@ -30,7 +30,7 @@ class ModelTest {
 		List<String> args = new ArrayList<String>();
 		args.add(filePath);
 		Model model = new Model(args);
-		args.set(0, args.get(0) + ".obj");
+		args.set(0, args.get(0) + ".ser");
 		Model objModel = new Model(args);
 		assertEquals(55.6631 ,objModel.modelBounds.yMin, 0.02);
 		assertEquals(7.090 ,objModel.modelBounds.xMin, 0.02);

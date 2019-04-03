@@ -42,7 +42,7 @@ public class Model {
 	}
 
 	private void loadDefaultData() throws IOException, ClassNotFoundException {
-		InputStream inputStream = ResourceLoader.getResourceAsStream("data/default.osm.obj");
+		InputStream inputStream = ResourceLoader.getResourceAsStream("data/default.osm.ser");
 		try {
 			parseObj(inputStream);
 		} catch (InvalidClassException e) {
@@ -52,7 +52,7 @@ public class Model {
 
 	private void loadDataFromArgs(List<String> args) throws IOException, ClassNotFoundException, XMLStreamException {
 		String filename = args.get(0);
-		if (filename.endsWith(".obj")) {
+		if (filename.endsWith(".ser")) {
 			try {
 				parseObj(filename);
 			} catch (InvalidClassException e) {
@@ -61,7 +61,7 @@ public class Model {
 		} else {
 			OSMParser parser = new OSMParser(filename, drawableModel);
 			modelBounds = parser.getModelBounds();
-			String path = filename + ".obj";
+			String path = filename + ".ser";
 			serializeData(path);
 		}
 	}
