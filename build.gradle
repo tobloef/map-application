@@ -23,7 +23,7 @@ javafx {
 }
 
 // Define the main class for the application
-mainClassName = 'bfst19.osmdrawing.Launcher'
+mainClassName = 'bfst19.danmarkskort.Launcher'
 
 dependencies {
     // Use JUnit test framework
