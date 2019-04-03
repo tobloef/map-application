@@ -197,8 +197,9 @@ public class OSMParser {
 		if (lastNode != null) {
 			double distance = findDistanceBetween(lastNode, newNode);
 			int maxSpeed = getMaxSpeed();
-			lastNode.addConnection(new Connection(newNode, distance, maxSpeed));
-			newNode.addConnection(new Connection(lastNode, distance, maxSpeed));
+			Connection connection = new Connection(lastNode, newNode, distance, maxSpeed);
+			lastNode.addConnection(connection);
+			newNode.addConnection(connection);
 		}
 	}
 

@@ -21,47 +21,58 @@ public class NavigationGraph {
 		while (!finished) {
 			for (int i = 0; i < nodes.size(); i++) {
 				//System.out.println("Now beginning node number " + i + ": " + nodes.get(i));
-				if (nodes.get(i).getConnectionAmount() == 2) {
+				if (isTwoWayNode(nodes.get(i))) {
 					OSMRoadNode origin = nodes.get(i);
 					Connection leftmostConnection = origin.getConnections().get(0);
 					Connection rightmostConnection = origin.getConnections().get(1);
-					OSMRoadNode nextLeftmostConnection = origin;
-					OSMRoadNode nextRightmostConnection = origin;
+					OSMRoadNode nextLeftmostNode = origin;
+					OSMRoadNode nextRightmostNode = origin;
+					OSMRoadNode leftmostNode = leftmostConnection.getOtherNode(nextLeftmostNode);
+					OSMRoadNode rightmostNode = rightmostConnection.getOtherNode(nextRightmostNode);
 					double summedDistance = leftmostConnection.getDistance() + rightmostConnection.getDistance();
 					double summedSpeedlimit = leftmostConnection.getSpeedLimit() + rightmostConnection.getSpeedLimit();
 					int connectionsToBeMerged = 2;
 
-					while (leftmostConnection.getNode().getConnectionAmount() == 2 && leftmostConnection.getNode() != origin) { //fixme i'm so duplicated right now
-						nodes.remove(nextLeftmostConnection);
-						OSMRoadNode temp = leftmostConnection.getNode();
-						leftmostConnection = leftmostConnection.getNode().getOtherConnection(nextLeftmostConnection);
+					//fixme man kunne måske fikse duplikering med enten en ny klasse eller statiske variabler
+					while (isTwoWayNode(leftmostNode) && leftmostNode != origin) { //fixme i'm so duplicated right now
+						nodes.remove(nextLeftmostNode);
+						leftmostConnection = leftmostNode.getOtherConnection(leftmostConnection);
 						if (leftmostConnection == null) {
-							System.out.println("help");
+							throw new RuntimeException("No node at the end of this connection");
 						}
-						nextLeftmostConnection = temp;
+						nextLeftmostNode = leftmostNode;
+						leftmostNode = leftmostConnection.getOtherNode(nextLeftmostNode);
+
 						summedDistance += leftmostConnection.getDistance();
 						summedSpeedlimit += leftmostConnection.getSpeedLimit();
 						connectionsToBeMerged++;
 					}
-					while (rightmostConnection.getNode().getConnectionAmount() == 2 && rightmostConnection.getNode() != origin) { //todo right now many deleted nodes will still have references to each other, and will just float around in memory
-						nodes.remove(nextRightmostConnection);
-						OSMRoadNode temp = rightmostConnection.getNode();
-						rightmostConnection = rightmostConnection.getNode().getOtherConnection(nextRightmostConnection);
-						nextRightmostConnection = temp;
+					while (rightmostNode.getConnectionAmount() == 2 && rightmostNode != origin) {
+						nodes.remove(nextRightmostNode);
+						rightmostConnection = rightmostNode.getOtherConnection(rightmostConnection);
+						if (rightmostConnection == null) {
+							throw new RuntimeException("No node at the end of this connection");
+						}
+						nextRightmostNode = rightmostNode;
+						rightmostNode = rightmostConnection.getOtherNode(nextRightmostNode);
+						
 						summedDistance += rightmostConnection.getDistance();
 						summedSpeedlimit += rightmostConnection.getSpeedLimit();
 						connectionsToBeMerged++;
 					}
 					double averageSpeedLimit = summedSpeedlimit / connectionsToBeMerged;
-					leftmostConnection.getNode().removeConnectionToNode(nextLeftmostConnection);
-					leftmostConnection.getNode().addConnection(new Connection(rightmostConnection.getNode(), summedDistance, averageSpeedLimit));
-					rightmostConnection.getNode().removeConnectionToNode(nextRightmostConnection);
-					rightmostConnection.getNode().addConnection(new Connection(leftmostConnection.getNode(), summedDistance, averageSpeedLimit));
+					leftmostNode.removeConnectionToNode(nextLeftmostNode);
+					rightmostNode.removeConnectionToNode(nextRightmostNode);
+					Connection newConnection = new Connection(leftmostNode, rightmostNode, summedDistance, averageSpeedLimit);
 					nodes.remove(origin);
 					i--;
 				}
 			}
 			finished = true;
 		}
+	}
+
+	private boolean isTwoWayNode(OSMRoadNode leftmostNode) {
+		return leftmostNode.getConnectionAmount() == 2;
 	}
 }

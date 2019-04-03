@@ -18,7 +18,7 @@ public class Connection {
 		if (secondNode == origin) {
 			return firstNode;
 		}
-		throw new RuntimeException("Given node is not part of this connection");
+		throw new IllegalArgumentException("Given node is not part of this connection");
 	}
 
 	public OSMRoadNode getFirstNode() {
