@@ -40,6 +40,20 @@ public class Model {
 		notifyObservers();
 	}
 
+	public void emptyBlacklist(){
+		for (WayType wayType: WayType.values()){
+			blacklistedWaytypes.remove(wayType);
+		}
+		notifyObservers();
+	}
+
+	public void fillBlacklist(){
+		for (WayType wayType: WayType.values()){
+			blacklistedWaytypes.add(wayType);
+		}
+		notifyObservers();
+	}
+
 	public void notifyObservers() {
 		for (Runnable observer : observers) observer.run();
 	}

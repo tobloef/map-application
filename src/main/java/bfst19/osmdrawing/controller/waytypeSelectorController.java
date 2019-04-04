@@ -3,11 +3,15 @@ package bfst19.osmdrawing.controller;
 import bfst19.osmdrawing.model.Model;
 import bfst19.osmdrawing.model.WayType;
 import bfst19.osmdrawing.utils.EnumHelper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class waytypeSelectorController {
 	@FXML
@@ -15,6 +19,8 @@ public class waytypeSelectorController {
 	@FXML
 	private ScrollPane scrollPane;
 	private BorderPane borderPane;
+
+	private List<CheckBox> waytypeSelectors = new ArrayList<>();
 
 	private boolean enabled = true;
 	private static Model model;
@@ -37,7 +43,14 @@ public class waytypeSelectorController {
 		scrollPane.setContent(layoutBox);
 		scrollPane.setPannable(true);
 
-		//TODO: Rebuild korrekt ud fra om de eksisterer i blacklist
+		buildCheckboxes();
+	}
+
+	private void buildCheckboxes(){
+		for (CheckBox checkBox: waytypeSelectors){
+			layoutBox.getChildren().remove(checkBox);
+		}
+		waytypeSelectors.removeAll(waytypeSelectors);
 		for (WayType wayType: WayType.values()) {
 			CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
 			checkBox.setSelected(!model.dontDraw(wayType));
@@ -47,17 +60,34 @@ public class waytypeSelectorController {
 						model.toggleBlacklistWaytype(wayType);
 					});
 			layoutBox.getChildren().add(checkBox);
+			waytypeSelectors.add(checkBox);
 		}
+	}
+
+	@FXML
+	private void onEnableAll(ActionEvent event){
+		model.emptyBlacklist();
+		buildCheckboxes();
+	}
+
+	@FXML
+	private void onDisableAll(ActionEvent event){
+		model.fillBlacklist();
+		buildCheckboxes();
 	}
 
 	public void togglePanel(){
 		if (enabled){
-			layoutBox.getChildren().removeAll();
-			scrollPane.setContent(null);
-			borderPane.setRight(null);
+			removeUI();
 		} else {
 			loadWaytypes();
 		}
 		enabled = !enabled;
+	}
+
+	private void removeUI(){
+		layoutBox.getChildren().removeAll();
+		scrollPane.setContent(null);
+		borderPane.setRight(null);
 	}
 }

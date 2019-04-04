@@ -13,6 +13,8 @@
             -fx-border-width: 0px 0px 0px 2px;
       </style>
       <VBox fx:id="layoutBox">
-            <Label text="Way types" style="-fx-font-size: 1.5em; -fx-font-weight: bold;"/>
+          <Label text="Way types" style="-fx-font-size: 1.5em; -fx-font-weight: bold;"/>
+          <Button text="Enable all waytypes" onAction="#onEnableAll" style="-fx-font-weight: bold"/>
+          <Button text="Disable all waytypes" onAction="#onDisableAll" style="-fx-font-weight: bold"/>
       </VBox>
 </ScrollPane>
