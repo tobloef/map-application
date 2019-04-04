@@ -17,7 +17,7 @@ public class MapCanvas extends Canvas {
 	private Model model;
 	private List<Drawer> drawers;
 	private double degreesLatitudePerPixel;
-	private double minZoom = 1;
+	private double minZoom = 0;
 	private double maxZoom = 1000000;
 
 	public void initialize(Model model) {
@@ -68,7 +68,17 @@ public class MapCanvas extends Canvas {
 			return;
 		}
 		pan(-model.modelBounds.xMin, model.modelBounds.yMax);
-		zoom(getWidth()/(model.modelBounds.xMax -model.modelBounds.xMin), 0,0);
+		double initialZoomFactor = findInitialZoomFactor();
+		zoom(initialZoomFactor, 0,0);
+		minZoom = graphicsContext.getTransform().getMxx();
+	}
+
+	private double findInitialZoomFactor() {
+		double minRequiredWidthZoom = getWidth()/(model.modelBounds.xMax -model.modelBounds.xMin);
+		double minRequiredHeightZoom = getHeight()/(model.modelBounds.yMax -model.modelBounds.yMin);
+		double extraMarginFactor = 0.8; //if more than 1.0, the margin will become negative
+		double smallestRequiredZoom = minRequiredWidthZoom < minRequiredHeightZoom ? minRequiredWidthZoom : minRequiredHeightZoom;
+		return smallestRequiredZoom * extraMarginFactor;
 	}
 
 	private void updateLineWidth() {
@@ -93,7 +103,6 @@ public class MapCanvas extends Canvas {
 		graphicsContext.setTransform(transform);
 		updateDegreesPerPixel();
 		repaint();
-		System.out.println(transform.getMxx());
 	}
 
 	private double clampZoom(double factor, Affine transform) {
