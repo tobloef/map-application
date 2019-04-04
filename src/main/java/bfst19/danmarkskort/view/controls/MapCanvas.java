@@ -63,12 +63,11 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void panViewToMapBounds() {
-		//FIXME: This repaints the map thrice.
 		if (model.modelBounds == null) {
 			return;
 		}
-		pan(-model.modelBounds.xMin, model.modelBounds.yMax);
-		zoom(findInitialZoomFactor(), 0,0);
+		pan(-model.modelBounds.xMin, model.modelBounds.yMax, false);
+		zoom(findInitialZoomFactor(), 0,0, false);
 		double xMargin = (getWidth() - ((model.modelBounds.xMax - model.modelBounds.xMin) / degreesLatitudePerPixel))/2;
 		double yMargin = (getHeight() - ((model.modelBounds.yMax - model.modelBounds.yMin) / degreesLatitudePerPixel))/2;
 		pan(xMargin, yMargin);
@@ -89,13 +88,23 @@ public class MapCanvas extends Canvas {
 
 
 	public void pan(double deltaX, double deltaY) {
+		pan(deltaX, deltaY, true);
+	}
+
+	public void pan(double deltaX, double deltaY, boolean shouldRepaint) {
 		Affine transform = graphicsContext.getTransform();
 		transform.prependTranslation(deltaX, deltaY);
 		graphicsContext.setTransform(transform);
-		repaint();
+		if (shouldRepaint) {
+			repaint();
+		}
 	}
 
 	public void zoom(double factor, double x, double y) {
+		zoom(factor, x, y, true);
+	}
+
+	public void zoom(double factor, double x, double y, boolean shouldRepaint) {
 		Affine transform = graphicsContext.getTransform();
 		factor = clampZoom(factor, transform);
 		if (factor == 1) {
@@ -104,7 +113,9 @@ public class MapCanvas extends Canvas {
 		transform.prependScale(factor, factor, x, y);
 		graphicsContext.setTransform(transform);
 		updateDegreesPerPixel();
-		repaint();
+		if (shouldRepaint) {
+			repaint();
+		}
 	}
 
 	private double clampZoom(double factor, Affine transform) {
