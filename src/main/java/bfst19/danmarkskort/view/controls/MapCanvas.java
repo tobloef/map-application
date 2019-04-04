@@ -17,6 +17,8 @@ public class MapCanvas extends Canvas {
 	private Model model;
 	private List<Drawer> drawers;
 	private double degreesLatitudePerPixel;
+	private double minZoom = 1;
+	private double maxZoom = 1000000;
 
 	public void initialize(Model model) {
 		this.model = model;
@@ -83,10 +85,25 @@ public class MapCanvas extends Canvas {
 
 	public void zoom(double factor, double x, double y) {
 		Affine transform = graphicsContext.getTransform();
+		factor = clampZoom(factor, transform);
+		if (factor == 1) {
+			return;
+		}
 		transform.prependScale(factor, factor, x, y);
 		graphicsContext.setTransform(transform);
 		updateDegreesPerPixel();
 		repaint();
+		System.out.println(transform.getMxx());
+	}
+
+	private double clampZoom(double factor, Affine transform) {
+		if (transform.getMxx() * factor < minZoom) {
+			factor = minZoom / transform.getMxx();
+		}
+		else if (transform.getMxx() * factor > maxZoom) {
+			factor = maxZoom / transform.getMxx();
+		}
+		return factor;
 	}
 
 	public void updateDegreesPerPixel() {
