@@ -63,13 +63,15 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void panViewToMapBounds() {
-		//FIXME: This repaints the map twice.
+		//FIXME: This repaints the map thrice.
 		if (model.modelBounds == null) {
 			return;
 		}
 		pan(-model.modelBounds.xMin, model.modelBounds.yMax);
-		double initialZoomFactor = findInitialZoomFactor();
-		zoom(initialZoomFactor, 0,0);
+		zoom(findInitialZoomFactor(), 0,0);
+		double xMargin = (getWidth() - ((model.modelBounds.xMax - model.modelBounds.xMin) / degreesLatitudePerPixel))/2;
+		double yMargin = (getHeight() - ((model.modelBounds.yMax - model.modelBounds.yMin) / degreesLatitudePerPixel))/2;
+		pan(xMargin, yMargin);
 		minZoom = graphicsContext.getTransform().getMxx();
 	}
 
