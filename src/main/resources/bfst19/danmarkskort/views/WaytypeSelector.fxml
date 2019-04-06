@@ -5,7 +5,7 @@
 <ScrollPane xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       prefWidth="210.0"
-      fx:controller="bfst19.osmdrawing.controller.waytypeSelectorController"
+      fx:controller="bfst19.danmarkskort.controller.waytypeSelectorController"
       fx:id="scrollPane">
       <style>
             -fx-background-color: #F5F5DC;

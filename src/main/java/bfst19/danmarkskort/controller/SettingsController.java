@@ -1,4 +1,4 @@
-package bfst19.osmdrawing.controller;
+package bfst19.danmarkskort.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

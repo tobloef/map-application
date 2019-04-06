@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <MenuBar xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
-         fx:controller="bfst19.osmdrawing.controller.SettingsController">
+         fx:controller="bfst19.danmarkskort.controller.SettingsController">
          <Menu text="Settings">
             <MenuItem text="Way types" onAction="#onToggleWaytypes"/>
          </Menu>

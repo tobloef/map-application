@@ -1,8 +1,8 @@
-package bfst19.osmdrawing.controller;
+package bfst19.danmarkskort.controller;
 
-import bfst19.osmdrawing.model.Model;
-import bfst19.osmdrawing.model.WayType;
-import bfst19.osmdrawing.utils.EnumHelper;
+import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.utils.EnumHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
