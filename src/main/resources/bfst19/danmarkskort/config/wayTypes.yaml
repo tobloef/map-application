@@ -51,7 +51,7 @@
   - highway:
     - motorway
 
-- MOTORWAYEXIT:
+- MOTORWAY_EXIT:
   - highway:
     - motorway_link
 
@@ -59,12 +59,12 @@
   - highway:
     - pedestrian
 
-- PRIMARYROAD:
+- PRIMARY_ROAD:
   - highway:
     - primary
     - trunk
 
-- PRIMARYROADEXIT:
+- PRIMARY_ROAD_EXIT:
   - highway:
     - primary_link
     - trunk_link
@@ -73,27 +73,27 @@
   - highway:
     - raceway
 
-- RESIDENTIALROAD:
+- RESIDENTIAL_ROAD:
   - highway:
     - residential
 
-- SECONDARYROAD:
+- SECONDARY_ROAD:
   - highway:
     - secondary
 
-- SECONDARYROADEXIT:
+- SECONDARY_ROAD_EXIT:
   - highway:
     - secondary_link
 
-- SERVICEROAD:
+- SERVICE_ROAD:
   - highway:
     - service
 
-- TERTIARYROAD:
+- TERTIARY_ROAD:
   - highway:
     - tertiary
 
-- TERTIARYROADEXIT:
+- TERTIARY_ROAD_EXIT:
   - high:
     - tertiary_link
 
@@ -101,7 +101,7 @@
   - highway:
     - track
 
-- UNCLASSIFIEDROAD:
+- UNCLASSIFIED_ROAD:
   - highway:
     - unclassified
 

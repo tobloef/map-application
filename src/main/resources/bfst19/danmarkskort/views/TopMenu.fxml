@@ -8,9 +8,6 @@
             <MenuItem text="Help" onAction="#onHelp"/>
             <MenuItem text="About" onAction="#onAbout"/>
         </Menu>
-        <Menu text="Settings">
-            <MenuItem text="Waytypes" onAction="#onWaytypes"/>
-        </Menu>
         <Menu text="Route">
             <MenuItem text="Print to file" onAction="#onPrintToFile"/>
             <MenuItem text="A*" onAction="#onAStar"/>

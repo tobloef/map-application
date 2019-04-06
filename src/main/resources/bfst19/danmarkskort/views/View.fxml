@@ -5,14 +5,20 @@
 
 <?import bfst19.danmarkskort.view.controls.MapCanvas?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
        fx:controller="bfst19.danmarkskort.controller.Controller"
        fx:id="scene"
        onKeyPressed="#onKeyPressed">
-            <BorderPane prefHeight="600.0" prefWidth="800.0">
+            <BorderPane prefHeight="600.0" prefWidth="800.0" fx:id="borderPane">
                 <top>
-                    <fx:include source="TopMenu.fxml"/>
+                    <HBox>
+                        <fx:include source="TopMenu.fxml"/>
+                        <Region HBox.hgrow="ALWAYS" styleClass="menu-bar"/>
+                        <fx:include source="TopRightMenu.fxml" />
+                    </HBox>
                 </top>
                 <center>
                     <!-- The symbol mapCanvas.parent.width cannot be resolved.
@@ -28,6 +34,9 @@
                         />
                     </Pane>
                 </center>
+                <right>
+                    <fx:include source="WaytypeSelector.fxml"/>
+                </right>
             </BorderPane>
 </Scene>
 
