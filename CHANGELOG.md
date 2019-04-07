@@ -4,15 +4,17 @@ Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige rel
 ## v0.6 - 07/4/2019
 ### Tilføjet
 - Enable og disable all waytypes i waytype selector UI'en
-- Relation merging således at coastlines relations bliver merged sammen til én OSMWay
+- Relation merging således at alle relations bliver merged korrekt.
 
 ### Ændringer
 - .obj er blevet ændret til .ser som er konventionen med serialiseret data
 - ændret fra osmdrawing til danmarkskort package navn
+- bedre zoom værdier.
 
 ### Bugs osv.
 - \#101 og \#104 som var bugs der var en del af relation merging er blevet fixet
 - \#106 er blevet opdaget i nodegrafen
+- visse coastlines bliver ikke til øer, da de ikke har en relation.
 
 ## v0.5 - 31/3/2019
 ### Tilføjet
