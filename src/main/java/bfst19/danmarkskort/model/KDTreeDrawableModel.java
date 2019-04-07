@@ -49,6 +49,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 			List<Drawable> drawables = wayTypeEnumMap.get(wayType);
 			if (drawables.size() > 0) {
 				KDTree newTree = new KDTree(drawables, getModelBounds());
+				modelBounds.growToEncompass(newTree.getBoundingBox());
 				wayTypeToKDTreeRoot.put(wayType, newTree);
 			}
 		}

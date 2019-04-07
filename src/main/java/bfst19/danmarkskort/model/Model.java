@@ -86,4 +86,8 @@ public class Model {
 			output.writeObject(drawableModel);
 		}
 	}
+
+	public Rectangle getModelBounds() {
+		return drawableModel.getModelBounds();
+	}
 }
