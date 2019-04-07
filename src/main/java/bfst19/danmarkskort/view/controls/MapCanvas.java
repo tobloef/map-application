@@ -119,7 +119,7 @@ public class MapCanvas extends Canvas {
 		double deltaCoordinate = deltaX * degreesLatitudePerPixel;
 		if (screenBounds.xMin + deltaCoordinate < ultimateBounds.xMin) {
 			deltaX = Math.min(0, deltaX);
-			//this is the opposite of what it should logically be, which is why it is different from clampDeltaY
+			//logically, this should be math.max, but it only works like this. This is only the case for x, not y
 		}
 		else if (screenBounds.xMax + deltaCoordinate > ultimateBounds.xMax) {
 			deltaX = Math.max(0, deltaX);
