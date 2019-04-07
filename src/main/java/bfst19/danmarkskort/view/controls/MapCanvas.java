@@ -101,9 +101,8 @@ public class MapCanvas extends Canvas {
 	public void pan(double deltaX, double deltaY, boolean shouldRepaint) {
 		Affine transform = graphicsContext.getTransform();
 		if (ultimateBounds != null) {
-			Rectangle screenBounds = mapDrawer.getScreenBounds();
-			deltaX = clampDelta(deltaX, screenBounds.xMin, screenBounds.xMax, ultimateBounds.xMin, ultimateBounds.xMax);
-			deltaY = clampDelta(deltaY, screenBounds.yMin, screenBounds.yMax, ultimateBounds.yMin, ultimateBounds.yMax);
+			deltaX = clampDeltaX(deltaX);
+			deltaY = clampDeltaY(deltaY);
 		}
 		//System.out.println(transform.getTx() + " " + (transform.getTx() / transform.getMxx()));
 		transform.prependTranslation(deltaX, deltaY);
@@ -113,20 +112,28 @@ public class MapCanvas extends Canvas {
 		}
 	}
 
-	private double clampDelta(double delta, double screenMin, double screenMax, double ultimateMin, double ultimateMax) {
-		if (ultimateBounds == null) {
-			return delta;
+	private double clampDeltaX(double deltaX) {
+		Rectangle screenBounds = mapDrawer.getScreenBounds();
+		double deltaCoordinate = deltaX * degreesLatitudePerPixel;
+		if (screenBounds.xMin + deltaCoordinate < ultimateBounds.xMin) {
+			deltaX = Math.min(0, deltaX);
 		}
-		double deltaCoordinate = delta * degreesLatitudePerPixel;
-		if (screenMin + deltaCoordinate < ultimateMin) {
-			System.out.println("Min " + screenMin + " " + deltaCoordinate + " " + ultimateMin);
-			delta = Math.max(0, delta);
+		else if (screenBounds.xMax + deltaCoordinate > ultimateBounds.xMax) {
+			deltaX = Math.max(0, deltaX);
 		}
-		else if (screenMax + deltaCoordinate > ultimateMax) {
-			System.out.println("Max " + screenMax + " " + deltaCoordinate + " " + ultimateMax);
-			delta = Math.min(0, delta);
+		return deltaX;
+	}
+
+	private double clampDeltaY(double deltaY) {
+		Rectangle screenBounds = mapDrawer.getScreenBounds();
+		double deltaCoordinate = deltaY * degreesLatitudePerPixel;
+		if (screenBounds.yMin + deltaCoordinate < ultimateBounds.yMin) {
+			deltaY = Math.max(0, deltaY);
 		}
-		return delta;
+		else if (screenBounds.yMax + deltaCoordinate > ultimateBounds.yMax) {
+			deltaY = Math.min(0, deltaY);
+		}
+		return deltaY;
 	}
 
 	public void zoom(double factor, double x, double y) {
