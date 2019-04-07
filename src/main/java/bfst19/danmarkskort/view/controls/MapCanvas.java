@@ -112,11 +112,14 @@ public class MapCanvas extends Canvas {
 		}
 	}
 
+	//clamping x and y are two separate functions because the inner adjustment needs min and max to be switched.
+	// I have yet to figure out why this is the case
 	private double clampDeltaX(double deltaX) {
 		Rectangle screenBounds = mapDrawer.getScreenBounds();
 		double deltaCoordinate = deltaX * degreesLatitudePerPixel;
 		if (screenBounds.xMin + deltaCoordinate < ultimateBounds.xMin) {
 			deltaX = Math.min(0, deltaX);
+			//this is the opposite of what it should logically be, which is why it is different from clampDeltaY
 		}
 		else if (screenBounds.xMax + deltaCoordinate > ultimateBounds.xMax) {
 			deltaX = Math.max(0, deltaX);
