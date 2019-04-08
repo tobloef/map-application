@@ -56,7 +56,7 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 
 	@Override
 	public float getNonEuclideanDistanceTo(float x, float y) {
-		float minDistance = 0;
+		float minDistance = Float.POSITIVE_INFINITY;
 		for (Polyline polyline : list) {
 			float tempDistance = polyline.getNonEuclideanDistanceTo(x, y);
 			if (tempDistance < minDistance){

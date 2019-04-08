@@ -75,6 +75,43 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		this.bbox.growToEncompass(lower.bbox);
 	}
 
+	public T getNearestNeighbor(float x, float y){
+		return getNearestNeighbor(x, y, Float.POSITIVE_INFINITY);
+	}
+
+	private T getNearestNeighbor(float x, float y, float distance){
+		if (splitElement == null){
+			return getClosestElement(x, y, distance);
+		}
+		T closestElement = null;
+		if (lower.bbox.nonEuclideanDistanceTo(x,y) < distance){
+			closestElement = (T) lower.getNearestNeighbor(x, y, distance);
+			distance = closestElement.getNonEuclideanDistanceTo(x,y);
+		}
+		float splitElementDistance = splitElement.getNonEuclideanDistanceTo(x ,y);
+		if (splitElementDistance < distance){
+			distance = splitElementDistance;
+			closestElement = splitElement;
+		}
+		if (higher.bbox.nonEuclideanDistanceTo(x,y) < distance){
+			closestElement = (T) higher.getNearestNeighbor(x, y, distance);
+			distance = closestElement.getNonEuclideanDistanceTo(x,y);
+		}
+		return closestElement;
+	}
+
+	private T getClosestElement(float x, float y, float distance) {
+		T closestElement = null;
+		for (T element : leafElements){
+			float tempDistance = element.getNonEuclideanDistanceTo(x, y);
+			if (tempDistance < distance){
+				distance = tempDistance;
+				closestElement = element;
+			}
+		}
+		return closestElement;
+	}
+
 	private void growToEncompassLeafElements(List<T> inputElements) {
 		for (T inputElement: inputElements){
 			this.bbox.growToEncompass(inputElement.getMinimumBoundingRectangle());

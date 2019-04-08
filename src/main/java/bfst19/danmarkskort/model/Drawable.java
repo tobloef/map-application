@@ -6,5 +6,4 @@ public interface Drawable {
 	public void stroke(GraphicsContext gc, double zoomFactor);
 	public void fill(GraphicsContext gc, double zoomFactor);
 
-	public float getNonEuclideanDistanceTo(float x, float y);
 }
