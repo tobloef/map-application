@@ -80,7 +80,7 @@ public class Rectangle implements Serializable {
 		}
 	}
 
-	public float nonEuclideanDistanceTo(float x, float y){ //TODO: Write some test before merge.
+	public float nonEuclideanDistanceTo(float x, float y){
 		float resultX = 0, resultY = 0;
 		if (x < xMin){
 			resultX = xMin - x;
