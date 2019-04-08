@@ -18,6 +18,7 @@ public class MapDrawer implements Drawer {
 	private GraphicsContext graphicsContext;
 	private Model model;
 	private Theme theme;
+	float drawX = 0, drawY = 0;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
@@ -54,8 +55,7 @@ public class MapDrawer implements Drawer {
 			else {
 				continue;
 			}
-			Drawable nearestNeighbor = model.getNearest(wayType, modelCoords(200, 200));
-			System.out.println(modelCoords(200, 200));
+			Drawable nearestNeighbor = model.getNearest(wayType, modelCoords(drawX, drawY));
 			if (nearestNeighbor != null) {
 				drawablesToDraw = new ArrayList<>();
 				((ArrayList<Drawable>) drawablesToDraw).add(nearestNeighbor);
@@ -182,5 +182,10 @@ public class MapDrawer implements Drawer {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public void setDrawCoords(float localX, float localY){
+		drawX = localX;
+		drawY = localY;
 	}
 }
