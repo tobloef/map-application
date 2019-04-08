@@ -85,8 +85,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		}
 		T closestElement = null;
 		if (lower.bbox.nonEuclideanDistanceTo(x,y) < distance){
-			closestElement = (T) lower.getNearestNeighbor(x, y, distance);
-			distance = closestElement.getNonEuclideanDistanceTo(x,y);
+			T lowerClosestElement = (T) lower.getNearestNeighbor(x, y, distance);
+			if (lowerClosestElement != null && lowerClosestElement.getNonEuclideanDistanceTo(x, y) < distance) {
+				closestElement = lowerClosestElement;
+				distance = closestElement.getNonEuclideanDistanceTo(x, y);
+			}
 		}
 		float splitElementDistance = splitElement.getNonEuclideanDistanceTo(x ,y);
 		if (splitElementDistance < distance){
@@ -94,8 +97,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			closestElement = splitElement;
 		}
 		if (higher.bbox.nonEuclideanDistanceTo(x,y) < distance){
-			closestElement = (T) higher.getNearestNeighbor(x, y, distance);
-			distance = closestElement.getNonEuclideanDistanceTo(x,y);
+			T higherClosestElement = (T) higher.getNearestNeighbor(x, y, distance);
+			if (higherClosestElement != null && higherClosestElement.getNonEuclideanDistanceTo(x, y) < distance) {
+				closestElement = higherClosestElement;
+				distance = closestElement.getNonEuclideanDistanceTo(x, y);
+			}
 		}
 		return closestElement;
 	}

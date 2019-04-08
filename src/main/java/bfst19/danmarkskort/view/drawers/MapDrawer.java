@@ -9,6 +9,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
+import java.util.ArrayList;
+
 import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 
 public class MapDrawer implements Drawer {
@@ -52,8 +54,13 @@ public class MapDrawer implements Drawer {
 			else {
 				continue;
 			}
-
-			drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
+			Drawable nearestNeighbor = model.getNearest(wayType, modelCoords(200, 200));
+			System.out.println(modelCoords(200, 200));
+			if (nearestNeighbor != null) {
+				drawablesToDraw = new ArrayList<>();
+				((ArrayList<Drawable>) drawablesToDraw).add(nearestNeighbor);
+				drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
+			}
 		}
 	}
 

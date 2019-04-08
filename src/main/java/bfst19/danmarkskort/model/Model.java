@@ -2,6 +2,7 @@ package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
+import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -115,5 +116,9 @@ public class Model {
 		try (ObjectOutputStream output = new ObjectOutputStream(bufferedOutputStream)) {
 			output.writeObject(drawableModel);
 		}
+	}
+
+	public Drawable getNearest(WayType type, Point2D modelCoords) {
+		return drawableModel.getNearestNeighbor(type, (float)modelCoords.getX(), (float)modelCoords.getY());
 	}
 }

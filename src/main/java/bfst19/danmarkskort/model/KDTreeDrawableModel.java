@@ -64,6 +64,16 @@ public class KDTreeDrawableModel implements DrawableModel {
 		return modelBounds;
 	}
 
+	@Override
+	public Drawable getNearestNeighbor(WayType type, float x, float y) {
+		if (wayTypeToKDTreeRoot.containsKey(type)) {
+			SpatialIndexable drawable = wayTypeToKDTreeRoot.get(type).getNearestNeighbor(x, y);
+			if (drawable != null) {
+				return (Drawable) drawable;
+			}
+		}
+		return null ;
+	}
 
 
 }
