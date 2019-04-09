@@ -180,6 +180,7 @@ public class OSMParser {
 	}
 
 	private void convertWayToRoadNodes(OSMWay currentWay) {
+		//TODO convert way to road
 		OSMRoadNode lastNode = null;
 		for (OSMNode node : currentWay.getNodes()) {
 			OSMRoadNode newNode;
