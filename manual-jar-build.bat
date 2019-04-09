@@ -21,6 +21,6 @@ del out\META-INF\MANIFEST.MF
 del out\module-info.class
 
 mkdir build\libs
-jar --create --file=build/libs/BFST19.jar --main-class=bfst19.osmdrawing.Launcher -C out .
+jar --create --file=build/libs/BFST19.jar --main-class=bfst19.danmarkskort.Launcher -C out .
 
 java -jar build/libs/BFST19.jar
