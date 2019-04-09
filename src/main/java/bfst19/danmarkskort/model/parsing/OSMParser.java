@@ -181,7 +181,7 @@ public class OSMParser {
 
 	private void convertWayToRoadNodes(OSMWay currentWay) {
 		//TODO convert way to road
-		OSMRoadNode lastNode = null;
+		OSMRoadWay newWay = convertWayToRoad(currentWay);
 		for (OSMNode node : currentWay.getNodes()) {
 			OSMRoadNode newNode;
 			if (node instanceof OSMRoadNode) {
@@ -190,24 +190,19 @@ public class OSMParser {
 			else {
 				newNode = convertNodeToRoadNode(node);
 			}
-			addConnection(lastNode, newNode);
-			lastNode = newNode;
+			newNode.add(newWay);
 		}
 	}
 
-	private void addConnection(OSMRoadNode lastNode, OSMRoadNode newNode) {
-		if (lastNode != null) {
-			double distance = findDistanceBetween(lastNode, newNode);
-			int maxSpeed = getMaxSpeed();
-			Connection connection = new Connection(lastNode, newNode, distance, maxSpeed);
-			lastNode.addConnection(connection);
-			newNode.addConnection(connection);
-		}
+	private OSMRoadWay convertWayToRoad(OSMWay way) {
+		OSMRoadWay road = new OSMRoadWay(way, getMaxSpeed());
+		idToWay.replace(road);
+		return road;
 	}
+
 
 	private OSMRoadNode convertNodeToRoadNode(OSMNode node) {
-		OSMRoadNode newNode;
-		newNode = new OSMRoadNode(node);
+		OSMRoadNode newNode = new OSMRoadNode(node);
 		idToNode.replace(newNode);
 		roadNodes.add(newNode);
 		return newNode;
