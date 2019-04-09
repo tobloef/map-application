@@ -9,7 +9,7 @@ public class NavigationGraph {
 
 	public NavigationGraph(List<OSMRoadNode> roadNodes) {
 		this.nodes = roadNodes;
-		mergeConnections();
+		//mergeConnections();
 	}
 
 	public List<OSMRoadNode> getNodes() {
