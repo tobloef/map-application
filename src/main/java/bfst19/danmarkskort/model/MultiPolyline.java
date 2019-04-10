@@ -55,6 +55,15 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	}
 
 	@Override
+	public long getNumOfFloats() {
+		long numOfFloats = 0;
+		for (Polyline polyline : list){
+			numOfFloats += polyline.getNumOfFloats();
+		}
+		return numOfFloats;
+	}
+
+	@Override
 	public float getRepresentativeX() {
 		//TODO: Make something more representative then just the first coords.
 		return list.get(0).getRepresentativeX();
@@ -70,4 +79,6 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	public Rectangle getMinimumBoundingRectangle() {
 		return new Rectangle(xMin,yMin,xMax,yMax);
 	}
+
+
 }

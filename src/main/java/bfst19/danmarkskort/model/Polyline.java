@@ -62,6 +62,11 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 	}
 
 	@Override
+	public long getNumOfFloats() {
+		return coords.length;
+	}
+
+	@Override
 	public float getRepresentativeX() {
 		//TODO: Make something more representative then just the first coords.
 		return coords[0];
