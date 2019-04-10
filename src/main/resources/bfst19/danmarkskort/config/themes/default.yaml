@@ -16,7 +16,7 @@
 - constants:
   - zoomLevels:
     #The zoomlevels are at the 800x600 size and what fits inside at that level.
-    - level0: &wholeDenmark 0,005
+    - level0: &wholeDenmark 0.005
     - level1: &region 0.002
     - level2: &largeCity 0.0005
     - level3: &amager 0.0002
@@ -31,6 +31,10 @@
     fillColor: "EEF0D5"
 
 # Island stuff
+- ADMINISTRATIVE:
+    fillcolor: "808080"
+    zoomLevel: *wholeDenmark
+
 
 - ISLAND:
     fillColor: "F4F0EA"
@@ -101,7 +105,7 @@
 
 - RESIDENTIAL:
     fillColor: "E6E6FA"
-    zoomLevel: *postCode
+    zoomLevel: *halfAmager
 
 - ALLOTMENTS:
     fillColor: "98FB98"

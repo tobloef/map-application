@@ -55,6 +55,7 @@ public class MapDrawer implements Drawer {
 				continue;
 			}
 			drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
+			dontStrokeLastFill();
 		}
 	}
 
@@ -95,7 +96,6 @@ public class MapDrawer implements Drawer {
 		for (Drawable drawable : drawables) {
 			drawable.fill(graphicsContext, currentZoomLevel);
 		}
-		dontStrokeLastFill();
 	}
 
 	private void dontStrokeLastFill() {
@@ -146,7 +146,7 @@ public class MapDrawer implements Drawer {
 					.hasNext();
 	}
 
-	private Rectangle getScreenBounds(){
+	public Rectangle getScreenBounds(){
 		Bounds bounds = canvas.getBoundsInLocal();
 		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
 		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
