@@ -29,7 +29,10 @@
     - bridleway
 
 - BUILDING:
-  - building
+  - amenity:
+      - university
+  #- building
+  #We dont parse the buildings to save around 180 mb on the whole of denmark.
 
 - BUS_GUIDEWAY:
   - highway:

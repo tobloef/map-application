@@ -11,7 +11,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	List<T> leafElements;
 	KDTree lower;
 	KDTree higher;
-	private final static int MAX_NODES_PER_LEAF = 5; //TODO: Benchmark some different values
+	private final static int MAX_NODES_PER_LEAF = 250; //TODO: Benchmark some different values
 	private final static Random random = new Random();
 
 	public KDTree(List<T> inputElements, Rectangle bbox){
