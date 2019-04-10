@@ -21,15 +21,13 @@
   - aeroway:
     - marking
 
-- BARRIER:
-  - barrier
-
 - BRIDLEWAY:
   - highway:
     - bridleway
 
 - BUILDING:
-  - building
+  - amenity:
+      - university
 
 - BUS_GUIDEWAY:
   - highway:
