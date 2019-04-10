@@ -74,7 +74,12 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 	}
 
 	private static float distance(float x, float y) {
-		return x*x + y*y;
+		return x * x + y * y;
+	}
+
+	@Override
+	public long getNumOfFloats() {
+		return coords.length;
 	}
 
 	@Override

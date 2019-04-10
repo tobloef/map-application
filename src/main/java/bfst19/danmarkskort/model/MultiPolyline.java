@@ -59,11 +59,20 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 		float minDistance = Float.POSITIVE_INFINITY;
 		for (Polyline polyline : list) {
 			float tempDistance = polyline.euclideanDistanceSquaredTo(x, y);
-			if (tempDistance < minDistance){
+			if (tempDistance < minDistance) {
 				minDistance = tempDistance;
 			}
 		}
 		return minDistance;
+	}
+
+	@Override
+	public long getNumOfFloats() {
+		long numOfFloats = 0;
+		for (Polyline polyline : list){
+			numOfFloats += polyline.getNumOfFloats();
+		}
+		return numOfFloats;
 	}
 
 	@Override
@@ -82,4 +91,6 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 	public Rectangle getMinimumBoundingRectangle() {
 		return new Rectangle(xMin,yMin,xMax,yMax);
 	}
+
+
 }

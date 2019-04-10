@@ -111,7 +111,9 @@ public class OSMParser {
 	}
 
 	private void handleEndWay() {
-		drawableModel.add(currentType, new Polyline(currentWay));
+		if (currentType != WayType.UNKNOWN) {
+			drawableModel.add(currentType, new Polyline(currentWay));
+		}
 		currentWay = null;
 	}
 
@@ -122,7 +124,7 @@ public class OSMParser {
 	}
 
 	private void handleEndRelation() {
-		if (currentRelation.hasMembers()) {
+		if (currentRelation.hasMembers() && currentType != WayType.UNKNOWN) {
 			drawableModel.add(currentType, new MultiPolyline(currentRelation));
 		}
 		currentRelation = null;
