@@ -17,20 +17,41 @@ public class OSMRoadWay extends OSMWay {
 
 	}
 
+	public OSMRoadWay(OSMWay way, List<OSMRoadNode> newNodes, int speedLimit, WayType type) {
+		super(way.id);
+		list = new ArrayList<>();
+		for (OSMRoadNode node : newNodes) {
+			node.add(this);
+		}
+		list.addAll(newNodes);
+		this.speedLimit = speedLimit;
+		this.type = type;
+	}
+
 	public double getSpeedLimit() {
 		return speedLimit;
 	}
 
 	public OSMRoadWay splitIfNeeded() {
 		for (int i = 1; i < list.size() - 1; i++) {
-			OSMRoadNode node = (OSMRoadNode) list.get(i);
+
+			OSMRoadNode node;
+			if (list.get(i) instanceof OSMRoadNode) {
+				node = (OSMRoadNode) list.get(i);
+			}
+			else {
+				throw new RuntimeException("Nodes in OSMRoadWay must be OSMRoadNode, not OSMNode");
+			}
 			if (node.getConnectionAmount() > 1) {
 				List<OSMNode> splitNodes = list.subList(i, list.size());
 				list = list.subList(0, i+1); //this uses i+1 since both lists needs to have the connecting node
-				OSMRoadWay result = new OSMRoadWay(new OSMWay(id), speedLimit, type);
+				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type);
 				for (OSMNode n : splitNodes) {
 					OSMRoadNode casted = (OSMRoadNode) n;
 					casted.changeConnection(this, result);
+				}
+				if (result.size() <= 0) {
+					throw new RuntimeException("Created empty way");
 				}
 				return result;
 			}
@@ -40,5 +61,9 @@ public class OSMRoadWay extends OSMWay {
 
 	public WayType getType() {
 		return type;
+	}
+
+	public void clear() {
+		list.clear();
 	}
 }

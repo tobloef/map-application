@@ -167,7 +167,14 @@ public class OSMParser {
 
 	private void handleEndWay() {
 		if (tags.containsKey("highway")) {
+			int nodeAmount = currentWay.getNodes().size();
+			if (nodeAmount <= 0) {
+				throw new RuntimeException("Why is this only a problem now?");
+			}
 			convertWayToRoadNodes(currentWay); //Since currentWay is a list of nodes,
+			if (nodeAmount != currentWay.getNodes().size()) {
+				throw new RuntimeException("Road conversion removes nodes somehow");
+			}
 		}
 		if (currentType != WayType.UNKNOWN) {
 			if (currentWay instanceof OSMRoadWay) {
@@ -217,8 +224,7 @@ public class OSMParser {
 	}
 
 	private void convertWayToRoadNodes(OSMWay currentWay) {
-		//TODO convert way to road
-		OSMRoadWay newWay = convertWayToRoad(currentWay);
+		List<OSMRoadNode> newNodes = new ArrayList<>();
 		for (OSMNode node : currentWay.getNodes()) {
 			OSMRoadNode newNode;
 			if (node instanceof OSMRoadNode) {
@@ -227,13 +233,18 @@ public class OSMParser {
 			else {
 				newNode = convertNodeToRoadNode(node);
 			}
-			newNode.add(newWay);
+			newNodes.add(newNode);
 		}
-		this.currentWay = newWay;
+		this.currentWay = convertWayToRoad(currentWay, newNodes);
+		for (OSMNode node : this.currentWay.getNodes()) {
+			if (!(node instanceof OSMRoadNode)) {
+				throw new RuntimeException("What the fuck");
+			}
+		}
 	}
 
-	private OSMRoadWay convertWayToRoad(OSMWay way) {
-		OSMRoadWay road = new OSMRoadWay(way, getMaxSpeed(), currentType);
+	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
+		OSMRoadWay road = new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType);
 		idToWay.replace(road);
 		return road;
 	}

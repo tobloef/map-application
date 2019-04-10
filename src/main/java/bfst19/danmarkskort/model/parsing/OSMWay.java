@@ -12,6 +12,11 @@ public class OSMWay implements LongSupplier {
 		this.id = id;
 	}
 
+	public OSMWay(long id, List<OSMNode> list) {
+		this.id = id;
+		this.list = list;
+	}
+
 	@Override
 	public long getAsLong() {
 		return id;

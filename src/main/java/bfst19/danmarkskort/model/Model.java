@@ -93,7 +93,7 @@ public class Model {
 			OSMParser parser = new OSMParser(filename, drawableModel);
 			modelBounds = parser.getModelBounds();
 			String path = filename + ".ser";
-			serializeData(path);
+			//serializeData(path);
 		}
 	}
 
