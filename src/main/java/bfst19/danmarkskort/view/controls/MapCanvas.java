@@ -21,7 +21,6 @@ public class MapCanvas extends Canvas {
 	private double degreesLatitudePerPixel;
 	private double minZoom = 0;
 	private double maxZoom = 1000000;
-	private Rectangle ultimateBounds;
 
 	public void initialize(Model model) {
 		this.model = model;
@@ -77,14 +76,12 @@ public class MapCanvas extends Canvas {
 		pan(xMargin, yMargin);
 		Affine transform = graphicsContext.getTransform();
 		minZoom = transform.getMxx();
-		ultimateBounds = mapDrawer.getScreenBounds();
-		System.out.println(ultimateBounds);
 	}
 
 	private double findInitialZoomFactor() {
 		double minRequiredWidthZoom = getWidth()/(model.modelBounds.xMax -model.modelBounds.xMin);
 		double minRequiredHeightZoom = getHeight()/(model.modelBounds.yMax -model.modelBounds.yMin);
-		double extraMarginFactor = 0.8; //if more than 1.0, the margin will become negative
+		double extraMarginFactor = 0.5; //if more than 1.0, the margin will become negative
 		double smallestRequiredZoom = minRequiredWidthZoom < minRequiredHeightZoom ? minRequiredWidthZoom : minRequiredHeightZoom;
 		return smallestRequiredZoom * extraMarginFactor;
 	}
@@ -100,43 +97,11 @@ public class MapCanvas extends Canvas {
 
 	public void pan(double deltaX, double deltaY, boolean shouldRepaint) {
 		Affine transform = graphicsContext.getTransform();
-		if (ultimateBounds != null) {
-			deltaX = clampDeltaX(deltaX);
-			deltaY = clampDeltaY(deltaY);
-		}
-		//System.out.println(transform.getTx() + " " + (transform.getTx() / transform.getMxx()));
 		transform.prependTranslation(deltaX, deltaY);
 		graphicsContext.setTransform(transform);
 		if (shouldRepaint) {
 			repaint();
 		}
-	}
-
-	//clamping x and y are two separate functions because the inner adjustment needs min and max to be switched.
-	// I have yet to figure out why this is the case
-	private double clampDeltaX(double deltaX) {
-		Rectangle screenBounds = mapDrawer.getScreenBounds();
-		double deltaCoordinate = deltaX * degreesLatitudePerPixel;
-		if (screenBounds.xMin + deltaCoordinate < ultimateBounds.xMin) {
-			deltaX = Math.min(0, deltaX);
-			//logically, this should be math.max, but it only works like this. This is only the case for x, not y
-		}
-		else if (screenBounds.xMax + deltaCoordinate > ultimateBounds.xMax) {
-			deltaX = Math.max(0, deltaX);
-		}
-		return deltaX;
-	}
-
-	private double clampDeltaY(double deltaY) {
-		Rectangle screenBounds = mapDrawer.getScreenBounds();
-		double deltaCoordinate = deltaY * degreesLatitudePerPixel;
-		if (screenBounds.yMin + deltaCoordinate < ultimateBounds.yMin) {
-			deltaY = Math.max(0, deltaY);
-		}
-		else if (screenBounds.yMax + deltaCoordinate > ultimateBounds.yMax) {
-			deltaY = Math.min(0, deltaY);
-		}
-		return deltaY;
 	}
 
 	public void zoom(double factor, double x, double y) {
