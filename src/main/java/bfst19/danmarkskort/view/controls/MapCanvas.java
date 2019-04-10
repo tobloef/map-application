@@ -77,7 +77,7 @@ public class MapCanvas extends Canvas {
 		pan(xMargin, yMargin);
 		Affine transform = graphicsContext.getTransform();
 		minZoom = transform.getMxx();
-		ultimateBounds = model.getModelBounds();
+		ultimateBounds = mapDrawer.getScreenBounds();
 		System.out.println(ultimateBounds);
 	}
 

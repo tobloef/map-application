@@ -169,7 +169,4 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		}
 	}
 
-	public Rectangle getBoundingBox() {
-		return bbox;
-	}
 }
