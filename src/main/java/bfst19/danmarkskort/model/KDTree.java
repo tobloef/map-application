@@ -75,6 +75,49 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		this.bbox.growToEncompass(lower.bbox);
 	}
 
+	public T getNearestNeighbor(float x, float y){
+		return getNearestNeighbor(x, y, Float.POSITIVE_INFINITY);
+	}
+
+	private T getNearestNeighbor(float x, float y, float distance){
+		if (splitElement == null){
+			return getClosestElement(x, y, distance);
+		}
+		T closestElement = null;
+		if (lower.bbox.euclideanDistanceSquaredTo(x,y) < distance){
+			T lowerClosestElement = (T) lower.getNearestNeighbor(x, y, distance);
+			if (lowerClosestElement != null && lowerClosestElement.euclideanDistanceSquaredTo(x, y) < distance) {
+				closestElement = lowerClosestElement;
+				distance = closestElement.euclideanDistanceSquaredTo(x, y);
+			}
+		}
+		float splitElementDistance = splitElement.euclideanDistanceSquaredTo(x ,y);
+		if (splitElementDistance < distance){
+			distance = splitElementDistance;
+			closestElement = splitElement;
+		}
+		if (higher.bbox.euclideanDistanceSquaredTo(x,y) < distance){
+			T higherClosestElement = (T) higher.getNearestNeighbor(x, y, distance);
+			if (higherClosestElement != null && higherClosestElement.euclideanDistanceSquaredTo(x, y) < distance) {
+				closestElement = higherClosestElement;
+				distance = closestElement.euclideanDistanceSquaredTo(x, y);
+			}
+		}
+		return closestElement;
+	}
+
+	private T getClosestElement(float x, float y, float distance) {
+		T closestElement = null;
+		for (T element : leafElements){
+			float tempDistance = element.euclideanDistanceSquaredTo(x, y);
+			if (tempDistance < distance){
+				distance = tempDistance;
+				closestElement = element;
+			}
+		}
+		return closestElement;
+	}
+
 	private void growToEncompassLeafElements(List<T> inputElements) {
 		for (T inputElement: inputElements){
 			this.bbox.growToEncompass(inputElement.getMinimumBoundingRectangle());

@@ -59,4 +59,10 @@ public class Controller {
 		x = e.getX();
 		y = e.getY();
 	}
+
+	public void onMouseMoved(MouseEvent mouseEvent) {
+		float localX = (float)mouseEvent.getX();
+		float localY = (float)mouseEvent.getY();
+		model.setMouseCoords(localX, localY);
+	}
 }
