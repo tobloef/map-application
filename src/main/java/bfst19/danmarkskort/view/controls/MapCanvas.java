@@ -2,6 +2,7 @@ package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.Rectangle;
 import bfst19.danmarkskort.view.drawers.ZoomIndicatorDrawer;
 import bfst19.danmarkskort.view.drawers.Drawer;
 import bfst19.danmarkskort.view.drawers.MapDrawer;
@@ -18,7 +19,10 @@ public class MapCanvas extends Canvas {
 	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
 	private Model model;
 	private List<Drawer> drawers;
+	private MapDrawer mapDrawer;
 	private double degreesLatitudePerPixel;
+	private double minZoom = 0;
+	private double maxZoom = 1000000;
 
 	public void initialize(Model model) {
 		this.model = model;
@@ -37,7 +41,8 @@ public class MapCanvas extends Canvas {
 	private void initializeDrawers(Model model) {
 		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
 		drawers = new ArrayList<>();
-		drawers.add(new MapDrawer(this, model));
+		mapDrawer = new MapDrawer(this, model);
+		drawers.add(mapDrawer);
 		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
@@ -63,12 +68,24 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void panViewToMapBounds() {
-		//FIXME: This repaints the map twice.
 		if (model.modelBounds == null) {
 			return;
 		}
-		pan(-model.modelBounds.xMin, model.modelBounds.yMax);
-		zoom(getWidth()/(model.modelBounds.xMax -model.modelBounds.xMin), 0,0);
+		pan(-model.modelBounds.xMin, model.modelBounds.yMax, false);
+		zoom(findInitialZoomFactor(), 0,0, false);
+		double xMargin = (getWidth() - ((model.modelBounds.xMax - model.modelBounds.xMin) / degreesLatitudePerPixel))/2;
+		double yMargin = (getHeight() - ((model.modelBounds.yMax - model.modelBounds.yMin) / degreesLatitudePerPixel))/2;
+		pan(xMargin, yMargin);
+		Affine transform = graphicsContext.getTransform();
+		minZoom = transform.getMxx();
+	}
+
+	private double findInitialZoomFactor() {
+		double minRequiredWidthZoom = getWidth()/(model.modelBounds.xMax -model.modelBounds.xMin);
+		double minRequiredHeightZoom = getHeight()/(model.modelBounds.yMax -model.modelBounds.yMin);
+		double extraMarginFactor = 0.5; //if more than 1.0, the margin will become negative
+		double smallestRequiredZoom = minRequiredWidthZoom < minRequiredHeightZoom ? minRequiredWidthZoom : minRequiredHeightZoom;
+		return smallestRequiredZoom * extraMarginFactor;
 	}
 
 	private void updateLineWidth() {
@@ -77,18 +94,44 @@ public class MapCanvas extends Canvas {
 
 
 	public void pan(double deltaX, double deltaY) {
+		pan(deltaX, deltaY, true);
+	}
+
+	public void pan(double deltaX, double deltaY, boolean shouldRepaint) {
 		Affine transform = graphicsContext.getTransform();
 		transform.prependTranslation(deltaX, deltaY);
 		graphicsContext.setTransform(transform);
-		repaint();
+		if (shouldRepaint) {
+			repaint();
+		}
 	}
 
 	public void zoom(double factor, double x, double y) {
+		zoom(factor, x, y, true);
+	}
+
+	public void zoom(double factor, double x, double y, boolean shouldRepaint) {
 		Affine transform = graphicsContext.getTransform();
+		factor = clampZoom(factor, transform);
+		if (factor == 1) {
+			return;
+		}
 		transform.prependScale(factor, factor, x, y);
 		graphicsContext.setTransform(transform);
 		updateDegreesPerPixel();
-		repaint();
+		if (shouldRepaint) {
+			repaint();
+		}
+	}
+
+	private double clampZoom(double factor, Affine transform) {
+		if (transform.getMxx() * factor < minZoom) {
+			factor = minZoom / transform.getMxx();
+		}
+		else if (transform.getMxx() * factor > maxZoom) {
+			factor = maxZoom / transform.getMxx();
+		}
+		return factor;
 	}
 
 	public void updateDegreesPerPixel() {

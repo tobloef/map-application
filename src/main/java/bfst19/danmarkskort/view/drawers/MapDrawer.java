@@ -146,7 +146,7 @@ public class MapDrawer implements Drawer {
 					.hasNext();
 	}
 
-	private Rectangle getScreenBounds(){
+	public Rectangle getScreenBounds(){
 		Bounds bounds = canvas.getBoundsInLocal();
 		Point2D min = modelCoords(bounds.getMinX(), bounds.getMinY());
 		Point2D max = modelCoords(bounds.getMaxX(), bounds.getMaxY());
