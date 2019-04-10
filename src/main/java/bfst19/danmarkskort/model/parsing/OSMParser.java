@@ -18,7 +18,6 @@ public class OSMParser {
 	private float lonFactor = 1.0f;
 	private LongMap<OSMNode> idToNode = new LongMap<OSMNode>();
 	private LongMap<OSMWay> idToWay = new LongMap<OSMWay>();
-	private List<OSMWay> coastLines = new ArrayList<>(); //coastlines need extra work, which is why we have a list for them
 	private OSMWay currentWay = null;
 	private OSMRelation currentRelation = null;
 	private WayType currentType = null;
@@ -28,6 +27,7 @@ public class OSMParser {
 	private Map<String, String> tags = new HashMap<>();
 	private Map<String, Integer> speedLimits = new HashMap<>();
 	private List<OSMRoadNode> roadNodes = new ArrayList<>();
+	private List<OSMRoadWay> roadWays = new ArrayList<>();
 	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
@@ -44,7 +44,31 @@ public class OSMParser {
 			throw new IOException();
 		}
 		parseOSM(osmSource);
+		initPolyRoadConnections();
 		drawableModel.doneAdding();
+	}
+
+	private void initPolyRoadConnections() {
+		List<OSMRoadWay> toBeAdded = new ArrayList<>();
+		for (OSMRoadWay way : roadWays) {
+			OSMRoadWay newWay = way;
+			while (newWay != null) {
+				newWay = newWay.splitIfNeeded();
+				if (newWay != null) {
+					toBeAdded.add(newWay);
+				}
+			}
+		}
+		roadWays.addAll(toBeAdded);
+		for (OSMRoadWay way : roadWays) {
+			PolyRoad newRoad = new PolyRoad(way);
+			roadWaysToPolyRoads.put(way, newRoad);
+			drawableModel.add(way.getType(), newRoad);
+		}
+		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
+			PolyRoad road = roadWaysToPolyRoads.get(way);
+
+		}
 	}
 
 	private void initSpeedLimits() {
@@ -137,7 +161,12 @@ public class OSMParser {
 			convertWayToRoadNodes(currentWay); //Since currentWay is a list of nodes,
 		}
 		if (currentType != WayType.UNKNOWN) {
-			drawableModel.add(currentType, new Polyline(currentWay));
+			if (currentWay instanceof OSMRoadWay) {
+				roadWays.add((OSMRoadWay) currentWay);
+			}
+			else {
+				drawableModel.add(currentType, new Polyline(currentWay));
+			}
 		}
 		currentWay = null;
 	}
@@ -191,6 +220,7 @@ public class OSMParser {
 			}
 			newNode.add(newWay);
 		}
+		this.currentWay = newWay;
 	}
 
 	private OSMRoadWay convertWayToRoad(OSMWay way) {

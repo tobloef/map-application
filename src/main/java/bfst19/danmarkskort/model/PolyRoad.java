@@ -14,11 +14,11 @@ public class PolyRoad extends Polyline{
 	private Set<PolyRoad> firstConnections;
 	private Set<PolyRoad> lastConnnections;
 
-	public PolyRoad(OSMRoadWay way, double speedLimit) {
+	public PolyRoad(OSMRoadWay way) {
 		super(way);
 		firstConnections = new HashSet<>();
 		lastConnnections = new HashSet<>();
-		this.speedLimit = speedLimit;
+		this.speedLimit = way.getSpeedLimit();
 	}
 
 	public void init() {

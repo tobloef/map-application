@@ -79,4 +79,12 @@ public class OSMRoadNode extends OSMNode{
 	public OSMRoadNode getNodeFromConnection(Connection connection) {
 		return connection.getOtherNode(this);
 	}
+
+	public void changeConnection(OSMRoadWay old, OSMRoadWay newConnection) {
+		if (!connections.contains(old)) {
+			throw new RuntimeException("Tried to change connection that doesn't exist");
+		}
+		connections.remove(old);
+		connections.add(newConnection);
+	}
 }
