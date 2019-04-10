@@ -136,12 +136,7 @@ public class OSMParser {
 		if (tags.containsKey("highway")) {
 			convertWayToRoadNodes(currentWay); //Since currentWay is a list of nodes,
 		}
-		if (currentType == WayType.COASTLINE) {
-			coastLines.add(currentWay);
-		} else {
-			if (currentWay instanceof OSMRoadWay) {
-
-			}
+		if (currentType != WayType.UNKNOWN) {
 			drawableModel.add(currentType, new Polyline(currentWay));
 		}
 		currentWay = null;
@@ -154,7 +149,7 @@ public class OSMParser {
 	}
 
 	private void handleEndRelation() {
-		if (currentRelation.hasMembers()) {
+		if (currentRelation.hasMembers() && currentType != WayType.UNKNOWN) {
 			drawableModel.add(currentType, new MultiPolyline(currentRelation));
 		}
 		currentRelation = null;
