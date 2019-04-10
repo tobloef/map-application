@@ -13,6 +13,10 @@
     - runway
     - taxiway
 
+- ADMINISTRATIVE:
+  - admin_level:
+    - "4"
+
 - APRON:
   - aeroway:
     - apron

@@ -54,6 +54,7 @@ public class MapDrawer implements Drawer {
 			}
 
 			drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
+			dontStrokeLastFill();
 		}
 	}
 
@@ -94,7 +95,6 @@ public class MapDrawer implements Drawer {
 		for (Drawable drawable : drawables) {
 			drawable.fill(graphicsContext, currentZoomLevel);
 		}
-		dontStrokeLastFill();
 	}
 
 	private void dontStrokeLastFill() {

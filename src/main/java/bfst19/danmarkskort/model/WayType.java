@@ -10,6 +10,8 @@ public enum WayType {
 	ISLAND,
 	SCREE,
 
+	ADMINISTRATIVE,
+
 	// Water
 	TREES,
 	GRASS,
