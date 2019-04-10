@@ -94,7 +94,7 @@ public class Model {
 			OSMParser parser = new OSMParser(filename, drawableModel);
 			modelBounds = parser.getModelBounds();
 			String path = filename + ".ser";
-			//serializeData(path);
+			serializeData(path);
 		}
 	}
 
@@ -126,5 +126,6 @@ public class Model {
 	public void setMouseCoords(float mouseX, float mouseY) {
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
+		System.out.println(drawableModel.getNearestNeighbor(WayType.RESIDENTIAL_ROAD, mouseX, mouseY) + " " + mouseX + " " + mouseY);
 	}
 }

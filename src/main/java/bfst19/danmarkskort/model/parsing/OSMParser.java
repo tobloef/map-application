@@ -26,6 +26,7 @@ public class OSMParser {
 	private List<OSMRoadNode> roadNodes = new ArrayList<>();
 	private List<OSMRoadWay> roadWays = new ArrayList<>();
 	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
+	private Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
@@ -53,15 +54,22 @@ public class OSMParser {
 			roadWaysToPolyRoads.put(way, newRoad);
 			drawableModel.add(way.getType(), newRoad);
 		}
+		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size()];
+		int i = 0;
+		for (PolyRoad road : roadWaysToPolyRoads.values()) {
+			polyRoadToIntegers.put(road, i);
+			PolyRoad.allPolyRoads[i] = road;
+			i++;
+		}
 		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
 			PolyRoad road = roadWaysToPolyRoads.get(way);
 			OSMRoadNode first = (OSMRoadNode) way.getFirst();
 			OSMRoadNode last = (OSMRoadNode) way.getLast();
 			for (OSMRoadWay connection : first.getConnections()) {
-				road.addConnectionToFirst(roadWaysToPolyRoads.get(connection));
+				road.addConnectionToFirst(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
 			}
 			for (OSMRoadWay connection : last.getConnections()) {
-				road.addConnectionTolast(roadWaysToPolyRoads.get(connection));
+				road.addConnectionTolast(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
 			}
 		}
 	}

@@ -7,7 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,9 +42,20 @@ class OSMParserTest {
 
 	@Test
 	void testGraph() throws IOException, XMLStreamException {
-		DrawableModel drawableModel = new BasicDrawableModel();
-		String filePath = this.getClass().getResource("small.zip").getPath();
+		boolean test = true;
+		DrawableModel drawableModel = new KDTreeDrawableModel();
+		String filePath = this.getClass().getResource("small.osm").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
-
+		PolyRoad a = (PolyRoad) drawableModel.getNearestNeighbor(WayType.RESIDENTIAL_ROAD, 205, 408);
+		Set<PolyRoad> aConnections = new HashSet<>(a.getFirstConnections());
+		aConnections.addAll(a.getLastConnections());
+		for (PolyRoad road : aConnections){
+			Set<PolyRoad> otherRoads = new HashSet<>(road.getFirstConnections());
+			otherRoads.addAll(road.getLastConnections());
+			if (!otherRoads.contains(a)) {
+				test = false;
+			}
+		}
+		assertTrue(test);
 	}
 }

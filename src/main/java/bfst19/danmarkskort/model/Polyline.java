@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import java.io.Serializable;
 
 public class Polyline implements Drawable, Serializable, SpatialIndexable {
-	private float[] coords;
+	float[] coords;
 	private float xMin, yMin, xMax, yMax;
 
 	public Polyline(OSMWay way) {

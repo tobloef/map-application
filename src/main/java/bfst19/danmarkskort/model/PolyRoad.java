@@ -7,8 +7,9 @@ import java.util.Set;
 
 public class PolyRoad extends Polyline{
 	private double speedLimit;
-	private Set<PolyRoad> firstConnections;
-	private Set<PolyRoad> lastConnections;
+	private Set<Integer> firstConnections;
+	private Set<Integer> lastConnections;
+	public static PolyRoad[] allPolyRoads;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
@@ -17,10 +18,31 @@ public class PolyRoad extends Polyline{
 		this.speedLimit = way.getSpeedLimit();
 	}
 
-	public void addConnectionToFirst(PolyRoad polyRoad) {
-		firstConnections.add(polyRoad);
+	public void addConnectionToFirst(Integer i) {
+		firstConnections.add(i);
 	}
-	public void addConnectionTolast(PolyRoad polyRoad) {
-		lastConnections.add(polyRoad);
+
+	public void addConnectionTolast(Integer i) {
+		lastConnections.add(i);
+	}
+
+	public double getSpeedLimit() {
+		return speedLimit;
+	}
+
+	public Set<PolyRoad> getFirstConnections() {
+		Set<PolyRoad> result = new HashSet<>();
+		for (Integer i : firstConnections) {
+			result.add(allPolyRoads[i]);
+		}
+		return result;
+	}
+
+	public Set<PolyRoad> getLastConnections() {
+		Set<PolyRoad> result = new HashSet<>();
+		for (Integer i : lastConnections) {
+			result.add(allPolyRoads[i]);
+		}
+		return result;
 	}
 }
