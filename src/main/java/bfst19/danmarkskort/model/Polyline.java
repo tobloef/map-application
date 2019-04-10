@@ -62,7 +62,7 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 	}
 
 	@Override
-	public float getNonEuclideanDistanceTo(float x, float y) {
+	public float euclideanDistanceSquaredTo(float x, float y) {
 		float minimumDistance = Float.POSITIVE_INFINITY;
 		for (int i = 0; i < coords.length; i+=2){
 			float tempDistance = distance(x - coords[i], y - coords[i+1]);

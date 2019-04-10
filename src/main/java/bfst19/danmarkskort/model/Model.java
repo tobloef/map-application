@@ -16,6 +16,7 @@ public class Model {
 	List<Runnable> observers = new ArrayList<>();
 	Set<WayType> blacklistedWaytypes = new HashSet<>();
 	public Rectangle modelBounds;
+	float mouseX, mouseY;
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -120,5 +121,10 @@ public class Model {
 
 	public Drawable getNearest(WayType type, Point2D modelCoords) {
 		return drawableModel.getNearestNeighbor(type, (float)modelCoords.getX(), (float)modelCoords.getY());
+	}
+
+	public void setMouseCoords(float mouseX, float mouseY) {
+		this.mouseX = mouseX;
+		this.mouseY = mouseY;
 	}
 }

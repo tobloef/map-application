@@ -100,12 +100,4 @@ public class MapCanvas extends Canvas {
 	public double getDegreesLatitudePerPixel() {
 		return degreesLatitudePerPixel;
 	}
-
-	public void setDrawCoords(float localX, float localY) {
-		for(Drawer drawer: drawers){
-			if (drawer instanceof MapDrawer){
-				((MapDrawer)drawer).setDrawCoords(localX,localY);
-			}
-		}
-	}
 }

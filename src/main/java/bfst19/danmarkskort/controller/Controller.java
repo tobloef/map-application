@@ -63,7 +63,6 @@ public class Controller {
 	public void onMouseMoved(MouseEvent mouseEvent) {
 		float localX = (float)mouseEvent.getX();
 		float localY = (float)mouseEvent.getY();
-		mapCanvas.setDrawCoords(localX, localY);
-		mapCanvas.repaint();
+		model.setMouseCoords(localX, localY);
 	}
 }

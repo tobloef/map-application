@@ -84,23 +84,23 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			return getClosestElement(x, y, distance);
 		}
 		T closestElement = null;
-		if (lower.bbox.nonEuclideanDistanceTo(x,y) < distance){
+		if (lower.bbox.euclideanDistanceSquaredTo(x,y) < distance){
 			T lowerClosestElement = (T) lower.getNearestNeighbor(x, y, distance);
-			if (lowerClosestElement != null && lowerClosestElement.getNonEuclideanDistanceTo(x, y) < distance) {
+			if (lowerClosestElement != null && lowerClosestElement.euclideanDistanceSquaredTo(x, y) < distance) {
 				closestElement = lowerClosestElement;
-				distance = closestElement.getNonEuclideanDistanceTo(x, y);
+				distance = closestElement.euclideanDistanceSquaredTo(x, y);
 			}
 		}
-		float splitElementDistance = splitElement.getNonEuclideanDistanceTo(x ,y);
+		float splitElementDistance = splitElement.euclideanDistanceSquaredTo(x ,y);
 		if (splitElementDistance < distance){
 			distance = splitElementDistance;
 			closestElement = splitElement;
 		}
-		if (higher.bbox.nonEuclideanDistanceTo(x,y) < distance){
+		if (higher.bbox.euclideanDistanceSquaredTo(x,y) < distance){
 			T higherClosestElement = (T) higher.getNearestNeighbor(x, y, distance);
-			if (higherClosestElement != null && higherClosestElement.getNonEuclideanDistanceTo(x, y) < distance) {
+			if (higherClosestElement != null && higherClosestElement.euclideanDistanceSquaredTo(x, y) < distance) {
 				closestElement = higherClosestElement;
-				distance = closestElement.getNonEuclideanDistanceTo(x, y);
+				distance = closestElement.euclideanDistanceSquaredTo(x, y);
 			}
 		}
 		return closestElement;
@@ -109,7 +109,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private T getClosestElement(float x, float y, float distance) {
 		T closestElement = null;
 		for (T element : leafElements){
-			float tempDistance = element.getNonEuclideanDistanceTo(x, y);
+			float tempDistance = element.euclideanDistanceSquaredTo(x, y);
 			if (tempDistance < distance){
 				distance = tempDistance;
 				closestElement = element;

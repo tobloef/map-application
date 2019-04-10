@@ -31,24 +31,24 @@ class RectangleTest {
 	@Test
 	void containsPoint() {
 		Rectangle rect1 = new Rectangle(0, 0, 10, 10); //The larger one
-		assertEquals(2*2,rect1.nonEuclideanDistanceTo(2, 12),  0.02);
+		assertEquals(2*2,rect1.euclideanDistanceSquaredTo(2, 12),  0.02);
 	}
 
 	@Test
 	void pointMiddleX() {
 		Rectangle rect1 = new Rectangle(0, 0, 10, 10); //The larger one
-		assertEquals(2*2, rect1.nonEuclideanDistanceTo(2, 12), 0.02);
+		assertEquals(2*2, rect1.euclideanDistanceSquaredTo(2, 12), 0.02);
 	}
 
 	@Test
 	void pointTopLeft() {
 		Rectangle rect1 = new Rectangle(0, 0, 10, 10); //The larger one
-		assertEquals((1)+(2*2),rect1.nonEuclideanDistanceTo(-1, 12), 0.02);
+		assertEquals((1)+(2*2),rect1.euclideanDistanceSquaredTo(-1, 12), 0.02);
 	}
 
 	@Test
 	void pointBottomRight() {
 		Rectangle rect1 = new Rectangle(0, 0, 10, 10); //The larger one
-		assertEquals((4*4)+(1), rect1.nonEuclideanDistanceTo(14, -1), 0.02);
+		assertEquals((4*4)+(1), rect1.euclideanDistanceSquaredTo(14, -1), 0.02);
 	}
 }

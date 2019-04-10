@@ -5,5 +5,5 @@ public interface SpatialIndexable {
 	float getRepresentativeY();
 	Rectangle getMinimumBoundingRectangle();
 
-	float getNonEuclideanDistanceTo(float x, float y);
+	float euclideanDistanceSquaredTo(float x, float y);
 }
