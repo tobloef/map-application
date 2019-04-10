@@ -44,7 +44,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 	}
 
 	private void initializeKDTree(){
-		//countFloats();
+		countFloats();
 		wayTypeToKDTreeRoot = new HashMap<>();
 		for (WayType wayType : WayType.values()){
 			List<Drawable> drawables = wayTypeEnumMap.get(wayType);
@@ -62,7 +62,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 			for (Drawable drawable : wayTypeEnumMap.get(wayType)){
 				numOfFloats += drawable.getNumOfFloats();
 			}
-			System.out.println(wayType.name() + ": " + numOfFloats);
+			System.out.println( wayTypeEnumMap.get(wayType).size() + " of " + wayType.name() + " having : " + numOfFloats + " floats");
 		}
 	}
 
@@ -76,6 +76,16 @@ public class KDTreeDrawableModel implements DrawableModel {
 		return modelBounds;
 	}
 
+	@Override
+	public Drawable getNearestNeighbor(WayType type, float x, float y) {
+		if (wayTypeToKDTreeRoot.containsKey(type)) {
+			SpatialIndexable drawable = wayTypeToKDTreeRoot.get(type).getNearestNeighbor(x, y);
+			if (drawable != null) {
+				return (Drawable) drawable;
+			}
+		}
+		return null ;
+	}
 
 
 }

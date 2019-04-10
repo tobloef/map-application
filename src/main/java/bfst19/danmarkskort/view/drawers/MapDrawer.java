@@ -9,6 +9,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
+import java.util.ArrayList;
+
 import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 
 public class MapDrawer implements Drawer {
@@ -52,7 +54,6 @@ public class MapDrawer implements Drawer {
 			else {
 				continue;
 			}
-
 			drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
 		}
 	}

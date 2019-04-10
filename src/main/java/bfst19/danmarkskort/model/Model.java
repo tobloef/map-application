@@ -2,6 +2,7 @@ package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
+import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -15,7 +16,7 @@ public class Model {
 	List<Runnable> observers = new ArrayList<>();
 	Set<WayType> blacklistedWaytypes = new HashSet<>();
 	public Rectangle modelBounds;
-	private NavigationGraph navigationGraph;
+	float mouseX, mouseY;
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -116,5 +117,14 @@ public class Model {
 		try (ObjectOutputStream output = new ObjectOutputStream(bufferedOutputStream)) {
 			output.writeObject(drawableModel);
 		}
+	}
+
+	public Drawable getNearest(WayType type, Point2D modelCoords) {
+		return drawableModel.getNearestNeighbor(type, (float)modelCoords.getX(), (float)modelCoords.getY());
+	}
+
+	public void setMouseCoords(float mouseX, float mouseY) {
+		this.mouseX = mouseX;
+		this.mouseY = mouseY;
 	}
 }
