@@ -105,7 +105,7 @@
 
 - RESIDENTIAL:
     fillColor: "E6E6FA"
-    zoomLevel: *postCode
+    zoomLevel: *halfAmager
 
 - ALLOTMENTS:
     fillColor: "98FB98"
