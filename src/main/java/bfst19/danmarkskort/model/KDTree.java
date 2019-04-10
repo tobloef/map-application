@@ -7,8 +7,7 @@ import java.util.Random;
 
 public class KDTree<T extends SpatialIndexable> implements Serializable {
 	T splitElement;
-	//Bounding box could be saved in just float so save the memory overhead.
-	private Rectangle bbox;
+	private float xMin, yMin, xMax, yMax;
 	List<T> leafElements;
 	KDTree lower;
 	KDTree higher;
@@ -20,7 +19,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
-		this.bbox = bbox;
+		this.setBbox(bbox);
 		if (inputElements.size() < MAX_NODES_PER_LEAF){
 			this.leafElements = inputElements;
 			growToEncompassLeafElements(inputElements);
@@ -28,8 +27,8 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		else {
 			splitElement = quickMedian(inputElements, odd);
 			inputElements.remove(splitElement);
-			this.bbox.growToEncompass(splitElement.getMinimumBoundingRectangle());
-			makeSubTrees(inputElements, odd, bbox);
+			this.bboxGrowToEncompass(splitElement.getMinimumBoundingRectangle());
+			makeSubTrees(inputElements, odd, this.getBbox());
 		}
 	}
 
@@ -54,7 +53,24 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			}
 		}
 		higher = new KDTree<T>(higherElements, !odd, higherBBox);
-		this.bbox.growToEncompass(higher.bbox);
+		this.bboxGrowToEncompass(higher.getBbox());
+	}
+
+	private void bboxGrowToEncompass(Rectangle otherBbox) {
+		Rectangle bbox = this.getBbox();
+		bbox.growToEncompass(otherBbox);
+		setBbox(bbox);
+	}
+
+	private void setBbox(Rectangle bbox) {
+		this.xMin = bbox.xMin;
+		this.yMin = bbox.yMin;
+		this.xMax = bbox.xMax;
+		this.yMax = bbox.yMax;
+	}
+
+	private Rectangle getBbox() {
+		return new Rectangle(xMin, yMin, xMax, yMax);
 	}
 
 	private void makeLowerTree(boolean odd, Rectangle bbox, List<T> inputElements) {
@@ -72,12 +88,12 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			}
 		}
 		lower = new KDTree<T>(lowerElements, !odd, lowerBBox);
-		this.bbox.growToEncompass(lower.bbox);
+		this.bboxGrowToEncompass(lower.getBbox());
 	}
 
 	private void growToEncompassLeafElements(List<T> inputElements) {
 		for (T inputElement: inputElements){
-			this.bbox.growToEncompass(inputElement.getMinimumBoundingRectangle());
+			this.bboxGrowToEncompass(inputElement.getMinimumBoundingRectangle());
 		}
 	}
 
@@ -109,10 +125,10 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		if (splitElement.getMinimumBoundingRectangle().intersect(queryBox)){
 			returnElements.add(splitElement);
 		}
-		if(queryBox.intersect(lower.bbox)){
+		if(queryBox.intersect(lower.getBbox())){
 			lower.rangeQuery(queryBox, !odd, returnElements);
 		}
-		if(queryBox.intersect(higher.bbox)){
+		if(queryBox.intersect(higher.getBbox())){
 			higher.rangeQuery(queryBox, !odd, returnElements);
 		}
 		return returnElements;
