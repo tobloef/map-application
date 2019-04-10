@@ -6,10 +6,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipInputStream;
 
 import static javax.xml.stream.XMLStreamConstants.*;
@@ -49,6 +46,27 @@ public class OSMParser {
 	}
 
 	private void initPolyRoadConnections() {
+		List<OSMRoadWay> toBeAdded = splitWays();
+		roadWays.addAll(toBeAdded);
+		for (OSMRoadWay way : roadWays) {
+			PolyRoad newRoad = new PolyRoad(way);
+			roadWaysToPolyRoads.put(way, newRoad);
+			drawableModel.add(way.getType(), newRoad);
+		}
+		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
+			PolyRoad road = roadWaysToPolyRoads.get(way);
+			OSMRoadNode first = (OSMRoadNode) way.getFirst();
+			OSMRoadNode last = (OSMRoadNode) way.getLast();
+			for (OSMRoadWay connection : first.getConnections()) {
+				road.addConnectionToFirst(roadWaysToPolyRoads.get(connection));
+			}
+			for (OSMRoadWay connection : last.getConnections()) {
+				road.addConnectionTolast(roadWaysToPolyRoads.get(connection));
+			}
+		}
+	}
+
+	private List<OSMRoadWay> splitWays() {
 		List<OSMRoadWay> toBeAdded = new ArrayList<>();
 		for (OSMRoadWay way : roadWays) {
 			OSMRoadWay newWay = way;
@@ -59,16 +77,7 @@ public class OSMParser {
 				}
 			}
 		}
-		roadWays.addAll(toBeAdded);
-		for (OSMRoadWay way : roadWays) {
-			PolyRoad newRoad = new PolyRoad(way);
-			roadWaysToPolyRoads.put(way, newRoad);
-			drawableModel.add(way.getType(), newRoad);
-		}
-		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
-			PolyRoad road = roadWaysToPolyRoads.get(way);
-
-		}
+		return toBeAdded;
 	}
 
 	private void initSpeedLimits() {

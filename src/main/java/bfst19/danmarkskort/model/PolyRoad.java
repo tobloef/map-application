@@ -1,27 +1,26 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.parsing.OSMNode;
-import bfst19.danmarkskort.model.parsing.OSMRoadNode;
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
-import bfst19.danmarkskort.model.parsing.OSMWay;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class PolyRoad extends Polyline{
 	private double speedLimit;
 	private Set<PolyRoad> firstConnections;
-	private Set<PolyRoad> lastConnnections;
+	private Set<PolyRoad> lastConnections;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
 		firstConnections = new HashSet<>();
-		lastConnnections = new HashSet<>();
+		lastConnections = new HashSet<>();
 		this.speedLimit = way.getSpeedLimit();
 	}
 
-	public void init() {
-
+	public void addConnectionToFirst(PolyRoad polyRoad) {
+		firstConnections.add(polyRoad);
+	}
+	public void addConnectionTolast(PolyRoad polyRoad) {
+		lastConnections.add(polyRoad);
 	}
 }

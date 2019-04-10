@@ -26,7 +26,11 @@ public class OSMRoadNode extends OSMNode{
 		return connections.size();
 	}
 
-//	public Connection getOtherConnection(Connection origin) {
+	public Set<OSMRoadWay> getConnections() {
+		return connections;
+	}
+
+	//	public Connection getOtherConnection(Connection origin) {
 //		for (Connection connection : connections) {
 //			if (connection != origin) {
 //				return connection;
