@@ -28,6 +28,7 @@ public class OSMParser {
 	private Map<String, String> tags = new HashMap<>();
 	private Map<String, Integer> speedLimits = new HashMap<>();
 	private List<OSMRoadNode> roadNodes = new ArrayList<>();
+	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
@@ -138,6 +139,9 @@ public class OSMParser {
 		if (currentType == WayType.COASTLINE) {
 			coastLines.add(currentWay);
 		} else {
+			if (currentWay instanceof OSMRoadWay) {
+
+			}
 			drawableModel.add(currentType, new Polyline(currentWay));
 		}
 		currentWay = null;
@@ -195,7 +199,7 @@ public class OSMParser {
 	}
 
 	private OSMRoadWay convertWayToRoad(OSMWay way) {
-		OSMRoadWay road = new OSMRoadWay(way, getMaxSpeed());
+		OSMRoadWay road = new OSMRoadWay(way, getMaxSpeed(), currentType);
 		idToWay.replace(road);
 		return road;
 	}

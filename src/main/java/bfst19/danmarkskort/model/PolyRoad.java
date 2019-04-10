@@ -1,5 +1,7 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.parsing.OSMNode;
+import bfst19.danmarkskort.model.parsing.OSMRoadNode;
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
 import bfst19.danmarkskort.model.parsing.OSMWay;
 
