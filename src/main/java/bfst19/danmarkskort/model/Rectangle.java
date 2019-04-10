@@ -79,4 +79,21 @@ public class Rectangle implements Serializable {
 			this.yMax = rectangle.yMax;
 		}
 	}
+
+	public float euclideanDistanceSquaredTo(float x, float y){
+		float resultX = 0, resultY = 0;
+		if (x < xMin){
+			resultX = xMin - x;
+		}
+		else if (x > xMax) {
+			resultX = x - xMax;
+		}
+		if (y < yMin){
+			resultY = yMin-y;
+		}
+		else if (y > yMax){
+			resultY = y-yMax;
+		}
+		return resultX*resultX + resultY*resultY;
+	}
 }

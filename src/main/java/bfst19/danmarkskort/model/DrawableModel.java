@@ -9,6 +9,6 @@ public interface DrawableModel extends Serializable {
 	void doneAdding();
 	void setModelBounds(Rectangle bounds);
 	Rectangle getModelBounds();
-
+	Drawable getNearestNeighbor(WayType type, float x, float y);
 
 }

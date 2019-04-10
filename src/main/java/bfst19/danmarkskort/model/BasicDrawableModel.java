@@ -47,4 +47,9 @@ public class BasicDrawableModel implements DrawableModel {
 		return modelBounds;
 	}
 
+	@Override
+	public Drawable getNearestNeighbor(WayType type, float x, float y) {
+		return wayTypeEnumMap.get(type).get(0);
+	}
+
 }

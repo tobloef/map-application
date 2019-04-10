@@ -1,5 +1,6 @@
 package bfst19.danmarkskort.view.controls;
 
+import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.view.drawers.ZoomIndicatorDrawer;
 import bfst19.danmarkskort.view.drawers.Drawer;
@@ -11,6 +12,7 @@ import javafx.scene.transform.Affine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MapCanvas extends Canvas {
 	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
