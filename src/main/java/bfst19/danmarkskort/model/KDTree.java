@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class KDTree<T extends SpatialIndexable> implements Serializable {
 	T splitElement;
-	private float xMin, yMin, xMax, yMax;
+	Rectangle bbox;
 	List<T> leafElements;
 	KDTree lower;
 	KDTree higher;
@@ -63,14 +63,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	}
 
 	private void setBbox(Rectangle bbox) {
-		this.xMin = bbox.xMin;
-		this.yMin = bbox.yMin;
-		this.xMax = bbox.xMax;
-		this.yMax = bbox.yMax;
+		this.bbox = bbox;
 	}
 
 	private Rectangle getBbox() {
-		return new Rectangle(xMin, yMin, xMax, yMax);
+		return bbox;
 	}
 
 	private void makeLowerTree(boolean odd, Rectangle bbox, List<T> inputElements) {
