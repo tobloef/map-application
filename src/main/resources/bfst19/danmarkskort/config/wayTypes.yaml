@@ -219,6 +219,8 @@
 
 - RESIDENTIAL:
   - residential
+  - landuse:
+    - residential
 
 - FERRY:
   - route:

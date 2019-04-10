@@ -11,6 +11,7 @@ public enum WayType {
 	SCREE,
 
 	ADMINISTRATIVE,
+	RESIDENTIAL,
 
 	// Water
 	TREES,
@@ -29,7 +30,6 @@ public enum WayType {
 	CONSTRUCTION,
 	INDUSTRIAL,
 	CEMETERY,
-	RESIDENTIAL,
 	ALLOTMENTS,
 	PLAYGROUND,
 	BUILDING,

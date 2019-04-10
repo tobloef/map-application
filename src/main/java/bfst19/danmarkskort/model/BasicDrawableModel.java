@@ -49,7 +49,7 @@ public class BasicDrawableModel implements DrawableModel {
 
 	@Override
 	public Drawable getNearestNeighbor(WayType type, float x, float y) {
-		return wayTypeEnumMap.get(type).get(0);
+		throw new RuntimeException("This methods does not make sense for a non spatial data type.");
 	}
 
 }
