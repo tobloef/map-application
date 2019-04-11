@@ -1,19 +1,16 @@
 package bfst19.danmarkskort.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Dijkstra {
 
-	public List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination){
+	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination){
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
 		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
-		for(double distance : distTo){
-			distance = Double.POSITIVE_INFINITY;
+		for(int i = 0; i < distTo.length; i++){
+			distTo[i] = Double.POSITIVE_INFINITY;
 		}
 
 		distTo[origin.getIndex()] = 0;
@@ -30,22 +27,24 @@ public class Dijkstra {
 				connections.addAll(current.getOtherConnections(current));
 			}
 			for(PolyRoad thisConnection : connections){
-				int w = thisConnection.getIndex();
-				if(distTo[w] > distTo[current.getIndex()] + current.getLength()){
-					distTo[w] = distTo[current.getIndex()] + current.getLength();
+				int thisConnectionIndex = thisConnection.getIndex();
+				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getLength()){
+					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getLength();
 					previousRoads.put(thisConnection, current);
-					if(remainingPolyRoads.contains(w)){
-						remainingPolyRoads.changeKey(w, distTo[w]);
+					if(remainingPolyRoads.contains(thisConnectionIndex)){
+						remainingPolyRoads.changeKey(thisConnectionIndex, distTo[thisConnectionIndex]);
 					}
 					else{
-						remainingPolyRoads.insert(w, distTo[w]);
+						remainingPolyRoads.insert(thisConnectionIndex, distTo[thisConnectionIndex]);
 					}
 				}
-				if(PolyRoad.allPolyRoads[w] == destination){
+				if(PolyRoad.allPolyRoads[thisConnectionIndex] == destination){
 					List<PolyRoad> path = new ArrayList<>();
+					path.add(destination);
 					while(path.get(path.size()-1) != origin){
 						path.add(previousRoads.get(path.get(path.size()-1)));
 					}
+					Collections.reverse(path);
 					return path;
 				}
 			}

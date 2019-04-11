@@ -2,7 +2,9 @@ package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PolyRoad extends Polyline{
@@ -65,7 +67,7 @@ public class PolyRoad extends Polyline{
 		if (lastConnections.contains(originIndex)) {
 			return getFirstConnections();
 		}
-		throw new RuntimeException("Error: Roads are only connected in one direction");
+		throw new RuntimeException("Error: This road has no connection to the specified road.");
 	}
 
 	public int getIndex() {
@@ -86,5 +88,17 @@ public class PolyRoad extends Polyline{
 			result.add(allPolyRoads[i]);
 		}
 		return result;
+	}
+
+	public List<PolyRoad> getAllConnections() {
+		List<PolyRoad> result = new ArrayList<>();
+		result.addAll(getFirstConnections());
+		result.addAll(getLastConnections());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "" + index;
 	}
 }
