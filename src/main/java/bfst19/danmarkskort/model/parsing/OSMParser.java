@@ -26,6 +26,7 @@ public class OSMParser {
 	private List<OSMRoadNode> roadNodes = new ArrayList<>();
 	private List<OSMRoadWay> roadWays = new ArrayList<>();
 	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
+	private Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
@@ -56,8 +57,8 @@ public class OSMParser {
 		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size()];
 		int i = 0;
 		for (PolyRoad road : roadWaysToPolyRoads.values()) {
+			polyRoadToIntegers.put(road, i);
 			PolyRoad.allPolyRoads[i] = road;
-			road.setIndex(i);
 			i++;
 		}
 		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
@@ -65,22 +66,10 @@ public class OSMParser {
 			OSMRoadNode first = (OSMRoadNode) way.getFirst();
 			OSMRoadNode last = (OSMRoadNode) way.getLast();
 			for (OSMRoadWay connection : first.getConnections()) {
-				if (roadWaysToPolyRoads.get(connection) == null) {
-					//this should not happen
-					continue;
-				}
-				if (road != roadWaysToPolyRoads.get(connection)) {
-					road.addConnectionToFirst(roadWaysToPolyRoads.get(connection));
-				}
+				road.addConnectionToFirst(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
 			}
 			for (OSMRoadWay connection : last.getConnections()) {
-				if (roadWaysToPolyRoads.get(connection) == null) {
-					//this should not happen
-					continue;
-				}
-				if (road != roadWaysToPolyRoads.get(connection)) {
-					road.addConnectionTolast(roadWaysToPolyRoads.get(connection));
-				}
+				road.addConnectionTolast(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
 			}
 		}
 	}
@@ -292,6 +281,12 @@ public class OSMParser {
 		return maxSpeed;
 	}
 
+	private double findDistanceBetween(OSMRoadNode lastNode, OSMRoadNode newNode) {
+		double deltaX = lastNode.getLon() - newNode.getLon();
+		double deltaY = lastNode.getLat() - newNode.getLat();
+		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+	}
+
 	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		currentWay.add(idToNode.get(ref));
@@ -317,5 +312,18 @@ public class OSMParser {
 
 	public Rectangle getModelBounds() {
 		return bounds;
+	}
+
+	public List<OSMRoadNode> getRoadNodes() {
+		return roadNodes;
+	}
+
+	public OSMNode getNodeFromID(long ref) {
+		return idToNode.get(ref);
+	}
+	public LongMap<OSMNode> getLongMap() {return idToNode;}
+
+	public NavigationGraph makeNavigationGraph() {
+		return new NavigationGraph(roadNodes);
 	}
 }

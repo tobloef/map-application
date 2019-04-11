@@ -34,6 +34,7 @@ public class OSMRoadWay extends OSMWay {
 
 	public OSMRoadWay splitIfNeeded() {
 		for (int i = 1; i < list.size() - 1; i++) {
+
 			OSMRoadNode node;
 			if (list.get(i) instanceof OSMRoadNode) {
 				node = (OSMRoadNode) list.get(i);
@@ -60,5 +61,9 @@ public class OSMRoadWay extends OSMWay {
 
 	public WayType getType() {
 		return type;
+	}
+
+	public void clear() {
+		list.clear();
 	}
 }
