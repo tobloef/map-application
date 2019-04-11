@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
+import bfst19.danmarkskort.utils.EnumHelper;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
@@ -20,6 +21,7 @@ public class Model {
 	float mouseX, mouseY;
 	PolyRoad start, end;
 	List<PolyRoad> shortestPath;
+	public static final List<WayType> roadTypes = WayType.getRoadTypes();
 
 
 	public boolean dontDraw(WayType waytype){
@@ -165,6 +167,20 @@ public class Model {
 	}
 
 	private Drawable getClosestRoad(float x, float y) {
-		return getNearest(WayType.RESIDENTIAL_ROAD, new Point2D(x,y));
+		PolyRoad closestRoad = null;
+		for (WayType roadType : roadTypes){
+			Drawable close = getNearest(roadType, new Point2D(x,y));
+			if (close == null || !(close instanceof PolyRoad)){
+				continue;
+			}
+
+			PolyRoad closeRoad = (PolyRoad)close;
+			if (closestRoad == null || closestRoad.euclideanDistanceSquaredTo(x, y) > closeRoad.euclideanDistanceSquaredTo(x, y)) {
+				closestRoad = closeRoad;
+			}
+
+		}
+
+		return closestRoad;
 	}
 }
