@@ -20,11 +20,10 @@ public class Dijkstra {
 			List<PolyRoad> connections = new ArrayList<>();
 
 			if(current == origin){
-				connections.addAll(current.getFirstConnections());
-				connections.addAll(current.getLastConnections());
+				connections.addAll(current.getAllConnections());
 			}
 			else{
-				connections.addAll(current.getOtherConnections(current));
+				connections.addAll(current.getOtherConnections(previousRoads.get(current)));
 			}
 			for(PolyRoad thisConnection : connections){
 				int thisConnectionIndex = thisConnection.getIndex();

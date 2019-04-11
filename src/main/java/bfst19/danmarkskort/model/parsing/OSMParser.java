@@ -24,7 +24,7 @@ public class OSMParser {
 	private Map<String, String> tags = new HashMap<>();
 	private Map<String, Integer> speedLimits = new HashMap<>();
 	private List<OSMRoadNode> roadNodes = new ArrayList<>();
-	private List<OSMRoadWay> roadWays = new ArrayList<>();
+	private Set<OSMRoadWay> OSMRoads = new HashSet<>();
 	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
 	private Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
@@ -47,36 +47,55 @@ public class OSMParser {
 	}
 
 	private void initPolyRoadConnections() {
-		List<OSMRoadWay> toBeAdded = splitWays();
-		roadWays.addAll(toBeAdded);
-		for (OSMRoadWay way : roadWays) {
-			PolyRoad newRoad = new PolyRoad(way);
-			roadWaysToPolyRoads.put(way, newRoad);
-			drawableModel.add(way.getType(), newRoad);
+		for (OSMRoadNode node : roadNodes) {
+			OSMRoads.addAll(node.getConnections());
 		}
-		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size()];
-		int i = 0;
-		for (PolyRoad road : roadWaysToPolyRoads.values()) {
-			polyRoadToIntegers.put(road, i);
-			PolyRoad.allPolyRoads[i] = road;
-			i++;
-		}
+		OSMRoads.addAll(splitWays());
+		createPolyRoadsFromOSMRoads();
+		fillPolyRoadsIntoArray();
+		initializeConnections();
+	}
+
+	private void initializeConnections() {
 		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
 			PolyRoad road = roadWaysToPolyRoads.get(way);
 			OSMRoadNode first = (OSMRoadNode) way.getFirst();
 			OSMRoadNode last = (OSMRoadNode) way.getLast();
 			for (OSMRoadWay connection : first.getConnections()) {
-				road.addConnectionToFirst(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
+				if (road != roadWaysToPolyRoads.get(connection)){
+					road.addConnectionToFirst(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
+				}
 			}
 			for (OSMRoadWay connection : last.getConnections()) {
-				road.addConnectionTolast(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
+				if (road != roadWaysToPolyRoads.get(connection)) {
+					road.addConnectionTolast(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
+				}
 			}
+		}
+	}
+
+	private void fillPolyRoadsIntoArray() {
+		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size()];
+		int i = 0;
+		for (PolyRoad road : roadWaysToPolyRoads.values()) {
+			polyRoadToIntegers.put(road, i);
+			PolyRoad.allPolyRoads[i] = road;
+			road.setIndex(i);
+			i++;
+		}
+	}
+
+	private void createPolyRoadsFromOSMRoads() {
+		for (OSMRoadWay way : OSMRoads) {
+			PolyRoad newRoad = new PolyRoad(way);
+			roadWaysToPolyRoads.put(way, newRoad);
+			drawableModel.add(way.getType(), newRoad);
 		}
 	}
 
 	private List<OSMRoadWay> splitWays() {
 		List<OSMRoadWay> toBeAdded = new ArrayList<>();
-		for (OSMRoadWay way : roadWays) {
+		for (OSMRoadWay way : OSMRoads) {
 			OSMRoadWay newWay = way;
 			while (newWay != null) {
 				newWay = newWay.splitIfNeeded();
@@ -186,7 +205,7 @@ public class OSMParser {
 		}
 		if (currentType != WayType.UNKNOWN) {
 			if (currentWay instanceof OSMRoadWay) {
-				roadWays.add((OSMRoadWay) currentWay);
+				OSMRoads.add((OSMRoadWay) currentWay);
 			}
 			else {
 				drawableModel.add(currentType, new Polyline(currentWay));
@@ -281,11 +300,7 @@ public class OSMParser {
 		return maxSpeed;
 	}
 
-	private double findDistanceBetween(OSMRoadNode lastNode, OSMRoadNode newNode) {
-		double deltaX = lastNode.getLon() - newNode.getLon();
-		double deltaY = lastNode.getLat() - newNode.getLat();
-		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
-	}
+
 
 	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
@@ -312,18 +327,5 @@ public class OSMParser {
 
 	public Rectangle getModelBounds() {
 		return bounds;
-	}
-
-	public List<OSMRoadNode> getRoadNodes() {
-		return roadNodes;
-	}
-
-	public OSMNode getNodeFromID(long ref) {
-		return idToNode.get(ref);
-	}
-	public LongMap<OSMNode> getLongMap() {return idToNode;}
-
-	public NavigationGraph makeNavigationGraph() {
-		return new NavigationGraph(roadNodes);
 	}
 }

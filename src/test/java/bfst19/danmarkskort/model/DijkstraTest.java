@@ -17,7 +17,10 @@ public class DijkstraTest {
 		String filePath = this.getClass().getResource("small.osm").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);
 		PolyRoad a = PolyRoad.allPolyRoads[0];
-		PolyRoad b = PolyRoad.allPolyRoads[482];
+		for (PolyRoad road : a.getAllConnections()) {
+			assertTrue(road.getAllConnections().contains(a));
+		}
+		PolyRoad b = PolyRoad.allPolyRoads[693];
 		System.out.println(a.getAllConnections());
 		System.out.println(b.getAllConnections());
 		List<PolyRoad> shortestPath = Dijkstra.getShortestPath(a, b);

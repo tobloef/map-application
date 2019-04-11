@@ -1,13 +1,12 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.parsing.OSMRoadNode;
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PolyRoad extends Polyline{
+	private int index;
 	private double speedLimit;
 	private Set<Integer> firstConnections;
 	private Set<Integer> lastConnections;
@@ -18,6 +17,7 @@ public class PolyRoad extends Polyline{
 		firstConnections = new HashSet<>();
 		lastConnections = new HashSet<>();
 		this.speedLimit = way.getSpeedLimit();
+		index = -1;
 	}
 
 	public void addConnectionToFirst(Integer i) {
@@ -55,8 +55,40 @@ public class PolyRoad extends Polyline{
 		return result;
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 	@Override
 	public String toString() {
 		return "" + index;
+	}
+
+	public Set<PolyRoad> getOtherConnections(PolyRoad origin) {
+		if (firstConnections.contains(origin.getIndex())) {
+			return getLastConnections();
+		}
+		if (lastConnections.contains(origin.getIndex())) {
+			return getFirstConnections();
+		}
+		throw new IllegalArgumentException("This road is not connected to specified road");
+	}
+
+	public double getLength() {
+		double result = 0;
+		for (int i = 0; i < coords.length - 2; i += 2) {
+			result += findDistanceBetween(coords[i], coords[i+1], coords[i+2], coords[i+3]);
+		}
+		return result;
+	}
+
+	private double findDistanceBetween(double x1, double y1, double x2, double y2) {
+		double deltaX = x1 - y1;
+		double deltaY = x2 - y2;
+		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
 	}
 }
