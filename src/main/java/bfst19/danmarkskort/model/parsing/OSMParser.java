@@ -63,12 +63,12 @@ public class OSMParser {
 			OSMRoadNode last = (OSMRoadNode) way.getLast();
 			for (OSMRoadWay connection : first.getConnections()) {
 				if (road != roadWaysToPolyRoads.get(connection)){
-					road.addConnectionToFirst(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
+					road.addConnectionToFirst(roadWaysToPolyRoads.get(connection));
 				}
 			}
 			for (OSMRoadWay connection : last.getConnections()) {
 				if (road != roadWaysToPolyRoads.get(connection)) {
-					road.addConnectionTolast(polyRoadToIntegers.get(roadWaysToPolyRoads.get(connection)));
+					road.addConnectionTolast(roadWaysToPolyRoads.get(connection));
 				}
 			}
 		}

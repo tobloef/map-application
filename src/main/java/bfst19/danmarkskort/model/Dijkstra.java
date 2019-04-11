@@ -15,6 +15,7 @@ public class Dijkstra {
 
 		distTo[origin.getIndex()] = 0;
 		remainingPolyRoads.insert(origin.getIndex(), 0.0);
+
 		while(!remainingPolyRoads.isEmpty()){
 			PolyRoad current = PolyRoad.allPolyRoads[remainingPolyRoads.delMin()];
 			List<PolyRoad> connections = new ArrayList<>();

@@ -27,6 +27,7 @@ public class DijkstraTest {
 		assertNotNull(shortestPath);
 		b = PolyRoad.allPolyRoads[1086];
 		shortestPath = Dijkstra.getShortestPath(a, b);
+		System.out.println(shortestPath);
 		assertEquals(shortestPath.size(), 3);
 	}
 }

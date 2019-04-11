@@ -20,12 +20,12 @@ public class PolyRoad extends Polyline{
 		index = -1;
 	}
 
-	public void addConnectionToFirst(Integer i) {
-		firstConnections.add(i);
+	public void addConnectionToFirst(PolyRoad road) {
+		firstConnections.add(road.getIndex());
 	}
 
-	public void addConnectionTolast(Integer i) {
-		lastConnections.add(i);
+	public void addConnectionTolast(PolyRoad road) {
+		lastConnections.add(road.getIndex());
 	}
 
 	public double getSpeedLimit() {
@@ -75,7 +75,8 @@ public class PolyRoad extends Polyline{
 		if (lastConnections.contains(origin.getIndex())) {
 			return getFirstConnections();
 		}
-		throw new IllegalArgumentException("This road is not connected to specified road");
+		return new HashSet<>(getAllConnections());
+		//throw new IllegalArgumentException("This road is not connected to specified road");
 	}
 
 	public double getLength() {
