@@ -20,7 +20,6 @@ public class Model {
 	float mouseX, mouseY;
 	PolyRoad start, end;
 	List<PolyRoad> shortestPath;
-	Transform transform;
 
 
 	public boolean dontDraw(WayType waytype){
@@ -140,18 +139,7 @@ public class Model {
 		}
 	}
 
-	public Point2D modelCoords(double x, double y) {
-		try {
-			return transform.inverseTransform(x, y);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
-	public void setTransform(Transform transform){
-		this.transform = transform;
-	}
 
 	public List<? extends Drawable> getShortestPath() {
 		if (shortestPath != null){
@@ -161,7 +149,7 @@ public class Model {
 	}
 
 	public void updateEnd() {
-		Drawable nearest = getClosestRoadToMouse(mouseX, mouseY);
+		Drawable nearest = getClosestRoad(mouseX, mouseY);
 		if (nearest instanceof PolyRoad){
 			start = (PolyRoad) nearest;
 			updateShortestPath();
@@ -169,15 +157,14 @@ public class Model {
 	}
 
 	public void updateStart() {
-		Drawable nearest = getClosestRoadToMouse(mouseX, mouseY);
+		Drawable nearest = getClosestRoad(mouseX, mouseY);
 		if (nearest instanceof PolyRoad){
 			end = (PolyRoad) nearest;
 			updateShortestPath();
 		}
 	}
 
-	private Drawable getClosestRoadToMouse(float mouseX, float mouseY) {
-		Point2D mouseCoords = modelCoords(mouseX, mouseY);
-		return getNearest(WayType.RESIDENTIAL_ROAD, mouseCoords);
+	private Drawable getClosestRoad(float x, float y) {
+		return getNearest(WayType.RESIDENTIAL_ROAD, new Point2D(x,y));
 	}
 }

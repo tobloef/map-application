@@ -6,6 +6,7 @@ import bfst19.danmarkskort.model.Rectangle;
 import bfst19.danmarkskort.view.drawers.ZoomIndicatorDrawer;
 import bfst19.danmarkskort.view.drawers.Drawer;
 import bfst19.danmarkskort.view.drawers.MapDrawer;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.FillRule;
@@ -29,7 +30,6 @@ public class MapCanvas extends Canvas {
 		Affine affine = new Affine();
 		affine.prependScale(1,-1, 0, 0);
 		graphicsContext.setTransform(affine);
-		model.setTransform(affine);
 		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		initializeDrawers(model);
 		panViewToMapBounds();
@@ -102,7 +102,6 @@ public class MapCanvas extends Canvas {
 		Affine transform = graphicsContext.getTransform();
 		transform.prependTranslation(deltaX, deltaY);
 		graphicsContext.setTransform(transform);
-		model.setTransform(transform);
 		if (shouldRepaint) {
 			repaint();
 		}
@@ -120,7 +119,6 @@ public class MapCanvas extends Canvas {
 		}
 		transform.prependScale(factor, factor, x, y);
 		graphicsContext.setTransform(transform);
-		model.setTransform(transform);
 		updateDegreesPerPixel();
 		if (shouldRepaint) {
 			repaint();
@@ -145,5 +143,15 @@ public class MapCanvas extends Canvas {
 
 	public double getDegreesLatitudePerPixel() {
 		return degreesLatitudePerPixel;
+	}
+
+
+	public Point2D modelCoords(double x, double y) {
+		try {
+			return graphicsContext.getTransform().inverseTransform(x, y);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

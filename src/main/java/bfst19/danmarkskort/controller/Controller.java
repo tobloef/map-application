@@ -4,6 +4,7 @@ import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import bfst19.danmarkskort.view.View;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -65,12 +66,13 @@ public class Controller {
 	@FXML
 	private void onMousePressed(MouseEvent e) {
 		x = e.getX();
-		y = e.getX();
+		y = e.getY();
 	}
 
 	public void onMouseMoved(MouseEvent mouseEvent) {
 		float localX = (float)mouseEvent.getX();
 		float localY = (float)mouseEvent.getY();
-		model.setMouseCoords(localX, localY);
+		Point2D modelCoords = mapCanvas.modelCoords(localX, localY);
+		model.setMouseCoords((float)modelCoords.getX(), (float)modelCoords.getY());
 	}
 }
