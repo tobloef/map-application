@@ -67,7 +67,7 @@ public class PolyRoad extends Polyline{
 		if (lastConnections.contains(originIndex)) {
 			return getFirstConnections();
 		}
-		throw new RuntimeException("Error: This road has no connection to the specified road.");
+		throw new RuntimeException("Error: Roads are only connected in one direction");
 	}
 
 	public int getIndex() {
