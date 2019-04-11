@@ -21,13 +21,14 @@ public class DijkstraTest {
 			assertTrue(road.getAllConnections().contains(a));
 		}
 		PolyRoad b = PolyRoad.allPolyRoads[693];
-		System.out.println(a.getAllConnections());
-		System.out.println(b.getAllConnections());
+		PolyRoad c = PolyRoad.allPolyRoads[156];
+		//System.out.println(a.getAllConnections());
+		//System.out.println(b.getAllConnections());
 		List<PolyRoad> shortestPath = Dijkstra.getShortestPath(a, b);
 		assertNotNull(shortestPath);
-		b = PolyRoad.allPolyRoads[1086];
-		shortestPath = Dijkstra.getShortestPath(a, b);
+		assertEquals(2, shortestPath.size());
+		shortestPath = Dijkstra.getShortestPath(a, c);
 		System.out.println(shortestPath);
-		assertEquals(shortestPath.size(), 3);
+		assertEquals(3, shortestPath.size());
 	}
 }
