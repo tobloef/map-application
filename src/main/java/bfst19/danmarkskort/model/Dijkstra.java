@@ -33,6 +33,7 @@ public class Dijkstra {
 				if(distTo[thisConnection.getIndex()] > distTo[current.polyRoad.getIndex()] + current.distance){
 					distTo[thisConnection.getIndex()] = distTo[current.polyRoad.getIndex()] + current.distance;
 					previousRoads.put(thisConnection, current.polyRoad);
+					if(remainingPolyRoads.remove())
 				}
 			}
 		}
