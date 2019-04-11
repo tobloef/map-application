@@ -5,7 +5,7 @@ import bfst19.danmarkskort.model.parsing.OSMRoadWay;
 
 import java.util.*;
 
-public class PolyRoad extends Polyline{
+public class PolyRoad extends Polyline {
 	private int index;
 	private double speedLimit;
 	private Set<Integer> firstConnections;

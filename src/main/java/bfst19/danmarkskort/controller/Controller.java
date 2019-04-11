@@ -36,6 +36,14 @@ public class Controller {
 					e1.printStackTrace();
 				}
 				break;
+			case E: {
+				model.updateEnd();
+				break;
+			}
+			case S: {
+				model.updateStart();
+				break;
+			}
 		}
 	}
 
@@ -57,7 +65,7 @@ public class Controller {
 	@FXML
 	private void onMousePressed(MouseEvent e) {
 		x = e.getX();
-		y = e.getY();
+		y = e.getX();
 	}
 
 	public void onMouseMoved(MouseEvent mouseEvent) {

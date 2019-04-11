@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.transform.Transform;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -17,6 +18,10 @@ public class Model {
 	Set<WayType> blacklistedWaytypes = new HashSet<>();
 	public Rectangle modelBounds;
 	float mouseX, mouseY;
+	PolyRoad start, end;
+	List<PolyRoad> shortestPath;
+	Transform transform;
+
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -126,6 +131,53 @@ public class Model {
 	public void setMouseCoords(float mouseX, float mouseY) {
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
-		System.out.println(drawableModel.getNearestNeighbor(WayType.RESIDENTIAL_ROAD, mouseX, mouseY) + " " + mouseX + " " + mouseY);
+	}
+
+	private void updateShortestPath() {
+		if (start != null && end != null){
+			shortestPath = Dijkstra.getShortestPath(start, end);
+			notifyObservers();
+		}
+	}
+
+	public Point2D modelCoords(double x, double y) {
+		try {
+			return transform.inverseTransform(x, y);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public void setTransform(Transform transform){
+		this.transform = transform;
+	}
+
+	public List<? extends Drawable> getShortestPath() {
+		if (shortestPath != null){
+			return shortestPath;
+		}
+		else return new ArrayList<>();
+	}
+
+	public void updateEnd() {
+		Drawable nearest = getClosestRoadToMouse(mouseX, mouseY);
+		if (nearest instanceof PolyRoad){
+			start = (PolyRoad) nearest;
+			updateShortestPath();
+		}
+	}
+
+	public void updateStart() {
+		Drawable nearest = getClosestRoadToMouse(mouseX, mouseY);
+		if (nearest instanceof PolyRoad){
+			end = (PolyRoad) nearest;
+			updateShortestPath();
+		}
+	}
+
+	private Drawable getClosestRoadToMouse(float mouseX, float mouseY) {
+		Point2D mouseCoords = modelCoords(mouseX, mouseY);
+		return getNearest(WayType.RESIDENTIAL_ROAD, mouseCoords);
 	}
 }

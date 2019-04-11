@@ -29,6 +29,7 @@ public class MapCanvas extends Canvas {
 		Affine affine = new Affine();
 		affine.prependScale(1,-1, 0, 0);
 		graphicsContext.setTransform(affine);
+		model.setTransform(affine);
 		graphicsContext.setFillRule(FillRule.EVEN_ODD);
 		initializeDrawers(model);
 		panViewToMapBounds();
@@ -101,6 +102,7 @@ public class MapCanvas extends Canvas {
 		Affine transform = graphicsContext.getTransform();
 		transform.prependTranslation(deltaX, deltaY);
 		graphicsContext.setTransform(transform);
+		model.setTransform(transform);
 		if (shouldRepaint) {
 			repaint();
 		}
@@ -118,6 +120,7 @@ public class MapCanvas extends Canvas {
 		}
 		transform.prependScale(factor, factor, x, y);
 		graphicsContext.setTransform(transform);
+		model.setTransform(transform);
 		updateDegreesPerPixel();
 		if (shouldRepaint) {
 			repaint();

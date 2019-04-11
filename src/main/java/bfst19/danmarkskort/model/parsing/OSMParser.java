@@ -287,11 +287,21 @@ public class OSMParser {
 	private int getMaxSpeed() {
 		int maxSpeed;
 		if (tags.containsKey("maxspeed")) {
-			maxSpeed = Integer.parseInt(tags.get("maxspeed"));
+			try {
+				maxSpeed = Integer.parseInt(tags.get("maxspeed"));
+			}
+			catch (NumberFormatException e){
+				maxSpeed = 30;
+			}
 		}
 		else {
 			if (speedLimits.get(tags.get("highway")) != null){
-				maxSpeed = speedLimits.get(tags.get("highway"));
+				try {
+					maxSpeed = Integer.parseInt(tags.get("maxspeed"));
+				}
+				catch (NumberFormatException e){
+					maxSpeed = 30;
+				}
 			}
 			else {
 				maxSpeed = 30; //If we have absolutely no idea how fast we can drive on a road, we just give it the speed 30. //todo handle this better
