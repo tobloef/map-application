@@ -6,11 +6,13 @@ public class Dijkstra {
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination){
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
+		double[] heuristic = new double[PolyRoad.allPolyRoads.length];
 		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
 		for(int i = 0; i < distTo.length; i++){
 			distTo[i] = Double.POSITIVE_INFINITY;
+			heuristic[i] = PolyRoad.allPolyRoads[i].euclideanDistanceTo(destination);
 		}
 
 		distTo[origin.getIndex()] = 0;
