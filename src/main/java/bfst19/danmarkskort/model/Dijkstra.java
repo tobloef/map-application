@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import java.util.*;
 
 public class Dijkstra {
+
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination){
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
 		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();

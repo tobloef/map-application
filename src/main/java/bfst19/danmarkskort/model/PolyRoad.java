@@ -32,6 +32,20 @@ public class PolyRoad extends Polyline {
 		return speedLimit;
 	}
 
+	public double euclideanDistanceTo(PolyRoad target){
+		return Math.abs(
+				Math.sqrt(
+						Math.abs(Math.pow(getRepresentativeX()-target.getRepresentativeX(),2))+
+						Math.abs(Math.pow(getRepresentativeY()-target.getRepresentativeY(),2))
+				)
+		);
+	}
+
+	public double weightedEuclideanDistanceTo(PolyRoad target){
+		//130 km/t på motorveje
+		return euclideanDistanceTo(target)/130;
+	}
+
 	public Set<PolyRoad> getFirstConnections() {
 		Set<PolyRoad> result = new HashSet<>();
 		for (Integer i : firstConnections) {
