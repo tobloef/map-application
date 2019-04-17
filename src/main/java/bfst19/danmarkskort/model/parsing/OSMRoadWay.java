@@ -59,10 +59,12 @@ public class OSMRoadWay extends OSMWay {
 				List<OSMNode> splitNodes = list.subList(i, list.size());
 				list = list.subList(0, i+1); //this uses i+1 since both lists needs to have the connecting node
 				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type);
-				if (!result.hasValidNodes()) throw new RuntimeException("Nodes are broken");
 				for (OSMNode n : splitNodes) {
+					if (n == splitNodes.get(0)) {
+						continue;
+					}
 					OSMRoadNode casted = (OSMRoadNode) n;
-					casted.changeConnection(this, result);
+					casted.removeConnection(this);
 				}
 				if (result.size() <= 0) {
 					throw new RuntimeException("Created empty way");
