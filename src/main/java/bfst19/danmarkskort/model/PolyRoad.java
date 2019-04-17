@@ -24,12 +24,8 @@ public class PolyRoad extends Polyline {
 		firstConnections.add(road.getIndex());
 	}
 
-	public void addConnectionTolast(PolyRoad road) {
+	public void addConnectionToLast(PolyRoad road) {
 		lastConnections.add(road.getIndex());
-	}
-
-	public double getSpeedLimit() {
-		return speedLimit;
 	}
 
 	public double euclideanDistanceTo(PolyRoad target){
@@ -39,6 +35,12 @@ public class PolyRoad extends Polyline {
 	public double weightedEuclideanDistanceTo(PolyRoad target){
 		//130 km/t på motorveje
 		return euclideanDistanceTo(target)/130;
+	}
+
+	private static double findDistanceBetween(double x1, double y1, double x2, double y2) {
+		double deltaX = x1 - y1;
+		double deltaY = x2 - y2;
+		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
 	}
 
 	public Set<PolyRoad> getFirstConnections() {
@@ -64,6 +66,18 @@ public class PolyRoad extends Polyline {
 		return result;
 	}
 
+	public Set<PolyRoad> getOtherConnections(PolyRoad origin) {
+		if (firstConnections.contains(origin.getIndex())) {
+			return getLastConnections();
+		}
+		if (lastConnections.contains(origin.getIndex())) {
+			return getFirstConnections();
+		}
+		return new HashSet<>(getAllConnections());
+		//fixme the above is a hack that slows down dijkstra, we should figure out why it happens and fix it so we can use the below instead
+		//throw new IllegalArgumentException("This road is not connected to specified road");
+	}
+
 	public int getIndex() {
 		return index;
 	}
@@ -77,17 +91,6 @@ public class PolyRoad extends Polyline {
 		return "" + index;
 	}
 
-	public Set<PolyRoad> getOtherConnections(PolyRoad origin) {
-		if (firstConnections.contains(origin.getIndex())) {
-			return getLastConnections();
-		}
-		if (lastConnections.contains(origin.getIndex())) {
-			return getFirstConnections();
-		}
-		return new HashSet<>(getAllConnections());
-		//throw new IllegalArgumentException("This road is not connected to specified road");
-	}
-
 	public double getLength() {
 		double result = 0;
 		for (int i = 0; i < coords.length - 2; i += 2) {
@@ -96,9 +99,11 @@ public class PolyRoad extends Polyline {
 		return result;
 	}
 
-	private static double findDistanceBetween(double x1, double y1, double x2, double y2) {
-		double deltaX = x1 - y1;
-		double deltaY = x2 - y2;
-		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+	public double getSpeedLimit() {
+		return speedLimit;
+	}
+
+	public double getWeight() {
+		return getLength() / getSpeedLimit();
 	}
 }
