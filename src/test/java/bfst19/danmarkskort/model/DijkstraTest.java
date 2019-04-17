@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DijkstraTest {
 	@Test
-	public void testShortestPath() throws IOException, XMLStreamException {
+	public void testShortestPath() throws IOException, XMLStreamException, DisconnectedRoadsException {
 		DrawableModel drawableModel = new BasicDrawableModel();
 		String filePath = this.getClass().getResource("small.osm").getPath();
 		OSMParser osmParser = new OSMParser(filePath, drawableModel);

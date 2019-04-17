@@ -3,9 +3,10 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.OSMRoadNode;
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class PolyRoad extends Polyline {
+public class PolyRoad extends Polyline implements Serializable {
 	private int index;
 	private double speedLimit;
 	private Set<Integer> firstConnections;
