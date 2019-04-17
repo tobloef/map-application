@@ -45,6 +45,9 @@ public class Controller {
 				model.updateStart();
 				break;
 			}
+			case D: {
+				model.swapStartAndEnd();
+			}
 		}
 	}
 

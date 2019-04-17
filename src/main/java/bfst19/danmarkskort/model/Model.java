@@ -166,6 +166,13 @@ public class Model {
 		}
 	}
 
+	public void swapStartAndEnd() {
+		PolyRoad temp = start;
+		start = end;
+		end = temp;
+		updateShortestPath();
+	}
+
 	private Drawable getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : roadTypes){
