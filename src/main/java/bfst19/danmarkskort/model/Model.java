@@ -135,8 +135,14 @@ public class Model {
 	}
 
 	private void updateShortestPath() {
-		if (start != null && end != null){
-			shortestPath = Dijkstra.getShortestPath(start, end);
+		try {
+			if (start != null && end != null){
+				shortestPath = Dijkstra.getShortestPath(start, end);
+				notifyObservers();
+			}
+		}
+		catch (DisconnectedRoadsException e) {
+			shortestPath = new ArrayList<>();
 			notifyObservers();
 		}
 	}

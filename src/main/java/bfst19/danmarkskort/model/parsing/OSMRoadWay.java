@@ -12,6 +12,9 @@ public class OSMRoadWay extends OSMWay {
 	public OSMRoadWay(OSMWay oldWay, double speedLimit, WayType type) {
 		super(oldWay.id);
 		list = oldWay.getNodes();
+		for (OSMRoadNode node : getNodesAsRoadNodes()) {
+			node.add(this);
+		}
 		this.speedLimit = speedLimit;
 		this.type = type;
 
@@ -32,6 +35,16 @@ public class OSMRoadWay extends OSMWay {
 		return speedLimit;
 	}
 
+	public boolean hasValidNodes() {
+		for (OSMNode node : list) {
+			OSMRoadNode roadNode = (OSMRoadNode) node;
+			if (!roadNode.getConnections().contains(this)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public OSMRoadWay splitIfNeeded() {
 		for (int i = 1; i < list.size() - 1; i++) {
 
@@ -46,6 +59,7 @@ public class OSMRoadWay extends OSMWay {
 				List<OSMNode> splitNodes = list.subList(i, list.size());
 				list = list.subList(0, i+1); //this uses i+1 since both lists needs to have the connecting node
 				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type);
+				if (!result.hasValidNodes()) throw new RuntimeException("Nodes are broken");
 				for (OSMNode n : splitNodes) {
 					OSMRoadNode casted = (OSMRoadNode) n;
 					casted.changeConnection(this, result);
@@ -59,11 +73,15 @@ public class OSMRoadWay extends OSMWay {
 		return null;
 	}
 
-	public WayType getType() {
-		return type;
+	public List<OSMRoadNode> getNodesAsRoadNodes() {
+		List<OSMRoadNode> result = new ArrayList<>();
+		for (OSMNode node : list) {
+			result.add((OSMRoadNode) node);
+		}
+		return result;
 	}
 
-	public void clear() {
-		list.clear();
+	public WayType getType() {
+		return type;
 	}
 }

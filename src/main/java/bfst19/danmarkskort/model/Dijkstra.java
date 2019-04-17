@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Dijkstra {
 
-	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination){
+	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination) throws DisconnectedRoadsException {
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
 		double[] heuristic = new double[PolyRoad.allPolyRoads.length];
 		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();
@@ -55,6 +55,6 @@ public class Dijkstra {
 				}
 			}
 		}
-		throw new IllegalArgumentException("There is no connection between the two roads");
+		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
 	}
 }
