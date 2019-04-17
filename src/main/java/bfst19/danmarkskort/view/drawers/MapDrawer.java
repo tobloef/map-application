@@ -57,15 +57,8 @@ public class MapDrawer implements Drawer {
 			drawDrawables(drawablesToDraw, drawingInfo, currentZoomLevel);
 			dontStrokeLastFill();
 		}
-		drawShortestPath();
 	}
 
-	private void drawShortestPath() {
-		graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 4);
-		for (Drawable drawable : model.getShortestPath()){
-			drawable.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
-		}
-	}
 
 	private boolean isVisibleAtZoom(DrawingInfo drawingInfo, double zoomLevel) {
 		// If no zoom level specified, just draw it.

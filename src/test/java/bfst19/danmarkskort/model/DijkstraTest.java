@@ -22,8 +22,6 @@ public class DijkstraTest {
 		}
 		PolyRoad b = PolyRoad.allPolyRoads[693];
 		PolyRoad c = PolyRoad.allPolyRoads[156];
-		//System.out.println(a.getAllConnections());
-		//System.out.println(b.getAllConnections());
 		List<PolyRoad> shortestPath = Dijkstra.getShortestPath(a, b);
 		assertNotNull(shortestPath);
 		assertEquals(2, shortestPath.size());

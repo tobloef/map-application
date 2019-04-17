@@ -3,6 +3,7 @@ package bfst19.danmarkskort.view.controls;
 import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Rectangle;
+import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import bfst19.danmarkskort.view.drawers.ZoomIndicatorDrawer;
 import bfst19.danmarkskort.view.drawers.Drawer;
 import bfst19.danmarkskort.view.drawers.MapDrawer;
@@ -44,6 +45,7 @@ public class MapCanvas extends Canvas {
 		drawers = new ArrayList<>();
 		mapDrawer = new MapDrawer(this, model);
 		drawers.add(mapDrawer);
+		drawers.add(new RouteDrawer(this, model));
 		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
