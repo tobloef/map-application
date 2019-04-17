@@ -33,12 +33,7 @@ public class PolyRoad extends Polyline {
 	}
 
 	public double euclideanDistanceTo(PolyRoad target){
-		return Math.abs(
-				Math.sqrt(
-						Math.abs(Math.pow(getRepresentativeX()-target.getRepresentativeX(),2))+
-						Math.abs(Math.pow(getRepresentativeY()-target.getRepresentativeY(),2))
-				)
-		);
+		return findDistanceBetween(getRepresentativeX(), getRepresentativeY(), target.getRepresentativeX(), target.getRepresentativeY());
 	}
 
 	public double weightedEuclideanDistanceTo(PolyRoad target){
@@ -101,7 +96,7 @@ public class PolyRoad extends Polyline {
 		return result;
 	}
 
-	private double findDistanceBetween(double x1, double y1, double x2, double y2) {
+	private static double findDistanceBetween(double x1, double y1, double x2, double y2) {
 		double deltaX = x1 - y1;
 		double deltaY = x2 - y2;
 		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
