@@ -57,4 +57,8 @@ public class Dijkstra {
 		}
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
 	}
+
+	public static double routePath(List<PolyRoad> route) {
+		return route.stream().mapToDouble(PolyRoad::getLength).sum();
+	}
 }
