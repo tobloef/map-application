@@ -33,6 +33,7 @@ public class Dijkstra {
 			for(PolyRoad thisConnection : connections){
 				int thisConnectionIndex = thisConnection.getIndex();
 				//System.out.println("Now maybe relaxing " + thisConnection + " from " + distTo[thisConnectionIndex] + " to " + distTo[current.getIndex()] + current.getLength());
+				//fixme this should use getWeight instead of getLength
 				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getLength()){
 					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getLength();
 					previousRoads.put(thisConnection, current);

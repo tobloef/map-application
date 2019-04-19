@@ -69,6 +69,7 @@ public class OSMParser {
 
 					OSMRoadNode otherFirst = (OSMRoadNode) connectedWay.getFirst();
 					OSMRoadNode otherLast = (OSMRoadNode) connectedWay.getLast();
+					//fixme this is probably not needed
 					if (otherFirst.getConnections().contains(way)){
 						otherRoad.addConnectionToFirst(road);
 						bothWays = true;
@@ -225,10 +226,10 @@ public class OSMParser {
 	}
 
 	private void handleEndWay() {
-		if (tags.containsKey("highway")) {
+		if (currentWayIsRoad()) {
 			int nodeAmount = currentWay.getNodes().size();
 			if (nodeAmount <= 0) {
-				throw new RuntimeException("Why is this only a problem now?");
+				throw new RuntimeException("Way consists of zero nodes and is not a way");
 			}
 			convertWayToRoadNodes(currentWay); //Since currentWay is a list of nodes,
 			if (nodeAmount != currentWay.getNodes().size()) {
@@ -244,6 +245,10 @@ public class OSMParser {
 			}
 		}
 		currentWay = null;
+	}
+
+	private boolean currentWayIsRoad() {
+		return tags.containsKey("highway");
 	}
 
 	private void handleStartRelation(XMLStreamReader reader) {
