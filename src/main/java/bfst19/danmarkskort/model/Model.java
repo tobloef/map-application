@@ -112,6 +112,7 @@ public class Model {
 	private void parseObj(InputStream inputStream) throws IOException, ClassNotFoundException {
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 		try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
+			PolyRoad.allPolyRoads = (PolyRoad[]) input.readObject();
 			drawableModel = (KDTreeDrawableModel) input.readObject();
 			modelBounds = drawableModel.getModelBounds();
 		}
@@ -121,6 +122,7 @@ public class Model {
 		FileOutputStream fileOutputStream = new FileOutputStream(path);
 		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 		try (ObjectOutputStream output = new ObjectOutputStream(bufferedOutputStream)) {
+			output.writeObject(PolyRoad.allPolyRoads);
 			output.writeObject(drawableModel);
 		}
 	}

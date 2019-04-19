@@ -6,13 +6,11 @@ public class Dijkstra {
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination) throws DisconnectedRoadsException {
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
-		double[] heuristic = new double[PolyRoad.allPolyRoads.length];
 		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
 		for(int i = 0; i < distTo.length; i++){
 			distTo[i] = Double.POSITIVE_INFINITY;
-			heuristic[i] = PolyRoad.allPolyRoads[i].euclideanDistanceTo(destination);
 		}
 
 		distTo[origin.getIndex()] = 0;
@@ -20,6 +18,7 @@ public class Dijkstra {
 
 		while(!remainingPolyRoads.isEmpty()){
 			PolyRoad current = PolyRoad.allPolyRoads[remainingPolyRoads.delMin()];
+			double heuristicTo = current.euclideanDistanceTo(destination);
 			List<PolyRoad> connections = new ArrayList<>();
 
 			if(current == origin){
