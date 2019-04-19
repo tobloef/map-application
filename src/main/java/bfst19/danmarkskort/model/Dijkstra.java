@@ -44,21 +44,27 @@ public class Dijkstra {
 						remainingPolyRoads.insert(thisConnectionIndex, distTo[thisConnectionIndex]);
 					}
 				}
-				if(PolyRoad.allPolyRoads[thisConnectionIndex] == destination){
-					List<PolyRoad> path = new ArrayList<>();
-					path.add(destination);
-					while(path.get(path.size()-1) != origin){
-						path.add(previousRoads.get(path.get(path.size()-1)));
-					}
-					Collections.reverse(path);
-					return path;
-				}
+			}
+			if(previousRoads.get(destination) != null){
+				List<PolyRoad> route = makeRoute(origin, destination, previousRoads);
+				System.out.println(routeLength(route));
+				return route;
 			}
 		}
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
 	}
 
-	public static double routePath(List<PolyRoad> route) {
+	private static List<PolyRoad> makeRoute(PolyRoad origin, PolyRoad destination, HashMap<PolyRoad, PolyRoad> previousRoads) {
+		List<PolyRoad> path = new ArrayList<>();
+		path.add(destination);
+		while(path.get(path.size()-1) != origin){
+			path.add(previousRoads.get(path.get(path.size()-1)));
+		}
+		Collections.reverse(path);
+		return path;
+	}
+
+	public static double routeLength(List<PolyRoad> route) {
 		return route.stream().mapToDouble(PolyRoad::getLength).sum();
 	}
 }
