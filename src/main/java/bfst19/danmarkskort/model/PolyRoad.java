@@ -134,7 +134,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	public boolean wrongWay(PolyRoad origin) {
 		// this check could be made either by seeing if the road we came from is in last connection (which will be true
 		// more often) or if it is not in the first connection (which will be true less often). Jakob decided that it
-		// was more important ot never go the wrong way, so he made the decision that this should use the former.
-		return isOneWay() && lastConnections.contains(origin.index);
+		// was more important to never go the wrong way, so he made the decision that this should use the former.
+		return isOneWay() && contains(lastConnections, origin.getIndex());
 	}
 }
