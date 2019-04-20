@@ -32,6 +32,7 @@ public class PolyRoad extends Polyline implements Serializable {
 			for (int i = 0; i < connections.length; i++){
 				tempArray[i] = connections[i];
 			}
+			tempArray[tempArray.length -1] = index;
 			return tempArray;
 		}
 		else return connections;
