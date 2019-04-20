@@ -13,7 +13,7 @@ import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 public class RouteDrawer implements Drawer{
 	private MapCanvas canvas;
 	private Model model;
-	private boolean debugging = true;
+	public static boolean debugging = true;
 
 	public RouteDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
