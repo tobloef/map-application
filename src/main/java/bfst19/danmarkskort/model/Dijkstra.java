@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import java.util.*;
 
 public class Dijkstra {
+	public static Set<PolyRoad> lastUsedRoads = new HashSet<>();
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination) throws DisconnectedRoadsException {
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
@@ -48,6 +49,13 @@ public class Dijkstra {
 			if(previousRoads.get(destination) != null){
 				List<PolyRoad> route = makeRoute(origin, destination, previousRoads);
 				System.out.println(routeLength(route));
+				Set<PolyRoad> usedRoads = new HashSet<>();
+				for (PolyRoad road : previousRoads.keySet()) {
+					if (previousRoads.get(road) != null) {
+						usedRoads.add(road);
+					}
+				}
+				lastUsedRoads = usedRoads;
 				return route;
 			}
 		}
