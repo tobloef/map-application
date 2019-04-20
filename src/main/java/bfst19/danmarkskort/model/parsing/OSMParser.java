@@ -304,9 +304,9 @@ public class OSMParser {
 	}
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
-		Set<String> restrictions = new HashSet<>();
+		Set<RoadRestriction> restrictions = new HashSet<>();
 		if (tags.get("oneway") != null) {
-			restrictions.add("oneway");
+			restrictions.add(RoadRestriction.ONE_WAY);
 		}
 		OSMRoadWay road = new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
 		idToWay.replace(road);

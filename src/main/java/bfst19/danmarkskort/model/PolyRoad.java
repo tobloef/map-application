@@ -12,7 +12,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	private Set<Integer> firstConnections;
 	private Set<Integer> lastConnections;
 	public static PolyRoad[] allPolyRoads;
-	public Set<String> restrictions;
+	public Set<RoadRestriction> restrictions;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
@@ -20,7 +20,7 @@ public class PolyRoad extends Polyline implements Serializable {
 		lastConnections = new HashSet<>();
 		this.speedLimit = way.getSpeedLimit();
 		index = -1;
-		restrictions = new HashSet<>();
+		restrictions = way.getRestrictions();
 	}
 
 	public void addConnectionToFirst(PolyRoad road) {
@@ -110,11 +110,7 @@ public class PolyRoad extends Polyline implements Serializable {
 		return getLength() / getSpeedLimit();
 	}
 
-	public void addRestriction(String restriction) {
-		restrictions.add(restriction);
-	}
-
 	public boolean isOneWay() {
-		return restrictions.contains("oneway");
+		return restrictions.contains(RoadRestriction.ONE_WAY);
 	}
 }
