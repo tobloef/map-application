@@ -54,6 +54,10 @@ public class Controller {
 				RouteDrawer.debugging = !RouteDrawer.debugging;
 				break;
 			}
+			case G:{
+				RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
+				break;
+			}
 		}
 	}
 

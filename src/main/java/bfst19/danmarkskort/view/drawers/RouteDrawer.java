@@ -13,6 +13,7 @@ import java.util.Set;
 import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 
 public class RouteDrawer implements Drawer{
+	public static boolean ShowExplored;
 	private MapCanvas canvas;
 	private Model model;
 	public static boolean debugging = true;
@@ -24,12 +25,16 @@ public class RouteDrawer implements Drawer{
 
 	@Override
 	public void draw() {
+		if (!debugging) {
+			return;
+		}
+
 		Theme theme = loadTheme("config/themes/default.yaml", null);
 		GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 		graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 4);
-		if (debugging) {
-			Set<PolyRoad> oneWayRoads = new HashSet<>();
-			graphicsContext.save();
+		Set<PolyRoad> oneWayRoads = new HashSet<>();
+		graphicsContext.save();
+		if (ShowExplored) {
 			graphicsContext.setStroke(Color.RED);
 			for (PolyRoad road : Dijkstra.lastUsedRoads) {
 				road.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
@@ -41,10 +46,12 @@ public class RouteDrawer implements Drawer{
 			for (PolyRoad road : oneWayRoads) {
 				road.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
 			}
-			graphicsContext.restore();
 		}
-		for (Drawable drawable : model.getShortestPath()){
+		graphicsContext.setLineWidth(canvas.getDegreesLatitudePerPixel() * 4);
+		for (Drawable drawable : model.getShortestPath()) {
 			drawable.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
+
 		}
+		graphicsContext.restore();
 	}
 }
