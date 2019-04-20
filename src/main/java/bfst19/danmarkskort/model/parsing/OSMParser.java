@@ -231,6 +231,7 @@ public class OSMParser {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		currentType = WayType.UNKNOWN;
 		currentRelation = new OSMRelation(id);
+		tags = new HashMap<>();
 	}
 
 	private void handleEndRelation() {
