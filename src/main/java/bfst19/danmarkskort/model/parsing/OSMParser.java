@@ -64,44 +64,13 @@ public class OSMParser {
 			for (OSMRoadWay connectedWay : first.getConnections()) {
 				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
 				if (road != otherRoad){
-					boolean bothWays = false;
 					road.addConnectionToFirst(otherRoad);
-
-					OSMRoadNode otherFirst = (OSMRoadNode) connectedWay.getFirst();
-					OSMRoadNode otherLast = (OSMRoadNode) connectedWay.getLast();
-					//fixme this is probably not needed
-					if (otherFirst.getConnections().contains(way)){
-						otherRoad.addConnectionToFirst(road);
-						bothWays = true;
-					}
-					if (otherLast.getConnections().contains(way)) {
-						otherRoad.addConnectionToLast(road);
-						bothWays = true;
-					}
-					if (!bothWays) {
-						System.out.println(way);
-					}
 				}
 			}
 			for (OSMRoadWay connectedWay : last.getConnections()) {
 				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
 				if (road != otherRoad){
-					boolean bothWays = false;
 					road.addConnectionToLast(otherRoad);
-
-					OSMRoadNode otherFirst = (OSMRoadNode) connectedWay.getFirst();
-					OSMRoadNode otherLast = (OSMRoadNode) connectedWay.getLast();
-					if (otherFirst.getConnections().contains(way)){
-						otherRoad.addConnectionToFirst(road);
-						bothWays = true;
-					}
-					if (otherLast.getConnections().contains(way)) {
-						otherRoad.addConnectionToLast(road);
-						bothWays = true;
-					}
-					if (!bothWays) {
-						System.out.println(way);
-					}
 				}
 			}
 		}
