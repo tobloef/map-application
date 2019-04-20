@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import java.util.*;
 
 public class Dijkstra {
+	public static Set<PolyRoad> lastUsedRoads = new HashSet<>();
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination) throws DisconnectedRoadsException {
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
@@ -32,7 +33,11 @@ public class Dijkstra {
 			//System.out.println("Relaxing the following connections: " + connections);
 			for(PolyRoad thisConnection : connections){
 				int thisConnectionIndex = thisConnection.getIndex();
+				if (thisConnection.wrongWay(current)) {
+					continue;
+				}
 				//System.out.println("Now maybe relaxing " + thisConnection + " from " + distTo[thisConnectionIndex] + " to " + distTo[current.getIndex()] + current.getLength());
+				//fixme this should use getWeight instead of getLength
 				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getLength()){
 					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getLength();
 					previousRoads.put(thisConnection, current);
@@ -47,6 +52,13 @@ public class Dijkstra {
 			if(previousRoads.get(destination) != null){
 				List<PolyRoad> route = makeRoute(origin, destination, previousRoads);
 				System.out.println(routeLength(route));
+				Set<PolyRoad> usedRoads = new HashSet<>();
+				for (PolyRoad road : previousRoads.keySet()) {
+					if (previousRoads.get(road) != null) {
+						usedRoads.add(road);
+					}
+				}
+				lastUsedRoads = usedRoads;
 				return route;
 			}
 		}

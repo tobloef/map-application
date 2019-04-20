@@ -1,34 +1,34 @@
 package bfst19.danmarkskort.model.parsing;
 
+import bfst19.danmarkskort.model.RoadRestriction;
 import bfst19.danmarkskort.model.WayType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class OSMRoadWay extends OSMWay {
-	private double speedLimit;
+	private int speedLimit;
 	private WayType type;
+	private Set<RoadRestriction> restrictions;
 
-	public OSMRoadWay(OSMWay oldWay, double speedLimit, WayType type) {
-		super(oldWay.id);
-		list = oldWay.getNodes();
-		for (OSMRoadNode node : getNodesAsRoadNodes()) {
-			node.add(this);
-		}
-		this.speedLimit = speedLimit;
-		this.type = type;
-
+	//used for making new road based on OSMWay
+	public OSMRoadWay(OSMWay way, int speedLimit, WayType type, Set<RoadRestriction> restrictions) {
+		this(way, way.getNodes(), speedLimit, type, restrictions);
 	}
 
-	public OSMRoadWay(OSMWay way, List<OSMRoadNode> newNodes, int speedLimit, WayType type) {
+	//used for splitting existing road
+	public OSMRoadWay(OSMWay way, List<? extends OSMNode> newNodes, int speedLimit, WayType type, Set<RoadRestriction> restrictions) {
 		super(way.id);
 		list = new ArrayList<>();
-		for (OSMRoadNode node : newNodes) {
-			node.add(this);
+		for (OSMNode node : newNodes) {
+			OSMRoadNode actual = (OSMRoadNode) node;
+			actual.add(this);
 		}
 		list.addAll(newNodes);
 		this.speedLimit = speedLimit;
 		this.type = type;
+		this.restrictions = restrictions;
 	}
 
 	public double getSpeedLimit() {
@@ -58,7 +58,7 @@ public class OSMRoadWay extends OSMWay {
 			if (node.getConnectionAmount() > 1) {
 				List<OSMNode> splitNodes = list.subList(i, list.size());
 				list = list.subList(0, i+1); //this uses i+1 since both lists needs to have the connecting node
-				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type);
+				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type, restrictions);
 				for (OSMNode n : splitNodes) {
 					if (n == splitNodes.get(0)) {
 						continue;
@@ -85,5 +85,13 @@ public class OSMRoadWay extends OSMWay {
 
 	public WayType getType() {
 		return type;
+	}
+
+	public Set<RoadRestriction> getRestrictions() {
+		return restrictions;
+	}
+
+	public void addRestriction(RoadRestriction restriction) {
+		restrictions.add(restriction);
 	}
 }

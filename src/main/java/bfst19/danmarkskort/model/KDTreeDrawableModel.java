@@ -12,6 +12,18 @@ public class KDTreeDrawableModel implements DrawableModel {
 
 	}
 
+	private void initializeKDTree(){
+		countFloats();
+		wayTypeToKDTreeRoot = new HashMap<>();
+		for (WayType wayType : WayType.values()){
+			List<Drawable> drawables = wayTypeEnumMap.get(wayType);
+			if (drawables.size() > 0) {
+				KDTree newTree = new KDTree(drawables, getModelBounds());
+				wayTypeToKDTreeRoot.put(wayType, newTree);
+			}
+		}
+	}
+
 	@Override
 	public void add(WayType type, Drawable drawable) {
 		wayTypeEnumMap.get(type).add(drawable);
@@ -19,6 +31,9 @@ public class KDTreeDrawableModel implements DrawableModel {
 
 	@Override
 	public Iterable<Drawable> getDrawablesOfTypeInBounds(WayType type, Rectangle bounds) {
+		if (wayTypeToKDTreeRoot == null) {
+			throw new RuntimeException("The KDTree has not been initialized yet");
+		}
 		if (wayTypeToKDTreeRoot.containsKey(type))
 			return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, new ArrayList<Drawable>());
 		else {
@@ -41,18 +56,6 @@ public class KDTreeDrawableModel implements DrawableModel {
 		initializeKDTree();
 		wayTypeEnumMap = null;
 		return;
-	}
-
-	private void initializeKDTree(){
-		countFloats();
-		wayTypeToKDTreeRoot = new HashMap<>();
-		for (WayType wayType : WayType.values()){
-			List<Drawable> drawables = wayTypeEnumMap.get(wayType);
-			if (drawables.size() > 0) {
-				KDTree newTree = new KDTree(drawables, getModelBounds());
-				wayTypeToKDTreeRoot.put(wayType, newTree);
-			}
-		}
 	}
 
 	private void countFloats() {

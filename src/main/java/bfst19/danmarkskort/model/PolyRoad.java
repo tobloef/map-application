@@ -11,6 +11,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	private int[] firstConnections;
 	private int[] lastConnections;
 	public static PolyRoad[] allPolyRoads;
+	public Set<RoadRestriction> restrictions;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
@@ -18,6 +19,7 @@ public class PolyRoad extends Polyline implements Serializable {
 		lastConnections = new int[0];
 		this.speedLimit = way.getSpeedLimit();
 		index = -1;
+		restrictions = way.getRestrictions();
 	}
 
 	public void addConnectionToFirst(PolyRoad road) {
@@ -123,5 +125,16 @@ public class PolyRoad extends Polyline implements Serializable {
 
 	public double getWeight() {
 		return getLength() / getSpeedLimit();
+	}
+
+	public boolean isOneWay() {
+		return restrictions.contains(RoadRestriction.ONE_WAY);
+	}
+
+	public boolean wrongWay(PolyRoad origin) {
+		// this check could be made either by seeing if the road we came from is in last connection (which will be true
+		// more often) or if it is not in the first connection (which will be true less often). Jakob decided that it
+		// was more important ot never go the wrong way, so he made the decision that this should use the former.
+		return isOneWay() && lastConnections.contains(origin.index);
 	}
 }

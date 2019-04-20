@@ -70,43 +70,13 @@ public class OSMParser {
 			for (OSMRoadWay connectedWay : first.getConnections()) {
 				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
 				if (road != otherRoad){
-					boolean bothWays = false;
 					road.addConnectionToFirst(otherRoad);
-
-					OSMRoadNode otherFirst = (OSMRoadNode) connectedWay.getFirst();
-					OSMRoadNode otherLast = (OSMRoadNode) connectedWay.getLast();
-					if (otherFirst.getConnections().contains(way)){
-						otherRoad.addConnectionToFirst(road);
-						bothWays = true;
-					}
-					if (otherLast.getConnections().contains(way)) {
-						otherRoad.addConnectionToLast(road);
-						bothWays = true;
-					}
-					if (!bothWays) {
-						System.out.println(way);
-					}
 				}
 			}
 			for (OSMRoadWay connectedWay : last.getConnections()) {
 				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
 				if (road != otherRoad){
-					boolean bothWays = false;
 					road.addConnectionToLast(otherRoad);
-
-					OSMRoadNode otherFirst = (OSMRoadNode) connectedWay.getFirst();
-					OSMRoadNode otherLast = (OSMRoadNode) connectedWay.getLast();
-					if (otherFirst.getConnections().contains(way)){
-						otherRoad.addConnectionToFirst(road);
-						bothWays = true;
-					}
-					if (otherLast.getConnections().contains(way)) {
-						otherRoad.addConnectionToLast(road);
-						bothWays = true;
-					}
-					if (!bothWays) {
-						System.out.println(way);
-					}
 				}
 			}
 		}
@@ -226,21 +196,21 @@ public class OSMParser {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		currentType = WayType.UNKNOWN;
 		currentWay = new OSMWay(id);
-		idToWay.put(id, currentWay);
 		tags = new HashMap<>();
 	}
 
 	private void handleEndWay() {
-		if (tags.containsKey("highway")) {
+		if (currentWayIsRoad()) {
 			int nodeAmount = currentWay.getNodes().size();
 			if (nodeAmount <= 0) {
-				throw new RuntimeException("Why is this only a problem now?");
+				throw new RuntimeException("Way consists of zero nodes and is not a way");
 			}
-			convertWayToRoadNodes(currentWay); //Since currentWay is a list of nodes,
+			convertWayToRoadNodes(currentWay);
 			if (nodeAmount != currentWay.getNodes().size()) {
 				throw new RuntimeException("Road conversion removes nodes somehow");
 			}
 		}
+		idToWay.put(currentWay.getAsLong(), currentWay);
 		if (currentType != WayType.UNKNOWN) {
 			if (currentWay instanceof OSMRoadWay) {
 				OSMRoads.add((OSMRoadWay) currentWay);
@@ -250,6 +220,11 @@ public class OSMParser {
 			}
 		}
 		currentWay = null;
+	}
+
+	private boolean currentWayIsRoad() {
+		//fixme this should not include footpaths
+		return tags.containsKey("highway");
 	}
 
 	private void handleStartRelation(XMLStreamReader reader) {
@@ -301,17 +276,14 @@ public class OSMParser {
 			newNodes.add(newNode);
 		}
 		this.currentWay = convertWayToRoad(currentWay, newNodes);
-		for (OSMNode node : this.currentWay.getNodes()) {
-			if (!(node instanceof OSMRoadNode)) {
-				throw new RuntimeException("What the fuck");
-			}
-		}
 	}
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
-		OSMRoadWay road = new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType);
-		idToWay.put(road.getAsLong(), road);
-		return road;
+		Set<RoadRestriction> restrictions = new HashSet<>();
+		if (tags.get("oneway") != null) {
+			restrictions.add(RoadRestriction.ONE_WAY);
+		}
+		return new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
 	}
 
 
