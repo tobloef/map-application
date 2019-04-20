@@ -1,6 +1,5 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.parsing.OSMRoadNode;
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
 
 import java.io.Serializable;
@@ -9,14 +8,14 @@ import java.util.*;
 public class PolyRoad extends Polyline implements Serializable {
 	private int index;
 	private double speedLimit;
-	private Set<Integer> firstConnections;
-	private Set<Integer> lastConnections;
+	private ResizingSortedIntArray firstConnections;
+	private ResizingSortedIntArray lastConnections;
 	public static PolyRoad[] allPolyRoads;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
-		firstConnections = new HashSet<>();
-		lastConnections = new HashSet<>();
+		firstConnections = new ResizingSortedIntArray();
+		lastConnections = new ResizingSortedIntArray();
 		this.speedLimit = way.getSpeedLimit();
 		index = -1;
 	}
