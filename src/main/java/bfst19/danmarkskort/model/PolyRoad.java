@@ -8,24 +8,42 @@ import java.util.*;
 public class PolyRoad extends Polyline implements Serializable {
 	private int index;
 	private double speedLimit;
-	private ResizingSortedIntArray firstConnections;
-	private ResizingSortedIntArray lastConnections;
+	private int[] firstConnections;
+	private int[] lastConnections;
 	public static PolyRoad[] allPolyRoads;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
-		firstConnections = new ResizingSortedIntArray();
-		lastConnections = new ResizingSortedIntArray();
+		firstConnections = new int[0];
+		lastConnections = new int[0];
 		this.speedLimit = way.getSpeedLimit();
 		index = -1;
 	}
 
 	public void addConnectionToFirst(PolyRoad road) {
-		firstConnections.add(road.getIndex());
+		firstConnections = add(firstConnections, road.getIndex());
+	}
+
+	private int[] add(int[] connections, int index) {
+		if (!contains(connections, index)){
+			int[] tempArray = new int[connections.length + 1];
+			for (int i = 0; i < connections.length; i++){
+				tempArray[i] = connections[i];
+			}
+			return tempArray;
+		}
+		else return connections;
+	}
+
+	private boolean contains(int[] connections, int index) {
+		for (int i = 0; i < connections.length; i++){
+			if (connections[i] == index) return true;
+		}
+		return false;
 	}
 
 	public void addConnectionToLast(PolyRoad road) {
-		lastConnections.add(road.getIndex());
+		lastConnections = add(lastConnections, road.getIndex());
 	}
 
 	public double euclideanDistanceTo(PolyRoad target){
@@ -67,10 +85,10 @@ public class PolyRoad extends Polyline implements Serializable {
 	}
 
 	public Set<PolyRoad> getOtherConnections(PolyRoad origin) {
-		if (firstConnections.contains(origin.getIndex())) {
+		if (contains(firstConnections, origin.getIndex())) {
 			return getLastConnections();
 		}
-		if (lastConnections.contains(origin.getIndex())) {
+		if (contains(lastConnections, origin.getIndex())) {
 			return getFirstConnections();
 		}
 		return new HashSet<>(getAllConnections());
