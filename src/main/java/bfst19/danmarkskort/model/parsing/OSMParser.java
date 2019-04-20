@@ -231,7 +231,7 @@ public class OSMParser {
 			if (nodeAmount <= 0) {
 				throw new RuntimeException("Way consists of zero nodes and is not a way");
 			}
-			convertWayToRoadNodes(currentWay); //Since currentWay is a list of nodes,
+			convertWayToRoadNodes(currentWay);
 			if (nodeAmount != currentWay.getNodes().size()) {
 				throw new RuntimeException("Road conversion removes nodes somehow");
 			}
@@ -248,6 +248,7 @@ public class OSMParser {
 	}
 
 	private boolean currentWayIsRoad() {
+		//fixme this should not include footpaths
 		return tags.containsKey("highway");
 	}
 
@@ -300,15 +301,14 @@ public class OSMParser {
 			newNodes.add(newNode);
 		}
 		this.currentWay = convertWayToRoad(currentWay, newNodes);
-		for (OSMNode node : this.currentWay.getNodes()) {
-			if (!(node instanceof OSMRoadNode)) {
-				throw new RuntimeException("What the fuck");
-			}
-		}
 	}
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
-		OSMRoadWay road = new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType);
+		Set<String> restrictions = new HashSet<>();
+		if (tags.get("oneway") != null) {
+			restrictions.add("oneway");
+		}
+		OSMRoadWay road = new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
 		idToWay.replace(road);
 		return road;
 	}

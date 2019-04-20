@@ -115,6 +115,6 @@ public class PolyRoad extends Polyline implements Serializable {
 	}
 
 	public boolean isOneWay() {
-		return restrictions.contains("oneWay");
+		return restrictions.contains("oneway");
 	}
 }
