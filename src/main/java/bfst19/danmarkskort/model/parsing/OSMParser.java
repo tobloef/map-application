@@ -14,12 +14,14 @@ import static javax.xml.stream.XMLStreamConstants.*;
 public class OSMParser {
 	private float lonFactor = 1.0f;
 	private LongMap<OSMNode> idToNode = new LongMap<OSMNode>();
-	private LongMap<OSMWay> idToWay = new LongMap<OSMWay>();
+
 	private OSMWay currentWay = null;
 	private OSMRelation currentRelation = null;
 	private WayType currentType = null;
 	private DrawableModel drawableModel;
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
+
+	private Map<Long, OSMWay> idToWay = new HashMap<>();
 
 	private Map<String, String> tags = new HashMap<>();
 	private Map<String, Integer> speedLimits = new HashMap<>();
@@ -42,6 +44,10 @@ public class OSMParser {
 			throw new IOException();
 		}
 		parseOSM(osmSource);
+		idToNode = null;
+		idToWay = null;
+		System.gc();
+		System.runFinalization();
 		initPolyRoadConnections();
 		drawableModel.doneAdding();
 	}
@@ -220,7 +226,7 @@ public class OSMParser {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		currentType = WayType.UNKNOWN;
 		currentWay = new OSMWay(id);
-		idToWay.add(currentWay);
+		idToWay.put(id, currentWay);
 		tags = new HashMap<>();
 	}
 
@@ -304,7 +310,7 @@ public class OSMParser {
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
 		OSMRoadWay road = new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType);
-		idToWay.replace(road);
+		idToWay.put(road.getAsLong(), road);
 		return road;
 	}
 
