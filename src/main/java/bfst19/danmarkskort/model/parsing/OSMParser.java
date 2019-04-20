@@ -190,7 +190,6 @@ public class OSMParser {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		currentType = WayType.UNKNOWN;
 		currentWay = new OSMWay(id);
-		idToWay.add(currentWay);
 		tags = new HashMap<>();
 	}
 
@@ -205,6 +204,7 @@ public class OSMParser {
 				throw new RuntimeException("Road conversion removes nodes somehow");
 			}
 		}
+		idToWay.add(currentWay);
 		if (currentType != WayType.UNKNOWN) {
 			if (currentWay instanceof OSMRoadWay) {
 				OSMRoads.add((OSMRoadWay) currentWay);
@@ -277,9 +277,7 @@ public class OSMParser {
 		if (tags.get("oneway") != null) {
 			restrictions.add(RoadRestriction.ONE_WAY);
 		}
-		OSMRoadWay road = new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
-		idToWay.replace(road);
-		return road;
+		return new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
 	}
 
 
