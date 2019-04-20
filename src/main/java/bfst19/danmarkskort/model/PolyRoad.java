@@ -1,6 +1,5 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.parsing.OSMRoadNode;
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
 
 import java.io.Serializable;
@@ -9,15 +8,15 @@ import java.util.*;
 public class PolyRoad extends Polyline implements Serializable {
 	private int index;
 	private double speedLimit;
-	private Set<Integer> firstConnections;
-	private Set<Integer> lastConnections;
+	private ResizingSortedIntArray firstConnections;
+	private ResizingSortedIntArray lastConnections;
 	public static PolyRoad[] allPolyRoads;
 	public Set<RoadRestriction> restrictions;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
-		firstConnections = new HashSet<>();
-		lastConnections = new HashSet<>();
+		firstConnections = new ResizingSortedIntArray();
+		lastConnections = new ResizingSortedIntArray();
 		this.speedLimit = way.getSpeedLimit();
 		index = -1;
 		restrictions = way.getRestrictions();
@@ -114,7 +113,10 @@ public class PolyRoad extends Polyline implements Serializable {
 		return restrictions.contains(RoadRestriction.ONE_WAY);
 	}
 
-	public boolean wrongWay(PolyRoad current) {
-		return isOneWay() && lastConnections.contains(current);
+	public boolean wrongWay(PolyRoad origin) {
+		// this check could be made either by seeing if the road we came from is in last connection (which will be true
+		// more often) or if it is not in the first connection (which will be true less often). Jakob decided that it
+		// was more important ot never go the wrong way, so he made the decision that this should use the former.
+		return isOneWay() && lastConnections.contains(origin.index);
 	}
 }
