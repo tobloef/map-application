@@ -3,9 +3,11 @@ package bfst19.danmarkskort.view.controls;
 import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Rectangle;
+import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import bfst19.danmarkskort.view.drawers.ZoomIndicatorDrawer;
 import bfst19.danmarkskort.view.drawers.Drawer;
 import bfst19.danmarkskort.view.drawers.MapDrawer;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.FillRule;
@@ -43,6 +45,7 @@ public class MapCanvas extends Canvas {
 		drawers = new ArrayList<>();
 		mapDrawer = new MapDrawer(this, model);
 		drawers.add(mapDrawer);
+		drawers.add(new RouteDrawer(this, model));
 		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
@@ -142,5 +145,15 @@ public class MapCanvas extends Canvas {
 
 	public double getDegreesLatitudePerPixel() {
 		return degreesLatitudePerPixel;
+	}
+
+
+	public Point2D modelCoords(double x, double y) {
+		try {
+			return graphicsContext.getTransform().inverseTransform(x, y);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

@@ -1,8 +1,10 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
+import bfst19.danmarkskort.utils.EnumHelper;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.transform.Transform;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -17,6 +19,10 @@ public class Model {
 	Set<WayType> blacklistedWaytypes = new HashSet<>();
 	public Rectangle modelBounds;
 	float mouseX, mouseY;
+	PolyRoad start, end;
+	List<PolyRoad> shortestPath;
+	public static final List<WayType> roadTypes = WayType.getRoadTypes();
+
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -106,6 +112,7 @@ public class Model {
 	private void parseObj(InputStream inputStream) throws IOException, ClassNotFoundException {
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 		try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
+			PolyRoad.allPolyRoads = (PolyRoad[]) input.readObject();
 			drawableModel = (KDTreeDrawableModel) input.readObject();
 			modelBounds = drawableModel.getModelBounds();
 		}
@@ -115,6 +122,7 @@ public class Model {
 		FileOutputStream fileOutputStream = new FileOutputStream(path);
 		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 		try (ObjectOutputStream output = new ObjectOutputStream(bufferedOutputStream)) {
+			output.writeObject(PolyRoad.allPolyRoads);
 			output.writeObject(drawableModel);
 		}
 	}
@@ -126,5 +134,68 @@ public class Model {
 	public void setMouseCoords(float mouseX, float mouseY) {
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
+	}
+
+	private void updateShortestPath() {
+		try {
+			if (start != null && end != null){
+				shortestPath = Dijkstra.getShortestPath(start, end);
+				notifyObservers();
+			}
+		}
+		catch (DisconnectedRoadsException e) {
+			shortestPath = new ArrayList<>();
+			notifyObservers();
+		}
+	}
+
+
+
+	public List<? extends Drawable> getShortestPath() {
+		if (shortestPath != null){
+			return shortestPath;
+		}
+		else return new ArrayList<>();
+	}
+
+	public void updateEnd() {
+		Drawable nearest = getClosestRoad(mouseX, mouseY);
+		if (nearest instanceof PolyRoad){
+			start = (PolyRoad) nearest;
+			updateShortestPath();
+		}
+	}
+
+	public void updateStart() {
+		Drawable nearest = getClosestRoad(mouseX, mouseY);
+		if (nearest instanceof PolyRoad){
+			end = (PolyRoad) nearest;
+			updateShortestPath();
+		}
+	}
+
+	public void swapStartAndEnd() {
+		PolyRoad temp = start;
+		start = end;
+		end = temp;
+		updateShortestPath();
+	}
+
+	private Drawable getClosestRoad(float x, float y) {
+		PolyRoad closestRoad = null;
+		for (WayType roadType : roadTypes){
+			Drawable close = getNearest(roadType, new Point2D(x,y));
+			if (close == null || !(close instanceof PolyRoad)){
+				continue;
+			}
+
+			PolyRoad closeRoad = (PolyRoad)close;
+			if (closestRoad == null || closestRoad.euclideanDistanceSquaredTo(x, y) > closeRoad.euclideanDistanceSquaredTo(x, y)) {
+				closestRoad = closeRoad;
+			}
+
+		}
+
+		return closestRoad;
 	}
 }

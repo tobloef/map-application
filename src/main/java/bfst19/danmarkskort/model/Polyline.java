@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import java.io.Serializable;
 
 public class Polyline implements Drawable, Serializable, SpatialIndexable {
-	private float[] coords;
+	float[] coords;
 	private float xMin, yMin, xMax, yMax;
 
 	public Polyline(OSMWay way) {
@@ -50,9 +50,10 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 		float[] lastCoords = new float[2];
 		lastCoords[0] = coords[0];
 		lastCoords[1] = coords[1];
-		for (int i = 2; i < coords.length; i+=2) {
+		for (int i = 2; i < coords.length -2; i+=2) {
 			traceWithoutSubpixel(coords[i], coords[i+1], zoomFactor, gc, lastCoords);
 		}
+		gc.lineTo(coords[coords.length - 2], coords[coords.length - 1]);
 	}
 
 	public void fill(GraphicsContext gc, double zoomFactor) {
