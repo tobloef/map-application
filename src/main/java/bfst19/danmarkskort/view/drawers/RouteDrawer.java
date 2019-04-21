@@ -47,6 +47,7 @@ public class RouteDrawer implements Drawer{
 				road.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
 			}
 		}
+		graphicsContext.setStroke(Color.BLACK);
 		graphicsContext.setLineWidth(canvas.getDegreesLatitudePerPixel() * 4);
 		for (Drawable drawable : model.getShortestPath()) {
 			drawable.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());

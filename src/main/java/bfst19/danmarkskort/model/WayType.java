@@ -29,6 +29,7 @@ public enum WayType {
 	BROWNFIELD,
 	SHRUB,
 
+
 	// Buildings
 	CONSTRUCTION,
 	INDUSTRIAL,
@@ -40,8 +41,17 @@ public enum WayType {
 	PITCH,
 	GROYNE,
 	PIER,
-	BRIDGE,
 	APRON,
+
+
+	// Water
+	WATER,
+	SWIMMINGPOOL,
+	CANAL,
+	BASIN,
+
+	//Navigable stuff that isnt roads.
+	BRIDGE,
 
 	// Exits
 	TERTIARY_ROAD_EXIT,
@@ -74,11 +84,6 @@ public enum WayType {
 	BRIDLEWAY,
 	CYCLEWAY,
 
-	// Water
-	WATER,
-	SWIMMINGPOOL,
-	CANAL,
-	BASIN,
 
 	// Misc.
 	UNKNOWN,

@@ -10,8 +10,9 @@ public class PolyRoad extends Polyline implements Serializable {
 	private double speedLimit;
 	private int[] firstConnections;
 	private int[] lastConnections;
+	public double length = 0;
 	public static PolyRoad[] allPolyRoads;
-	public Set<RoadRestriction> restrictions;
+	public EnumSet<RoadRestriction> restrictions;
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
@@ -20,6 +21,15 @@ public class PolyRoad extends Polyline implements Serializable {
 		this.speedLimit = way.getSpeedLimit();
 		index = -1;
 		restrictions = way.getRestrictions();
+		length = calculateLength();
+	}
+
+	private double calculateLength() {
+		double result = 0;
+		for (int i = 0; i < coords.length - 2; i += 2) {
+			result += findDistanceBetweenSquared(coords[i], coords[i+1], coords[i+2], coords[i+3]);
+		}
+		return result;
 	}
 
 	public void addConnectionToFirst(PolyRoad road) {
@@ -49,18 +59,18 @@ public class PolyRoad extends Polyline implements Serializable {
 		lastConnections = add(lastConnections, road.getIndex());
 	}
 
-	public double euclideanDistanceTo(PolyRoad target){
-		return findDistanceBetween(getRepresentativeX(), getRepresentativeY(), target.getRepresentativeX(), target.getRepresentativeY());
+	public double euclideanDistanceSquaredTo(PolyRoad target){
+		return findDistanceBetweenSquared(getRepresentativeX(), getRepresentativeY(), target.getRepresentativeX(), target.getRepresentativeY());
 	}
 
 	public double weightedEuclideanDistanceTo(PolyRoad target){
 		//130 km/t på motorveje
-		return euclideanDistanceTo(target)/130;
+		return euclideanDistanceSquaredTo(target)/130;
 	}
 
-	private static double findDistanceBetween(double x1, double y1, double x2, double y2) {
-		double deltaX = x1 - y1;
-		double deltaY = x2 - y2;
+	private static double findDistanceBetweenSquared(double x1, double y1, double x2, double y2) {
+		double deltaX = x1 - x2;
+		double deltaY = y1 - y2;
 		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
 	}
 
@@ -113,11 +123,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	}
 
 	public double getLength() {
-		double result = 0;
-		for (int i = 0; i < coords.length - 2; i += 2) {
-			result += findDistanceBetween(coords[i], coords[i+1], coords[i+2], coords[i+3]);
-		}
-		return result;
+		return length;
 	}
 
 	public double getSpeedLimit() {

@@ -136,7 +136,7 @@ public class OSMParser {
 			}
 			convertWayToRoadNodes(currentWay);
 			if (nodeAmount != currentWay.getNodes().size()) {
-				throw new RuntimeException("Road conversion removes nodes somehow");
+				throw new RuntimeException("Road conversion resulted in removal of nodes.");
 			}
 		}
 		idToWay.put(currentWay.getAsLong(), currentWay);
@@ -152,8 +152,15 @@ public class OSMParser {
 	}
 
 	private boolean currentWayIsRoad() {
-		//fixme this should not include footpaths
-		return tags.containsKey("highway");
+		if (!tags.containsKey("highway") || tags.get("highway") == null){
+			return false;
+		}
+		String highWayType = tags.get("highway");
+		if (highWayType.equals("construction") || highWayType.equals("proposed")){
+			return false;
+		}
+		//If none of the cases makes it false, return true.
+		return true;
 	}
 
 	private void handleStartRelation(XMLStreamReader reader) {
@@ -209,11 +216,57 @@ public class OSMParser {
 	}
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
-		Set<RoadRestriction> restrictions = new HashSet<>();
-		if (tags.get("oneway") != null) {
-			restrictions.add(RoadRestriction.ONE_WAY);
-		}
+		EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad(way);
 		return new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
+	}
+
+	private EnumSet<RoadRestriction> getRestrictionsOfRoad(OSMWay way) {
+		EnumSet<RoadRestriction> restrictions =EnumSet.noneOf(RoadRestriction.class);
+		if (tags.containsKey("highway")){
+			RoadRestriction vehicleRestriction = getVehicleRestriction();
+			if (vehicleRestriction != null){
+				restrictions.add(vehicleRestriction);
+			}
+		}
+		if(tags.containsKey("oneway")){
+			RoadRestriction oneWayType = getOneWayType();
+			if (oneWayType != null){
+				restrictions.add(oneWayType);
+			}
+		}
+		return restrictions;
+	}
+
+	private RoadRestriction getVehicleRestriction() {
+		switch (tags.get("highway")){
+			case "motorway": return RoadRestriction.CAR_ONLY;
+			case "trunk": return RoadRestriction.CAR_ONLY;
+			case "primary": return RoadRestriction.CAR_ONLY;
+			case "motorway_link": return RoadRestriction.CAR_ONLY;
+			case "trunk_link": return RoadRestriction.CAR_ONLY;
+			case "primary_link": return RoadRestriction.CAR_ONLY;
+			case "pedestrian": return RoadRestriction.NO_CAR;
+			case "track": return RoadRestriction.NO_CAR;
+			case "escape": return RoadRestriction.NO_CAR;
+			case "footway": return RoadRestriction.NO_CAR;
+			case "bridleway": return RoadRestriction.NO_CAR;
+			case "steps": return RoadRestriction.NO_CAR;
+			case "path": return RoadRestriction.NO_CAR;
+			case "cycleway": return RoadRestriction.NO_CAR;
+			case "crossing": return RoadRestriction.NO_CAR;
+			default: return null;
+		}
+	}
+
+	private RoadRestriction getOneWayType() {
+		switch (tags.get("oneway")){
+			case "yes": return RoadRestriction.ONE_WAY;
+			case "true": return RoadRestriction.ONE_WAY;
+			case "1": return RoadRestriction.ONE_WAY;
+			case "-1": return RoadRestriction.ONE_WAY_REVERSED;
+			case "reversible": return RoadRestriction.ONE_WAY_REVERSED;
+			default: return null;
+		}
 	}
 
 
@@ -227,32 +280,27 @@ public class OSMParser {
 
 	//TODO: Write this function, it seems incorrect.
 	private int getMaxSpeed() {
-		int maxSpeed;
-		if (tags.containsKey("maxspeed")) {
+		int maxSpeed = 50;
+		if (tags.containsKey("maxspeed") && isInteger(tags.get("maxSpeed"))) {
 			try {
 				maxSpeed = Integer.parseInt(tags.get("maxspeed"));
 			}
 			catch (NumberFormatException e){
-				maxSpeed = 30;
+				e.printStackTrace();
+				maxSpeed = 50;
 			}
 		}
 		else {
-			if (RoadInformation.speedLimitsFromTags.get(tags.get("highway")) != null){
-				try {
-					maxSpeed = Integer.parseInt(tags.get("maxspeed"));
-				}
-				catch (NumberFormatException e){
-					maxSpeed = 30;
-				}
-			}
-			else {
-				maxSpeed = 30; //If we have absolutely no idea how fast we can drive on a road, we just give it the speed 30. //todo handle this better
-			}
+			maxSpeed = RoadInformation.speedLimitsFromTags.getOrDefault(tags.get("highway"), 50);
 		}
 		return maxSpeed;
 	}
 
-	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
+	private boolean isInteger(String string) {
+		return string != null && string.matches("-?\\d+");
+	}
+
+	private void handleStartND(XMLStreamReader reader) {
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		currentWay.add(idToNode.get(ref));
 	}

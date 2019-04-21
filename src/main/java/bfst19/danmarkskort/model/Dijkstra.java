@@ -19,7 +19,7 @@ public class Dijkstra {
 
 		while(!remainingPolyRoads.isEmpty()){
 			PolyRoad current = PolyRoad.allPolyRoads[remainingPolyRoads.delMin()];
-			double heuristicTo = current.euclideanDistanceTo(destination);
+			double heuristicTo = current.euclideanDistanceSquaredTo(destination);
 			List<PolyRoad> connections = new ArrayList<>();
 
 			if(current == origin){
@@ -38,8 +38,8 @@ public class Dijkstra {
 				}
 				//System.out.println("Now maybe relaxing " + thisConnection + " from " + distTo[thisConnectionIndex] + " to " + distTo[current.getIndex()] + current.getLength());
 				//fixme this should use getWeight instead of getLength
-				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getLength()){
-					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getLength();
+				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getWeight()){
+					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getWeight();
 					previousRoads.put(thisConnection, current);
 					if(remainingPolyRoads.contains(thisConnectionIndex)){
 						remainingPolyRoads.changeKey(thisConnectionIndex, distTo[thisConnectionIndex]);
