@@ -4,56 +4,45 @@ import java.util.*;
 
 public class Dijkstra {
 	public static Set<PolyRoad> lastUsedRoads = new HashSet<>();
-	public static HashMap<PolyRoad, PolyRoad> previousRoads;
+	public static HashMap<PolyRoad, PolyRoad> pathToRoad;
+	private static double[] distTo;
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
-		double[] distTo = initializeDistTo(origin);
-		previousRoads = new HashMap<>();
+		distTo = initializeDistTo(origin);
+		pathToRoad = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
-		remainingPolyRoads.insert(origin.getIndex(), 0.0);
+		insertStartConnections(origin,destination, remainingPolyRoads, vehicleType);
 
 
 		while(!remainingPolyRoads.isEmpty()){
 			PolyRoad current = PolyRoad.allPolyRoads[remainingPolyRoads.delMin()];
-			double heuristicTo = current.euclideanDistanceSquaredTo(destination);
-			List<PolyRoad> connections = new ArrayList<>();
-
-			if(current == origin){
-
-				connections.addAll(current.getAllConnections());
-			}
-			else{
-
-				connections.addAll(current.getOtherConnections(previousRoads.get(current)));
-			}
-
-			for(PolyRoad connectedRoad : connections){
-				if (current.wrongWay(connectedRoad, vehicleType)) {
+			for(PolyRoad connectedRoad : current.getAllConnections()){
+				if (pathToRoad.containsKey(connectedRoad)){
 					continue;
 				}
-				if (!connectedRoad.vehicleIsAllowedToTakeRoad(vehicleType)){
+				if (notAllowedToTakeRoad(vehicleType, current, connectedRoad)) {
 					continue;
 				}
-				int thisConnectionIndex = connectedRoad.getIndex();
+				int connectedRoadIndex = connectedRoad.getIndex();
 				double connectedRoadWeight = calculateWeight(connectedRoad, destination, vehicleType);
-				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + connectedRoadWeight){
-					distTo[thisConnectionIndex] = distTo[current.getIndex()] + connectedRoadWeight;
-					previousRoads.put(connectedRoad, current);
-					if(remainingPolyRoads.contains(thisConnectionIndex)){
-						remainingPolyRoads.changeKey(thisConnectionIndex, distTo[thisConnectionIndex]);
+				if(distTo[connectedRoadIndex] > distTo[current.getIndex()] + connectedRoadWeight){
+					distTo[connectedRoadIndex] = distTo[current.getIndex()] + connectedRoadWeight;
+					pathToRoad.put(connectedRoad, current);
+					if(remainingPolyRoads.contains(connectedRoadIndex)){
+						remainingPolyRoads.changeKey(connectedRoadIndex, distTo[connectedRoadIndex]);
 					}
 					else{
-						remainingPolyRoads.insert(thisConnectionIndex, distTo[thisConnectionIndex]);
+						remainingPolyRoads.insert(connectedRoadIndex, distTo[connectedRoadIndex]);
 					}
 				}
 			}
-			if(previousRoads.get(destination) != null){
-				List<PolyRoad> route = makeRoute(origin, destination, previousRoads);
+			if(pathToRoad.get(destination) != null){
+				List<PolyRoad> route = makeRoute(origin, destination, pathToRoad);
 				System.out.println(routeLength(route));
 				Set<PolyRoad> usedRoads = new HashSet<>();
-				for (PolyRoad road : previousRoads.keySet()) {
-					if (previousRoads.get(road) != null) {
+				for (PolyRoad road : pathToRoad.keySet()) {
+					if (pathToRoad.get(road) != null) {
 						usedRoads.add(road);
 					}
 				}
@@ -64,10 +53,22 @@ public class Dijkstra {
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
 	}
 
+	private static boolean notAllowedToTakeRoad(VehicleType vehicleType, PolyRoad current, PolyRoad connectedRoad) {
+		if (current.wrongWay(connectedRoad, vehicleType)) {
+			return true;
+		}
+		if (!connectedRoad.vehicleIsAllowedToTakeRoad(vehicleType)){
+			return true;
+		}
+		return false;
+	}
+
 	private static void insertStartConnections(PolyRoad origin, PolyRoad destination,  IndexMinPQ<Double> remainingPolyRoads, VehicleType vehicleType) {
 		for (PolyRoad connectedRoad : origin.getAllConnections()){
-			previousRoads.put(connectedRoad, origin);
-			remainingPolyRoads.insert(connectedRoad.getIndex(), calculateWeight(connectedRoad, destination, vehicleType));
+			pathToRoad.put(connectedRoad, origin);
+			double weightToConnectedRoad = calculateWeight(connectedRoad, destination, vehicleType);
+			distTo[connectedRoad.getIndex()] = weightToConnectedRoad;
+			remainingPolyRoads.insert(connectedRoad.getIndex(), weightToConnectedRoad);
 		}
 	}
 
