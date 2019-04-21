@@ -21,6 +21,7 @@ public class Model {
 	float mouseX, mouseY;
 	PolyRoad start, end;
 	List<PolyRoad> shortestPath;
+	VehicleType currentVehicleType = VehicleType.CAR;
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -135,10 +136,10 @@ public class Model {
 	}
 
 	private void updateShortestPath() {
+		if (start == null || end == null)
+			return;
 		try {
-			if (start != null && end != null){
-				shortestPath = Dijkstra.getShortestPath(start, end, VehicleType.CAR);
-			}
+			shortestPath = Dijkstra.getShortestPath(start, end, currentVehicleType);
 		}
 		catch (DisconnectedRoadsException e) {
 			shortestPath = new ArrayList<>();
@@ -180,7 +181,7 @@ public class Model {
 
 	private Drawable getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
-		for (WayType roadType : RoadInformation.roadTypes){
+		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
 			if (close == null || !(close instanceof PolyRoad)){
 				continue;
@@ -194,5 +195,10 @@ public class Model {
 		}
 
 		return closestRoad;
+	}
+
+	public void updateVehicleType(VehicleType vehicleType) {
+		this.currentVehicleType = vehicleType;
+		updateShortestPath();
 	}
 }

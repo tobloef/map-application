@@ -6,6 +6,33 @@ public class RoadInformation {
 
 	public static Map<String, Integer> speedLimitsFromTags = initSpeedLimitsFromTags();
 	public static Set<WayType> roadTypes = getRoadTypes();
+	public static Map<VehicleType, EnumSet<WayType>> allowedRoadTypes = initAllowedRoadTypes();
+
+	private static Map<VehicleType, EnumSet<WayType>> initAllowedRoadTypes() {
+		Map<VehicleType, EnumSet<WayType>> allowedRoadTypes = new EnumMap<>(VehicleType.class);
+		for (VehicleType vehicleType : VehicleType.values()){
+			allowedRoadTypes.put(vehicleType, EnumSet.noneOf(WayType.class));
+		}
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.RESIDENTIAL_ROAD);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.SERVICE_ROAD);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.TERTIARY_ROAD);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.LIVING_STREET);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.SECONDARY_ROAD);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.UNCLASSIFIED_ROAD);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.ROUNDABOUT);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.PRIMARY_ROAD);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.MOTORWAY);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.TERTIARY_ROAD_EXIT);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.SECONDARY_ROAD_EXIT);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.PRIMARY_ROAD_EXIT);
+		allowedRoadTypes.get(VehicleType.CAR).add(WayType.MOTORWAY_EXIT);
+		allowedRoadTypes.get(VehicleType.WALKING).addAll(getRoadTypes());
+		allowedRoadTypes.get(VehicleType.WALKING).remove(WayType.MOTORWAY);
+		allowedRoadTypes.get(VehicleType.WALKING).remove(WayType.MOTORWAY_EXIT);
+		allowedRoadTypes.get(VehicleType.BICYCLE).addAll(allowedRoadTypes.get(VehicleType.WALKING));
+		return allowedRoadTypes;
+	}
+
 
 	public static Set<WayType> getRoadTypes() {
 		Set<WayType> roadTypes = new HashSet<>();

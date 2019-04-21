@@ -71,7 +71,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	private static double findDistanceBetweenSquared(double x1, double y1, double x2, double y2) {
 		double deltaX = x1 - x2;
 		double deltaY = y1 - y2;
-		return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+		return deltaX*deltaX + deltaY*deltaY;
 	}
 
 	public Set<PolyRoad> getFirstConnections() {

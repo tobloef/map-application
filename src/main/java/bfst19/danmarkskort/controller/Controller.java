@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.VehicleType;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import bfst19.danmarkskort.view.View;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;
@@ -56,6 +57,14 @@ public class Controller {
 			}
 			case G:{
 				RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
+				break;
+			}
+			case C:{
+				model.updateVehicleType(VehicleType.CAR);
+				break;
+			}
+			case B:{
+				model.updateVehicleType(VehicleType.BICYCLE);
 				break;
 			}
 		}
