@@ -4,13 +4,15 @@ import java.util.*;
 
 public class Dijkstra {
 	public static Set<PolyRoad> lastUsedRoads = new HashSet<>();
+	public static HashMap<PolyRoad, PolyRoad> previousRoads;
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
 		double[] distTo = initializeDistTo(origin);
-		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();
+		previousRoads = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
 		remainingPolyRoads.insert(origin.getIndex(), 0.0);
+
 
 		while(!remainingPolyRoads.isEmpty()){
 			PolyRoad current = PolyRoad.allPolyRoads[remainingPolyRoads.delMin()];
@@ -34,8 +36,9 @@ public class Dijkstra {
 					continue;
 				}
 				int thisConnectionIndex = connectedRoad.getIndex();
-				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getWeight()){
-					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getWeight();
+				double connectedRoadWeight = calculateWeight(connectedRoad, destination, vehicleType);
+				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + connectedRoadWeight){
+					distTo[thisConnectionIndex] = distTo[current.getIndex()] + connectedRoadWeight;
 					previousRoads.put(connectedRoad, current);
 					if(remainingPolyRoads.contains(thisConnectionIndex)){
 						remainingPolyRoads.changeKey(thisConnectionIndex, distTo[thisConnectionIndex]);
@@ -59,6 +62,24 @@ public class Dijkstra {
 			}
 		}
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
+	}
+
+	private static void insertStartConnections(PolyRoad origin, PolyRoad destination,  IndexMinPQ<Double> remainingPolyRoads, VehicleType vehicleType) {
+		for (PolyRoad connectedRoad : origin.getAllConnections()){
+			previousRoads.put(connectedRoad, origin);
+			remainingPolyRoads.insert(connectedRoad.getIndex(), calculateWeight(connectedRoad, destination, vehicleType));
+		}
+	}
+
+	private static double calculateWeight(PolyRoad polyRoad, PolyRoad destination, VehicleType vehicleType) {
+		double weight;
+		if (vehicleType == VehicleType.CAR){
+			weight = polyRoad.getWeight();
+		}
+		else {
+			weight = polyRoad.getLength();
+		}
+		return weight;
 	}
 
 	private static double[] initializeDistTo(PolyRoad origin) {
