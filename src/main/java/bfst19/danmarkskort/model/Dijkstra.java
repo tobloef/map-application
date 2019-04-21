@@ -5,16 +5,11 @@ import java.util.*;
 public class Dijkstra {
 	public static Set<PolyRoad> lastUsedRoads = new HashSet<>();
 
-	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination) throws DisconnectedRoadsException {
-		double[] distTo = new double[PolyRoad.allPolyRoads.length];
+	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
+		double[] distTo = initializeDistTo(origin);
 		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
-		for(int i = 0; i < distTo.length; i++){
-			distTo[i] = Double.POSITIVE_INFINITY;
-		}
-
-		distTo[origin.getIndex()] = 0;
 		remainingPolyRoads.insert(origin.getIndex(), 0.0);
 
 		while(!remainingPolyRoads.isEmpty()){
@@ -31,14 +26,17 @@ public class Dijkstra {
 				connections.addAll(current.getOtherConnections(previousRoads.get(current)));
 			}
 
-			for(PolyRoad thisConnection : connections){
-				int thisConnectionIndex = thisConnection.getIndex();
-				if (thisConnection.wrongWay(current)) {
+			for(PolyRoad connectedRoad : connections){
+				if (current.wrongWay(connectedRoad, vehicleType)) {
 					continue;
 				}
+				if (!connectedRoad.vehicleIsAllowedToTakeRoad(vehicleType)){
+					continue;
+				}
+				int thisConnectionIndex = connectedRoad.getIndex();
 				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getWeight()){
 					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getWeight();
-					previousRoads.put(thisConnection, current);
+					previousRoads.put(connectedRoad, current);
 					if(remainingPolyRoads.contains(thisConnectionIndex)){
 						remainingPolyRoads.changeKey(thisConnectionIndex, distTo[thisConnectionIndex]);
 					}
@@ -61,6 +59,15 @@ public class Dijkstra {
 			}
 		}
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
+	}
+
+	private static double[] initializeDistTo(PolyRoad origin) {
+		double[] distTo = new double[PolyRoad.allPolyRoads.length];
+		for(int i = 0; i < distTo.length; i++){
+			distTo[i] = Double.POSITIVE_INFINITY;
+		}
+		distTo[origin.getIndex()] = 0;
+		return distTo;
 	}
 
 	private static List<PolyRoad> makeRoute(PolyRoad origin, PolyRoad destination, HashMap<PolyRoad, PolyRoad> previousRoads) {

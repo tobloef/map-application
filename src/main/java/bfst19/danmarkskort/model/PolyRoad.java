@@ -134,14 +134,36 @@ public class PolyRoad extends Polyline implements Serializable {
 		return getLength() / getSpeedLimit();
 	}
 
-	public boolean isOneWay() {
-		return restrictions.contains(RoadRestriction.ONE_WAY);
+
+	public boolean wrongWay(PolyRoad origin, VehicleType vehicleType) {
+		if (vehicleType != VehicleType.CAR){
+			return false;
+		}
+		if (!isOneWay()){
+			return false;
+		}
+		if (restrictions.contains(RoadRestriction.ONE_WAY) && contains(firstConnections, origin.getIndex())){
+			return true;
+		}
+		else if (restrictions.contains(RoadRestriction.ONE_WAY_REVERSED) && contains(lastConnections, origin.getIndex())){
+			return true;
+		}
+		else return false;
 	}
 
-	public boolean wrongWay(PolyRoad origin) {
-		// this check could be made either by seeing if the road we came from is in last connection (which will be true
-		// more often) or if it is not in the first connection (which will be true less often). Jakob decided that it
-		// was more important to never go the wrong way, so he made the decision that this should use the former.
-		return isOneWay() && contains(lastConnections, origin.getIndex());
+	public boolean isOneWay() {
+		return restrictions.contains(RoadRestriction.ONE_WAY) || restrictions.contains(RoadRestriction.ONE_WAY_REVERSED);
+	}
+
+	public boolean vehicleIsAllowedToTakeRoad(VehicleType vehicleType) {
+		if (vehicleType == VehicleType.CAR){
+			if (restrictions.contains(RoadRestriction.NO_CAR)){
+				return false;
+			}
+		}
+		else if (vehicleType == VehicleType.BICYCLE || vehicleType == VehicleType.WALKING){
+			return !restrictions.contains(RoadRestriction.CAR_ONLY);
+		}
+		return true;
 	}
 }

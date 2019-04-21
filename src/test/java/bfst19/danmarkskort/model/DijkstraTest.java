@@ -22,10 +22,10 @@ public class DijkstraTest {
 		}
 		PolyRoad b = PolyRoad.allPolyRoads[693];
 		PolyRoad c = PolyRoad.allPolyRoads[156];
-		List<PolyRoad> shortestPath = Dijkstra.getShortestPath(a, b);
+		List<PolyRoad> shortestPath = Dijkstra.getShortestPath(a, b, VehicleType.CAR);
 		assertNotNull(shortestPath);
 		assertEquals(2, shortestPath.size());
-		shortestPath = Dijkstra.getShortestPath(a, c);
+		shortestPath = Dijkstra.getShortestPath(a, c, VehicleType.CAR);
 		System.out.println(shortestPath);
 		assertEquals(3, shortestPath.size());
 	}

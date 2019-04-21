@@ -7,11 +7,13 @@ public class RoadInformation {
 	public static Map<String, Integer> speedLimitsFromTags = initSpeedLimitsFromTags();
 	public static Set<WayType> roadTypes = getRoadTypes();
 
-
-
 	public static Set<WayType> getRoadTypes() {
 		Set<WayType> roadTypes = new HashSet<>();
 		roadTypes.add(WayType.RESIDENTIAL_ROAD);
+		roadTypes.add(WayType.FOOTWAY);
+		roadTypes.add(WayType.BRIDLEWAY);
+		roadTypes.add(WayType.TRACK);
+		roadTypes.add(WayType.PIER);
 		roadTypes.add(WayType.SERVICE_ROAD);
 		roadTypes.add(WayType.TERTIARY_ROAD);
 		roadTypes.add(WayType.LIVING_STREET);
@@ -26,8 +28,11 @@ public class RoadInformation {
 		roadTypes.add(WayType.SECONDARY_ROAD_EXIT);
 		roadTypes.add(WayType.PRIMARY_ROAD_EXIT);
 		roadTypes.add(WayType.MOTORWAY_EXIT);
+		roadTypes.add(WayType.CYCLEWAY);
 		return roadTypes;
 	}
+
+
 
 	private static Map<String, Integer> initSpeedLimitsFromTags() {
 		Map<String, Integer> speedLimits = new HashMap<>();

@@ -228,7 +228,7 @@ public class OSMParser {
 				restrictions.add(vehicleRestriction);
 			}
 		}
-		if(tags.containsKey("oneway")){
+		if(tags.containsKey("oneway") || tags.containsKey("junction")){
 			RoadRestriction oneWayType = getOneWayType();
 			if (oneWayType != null){
 				restrictions.add(oneWayType);
@@ -239,12 +239,12 @@ public class OSMParser {
 
 	private RoadRestriction getVehicleRestriction() {
 		switch (tags.get("highway")){
-			case "motorway": return RoadRestriction.CAR_ONLY;
-			case "trunk": return RoadRestriction.CAR_ONLY;
-			case "primary": return RoadRestriction.CAR_ONLY;
-			case "motorway_link": return RoadRestriction.CAR_ONLY;
-			case "trunk_link": return RoadRestriction.CAR_ONLY;
-			case "primary_link": return RoadRestriction.CAR_ONLY;
+			case "motorway": return checkIfBikeAllowed();
+			case "trunk": return checkIfBikeAllowed();
+			case "primary": return checkIfBikeAllowed();
+			case "motorway_link": return checkIfBikeAllowed();
+			case "trunk_link": return checkIfBikeAllowed();
+			case "primary_link": return checkIfBikeAllowed();
 			case "pedestrian": return RoadRestriction.NO_CAR;
 			case "track": return RoadRestriction.NO_CAR;
 			case "escape": return RoadRestriction.NO_CAR;
@@ -258,7 +258,21 @@ public class OSMParser {
 		}
 	}
 
+	private RoadRestriction checkIfBikeAllowed() {
+		if (tags.containsKey("bicycle")){
+			switch (tags.get("bicycle")){
+				case "yes": return null;
+				case "no": return RoadRestriction.CAR_ONLY;
+				default: return RoadRestriction.CAR_ONLY;
+			}
+		}
+		return RoadRestriction.CAR_ONLY;
+	}
+
 	private RoadRestriction getOneWayType() {
+		if (tags.containsKey("junction")){
+			return RoadRestriction.ONE_WAY;
+		}
 		switch (tags.get("oneway")){
 			case "yes": return RoadRestriction.ONE_WAY;
 			case "true": return RoadRestriction.ONE_WAY;

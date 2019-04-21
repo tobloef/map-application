@@ -137,7 +137,7 @@ public class Model {
 	private void updateShortestPath() {
 		try {
 			if (start != null && end != null){
-				shortestPath = Dijkstra.getShortestPath(start, end);
+				shortestPath = Dijkstra.getShortestPath(start, end, VehicleType.BICYCLE);
 			}
 		}
 		catch (DisconnectedRoadsException e) {

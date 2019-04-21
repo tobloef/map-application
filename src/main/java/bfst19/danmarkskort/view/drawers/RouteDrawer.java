@@ -31,7 +31,7 @@ public class RouteDrawer implements Drawer{
 
 		Theme theme = loadTheme("config/themes/default.yaml", null);
 		GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-		graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 4);
+		graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 2);
 		Set<PolyRoad> oneWayRoads = new HashSet<>();
 		graphicsContext.save();
 		if (ShowExplored) {
