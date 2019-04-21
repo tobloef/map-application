@@ -132,7 +132,7 @@ public class OSMParser {
 		if (currentWayIsRoad()) {
 			int nodeAmount = currentWay.getNodes().size();
 			if (nodeAmount <= 0) {
-				throw new RuntimeException("Way consists of zero nodes and is not a way");
+				throw new RuntimeException("Road consists of zero nodes and is not a way");
 			}
 			convertWayToRoadNodes(currentWay);
 			if (nodeAmount != currentWay.getNodes().size()) {

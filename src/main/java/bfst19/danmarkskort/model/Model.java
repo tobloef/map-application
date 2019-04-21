@@ -21,8 +21,6 @@ public class Model {
 	float mouseX, mouseY;
 	PolyRoad start, end;
 	List<PolyRoad> shortestPath;
-	public static final List<WayType> roadTypes = WayType.getRoadTypes();
-
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -183,7 +181,7 @@ public class Model {
 
 	private Drawable getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
-		for (WayType roadType : roadTypes){
+		for (WayType roadType : RoadInformation.roadTypes){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
 			if (close == null || !(close instanceof PolyRoad)){
 				continue;
