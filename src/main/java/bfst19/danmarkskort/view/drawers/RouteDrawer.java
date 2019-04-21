@@ -36,7 +36,7 @@ public class RouteDrawer implements Drawer{
 		graphicsContext.save();
 		if (ShowExplored) {
 			graphicsContext.setStroke(Color.RED);
-			for (PolyRoad road : Dijkstra.lastUsedRoads) {
+			for (PolyRoad road : Dijkstra.getLastVisitedRoads()) {
 				road.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
 				if (road.isOneWay()) {
 					oneWayRoads.add(road);

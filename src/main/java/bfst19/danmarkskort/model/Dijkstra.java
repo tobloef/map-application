@@ -3,7 +3,6 @@ package bfst19.danmarkskort.model;
 import java.util.*;
 
 public class Dijkstra {
-	public static Set<PolyRoad> lastUsedRoads = new HashSet<>();
 	public static HashMap<PolyRoad, PolyRoad> pathToRoad;
 	private static double[] distTo;
 
@@ -37,20 +36,17 @@ public class Dijkstra {
 					}
 				}
 			}
-			if(pathToRoad.get(destination) != null){
+			if(foundPathTo(destination)){
 				List<PolyRoad> route = makeRoute(origin, destination, pathToRoad);
 				System.out.println(routeLength(route));
-				Set<PolyRoad> usedRoads = new HashSet<>();
-				for (PolyRoad road : pathToRoad.keySet()) {
-					if (pathToRoad.get(road) != null) {
-						usedRoads.add(road);
-					}
-				}
-				lastUsedRoads = usedRoads;
 				return route;
 			}
 		}
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
+	}
+
+	private static boolean foundPathTo(PolyRoad destination) {
+		return pathToRoad.get(destination) != null;
 	}
 
 	private static boolean notAllowedToTakeRoad(VehicleType vehicleType, PolyRoad current, PolyRoad connectedRoad) {
@@ -104,5 +100,9 @@ public class Dijkstra {
 
 	public static double routeLength(List<PolyRoad> route) {
 		return route.stream().mapToDouble(PolyRoad::getLength).sum();
+	}
+
+	public static Iterable<? extends PolyRoad> getLastVisitedRoads() {
+		return pathToRoad.keySet();
 	}
 }
