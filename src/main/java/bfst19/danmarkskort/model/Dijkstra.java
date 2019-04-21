@@ -61,6 +61,9 @@ public class Dijkstra {
 
 	private static void insertStartConnections(PolyRoad origin, PolyRoad destination,  IndexMinPQ<Double> remainingPolyRoads, VehicleType vehicleType) {
 		for (PolyRoad connectedRoad : origin.getAllConnections()){
+			if (remainingPolyRoads.contains(connectedRoad.getIndex())) {
+				continue;
+			}
 			pathToRoad.put(connectedRoad, origin);
 			double weightToConnectedRoad = calculateWeight(connectedRoad, destination, vehicleType);
 			distTo[connectedRoad.getIndex()] = weightToConnectedRoad;
@@ -72,10 +75,13 @@ public class Dijkstra {
 		double weight;
 		if (vehicleType == VehicleType.CAR){
 			weight = polyRoad.getWeight();
+			weight += polyRoad.weightedEuclideanDistanceTo(destination);
 		}
 		else {
 			weight = polyRoad.getLength();
+			weight += polyRoad.euclideanDistanceSquaredTo(destination);
 		}
+
 		return weight;
 	}
 
