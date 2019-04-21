@@ -1,6 +1,25 @@
 # Changelog
 Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige releases.
 
+## v0.8 - 21/4/2019
+v0.7 blev skippet, så dette er for de sidste 2 uger.
+### Tilføjet
+- Navigation Graph som gør det muligt at finde vej.
+- Dijkstra
+- Debugging view af Dijkstra. 
+- Nearest Neighbor
+
+### Ændringer
+- Clamping af zoomniveauer.
+- Building, Barriers og UNKNOWNS bliver ignoreret for at spare RAM. Det cuttede ram forbrug for tegning af hele danmark ned til 140 mb fra 400 mb. 
+- Det sidste punkt bliver tegnet i polylines for at det ser mere korrekt ud når der er zoomet ud. 
+- Der repaintes ikke 2 ganger under load af programmet.
+
+### Bugs osv.
+- Vejfinding giver ikke altid den korrekte længde
+- Djikstra og generation af knude graf vil blive omskrevet til at være pænnere. 
+
+
 ## v0.6 - 07/4/2019
 ### Tilføjet
 - Enable og disable all waytypes i waytype selector UI'en
