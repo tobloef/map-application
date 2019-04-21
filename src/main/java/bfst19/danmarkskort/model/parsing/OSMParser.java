@@ -22,18 +22,14 @@ public class OSMParser {
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
 
 	private Map<Long, OSMWay> idToWay = new HashMap<>();
+	NodeGraphCreator nodeGraphCreator;
 
 	private Map<String, String> tags = new HashMap<>();
-	private Map<String, Integer> speedLimits = new HashMap<>();
-	private List<OSMRoadNode> roadNodes = new ArrayList<>();
-	private Set<OSMRoadWay> OSMRoads = new HashSet<>();
-	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
-	private Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
-		initSpeedLimits();
 		this.drawableModel = drawableModel;
+		nodeGraphCreator = new NodeGraphCreator(this.drawableModel);
 		if (filename.endsWith(".zip")) {
 			osmSource = getZipFile(filename);
 		}
@@ -44,85 +40,18 @@ public class OSMParser {
 			throw new IOException();
 		}
 		parseOSM(osmSource);
+		doneParsing();
+	}
+
+	private void doneParsing() {
 		idToNode = null;
 		idToWay = null;
 		System.gc();
 		System.runFinalization();
-		initPolyRoadConnections();
+		nodeGraphCreator.initPolyRoadConnections();
 		drawableModel.doneAdding();
 	}
 
-	private void initPolyRoadConnections() {
-		for (OSMRoadNode node : roadNodes) {
-			OSMRoads.addAll(node.getConnections());
-		}
-		OSMRoads.addAll(splitWays());
-		createPolyRoadsFromOSMRoads();
-		fillPolyRoadsIntoArray();
-		initializeConnections();
-	}
-
-	private void initializeConnections() {
-		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
-			PolyRoad road = roadWaysToPolyRoads.get(way);
-			OSMRoadNode first = (OSMRoadNode) way.getFirst();
-			OSMRoadNode last = (OSMRoadNode) way.getLast();
-			for (OSMRoadWay connectedWay : first.getConnections()) {
-				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
-				if (road != otherRoad){
-					road.addConnectionToFirst(otherRoad);
-				}
-			}
-			for (OSMRoadWay connectedWay : last.getConnections()) {
-				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
-				if (road != otherRoad){
-					road.addConnectionToLast(otherRoad);
-				}
-			}
-		}
-	}
-
-	private void fillPolyRoadsIntoArray() {
-		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size()];
-		int i = 0;
-		for (PolyRoad road : roadWaysToPolyRoads.values()) {
-			polyRoadToIntegers.put(road, i);
-			PolyRoad.allPolyRoads[i] = road;
-			road.setIndex(i);
-			i++;
-		}
-	}
-
-	private void createPolyRoadsFromOSMRoads() {
-		for (OSMRoadWay way : OSMRoads) {
-			PolyRoad newRoad = new PolyRoad(way);
-			roadWaysToPolyRoads.put(way, newRoad);
-			drawableModel.add(way.getType(), newRoad);
-		}
-	}
-
-	private List<OSMRoadWay> splitWays() {
-		List<OSMRoadWay> toBeAdded = new ArrayList<>();
-		for (OSMRoadWay way : OSMRoads) {
-			OSMRoadWay newWay = way;
-			while (newWay != null) {
-				newWay = newWay.splitIfNeeded();
-				if (newWay != null) {
-					toBeAdded.add(newWay);
-				}
-			}
-		}
-		return toBeAdded;
-	}
-
-	private void initSpeedLimits() {
-		speedLimits.put("residential", 50);
-		speedLimits.put("unclassified", 50);
-		speedLimits.put("tertiary", 65);
-		speedLimits.put("secondary", 80);
-		speedLimits.put("trunk", 90);
-		speedLimits.put("motorway", 130);
-	}
 
 	private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
 		return new BufferedInputStream(new FileInputStream(filename));
@@ -213,7 +142,7 @@ public class OSMParser {
 		idToWay.put(currentWay.getAsLong(), currentWay);
 		if (currentType != WayType.UNKNOWN) {
 			if (currentWay instanceof OSMRoadWay) {
-				OSMRoads.add((OSMRoadWay) currentWay);
+				nodeGraphCreator.addRoad((OSMRoadWay) currentWay);
 			}
 			else {
 				drawableModel.add(currentType, new Polyline(currentWay));
@@ -291,10 +220,12 @@ public class OSMParser {
 	private OSMRoadNode convertNodeToRoadNode(OSMNode node) {
 		OSMRoadNode newNode = new OSMRoadNode(node);
 		idToNode.replace(newNode);
-		roadNodes.add(newNode);
+		nodeGraphCreator.addRoadNode(newNode);
 		return newNode;
 	}
 
+
+	//TODO: Write this function, it seems incorrect.
 	private int getMaxSpeed() {
 		int maxSpeed;
 		if (tags.containsKey("maxspeed")) {
@@ -306,7 +237,7 @@ public class OSMParser {
 			}
 		}
 		else {
-			if (speedLimits.get(tags.get("highway")) != null){
+			if (RoadInformation.speedLimitsFromTags.get(tags.get("highway")) != null){
 				try {
 					maxSpeed = Integer.parseInt(tags.get("maxspeed"));
 				}
@@ -320,8 +251,6 @@ public class OSMParser {
 		}
 		return maxSpeed;
 	}
-
-
 
 	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
