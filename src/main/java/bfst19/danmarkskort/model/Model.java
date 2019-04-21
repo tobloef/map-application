@@ -138,13 +138,12 @@ public class Model {
 		try {
 			if (start != null && end != null){
 				shortestPath = Dijkstra.getShortestPath(start, end);
-				notifyObservers();
 			}
 		}
 		catch (DisconnectedRoadsException e) {
 			shortestPath = new ArrayList<>();
-			notifyObservers();
 		}
+		notifyObservers();
 	}
 
 
@@ -159,7 +158,7 @@ public class Model {
 	public void updateEnd() {
 		Drawable nearest = getClosestRoad(mouseX, mouseY);
 		if (nearest instanceof PolyRoad){
-			start = (PolyRoad) nearest;
+			end = (PolyRoad) nearest;
 			updateShortestPath();
 		}
 	}
@@ -167,7 +166,7 @@ public class Model {
 	public void updateStart() {
 		Drawable nearest = getClosestRoad(mouseX, mouseY);
 		if (nearest instanceof PolyRoad){
-			end = (PolyRoad) nearest;
+			start = (PolyRoad) nearest;
 			updateShortestPath();
 		}
 	}

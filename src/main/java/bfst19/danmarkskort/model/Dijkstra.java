@@ -23,21 +23,19 @@ public class Dijkstra {
 			List<PolyRoad> connections = new ArrayList<>();
 
 			if(current == origin){
-				//System.out.println("Starting with " + current);
+
 				connections.addAll(current.getAllConnections());
 			}
 			else{
-				//System.out.println("Moving on to " + current + " since it was lowest with " + distTo[current.getIndex()]);
+
 				connections.addAll(current.getOtherConnections(previousRoads.get(current)));
 			}
-			//System.out.println("Relaxing the following connections: " + connections);
+
 			for(PolyRoad thisConnection : connections){
 				int thisConnectionIndex = thisConnection.getIndex();
 				if (thisConnection.wrongWay(current)) {
 					continue;
 				}
-				//System.out.println("Now maybe relaxing " + thisConnection + " from " + distTo[thisConnectionIndex] + " to " + distTo[current.getIndex()] + current.getLength());
-				//fixme this should use getWeight instead of getLength
 				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getWeight()){
 					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getWeight();
 					previousRoads.put(thisConnection, current);
