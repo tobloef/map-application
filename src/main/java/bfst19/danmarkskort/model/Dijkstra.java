@@ -109,6 +109,8 @@ public class Dijkstra {
 	}
 
 	public static Iterable<? extends PolyRoad> getLastVisitedRoads() {
-		return pathToRoad.keySet();
+		if (pathToRoad != null)
+			return pathToRoad.keySet();
+		else return new ArrayList<PolyRoad>();
 	}
 }

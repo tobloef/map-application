@@ -97,18 +97,6 @@ public class PolyRoad extends Polyline implements Serializable {
 		return result;
 	}
 
-	public Set<PolyRoad> getOtherConnections(PolyRoad origin) {
-		if (contains(firstConnections, origin.getIndex())) {
-			return getLastConnections();
-		}
-		if (contains(lastConnections, origin.getIndex())) {
-			return getFirstConnections();
-		}
-		return new HashSet<>(getAllConnections());
-		//fixme the above is a hack that slows down dijkstra, we should figure out why it happens and fix it so we can use the below instead
-		//throw new IllegalArgumentException("This road is not connected to specified road");
-	}
-
 	public int getIndex() {
 		return index;
 	}
