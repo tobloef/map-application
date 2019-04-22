@@ -1,0 +1,313 @@
+---
+
+# The format is:
+# way type name:
+#   fillColor: "Web color"
+#   strokeColor: "Web color"
+#   lineDash: Number
+#   lineWidth: Number
+#   texture: Path
+#
+# For more about web color formats, see:
+# https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
+
+# Constants, won't get parsed but are used for anchor references
+
+- constants:
+  - zoomLevels:
+    #The zoomlevels are at the 800x600 size and what fits inside at that level.
+    - level0: &wholeDenmark 0.005
+    - level1: &region 0.002
+    - level2: &largeCity 0.0005
+    - level3: &amager 0.0002
+    - level4: &halfAmager 0.0001
+    - level5: &postCode 0.00008
+    - level6: &suburb 0.00002
+    - level7: &haveforening 0.000006
+
+# Coastline, always draw first
+
+- COASTLINE:
+    fillColor: "EEF0D5"
+
+# Island stuff
+- ADMINISTRATIVE:
+    fillcolor: "808080"
+    zoomLevel: *wholeDenmark
+
+
+- ISLAND:
+    fillColor: "F4F0EA"
+
+- SCREE:
+    fillColor: "F1E5DC"
+    zoomLevel: *region
+
+# Nature
+
+- TREES:
+    fillColor: "006400"
+    zoomLevel: *region
+
+- GRASS:
+    fillColor: "C4EDB2"
+    zoomLevel: *largeCity
+
+- SAND:
+    fillColor: "FFF1BA"
+    zoomLevel: *largeCity
+
+- FARMLAND:
+    fillColor: "EFF1D5"
+    zoomLevel: *region
+
+- WOOD:
+    fillColor: "A1D29F"
+    zoomLevel: *region
+
+- HEATH:
+    fillColor: "D6D99F"
+    zoomLevel: *region
+
+- MEADOW:
+    fillColor: "C4EDB2"
+    zoomLevel: *largeCity
+
+- PARK:
+    fillColor: "90EE90"
+    zoomLevel: *largeCity
+
+- WETLAND:
+    fillColor: "ADD8E6"
+    zoomLevel: *largeCity
+
+- BROWNFIELD:
+    fillColor: "D2B48C"
+    zoomLevel: *largeCity
+
+- SHRUB:
+    fillColor: "90EE90"
+    zoomLevel: *largeCity
+
+# Buildings
+
+- CONSTRUCTION:
+    fillColor: "8FBC8F"
+    zoomLevel: *postCode
+
+- INDUSTRIAL:
+    fillColor: "D8BFD8"
+    zoomLevel: *postCode
+
+- CEMETERY:
+    fillColor: "6B8E23"
+    zoomLevel: *halfAmager
+
+- RESIDENTIAL:
+    fillColor: "E6E6FA"
+    zoomLevel: *halfAmager
+
+- ALLOTMENTS:
+    fillColor: "98FB98"
+    zoomLevel: *postCode
+
+- PLAYGROUND:
+    fillColor: "66CDAA"
+    zoomLevel: *postCode
+
+- BUILDING:
+    fillColor: "A9A9A9"
+    zoomLevel: *postCode
+
+- BARRIER:
+    strokeColor: "BC8F8F"
+    zoomLevel: *postCode
+
+- PITCH:
+    fillColor: "66CDAA"
+    zoomLevel: *postCode
+
+- GROYNE:
+    fillColor: "A9A9A9"
+    zoomLevel: *postCode
+
+- PIER:
+    fillColor: "FFFF00"
+    strokeColor: "FFFF00"
+    zoomLevel: *postCode
+
+
+- APRON:
+    fillColor: "DADAE0"
+    zoomLevel: *largeCity
+
+# Road exits
+
+- TERTIARY_ROAD_EXIT:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00008
+    zoomLevel: *largeCity
+
+- SECONDARY_ROAD_EXIT:
+    fillColor:
+    strokeColor: "F7FBBB"
+    lineWidth: 0.00012
+    zoomLevel: *largeCity
+
+- PRIMARY_ROAD_EXIT:
+    fillColor:
+    strokeColor: "FFAD95"
+    lineWidth: 0.00012
+    zoomLevel: *largeCity
+
+- MOTORWAY_EXIT:
+    fillColor:
+    strokeColor: "FEB9C3"
+    lineWidth: 0.00014
+    zoomLevel: *region
+
+# Roads
+
+- RESIDENTIAL_ROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00006
+    zoomLevel: *postCode
+
+- TERTIARY_ROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00008
+    zoomLevel: *halfAmager
+
+- SERVICE_ROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00004
+    zoomLevel: *halfAmager
+
+- UNCLASSIFIED_ROAD:
+    fillColor:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.00006
+    zoomLevel: *suburb
+
+- LIVING_STREET:
+    fillColor:
+    strokeColor: "EDEEED"
+    lineWidth: 0.00006
+    zoomLevel: *halfAmager
+
+- SECONDARY_ROAD:
+    fillColor:
+    strokeColor: "F7FBBB"
+    lineWidth: 0.00012
+    zoomLevel: *amager
+
+- PRIMARY_ROAD:
+    fillColor:
+    strokeColor: "FFAD95"
+    lineWidth: 0.00012
+    zoomLevel: *largeCity
+
+- RUNWAY:
+    fillColor:
+    strokeColor: "BABACC"
+    lineWidth: 0.0005
+    zoomLevel: *amager
+
+- RAILWAY:
+    fillColor:
+    strokeColor: "D3D3D3"
+    lineDash: 2
+    zoomLevel: *amager
+
+- PEDESTRIAN:
+    fillColor:
+    strokeColor: "DDDDE9"
+    lineWidth: 0.00005
+    zoomLevel: *halfAmager
+
+- RACEWAY:
+    fillColor:
+    strokeColor: "FFBDC7"
+    lineWidth: 0.00004
+    zoomLevel: *halfAmager
+
+- MOTORWAY:
+    fillColor:
+    strokeColor: "FEB9C3"
+    lineWidth: 0.00014
+    zoomLevel: *wholeDenmark
+
+- BRIDGE:
+    fillColor: "BDB76B"
+    strokeColor: "BDB76B"
+    zoomLevel: *largeCity
+
+# Abstract routes
+
+- MARKING:
+    fillColor:
+    strokeColor: "000000"
+    zoomLevel: *suburb
+
+- TRACK:
+    fillColor:
+    strokeColor: "B68235"
+    lineDash: 2
+    zoomLevel: *suburb
+
+- FERRY:
+    fillColor:
+    strokeColor: "0000FF"
+    lineDash: 2
+    zoomLevel: *suburb
+
+- TOUR:
+    fillColor:
+    strokeColor: "000000"
+    lineDash: 2
+    zoomLevel: *suburb
+
+- BUS_GUIDEWAY:
+    fillColor:
+    strokeColor: "6066FF"
+    lineDash: 2
+    zoomLevel: *suburb
+
+- FOOTWAY:
+    fillColor:
+    strokeColor: "FE9E93"
+    zoomLevel: *suburb
+
+- BRIDLEWAY:
+    fillColor:
+    strokeColor: "A8D7B6"
+    lineDash: 2
+    zoomLevel: *haveforening
+
+- CYCLEWAY:
+    fillColor:
+    strokeColor: "7B7EF8"
+    zoomLevel: *haveforening
+
+# Water
+
+- WATER:
+    fillColor: "87CEFA"
+    zoomLevel: *largeCity
+
+- SWIMMINGPOOL:
+    fillColor: "87CEFA"
+    zoomLevel: *haveforening
+
+- CANAL:
+    fillColor: "87CEFA"
+    zoomLevel: *largeCity
+
+- BASIN:
+    fillColor: "87CEFA"
+    zoomLevel: *halfAmager
+# Misc.

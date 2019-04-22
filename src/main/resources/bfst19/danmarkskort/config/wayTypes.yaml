@@ -1,0 +1,233 @@
+---
+
+# Format is:
+# - enum name:
+#   - xml tag 1:
+#     - sub tag 1
+#     - sub tag 2
+#   - xml tag 2:
+#     - sub tag 1
+
+- RUNWAY:
+  - aeroway:
+    - runway
+    - taxiway
+
+- ADMINISTRATIVE:
+  - admin_level:
+    - "4"
+
+- APRON:
+  - aeroway:
+    - apron
+
+- MARKING:
+  - aeroway:
+    - marking
+
+- BARRIER:
+  - barrier
+
+- BRIDLEWAY:
+  - highway:
+    - bridleway
+
+- BUILDING:
+  - building
+
+- BUS_GUIDEWAY:
+  - highway:
+    - bus_guideway
+
+- CYCLEWAY:
+  - highway:
+    - cycleway
+
+- FOOTWAY:
+  - highway:
+    - footway
+
+- LIVING_STREET:
+  - highway:
+    - living_street
+
+- MOTORWAY:
+  - highway:
+    - motorway
+
+- MOTORWAY_EXIT:
+  - highway:
+    - motorway_link
+
+- PEDESTRIAN:
+  - highway:
+    - pedestrian
+
+- PRIMARY_ROAD:
+  - highway:
+    - primary
+    - trunk
+
+- PRIMARY_ROAD_EXIT:
+  - highway:
+    - primary_link
+    - trunk_link
+
+- RACEWAY:
+  - highway:
+    - raceway
+
+- RESIDENTIAL_ROAD:
+  - highway:
+    - residential
+
+- SECONDARY_ROAD:
+  - highway:
+    - secondary
+
+- SECONDARY_ROAD_EXIT:
+  - highway:
+    - secondary_link
+
+- SERVICE_ROAD:
+  - highway:
+    - service
+
+- TERTIARY_ROAD:
+  - highway:
+    - tertiary
+
+- TERTIARY_ROAD_EXIT:
+  - high:
+    - tertiary_link
+
+- TRACK:
+  - highway:
+    - track
+
+- UNCLASSIFIED_ROAD:
+  - highway:
+    - unclassified
+
+- ALLOTMENTS:
+  - landuse:
+    - allotments
+
+- BASIN:
+  - landuse:
+    - basin
+
+- BROWNFIELD:
+  - landuse:
+    - brownfield
+
+- CEMETERY:
+  - landuse:
+    - cemetery
+
+- CONSTRUCTION:
+  - landuse:
+    - construction
+
+- FARMLAND:
+  - landuse:
+    - farmland
+
+- GRASS:
+  - landuse:
+    - grass
+
+- INDUSTRIAL:
+  - landuse:
+    - industrial
+
+- MEADOW:
+  - landuse:
+    - meadow
+
+- PITCH:
+  - leisure
+
+- PARK:
+  - leisure:
+    - park
+    - garden
+
+- PLAYGROUND:
+  - leisure:
+    - playground
+
+- SWIMMINGPOOL:
+  - leisure:
+    - swimming_pool
+
+- BRIDGE:
+  - man_made:
+    - bridge
+
+- GROYNE:
+  - man_made:
+    - groyne
+
+- PIER:
+  - man_made:
+    - pier
+
+- SAND:
+  - natural:
+    - beach
+
+- COASTLINE:
+  - place:
+    - island
+    - peninsula
+    - islet
+    - archipelago
+
+- HEATH:
+  - natural:
+    - heath
+
+- SCREE:
+  - natural:
+    - scree
+
+- TREES:
+  - natural:
+    - tree
+  - landuse:
+    - forest
+
+- WATER:
+  - natural:
+    - water
+  - shrub:
+    - water
+
+- WETLAND:
+  - natural:
+    - wetland
+
+- WOOD:
+  - natural:
+    - wood
+
+- RAILWAY:
+  - railway:
+    - rail
+    - construction
+
+- RESIDENTIAL:
+  - residential
+  - landuse:
+    - residential
+
+- FERRY:
+  - route:
+    - ferry tour
+
+- CANAL:
+  - water:
+    - canal
+    - pond
+    - reservoir
