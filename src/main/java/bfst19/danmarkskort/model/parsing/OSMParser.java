@@ -152,6 +152,9 @@ public class OSMParser {
 	}
 
 	private boolean currentWayIsRoad() {
+		if (!RoadInformation.roadTypes.contains(currentType)){
+			return false;
+		}
 		if (!tags.containsKey("highway") || tags.get("highway") == null){
 			return false;
 		}
@@ -270,17 +273,26 @@ public class OSMParser {
 	}
 
 	private RoadRestriction getOneWayType() {
-		if (tags.containsKey("junction")){
+		if (tags.containsKey("junction") && tags.get("junction").equals("roundabout")){
 			return RoadRestriction.ONE_WAY;
 		}
-		switch (tags.get("oneway")){
-			case "yes": return RoadRestriction.ONE_WAY;
-			case "true": return RoadRestriction.ONE_WAY;
-			case "1": return RoadRestriction.ONE_WAY;
-			case "-1": return RoadRestriction.ONE_WAY_REVERSED;
-			case "reversible": return RoadRestriction.ONE_WAY_REVERSED;
-			default: return null;
+		if (tags.get("oneway") != null) {
+			switch (tags.get("oneway")) {
+				case "yes":
+					return RoadRestriction.ONE_WAY;
+				case "true":
+					return RoadRestriction.ONE_WAY;
+				case "1":
+					return RoadRestriction.ONE_WAY;
+				case "-1":
+					return RoadRestriction.ONE_WAY_REVERSED;
+				case "reversible":
+					return RoadRestriction.ONE_WAY_REVERSED;
+				default:
+					return null;
+			}
 		}
+		return null;
 	}
 
 

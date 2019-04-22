@@ -8,6 +8,7 @@ public class Dijkstra {
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
 		distTo = initializeDistTo(origin);
+		long time = -System.nanoTime();
 		pathToRoad = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
@@ -39,6 +40,8 @@ public class Dijkstra {
 			if(foundPathTo(destination)){
 				List<PolyRoad> route = makeRoute(origin, destination, pathToRoad);
 				System.out.println(routeLength(route));
+				time += System.nanoTime();
+				System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
 				return route;
 			}
 		}
@@ -75,13 +78,22 @@ public class Dijkstra {
 		double weight;
 		if (vehicleType == VehicleType.CAR){
 			weight = polyRoad.getWeight();
-			weight += polyRoad.weightedEuclideanDistanceTo(destination);
 		}
 		else {
 			weight = polyRoad.getLength();
-			weight += polyRoad.euclideanDistanceSquaredTo(destination);
 		}
+		weight += calculateHeuristics(polyRoad, destination, vehicleType);
+		return weight;
+	}
 
+	private static double calculateHeuristics(PolyRoad polyRoad, PolyRoad destination, VehicleType vehicleType){
+		double weight;
+		if (vehicleType == VehicleType.CAR){
+			weight = polyRoad.weightedEuclideanDistanceTo(destination);
+		}
+		else {
+			weight = polyRoad.euclideanDistanceSquaredTo(destination);
+		}
 		return weight;
 	}
 
