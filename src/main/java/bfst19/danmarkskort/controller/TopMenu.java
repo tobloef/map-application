@@ -1,11 +1,24 @@
 package bfst19.danmarkskort.controller;
 
+import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.view.drawers.MapDrawer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public class TopMenu {
+
+	private static Model model;
+	private static TopMenu singletonInstance;
+
+	public static void init(Model modelParam){
+		model = modelParam;
+	}
+
+	public TopMenu(){
+		singletonInstance = this;
+	}
 
 	@FXML
 	private void onHelp(final ActionEvent event){
@@ -44,7 +57,7 @@ public class TopMenu {
 	}
 
 	@FXML
-	private void onDjikstra(final ActionEvent event){
+	private void onDijkstra(final ActionEvent event){
 		//TODO: Enten AlertPane med dropdown selektion eller options knapper. Ellers skal den bare
 		//give en checkbox markering eller noget
 	}
@@ -55,7 +68,7 @@ public class TopMenu {
 	}
 
 	@FXML
-	private void onEE(final ActionEvent event){
-		//TODO: Alt upside down?
+	private void onHDGraphics(final ActionEvent event){
+
 	}
 }

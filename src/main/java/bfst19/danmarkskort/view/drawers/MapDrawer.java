@@ -17,26 +17,23 @@ public class MapDrawer implements Drawer {
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
-	private Theme theme;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
-		// TODO: This should be done somewhere else
-		theme = loadTheme("config/themes/default.yaml", null);
 	}
 
 	public void draw() {
-		if (theme == null) {
+		if (model.getCurrentTheme() == null) {
 			return;
 		}
 		double currentZoomLevel = canvas.getDegreesLatitudePerPixel();
-		fillBackground(theme);
+		fillBackground(model.getCurrentTheme());
 		for (WayType wayType : WayType.values()){
 
 			//Skip if no theme found
-			DrawingInfo drawingInfo = theme.getDrawingInfo(wayType);
+			DrawingInfo drawingInfo = model.getCurrentTheme().getDrawingInfo(wayType);
 			if (drawingInfo == null) {
 				continue;
 			}

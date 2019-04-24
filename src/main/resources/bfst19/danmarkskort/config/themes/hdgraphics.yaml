@@ -1,0 +1,15 @@
+---
+
+# The format is:
+# way type name:
+#   fillColor: "Web color"
+#   strokeColor: "Web color"
+#   lineDash: Number
+#   lineWidth: Number
+#   texture: Path
+#
+# For more about web color formats, see:
+# https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
+
+# Constants, won't get parsed but are used for anchor references
+

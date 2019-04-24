@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.EnumHelper;
 import bfst19.danmarkskort.utils.ResourceLoader;
+import bfst19.danmarkskort.utils.ThemeLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 
@@ -22,7 +23,11 @@ public class Model {
 	PolyRoad start, end;
 	List<PolyRoad> shortestPath;
 	public static final List<WayType> roadTypes = WayType.getRoadTypes();
+	private Theme theme;
 
+	public Theme getCurrentTheme(){
+		return theme;
+	}
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -74,6 +79,11 @@ public class Model {
 			loadDefaultData();
 		} else {
 			loadDataFromArgs(args);
+		}
+		if (args.size() == 2){
+			theme = ThemeLoader.loadTheme(args.get(1), null);
+		} else {
+			theme = ThemeLoader.loadTheme("config/themes/default.yaml",null);
 		}
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
