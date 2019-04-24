@@ -27,6 +27,15 @@ public class NodeGraphCreator {
 		createPolyRoadsFromOSMRoads();
 		fillPolyRoadsIntoArray();
 		initializeConnections();
+		removeDuplicates();
+	}
+
+	private void removeDuplicates() {
+		for (PolyRoad polyRoad : PolyRoad.allPolyRoads){
+			if (polyRoad != null) {
+				polyRoad.removeDuplicateConnections();
+			}
+		}
 	}
 
 	private void initializeConnections() {
@@ -50,8 +59,10 @@ public class NodeGraphCreator {
 	}
 
 	private void fillPolyRoadsIntoArray() {
-		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size()];
-		int i = 0;
+		//We start from 0, so that we can reference roads and use 0 as an uninitialized reference,
+		// as ints are initialized to 0 by default.
+		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size() + 1];
+		int i = 1;
 		for (PolyRoad road : roadWaysToPolyRoads.values()) {
 			polyRoadToIntegers.put(road, i);
 			PolyRoad.allPolyRoads[i] = road;

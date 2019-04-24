@@ -24,6 +24,34 @@ public class PolyRoad extends Polyline implements Serializable {
 		length = calculateLength();
 	}
 
+	public void removeDuplicateConnections(){
+		this.firstConnections = removeDuplicateElements(this.firstConnections);
+		this.lastConnections = removeDuplicateElements(this.lastConnections);
+	}
+
+	private static int[] removeDuplicateElements(int arr[]){
+		int n = arr.length;
+		if (n==0 || n==1){
+			return arr;
+		}
+		//Sort it and ignore duplicates
+		Arrays.sort(arr);
+		int[] temp = new int[n];
+		int j = 0;
+		for (int i=0; i<n-1; i++){
+			if (arr[i] != arr[i+1]){
+				temp[j++] = arr[i];
+			}
+		}
+		temp[j++] = arr[n-1];
+		//Size it correctly.
+		int[] tempToSize = new int[j];
+		for (int i = 0; i < j; i++){
+			tempToSize[i] = temp[i];
+		}
+		return tempToSize;
+	}
+
 	private double calculateLength() {
 		double result = 0;
 		for (int i = 0; i < coords.length - 2; i += 2) {
@@ -74,26 +102,38 @@ public class PolyRoad extends Polyline implements Serializable {
 		return deltaX*deltaX + deltaY*deltaY;
 	}
 
-	public Set<PolyRoad> getFirstConnections() {
-		Set<PolyRoad> result = new HashSet<>();
+	public Collection<PolyRoad> getFirstConnections() {
+		List<PolyRoad> result = new ArrayList<>();
 		for (Integer i : firstConnections) {
 			result.add(allPolyRoads[i]);
 		}
 		return result;
 	}
 
-	public Set<PolyRoad> getLastConnections() {
-		Set<PolyRoad> result = new HashSet<>();
+	public Collection<PolyRoad> getLastConnections() {
+		List<PolyRoad> result = new ArrayList<>();
 		for (Integer i : lastConnections) {
 			result.add(allPolyRoads[i]);
 		}
 		return result;
 	}
 
-	public List<PolyRoad> getAllConnections() {
+	public Collection<PolyRoad> getAllConnections() {
 		List<PolyRoad> result = new ArrayList<>();
 		result.addAll(getFirstConnections());
 		result.addAll(getLastConnections());
+		return result;
+	}
+
+	public int[] getAllConnectionsFast(){
+		int[] result = new int[firstConnections.length + lastConnections.length];
+		int i = 0;
+		for (; i < firstConnections.length; i++){
+			result[i] = firstConnections[i];
+		}
+		for (int j = 0; j < lastConnections.length; i++, j++){
+			result[i] = lastConnections[j];
+		}
 		return result;
 	}
 

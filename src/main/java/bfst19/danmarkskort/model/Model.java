@@ -136,6 +136,7 @@ public class Model {
 	}
 
 	private void updateShortestPath() {
+		long time = -System.nanoTime();
 		if (start == null || end == null)
 			return;
 		try {
@@ -144,6 +145,8 @@ public class Model {
 		catch (DisconnectedRoadsException e) {
 			shortestPath = new ArrayList<>();
 		}
+		time += System.nanoTime();
+		System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
 		notifyObservers();
 	}
 

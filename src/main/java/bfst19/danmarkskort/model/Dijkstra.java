@@ -3,13 +3,12 @@ package bfst19.danmarkskort.model;
 import java.util.*;
 
 public class Dijkstra {
-	public static HashMap<PolyRoad, PolyRoad> pathToRoad;
+	public static int[] pathToRoad;
 	private static double[] distTo;
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
 		distTo = initializeDistTo(origin);
-		long time = -System.nanoTime();
-		pathToRoad = new HashMap<>();
+		pathToRoad = new int[PolyRoad.allPolyRoads.length];
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
 
 		insertStartConnections(origin,destination, remainingPolyRoads, vehicleType);
@@ -17,18 +16,18 @@ public class Dijkstra {
 
 		while(!remainingPolyRoads.isEmpty()){
 			PolyRoad current = PolyRoad.allPolyRoads[remainingPolyRoads.delMin()];
-			for(PolyRoad connectedRoad : current.getAllConnections()){
-				if (pathToRoad.containsKey(connectedRoad)){
+			for(int connectedRoadIndex : current.getAllConnectionsFast()){
+				PolyRoad connectedRoad = PolyRoad.allPolyRoads[connectedRoadIndex];
+				if (pathToRoad[connectedRoadIndex] != 0){
 					continue;
 				}
 				if (notAllowedToTakeRoad(vehicleType, current, connectedRoad)) {
 					continue;
 				}
-				int connectedRoadIndex = connectedRoad.getIndex();
 				double connectedRoadWeight = calculateWeight(connectedRoad, destination, vehicleType);
 				if(distTo[connectedRoadIndex] > distTo[current.getIndex()] + connectedRoadWeight){
 					distTo[connectedRoadIndex] = distTo[current.getIndex()] + connectedRoadWeight;
-					pathToRoad.put(connectedRoad, current);
+					pathToRoad[connectedRoadIndex] = current.getIndex();
 					if(remainingPolyRoads.contains(connectedRoadIndex)){
 						remainingPolyRoads.changeKey(connectedRoadIndex, distTo[connectedRoadIndex]);
 					}
@@ -40,8 +39,6 @@ public class Dijkstra {
 			if(foundPathTo(destination)){
 				List<PolyRoad> route = makeRoute(origin, destination, pathToRoad);
 				System.out.println(routeLength(route));
-				time += System.nanoTime();
-				System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
 				return route;
 			}
 		}
@@ -49,7 +46,7 @@ public class Dijkstra {
 	}
 
 	private static boolean foundPathTo(PolyRoad destination) {
-		return pathToRoad.get(destination) != null;
+		return pathToRoad[destination.getIndex()] != 0;
 	}
 
 	private static boolean notAllowedToTakeRoad(VehicleType vehicleType, PolyRoad current, PolyRoad connectedRoad) {
@@ -67,7 +64,7 @@ public class Dijkstra {
 			if (remainingPolyRoads.contains(connectedRoad.getIndex())) {
 				continue;
 			}
-			pathToRoad.put(connectedRoad, origin);
+			pathToRoad[connectedRoad.getIndex()] = origin.getIndex();
 			double weightToConnectedRoad = calculateWeight(connectedRoad, destination, vehicleType);
 			distTo[connectedRoad.getIndex()] = weightToConnectedRoad;
 			remainingPolyRoads.insert(connectedRoad.getIndex(), weightToConnectedRoad);
@@ -106,11 +103,12 @@ public class Dijkstra {
 		return distTo;
 	}
 
-	private static List<PolyRoad> makeRoute(PolyRoad origin, PolyRoad destination, HashMap<PolyRoad, PolyRoad> previousRoads) {
+	private static List<PolyRoad> makeRoute(PolyRoad origin, PolyRoad destination, int[] previousRoads) {
 		List<PolyRoad> path = new ArrayList<>();
 		path.add(destination);
 		while(path.get(path.size()-1) != origin){
-			path.add(previousRoads.get(path.get(path.size()-1)));
+			PolyRoad prevRoad = PolyRoad.allPolyRoads[previousRoads[(path.get(path.size()-1)).getIndex()]];
+			path.add(prevRoad);
 		}
 		Collections.reverse(path);
 		return path;
@@ -121,8 +119,16 @@ public class Dijkstra {
 	}
 
 	public static Iterable<? extends PolyRoad> getLastVisitedRoads() {
-		if (pathToRoad != null)
-			return pathToRoad.keySet();
+		if (pathToRoad != null) {
+			List<PolyRoad> roads = new ArrayList<>();
+			for (int roadIndex : pathToRoad) {
+				if (roadIndex == 0) {
+					continue;
+				}
+				roads.add(PolyRoad.allPolyRoads[roadIndex]);
+			}
+			return roads;
+		}
 		else return new ArrayList<PolyRoad>();
 	}
 }
