@@ -36,8 +36,8 @@ public class Dijkstra {
 				if (thisConnection.wrongWay(current)) {
 					continue;
 				}
-				//System.out.println("Now maybe relaxing " + thisConnection + " from " + distTo[thisConnectionIndex] + " to " + distTo[current.getIndex()] + current.getLength());
-				//fixme this should use getWeight instead of getLength
+				//System.out.println("Now maybe relaxing " + thisConnection + " from " + distTo[thisConnectionIndex] + " to " + distTo[current.getIndex()] + current.sumLength());
+				//fixme this should use getWeight instead of sumLength
 				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getLength()){
 					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getLength();
 					previousRoads.put(thisConnection, current);
@@ -50,8 +50,8 @@ public class Dijkstra {
 				}
 			}
 			if(previousRoads.get(destination) != null){
-				List<PolyRoad> route = makeRoute(origin, destination, previousRoads);
-				System.out.println(routeLength(route));
+				Route route = makeRoute(origin, destination, previousRoads);
+				System.out.println(route.sumLength());
 				Set<PolyRoad> usedRoads = new HashSet<>();
 				for (PolyRoad road : previousRoads.keySet()) {
 					if (previousRoads.get(road) != null) {
@@ -65,17 +65,13 @@ public class Dijkstra {
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
 	}
 
-	private static List<PolyRoad> makeRoute(PolyRoad origin, PolyRoad destination, HashMap<PolyRoad, PolyRoad> previousRoads) {
-		List<PolyRoad> path = new ArrayList<>();
+	private static Route makeRoute(PolyRoad origin, PolyRoad destination, HashMap<PolyRoad, PolyRoad> previousRoads) {
+		Route path = new Route();
 		path.add(destination);
 		while(path.get(path.size()-1) != origin){
 			path.add(previousRoads.get(path.get(path.size()-1)));
 		}
 		Collections.reverse(path);
 		return path;
-	}
-
-	public static double routeLength(List<PolyRoad> route) {
-		return route.stream().mapToDouble(PolyRoad::getLength).sum();
 	}
 }
