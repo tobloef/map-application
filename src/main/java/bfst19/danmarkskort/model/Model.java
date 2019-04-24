@@ -24,9 +24,21 @@ public class Model {
 	List<PolyRoad> shortestPath;
 	public static final List<WayType> roadTypes = WayType.getRoadTypes();
 	private Theme theme;
+	private boolean HDOn;
 
 	public Theme getCurrentTheme(){
 		return theme;
+	}
+
+	public void toggleHDTheme(){
+		//TODO: Toggle HD theme on and off
+		if (HDOn){
+			theme = ThemeLoader.loadTheme("config/themes/default.yaml",null);
+		} else {
+			theme = ThemeLoader.loadTheme("config/themes/hdgraphics.yaml", theme);
+		}
+		HDOn = !HDOn;
+		notifyObservers();
 	}
 
 	public boolean dontDraw(WayType waytype){

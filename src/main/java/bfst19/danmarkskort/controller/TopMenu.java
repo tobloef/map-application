@@ -69,6 +69,6 @@ public class TopMenu {
 
 	@FXML
 	private void onHDGraphics(final ActionEvent event){
-
+		model.toggleHDTheme();
 	}
 }

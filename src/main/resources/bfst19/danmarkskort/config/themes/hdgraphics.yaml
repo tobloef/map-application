@@ -13,3 +13,22 @@
 
 # Constants, won't get parsed but are used for anchor references
 
+- COASTLINE:
+    fillColor:
+    texture: "textures/ground.jpg"
+
+- TREES:
+    fillColor:
+    texture: "textures/forest-texture.jpg"
+
+- GRASS:
+    fillColor:
+    texture: "textures/grass.jpg"
+
+- FARMLAND:
+    fillColor:
+    texture: "textures/farmland.jpg"
+
+- SAND:
+    fillColor:
+    texture: "textures/coastline-seamless.jpg"
