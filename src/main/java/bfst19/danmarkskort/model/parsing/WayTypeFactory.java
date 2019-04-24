@@ -10,7 +10,7 @@ import static bfst19.danmarkskort.utils.EnumHelper.stringToWayType;
 
 @SuppressWarnings("unchecked")
 public class WayTypeFactory {
-	private static final String wayTypesConfigPath = "config/superspartan.yaml";
+	private static final String wayTypesConfigPath = "config/spartan.yaml";
 
 	/**
 	 * Maps cartographic feature keys to maps that map feature values to WayType.
