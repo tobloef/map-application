@@ -179,7 +179,7 @@ public class Model {
 		updateShortestPath();
 	}
 
-	private Drawable getClosestRoad(float x, float y) {
+	private PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
