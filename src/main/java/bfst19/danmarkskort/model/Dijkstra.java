@@ -5,7 +5,7 @@ import java.util.*;
 public class Dijkstra {
 	public static Set<PolyRoad> lastUsedRoads = new HashSet<>();
 
-	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination) throws DisconnectedRoadsException {
+	public static Route getShortestPath(PolyRoad origin, PolyRoad destination) throws DisconnectedRoadsException {
 		double[] distTo = new double[PolyRoad.allPolyRoads.length];
 		HashMap<PolyRoad, PolyRoad> previousRoads = new HashMap<>();
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
@@ -37,7 +37,7 @@ public class Dijkstra {
 					continue;
 				}
 				//System.out.println("Now maybe relaxing " + thisConnection + " from " + distTo[thisConnectionIndex] + " to " + distTo[current.getIndex()] + current.sumLength());
-				//fixme this should use getWeight instead of sumLength
+				//fixme this should use getWeight instead of getLength
 				if(distTo[thisConnectionIndex] > distTo[current.getIndex()] + current.getLength()){
 					distTo[thisConnectionIndex] = distTo[current.getIndex()] + current.getLength();
 					previousRoads.put(thisConnection, current);

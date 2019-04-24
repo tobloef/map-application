@@ -20,7 +20,7 @@ public class Model {
 	public Rectangle modelBounds;
 	float mouseX, mouseY;
 	PolyRoad start, end;
-	List<PolyRoad> shortestPath;
+	Route shortestPath;
 	public static final List<WayType> roadTypes = WayType.getRoadTypes();
 
 
@@ -144,8 +144,10 @@ public class Model {
 			}
 		}
 		catch (DisconnectedRoadsException e) {
-			shortestPath = new ArrayList<>();
+			shortestPath = new Route();
+			Route.printAll(shortestPath.getTextDescription());
 			notifyObservers();
+
 		}
 	}
 
