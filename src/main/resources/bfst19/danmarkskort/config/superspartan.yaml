@@ -1,0 +1,118 @@
+---
+
+# Format is:
+# - enum name:
+#   - xml tag 1:
+#     - sub tag 1
+#     - sub tag 2
+#   - xml tag 2:
+#     - sub tag 1
+
+
+- BRIDLEWAY:
+  - highway:
+    - bridleway
+
+- BUILDING:
+  - amenity:
+      - university
+
+
+
+- CYCLEWAY:
+  - highway:
+    - cycleway
+
+- FOOTWAY:
+  - highway:
+    - footway
+
+- LIVING_STREET:
+  - highway:
+    - living_street
+
+- MOTORWAY:
+  - highway:
+    - motorway
+
+- MOTORWAY_EXIT:
+  - highway:
+    - motorway_link
+
+- PEDESTRIAN:
+  - highway:
+    - pedestrian
+
+- PRIMARY_ROAD:
+  - highway:
+    - primary
+    - trunk
+
+- PRIMARY_ROAD_EXIT:
+  - highway:
+    - primary_link
+    - trunk_link
+
+- RESIDENTIAL_ROAD:
+  - highway:
+    - residential
+
+- SECONDARY_ROAD:
+  - highway:
+    - secondary
+
+- SECONDARY_ROAD_EXIT:
+  - highway:
+    - secondary_link
+
+- SERVICE_ROAD:
+  - highway:
+    - service
+
+- TERTIARY_ROAD:
+  - highway:
+    - tertiary
+
+- TERTIARY_ROAD_EXIT:
+  - high:
+    - tertiary_link
+
+- TRACK:
+  - highway:
+    - track
+
+- UNCLASSIFIED_ROAD:
+  - highway:
+    - unclassified
+
+- BRIDGE:
+  - man_made:
+    - bridge
+
+- PIER:
+  - man_made:
+    - pier
+
+- COASTLINE:
+  - place:
+    - island
+    - peninsula
+    - islet
+    - archipelago
+
+- WATER:
+  - natural:
+    - water
+  - shrub:
+    - water
+
+- RAILWAY:
+  - railway:
+    - rail
+    - construction
+
+- CANAL:
+  - water:
+    - canal
+    - pond
+    - reservoir
