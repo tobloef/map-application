@@ -8,10 +8,7 @@ import javafx.scene.transform.Transform;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Model {
 	DrawableModel drawableModel = new KDTreeDrawableModel();
@@ -57,9 +54,7 @@ public class Model {
 	}
 
 	public void fillBlacklist(){
-		for (WayType wayType: WayType.values()){
-			blacklistedWaytypes.add(wayType);
-		}
+		blacklistedWaytypes.addAll(Arrays.asList(WayType.values()));
 		notifyObservers();
 	}
 
