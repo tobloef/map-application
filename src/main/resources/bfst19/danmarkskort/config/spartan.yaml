@@ -92,12 +92,14 @@
     - tertiary
 
 - TERTIARY_ROAD_EXIT:
-  - high:
+  - highway:
     - tertiary_link
 
 - TRACK:
   - highway:
     - track
+    - path
+    - steps
 
 - UNCLASSIFIED_ROAD:
   - highway:

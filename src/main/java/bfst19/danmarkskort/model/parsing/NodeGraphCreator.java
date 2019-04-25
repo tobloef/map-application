@@ -31,7 +31,7 @@ public class NodeGraphCreator {
 	}
 
 	private void removeDuplicates() {
-		for (PolyRoad polyRoad : PolyRoad.allPolyRoads){
+		for (PolyRoad polyRoad : PolyRoad.getAllPolyRoads()){
 			if (polyRoad != null) {
 				polyRoad.removeDuplicateConnections();
 			}
@@ -61,11 +61,11 @@ public class NodeGraphCreator {
 	private void fillPolyRoadsIntoArray() {
 		//We start from 0, so that we can reference roads and use 0 as an uninitialized reference,
 		// as ints are initialized to 0 by default.
-		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size() + 1];
+		PolyRoad.initializePolyRoadRegister( roadWaysToPolyRoads.values().size() + 1);
 		int i = 1;
 		for (PolyRoad road : roadWaysToPolyRoads.values()) {
 			polyRoadToIntegers.put(road, i);
-			PolyRoad.allPolyRoads[i] = road;
+			PolyRoad.setPolyRoadByIndex(i, road);
 			road.setIndex(i);
 			i++;
 		}

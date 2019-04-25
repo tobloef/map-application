@@ -10,9 +10,13 @@ public class PolyRoad extends Polyline implements Serializable {
 	private double speedLimit;
 	private int[] firstConnections;
 	private int[] lastConnections;
-	public double length = 0;
-	public static PolyRoad[] allPolyRoads;
-	public EnumSet<RoadRestriction> restrictions;
+	private double length = 0;
+	private static PolyRoad[] allPolyRoads;
+	private EnumSet<RoadRestriction> restrictions;
+
+	public static PolyRoad getPolyRoadFromIndex(int index){
+		return allPolyRoads[index];
+	}
 
 	public PolyRoad(OSMRoadWay way) {
 		super(way);
@@ -24,12 +28,32 @@ public class PolyRoad extends Polyline implements Serializable {
 		length = calculateLength();
 	}
 
-	public void removeDuplicateConnections(){
-		this.firstConnections = removeDuplicateElements(this.firstConnections);
-		this.lastConnections = removeDuplicateElements(this.lastConnections);
+	public static int getNumberOfRoads() {
+		return allPolyRoads.length;
 	}
 
-	private static int[] removeDuplicateElements(int arr[]){
+	public static void setPolyRoadByIndex(int i, PolyRoad road) {
+		allPolyRoads[i] = road;
+	}
+
+	public static void initializePolyRoadRegister(int n) {
+		allPolyRoads = new PolyRoad[n];
+	}
+
+	public static PolyRoad[] getAllPolyRoads() {
+		return allPolyRoads;
+	}
+
+	public static void setAllPolyRoads(PolyRoad[] newAllPolyRoads) {
+		allPolyRoads = newAllPolyRoads;
+	}
+
+	public void removeDuplicateConnections(){
+		this.firstConnections = getUniqueValues(this.firstConnections);
+		this.lastConnections = getUniqueValues(this.lastConnections);
+	}
+
+	private static int[] getUniqueValues(int arr[]){
 		int n = arr.length;
 		if (n==0 || n==1){
 			return arr;
@@ -118,14 +142,8 @@ public class PolyRoad extends Polyline implements Serializable {
 		return result;
 	}
 
-	public Collection<PolyRoad> getAllConnections() {
-		List<PolyRoad> result = new ArrayList<>();
-		result.addAll(getFirstConnections());
-		result.addAll(getLastConnections());
-		return result;
-	}
 
-	public int[] getAllConnectionsFast(){
+	public int[] getAllConnections(){
 		int[] result = new int[firstConnections.length + lastConnections.length];
 		int i = 0;
 		for (; i < firstConnections.length; i++){

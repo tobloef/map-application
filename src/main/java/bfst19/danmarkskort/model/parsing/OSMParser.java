@@ -152,18 +152,7 @@ public class OSMParser {
 	}
 
 	private boolean currentWayIsRoad() {
-		if (!RoadInformation.roadTypes.contains(currentType)){
-			return false;
-		}
-		if (!tags.containsKey("highway") || tags.get("highway") == null){
-			return false;
-		}
-		String highWayType = tags.get("highway");
-		if (highWayType.equals("construction") || highWayType.equals("proposed")){
-			return false;
-		}
-		//If none of the cases makes it false, return true.
-		return true;
+		return RoadInformation.roadTypes.contains(currentType);
 	}
 
 	private void handleStartRelation(XMLStreamReader reader) {
@@ -303,8 +292,6 @@ public class OSMParser {
 		return newNode;
 	}
 
-
-	//TODO: Write this function, it seems incorrect.
 	private int getMaxSpeed() {
 		int maxSpeed = 50;
 		if (tags.containsKey("maxspeed") && isInteger(tags.get("maxSpeed"))) {

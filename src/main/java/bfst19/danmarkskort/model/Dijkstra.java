@@ -8,16 +8,16 @@ public class Dijkstra {
 
 	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
 		distTo = initializeDistTo(origin);
-		pathToRoad = new int[PolyRoad.allPolyRoads.length];
-		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.allPolyRoads.length);
+		pathToRoad = new int[PolyRoad.getNumberOfRoads()];
+		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.getNumberOfRoads());
 
 		insertStartConnections(origin,destination, remainingPolyRoads, vehicleType);
 
 
 		while(!remainingPolyRoads.isEmpty()){
-			PolyRoad current = PolyRoad.allPolyRoads[remainingPolyRoads.delMin()];
-			for(int connectedRoadIndex : current.getAllConnectionsFast()){
-				PolyRoad connectedRoad = PolyRoad.allPolyRoads[connectedRoadIndex];
+			PolyRoad current = PolyRoad.getPolyRoadFromIndex(remainingPolyRoads.delMin());
+			for(int connectedRoadIndex : current.getAllConnections()){
+				PolyRoad connectedRoad = PolyRoad.getPolyRoadFromIndex(connectedRoadIndex);
 				if (pathToRoad[connectedRoadIndex] != 0){
 					continue;
 				}
@@ -38,11 +38,17 @@ public class Dijkstra {
 			}
 			if(foundPathTo(destination)){
 				List<PolyRoad> route = makeRoute(origin, destination, pathToRoad);
+				cleanup();
 				System.out.println(routeLength(route));
 				return route;
 			}
 		}
+		cleanup();
 		throw new DisconnectedRoadsException("There is no connection between the two roads", origin, destination);
+	}
+
+	private static void cleanup() {
+		distTo = null;
 	}
 
 	private static boolean foundPathTo(PolyRoad destination) {
@@ -60,7 +66,8 @@ public class Dijkstra {
 	}
 
 	private static void insertStartConnections(PolyRoad origin, PolyRoad destination,  IndexMinPQ<Double> remainingPolyRoads, VehicleType vehicleType) {
-		for (PolyRoad connectedRoad : origin.getAllConnections()){
+		for (int connectedRoadIndex : origin.getAllConnections()){
+			PolyRoad connectedRoad = PolyRoad.getPolyRoadFromIndex(connectedRoadIndex);
 			if (remainingPolyRoads.contains(connectedRoad.getIndex())) {
 				continue;
 			}
@@ -95,7 +102,7 @@ public class Dijkstra {
 	}
 
 	private static double[] initializeDistTo(PolyRoad origin) {
-		double[] distTo = new double[PolyRoad.allPolyRoads.length];
+		double[] distTo = new double[PolyRoad.getNumberOfRoads()];
 		for(int i = 0; i < distTo.length; i++){
 			distTo[i] = Double.POSITIVE_INFINITY;
 		}
@@ -107,7 +114,8 @@ public class Dijkstra {
 		List<PolyRoad> path = new ArrayList<>();
 		path.add(destination);
 		while(path.get(path.size()-1) != origin){
-			PolyRoad prevRoad = PolyRoad.allPolyRoads[previousRoads[(path.get(path.size()-1)).getIndex()]];
+			int prevRoadIndex = previousRoads[(path.get(path.size()-1)).getIndex()];
+			PolyRoad prevRoad = PolyRoad.getPolyRoadFromIndex(prevRoadIndex);
 			path.add(prevRoad);
 		}
 		Collections.reverse(path);
@@ -125,7 +133,7 @@ public class Dijkstra {
 				if (roadIndex == 0) {
 					continue;
 				}
-				roads.add(PolyRoad.allPolyRoads[roadIndex]);
+				roads.add(PolyRoad.getPolyRoadFromIndex(roadIndex));
 			}
 			return roads;
 		}
