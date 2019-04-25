@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class waytypeSelectorController {
+public class WaytypeSelectorController {
 	@FXML
 	private VBox layoutBox;
 	@FXML
@@ -24,7 +24,7 @@ public class waytypeSelectorController {
 
 	private boolean enabled = true;
 	private static Model model;
-	private static waytypeSelectorController singletonInstance;
+	private static WaytypeSelectorController singletonInstance;
 
 	public static void init(Model modelParam, BorderPane borderPane){
 		singletonInstance.borderPane = borderPane;
@@ -33,7 +33,7 @@ public class waytypeSelectorController {
 		singletonInstance.togglePanel();
 	}
 
-	public waytypeSelectorController(){
+	public WaytypeSelectorController(){
 		singletonInstance = this;
 		SettingsController.init(this);
 	}

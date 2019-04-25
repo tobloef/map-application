@@ -22,6 +22,7 @@ public class Route extends ArrayList<PolyRoad> {
 		for (PolyRoad road : this) {
 			if (last == null) {
 				last = road;
+				System.out.println(last.getLength() + " " + last.getSpeedLimit());
 				continue;
 			}
 			String description = "";

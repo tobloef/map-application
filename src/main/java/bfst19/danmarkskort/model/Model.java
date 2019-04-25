@@ -148,11 +148,11 @@ public class Model {
 
 
 
-	public List<? extends Drawable> getShortestPath() {
+	public Route getShortestPath() {
 		if (shortestPath != null){
 			return shortestPath;
 		}
-		else return new ArrayList<>();
+		else return new Route();
 	}
 
 	public void updateEnd() {

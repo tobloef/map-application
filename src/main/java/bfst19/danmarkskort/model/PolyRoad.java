@@ -121,6 +121,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	}
 
 	public double getDurationInMinutes() {
+		//fixme this currently gives the wrong value, but I'll wait to fix until after the refactor of nodegraph
 		return (getLength() * 110 / getSpeedLimit()) * 60;
 	}
 
