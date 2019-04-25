@@ -132,7 +132,7 @@ public class PolyRoad extends Polyline implements Serializable {
 			deltaX = coords[end-2] - coords[end-4];
 			deltaY = coords[end-1] - coords[end-3];
 		}
-		return Math.atan(deltaY / deltaX);
+		return Math.toDegrees(Math.atan2(deltaY, deltaX));
 	}
 
 	public double getSpeedLimit() {

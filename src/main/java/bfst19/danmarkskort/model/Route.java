@@ -22,8 +22,23 @@ public class Route extends ArrayList<PolyRoad> {
 		for (PolyRoad road : this) {
 			String description = "";
 			int direction = getDirection(last, road);
+			switch (direction) {
+				case 1: {
+					description += "Turn left an drive on ";
+					break;
+				}
+				case 0: {
+					description += "Continue forward on ";
+					break;
+				}
+				case -1: {
+					description += "Turn right and drive on ";
+					break;
+				}
+			}
 			last = road;
-			result.add("Drive on " + road.toString() + " for " + road.getDurationInMinutes() + "minutes");
+			description += road.toString() + " for " + road.getDurationInMinutes() + "minutes";
+			result.add(description);
 		}
 		return result;
 		//return stream().map(x -> ("Drive on " + x.toString() + " for " + (x.getLength()*110 / x.getSpeedLimit())*60 + "minutes" )).collect(Collectors.toList());
@@ -32,9 +47,26 @@ public class Route extends ArrayList<PolyRoad> {
 	private int getDirection(PolyRoad last, PolyRoad current) {
 		double lastDegree = last.getDegree(true);
 		double firstDegree = current.getDegree(false);
-		System.out.println(lastDegree);
-		System.out.println(firstDegree);
-		return 0;
+		double rightBound = 45;
+		double leftBound = -45;
+		double deltaDegree = clampAngle(lastDegree - firstDegree);
+		if (deltaDegree > rightBound) {
+			return 1; //if you are going exactly backwards, you are technically turning left, since backwards would be 180 degrees.
+		}
+		if (deltaDegree > leftBound) {
+			return 0;
+		}
+		return -1;
+	}
+
+	private double clampAngle(double angle) {
+		if (angle > 180) {
+			angle -= 360;
+		}
+		else if (angle <=-180) {
+			angle += 360;
+		}
+		return angle;
 	}
 
 	public static void printAll(List<String> list) {
