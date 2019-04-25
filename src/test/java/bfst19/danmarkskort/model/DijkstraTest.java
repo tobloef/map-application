@@ -26,7 +26,6 @@ public class DijkstraTest {
 		assertNotNull(shortestPath);
 		assertEquals(2, shortestPath.size());
 		shortestPath = Dijkstra.getShortestPath(a, c);
-		System.out.println(shortestPath);
 		assertEquals(3, shortestPath.size());
 	}
 
