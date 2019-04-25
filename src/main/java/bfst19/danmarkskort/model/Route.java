@@ -42,7 +42,7 @@ public class Route extends ArrayList<PolyRoad> {
 				}
 			}
 			last = road;
-			description += road.toString() + " for " + String.format("%.0f", road.getDurationInMinutes()) + " minutes";
+			description += road.getName() + " for " + String.format("%.0f", road.getDurationInMinutes()) + " minutes";
 			result.add(description);
 		}
 		return result;

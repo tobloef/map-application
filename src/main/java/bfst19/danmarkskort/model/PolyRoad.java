@@ -154,4 +154,9 @@ public class PolyRoad extends Polyline implements Serializable {
 		// was more important to never go the wrong way, so he made the decision that this should use the former.
 		return isOneWay() && contains(lastConnections, origin.getIndex());
 	}
+
+	public String getName() {
+		//fixme this should be the actual name of the road
+		return toString();
+	}
 }

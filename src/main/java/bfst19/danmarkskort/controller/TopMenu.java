@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.Route;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -46,14 +47,15 @@ public class TopMenu {
 	private void onPrintToFile(final ActionEvent event){
 		//TODO: Tænker der kan være en alert med et indtastningsfelt, til filnavn fx
 		try {
-			List<String> routeDescription = model.getShortestPath().getTextDescription();
-			if (routeDescription.isEmpty()) {
+			Route route = model.getShortestPath();
+			if (route.isEmpty()) {
 				//Fixme find a better exception for this
 				throw new Exception("Please select a route.");
 			}
 			//fixme figure out where the file should be outputted
-			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("sample.txt"));
-			for (String string : routeDescription) {
+			String fileName = route.get(0).getName() + "_" + route.get(route.size()-1).getName() + ".txt";
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
+			for (String string : route.getTextDescription()) {
 				bufferedWriter.write(string + String.format("%n"));
 			}
 			bufferedWriter.close();
