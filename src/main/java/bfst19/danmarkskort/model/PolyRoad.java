@@ -121,7 +121,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	}
 
 	public double getDurationInMinutes() {
-		return getLength() * 110 / getSpeedLimit() * 60;
+		return (getLength() * 110 / getSpeedLimit()) * 60;
 	}
 
 	public double getDegree(boolean last) {

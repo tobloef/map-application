@@ -20,6 +20,10 @@ public class Route extends ArrayList<PolyRoad> {
 		List<String> result = new ArrayList<>();
 		PolyRoad last = null;
 		for (PolyRoad road : this) {
+			if (last == null) {
+				last = road;
+				continue;
+			}
 			String description = "";
 			int direction = getDirection(last, road);
 			switch (direction) {
@@ -37,7 +41,7 @@ public class Route extends ArrayList<PolyRoad> {
 				}
 			}
 			last = road;
-			description += road.toString() + " for " + road.getDurationInMinutes() + "minutes";
+			description += road.toString() + " for " + String.format("%.0f", road.getDurationInMinutes()) + " minutes";
 			result.add(description);
 		}
 		return result;
