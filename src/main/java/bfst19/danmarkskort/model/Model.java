@@ -135,7 +135,7 @@ public class Model {
 		try {
 			if (start != null && end != null){
 				shortestPath = Dijkstra.getShortestPath(start, end);
-				Route.printAll(shortestPath.getTextDescription());
+				//Route.printAll(shortestPath.getTextDescription());
 				notifyObservers();
 			}
 		}
