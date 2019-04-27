@@ -200,8 +200,22 @@ public class Model {
 		return closestRoad;
 	}
 
+	public void insert(WayType type,Drawable drawable){
+		drawableModel.insert(type, drawable);
+		notifyObservers();
+	}
+
 	public void updateVehicleType(VehicleType vehicleType) {
 		this.currentVehicleType = vehicleType;
 		updateShortestPath();
+	}
+
+	public void addPOIAtCurrentMousePosition() {
+		this.addPOIAtPosition(mouseX, mouseY);
+	}
+
+	private void addPOIAtPosition(float mouseX, float mouseY) {
+		PointOfInterest pointOfInterest = new PointOfInterest(mouseX, mouseY);
+		this.insert(WayType.POI, pointOfInterest);
 	}
 }

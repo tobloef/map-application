@@ -11,15 +11,20 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	List<T> leafElements;
 	KDTree lower;
 	KDTree higher;
-	private final static int MAX_NODES_PER_LEAF = 250; //TODO: Benchmark some different values
+	private final static int MAX_NODES_PER_LEAF = 500;
+	private final static int MAX_NODES_BEFORE_REBALANCE = (MAX_NODES_PER_LEAF * 3) / 2;
 	private final static Random random = new Random();
 
-	public KDTree(List<T> inputElements, Rectangle bbox){
-		this(inputElements, true, new Rectangle(bbox));
+	public KDTree(List<T> inputElements){
+		this(inputElements, true);
 	}
 
-	private KDTree(List<T> inputElements, boolean odd, Rectangle bbox){
-		this.setBbox(bbox);
+	private KDTree(List<T> inputElements, boolean odd){
+		generateKDTree(inputElements, odd);
+	}
+
+	private void generateKDTree(List<T> inputElements, boolean odd) {
+		this.setBbox(new Rectangle());
 		if (inputElements.size() < MAX_NODES_PER_LEAF){
 			this.leafElements = inputElements;
 			growToEncompassLeafElements(inputElements);
@@ -28,32 +33,36 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			splitElement = quickMedian(inputElements, odd);
 			inputElements.remove(splitElement);
 			this.bboxGrowToEncompass(splitElement.getMinimumBoundingRectangle());
-			makeSubTrees(inputElements, odd, this.getBbox());
+			makeSubTrees(inputElements, odd);
 		}
 	}
 
-	private void makeSubTrees(List<T> inputElements, boolean odd, Rectangle bbox) {
-		makeLowerTree(odd, bbox, inputElements);
-		makeHigherTree(odd, bbox, inputElements);
+	private void makeSubTrees(List<T> inputElements, boolean odd) {
+		makeLowerTree(odd, inputElements);
+		makeHigherTree(odd, inputElements);
 
 	}
 
-	private void makeHigherTree(boolean odd, Rectangle bbox, List<T> inputElements) {
-		Rectangle higherBBox = new Rectangle(bbox);
-		if (odd){
-			higherBBox.xMin = splitElement.getRepresentativeX();
-		}
-		else {
-			higherBBox.yMin = splitElement.getRepresentativeY();
-		}
+	private void makeHigherTree(boolean odd, List<T> inputElements) {
 		List<T> higherElements = new ArrayList<>();
 		for (T element : inputElements){
 			if (!spatialLessThen(element, this.splitElement, odd)){
 				higherElements.add(element);
 			}
 		}
-		higher = new KDTree<T>(higherElements, !odd, higherBBox);
+		higher = new KDTree<T>(higherElements, !odd);
 		this.bboxGrowToEncompass(higher.getBbox());
+	}
+
+	private void makeLowerTree(boolean odd, List<T> inputElements) {
+		List<T> lowerElements = new ArrayList<>();
+		for (T element : inputElements){
+			if (spatialLessThen(element, this.splitElement, odd)){
+				lowerElements.add(element);
+			}
+		}
+		lower = new KDTree<T>(lowerElements, !odd);
+		this.bboxGrowToEncompass(lower.getBbox());
 	}
 
 	private void bboxGrowToEncompass(Rectangle otherBbox) {
@@ -70,23 +79,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		return bbox;
 	}
 
-	private void makeLowerTree(boolean odd, Rectangle bbox, List<T> inputElements) {
-		Rectangle lowerBBox = new Rectangle(bbox);
-		if (odd){
-			lowerBBox.xMax = splitElement.getRepresentativeX();
-		}
-		else {
-			lowerBBox.yMax = splitElement.getRepresentativeY();
-		}
-		List<T> lowerElements = new ArrayList<>();
-		for (T element : inputElements){
-			if (spatialLessThen(element, this.splitElement, odd)){
-				lowerElements.add(element);
-			}
-		}
-		lower = new KDTree<T>(lowerElements, !odd, lowerBBox);
-		this.bboxGrowToEncompass(lower.getBbox());
-	}
+
 
 	public T getNearestNeighbor(float x, float y){
 		return getNearestNeighbor(x, y, Float.POSITIVE_INFINITY);
@@ -134,6 +127,42 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private void growToEncompassLeafElements(List<T> inputElements) {
 		for (T inputElement: inputElements){
 			this.bboxGrowToEncompass(inputElement.getMinimumBoundingRectangle());
+		}
+	}
+
+	public void insert(T insertionElement) {
+		insert(insertionElement, true);
+		if(treeIsUnbalanced()){
+			rebalanceKDTree();
+		}
+	}
+
+	private void rebalanceKDTree() {
+		List<T> oldElements = new ArrayList<>();
+		generateKDTree(this.getContent(oldElements), true);
+	}
+
+	private boolean treeIsUnbalanced() {
+		if (splitElement != null){
+			return lower.treeIsUnbalanced() || higher.treeIsUnbalanced();
+		}
+		if (leafElements != null){
+			return leafElements.size() > MAX_NODES_BEFORE_REBALANCE;
+		}
+		return false;
+	}
+
+	private void insert(T insertionElement, boolean odd){
+		if (splitElement == null){
+			leafElements.add(insertionElement);
+		}
+		else {
+			if (spatialLessThen(insertionElement, splitElement, odd)){
+				lower.insert(insertionElement, !odd);
+			}
+			else {
+				higher.insert(insertionElement, !odd);
+			}
 		}
 	}
 
