@@ -18,8 +18,7 @@ public class Model {
 	float mouseX, mouseY;
 	PolyRoad start, end;
 	Route shortestPath;
-	public static final List<WayType> roadTypes = WayType.getRoadTypes();
-
+	VehicleType currentVehicleType = VehicleType.CAR;
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -107,7 +106,7 @@ public class Model {
 	private void parseObj(InputStream inputStream) throws IOException, ClassNotFoundException {
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 		try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
-			PolyRoad.allPolyRoads = (PolyRoad[]) input.readObject();
+			PolyRoad.setAllPolyRoads((PolyRoad[]) input.readObject());
 			drawableModel = (KDTreeDrawableModel) input.readObject();
 			modelBounds = drawableModel.getModelBounds();
 		}
@@ -117,7 +116,7 @@ public class Model {
 		FileOutputStream fileOutputStream = new FileOutputStream(path);
 		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 		try (ObjectOutputStream output = new ObjectOutputStream(bufferedOutputStream)) {
-			output.writeObject(PolyRoad.allPolyRoads);
+			output.writeObject(PolyRoad.getAllPolyRoads());
 			output.writeObject(drawableModel);
 		}
 	}
@@ -132,18 +131,19 @@ public class Model {
 	}
 
 	private void updateShortestPath() {
+		long time = -System.nanoTime();
+		if (start == null || end == null)
+			return;
 		try {
-			if (start != null && end != null){
-				shortestPath = Dijkstra.getShortestPath(start, end);
-				//Route.printAll(shortestPath.getTextDescription());
-				notifyObservers();
-			}
+			shortestPath = Dijkstra.getShortestPath(start, end, currentVehicleType);
 		}
 		catch (DisconnectedRoadsException e) {
 			shortestPath = new Route();
-			notifyObservers();
-
 		}
+		time += System.nanoTime();
+		System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
+
+		notifyObservers();
 	}
 
 
@@ -158,7 +158,7 @@ public class Model {
 	public void updateEnd() {
 		Drawable nearest = getClosestRoad(mouseX, mouseY);
 		if (nearest instanceof PolyRoad){
-			start = (PolyRoad) nearest;
+			end = (PolyRoad) nearest;
 			updateShortestPath();
 		}
 	}
@@ -166,7 +166,7 @@ public class Model {
 	public void updateStart() {
 		Drawable nearest = getClosestRoad(mouseX, mouseY);
 		if (nearest instanceof PolyRoad){
-			end = (PolyRoad) nearest;
+			start = (PolyRoad) nearest;
 			updateShortestPath();
 		}
 	}
@@ -178,9 +178,9 @@ public class Model {
 		updateShortestPath();
 	}
 
-	private Drawable getClosestRoad(float x, float y) {
+	private PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
-		for (WayType roadType : roadTypes){
+		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
 			if (close == null || !(close instanceof PolyRoad)){
 				continue;
@@ -194,5 +194,10 @@ public class Model {
 		}
 
 		return closestRoad;
+	}
+
+	public void updateVehicleType(VehicleType vehicleType) {
+		this.currentVehicleType = vehicleType;
+		updateShortestPath();
 	}
 }
