@@ -53,7 +53,8 @@ public class TopMenu {
 				throw new Exception("Please select a route.");
 			}
 			//fixme figure out where the file should be outputted
-			String fileName = route.get(0).getName() + "_" + route.get(route.size()-1).getName() + ".txt";
+			//String fileName = route.get(0).getName() + "_" + route.get(route.size()-1).getName() + ".txt";
+			String fileName = "sample.txt";
 			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
 			for (String string : route.getTextDescription()) {
 				bufferedWriter.write(string + String.format("%n"));

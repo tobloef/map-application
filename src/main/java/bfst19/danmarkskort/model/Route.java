@@ -41,7 +41,14 @@ public class Route extends ArrayList<PolyRoad> {
 				}
 			}
 			last = road;
-			description += road.getName() + " for " + String.format("%.0f", road.getDurationInMinutes()) + " minutes";
+			description += road.getName() + " for ";
+			double durationInMinutes = road.getDurationInMinutes();
+			if (durationInMinutes < 1) {
+				description += "less than a minute (" + durationInMinutes * 60 + " seconds)";
+			}
+			else {
+				description += String.format("%.0f", durationInMinutes) + " minutes";
+			}
 			result.add(description);
 		}
 		return result;
