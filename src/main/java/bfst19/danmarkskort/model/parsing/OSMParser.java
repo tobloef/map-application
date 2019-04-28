@@ -9,21 +9,47 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
+import static bfst19.danmarkskort.utils.Misc.getWithFallback;
+import static bfst19.danmarkskort.utils.Misc.pickNotNull;
 import static javax.xml.stream.XMLStreamConstants.*;
 
 public class OSMParser {
-	private float lonFactor = 1.0f;
-	private LongMap<OSMNode> idToNode = new LongMap<OSMNode>();
+	final private String[] streetNameKeys = new String[]{
+		"addr:street",
+		"osak:street_name",
+	};
 
+	final private String[] placeNameKeys = new String[] {
+		"name",
+	};
+
+	final private String[] houseNumberKeys = new String[] {
+		"addr:housenumber",
+		"osak:house_no",
+	};
+
+	final private String[] cityKeys = new String[] {
+		"addr:city",
+		"is_in:city",
+		"osak:municipality_name",
+		"is_in",
+	};
+
+	final private String[] postCodeKeys = new String[] {
+			"addr:postcode",
+	};
+
+
+	private float lonFactor = 1.0f;
+	private LongMap<OSMNode> idToNode = new LongMap<>();
+	private OSMNode currentNode = null;
 	private OSMWay currentWay = null;
 	private OSMRelation currentRelation = null;
 	private WayType currentType = null;
 	private DrawableModel drawableModel;
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
-
 	private Map<Long, OSMWay> idToWay = new HashMap<>();
-	NodeGraphCreator nodeGraphCreator;
-
+	private NodeGraphCreator nodeGraphCreator;
 	private Map<String, String> tags = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
@@ -118,6 +144,9 @@ public class OSMParser {
 			case "relation":
 				handleEndRelation();
 				break;
+			case "node":
+				handleEndNode();
+				break;
 		}
 	}
 
@@ -148,6 +177,7 @@ public class OSMParser {
 				drawableModel.add(currentType, new Polyline(currentWay));
 			}
 		}
+		tryAddPlace();
 		currentWay = null;
 	}
 
@@ -166,6 +196,7 @@ public class OSMParser {
 		if (currentRelation.hasMembers() && currentType != WayType.UNKNOWN) {
 			drawableModel.add(currentType, new MultiPolyline(currentRelation));
 		}
+		tryAddPlace();
 		currentRelation = null;
 	}
 
@@ -209,7 +240,9 @@ public class OSMParser {
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
 		EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad(way);
-		return new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
+		int speedLimit = getMaxSpeed();
+		String streetName = getWithFallback(tags, streetNameKeys);
+		return new OSMRoadWay(way, newNodes, streetName, speedLimit, currentType, restrictions);
 	}
 
 	private EnumSet<RoadRestriction> getRestrictionsOfRoad(OSMWay way) {
@@ -325,7 +358,71 @@ public class OSMParser {
 		long id = Long.parseLong(reader.getAttributeValue(null, "id"));
 		float lat = Float.parseFloat(reader.getAttributeValue(null, "lat"));
 		float lon = lonFactor * Float.parseFloat(reader.getAttributeValue(null, "lon"));
-		idToNode.add(new OSMNode(id, lon, lat));
+		OSMNode node = new OSMNode(id, lon, lat);
+		idToNode.add(node);
+		currentNode = node;
+		tags = new HashMap<>();
+	}
+
+	private void handleEndNode() {
+		tryAddPlace();
+		currentNode = null;
+	}
+
+	private void tryAddPlace() {
+
+		long id = getPlaceOSMId();
+		if (id == -1) {
+			return;
+		}
+		OSMNode positionNode = getPlacePositionNode();
+		if (positionNode == null) {
+			return;
+		}
+		float lat = positionNode.getLat();
+		float lon = positionNode.getLon();
+		String placeName = getWithFallback(tags, placeNameKeys);
+		String streetName = getWithFallback(tags, streetNameKeys);
+		String houseNumber = getWithFallback(tags, houseNumberKeys);
+		String city = getWithFallback(tags, cityKeys);
+		String postCode = getWithFallback(tags, postCodeKeys);
+
+		Place place = new Place(
+				id,
+				lat,
+				lon,
+				placeName,
+				streetName,
+				houseNumber,
+				city,
+				postCode
+		);
+	}
+
+	private long getPlaceOSMId() {
+		if (currentNode != null) {
+			return currentNode.getAsLong();
+		}
+		if (currentWay != null) {
+			return currentWay.getAsLong();
+		}
+		if (currentRelation != null) {
+			return currentRelation.getAsLong();
+		}
+		return -1;
+	}
+
+	private OSMNode getPlacePositionNode() {
+		if (currentNode != null) {
+			return currentNode;
+		}
+		if (currentWay != null) {
+			return currentWay.getFirst();
+		}
+		if (currentRelation != null && currentRelation.getFirst() != null) {
+			return currentRelation.getFirst().getFirst();
+		}
+		return null;
 	}
 
 	private void handleStartBounds(XMLStreamReader reader) {

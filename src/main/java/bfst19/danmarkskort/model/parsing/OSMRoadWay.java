@@ -9,17 +9,31 @@ import java.util.List;
 import java.util.Set;
 
 public class OSMRoadWay extends OSMWay {
+	private String streetName;
 	private int speedLimit;
 	private WayType type;
 	private EnumSet<RoadRestriction> restrictions;
 
 	//used for making new road based on OSMWay
-	public OSMRoadWay(OSMWay way, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions) {
-		this(way, way.getNodes(), speedLimit, type, restrictions);
+	public OSMRoadWay(
+			OSMWay way,
+			String streetName,
+			int speedLimit,
+			WayType type,
+			EnumSet<RoadRestriction> restrictions
+	) {
+		this(way, way.getNodes(), streetName, speedLimit, type, restrictions);
 	}
 
 	//used for splitting existing road
-	public OSMRoadWay(OSMWay way, List<? extends OSMNode> newNodes, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions) {
+	public OSMRoadWay(
+			OSMWay way,
+			List<? extends OSMNode> newNodes,
+			String streetName,
+			int speedLimit,
+			WayType type,
+			EnumSet<RoadRestriction> restrictions
+	) {
 		super(way.id);
 		list = new ArrayList<>();
 		for (OSMNode node : newNodes) {
@@ -27,6 +41,7 @@ public class OSMRoadWay extends OSMWay {
 			actual.add(this);
 		}
 		list.addAll(newNodes);
+		this.streetName = streetName;
 		this.speedLimit = speedLimit;
 		this.type = type;
 		this.restrictions = restrictions;
@@ -34,6 +49,10 @@ public class OSMRoadWay extends OSMWay {
 
 	public double getSpeedLimit() {
 		return speedLimit;
+	}
+
+	public String getStreetName() {
+		return streetName;
 	}
 
 	public boolean hasValidNodes() {
@@ -59,7 +78,13 @@ public class OSMRoadWay extends OSMWay {
 			if (node.getConnectionAmount() > 1) {
 				List<OSMNode> splitNodes = list.subList(i, list.size());
 				list = list.subList(0, i+1); //this uses i+1 since both lists needs to have the connecting node
-				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type, restrictions);
+				OSMRoadWay result = new OSMRoadWay(
+						new OSMWay(id, splitNodes),
+						streetName,
+						speedLimit,
+						type,
+						restrictions
+				);
 				for (OSMNode n : splitNodes) {
 					if (n == splitNodes.get(0)) {
 						continue;

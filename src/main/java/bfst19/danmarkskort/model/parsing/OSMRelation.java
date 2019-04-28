@@ -1,9 +1,10 @@
 package bfst19.danmarkskort.model.parsing;
 
 import java.util.*;
+import java.util.function.LongSupplier;
 
-public class OSMRelation {
-	private Collection<OSMWay> list = new ArrayList<>();
+public class OSMRelation implements LongSupplier {
+	private List<OSMWay> list = new ArrayList<>();
 	public String debugName;
 	long id;
 
@@ -28,7 +29,7 @@ public class OSMRelation {
 		list = newMerge(list);
 	}
 
-	private static Collection<OSMWay> newMerge(Collection<OSMWay> inputList){
+	private static List<OSMWay> newMerge(List<OSMWay> inputList){
 		Map<OSMNode, OSMWay> piecesStarts = new HashMap<>();
 		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
 		for (OSMWay currentWay : inputList){
@@ -122,4 +123,15 @@ public class OSMRelation {
 		res.addAllAtStart(duplicate);
 	}
 
+	public OSMWay getFirst() {
+		if (list.size() == 0) {
+			return null;
+		}
+		return list.get(0);
+	}
+
+	@Override
+	public long getAsLong() {
+		return id;
+	}
 }
