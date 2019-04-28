@@ -209,7 +209,7 @@ public class OSMParser {
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
 		EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad(way);
-		return new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
+		return new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions, tags.get("name"));
 	}
 
 	private EnumSet<RoadRestriction> getRestrictionsOfRoad(OSMWay way) {

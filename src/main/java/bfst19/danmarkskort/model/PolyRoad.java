@@ -13,6 +13,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	private double length = 0;
 	private static PolyRoad[] allPolyRoads;
 	private EnumSet<RoadRestriction> restrictions;
+	private String name;
 
 	public static PolyRoad getPolyRoadFromIndex(int index){
 		return allPolyRoads[index];
@@ -26,6 +27,7 @@ public class PolyRoad extends Polyline implements Serializable {
 		index = -1;
 		restrictions = way.getRestrictions();
 		length = calculateLength();
+		name = way.getName();
 	}
 
 	public static int getNumberOfRoads() {
@@ -230,7 +232,6 @@ public class PolyRoad extends Polyline implements Serializable {
 	}
 
 	public String getName() {
-		//fixme this should be the actual name of the road
-		return toString();
+		return name;
 	}
 }

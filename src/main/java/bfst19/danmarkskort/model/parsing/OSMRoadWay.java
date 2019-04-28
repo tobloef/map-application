@@ -12,14 +12,15 @@ public class OSMRoadWay extends OSMWay {
 	private int speedLimit;
 	private WayType type;
 	private EnumSet<RoadRestriction> restrictions;
+	private String name;
 
 	//used for making new road based on OSMWay
-	public OSMRoadWay(OSMWay way, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions) {
-		this(way, way.getNodes(), speedLimit, type, restrictions);
+	public OSMRoadWay(OSMWay way, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions, String name) {
+		this(way, way.getNodes(), speedLimit, type, restrictions, name);
 	}
 
 	//used for splitting existing road
-	public OSMRoadWay(OSMWay way, List<? extends OSMNode> newNodes, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions) {
+	public OSMRoadWay(OSMWay way, List<? extends OSMNode> newNodes, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions, String name) {
 		super(way.id);
 		list = new ArrayList<>();
 		for (OSMNode node : newNodes) {
@@ -30,6 +31,7 @@ public class OSMRoadWay extends OSMWay {
 		this.speedLimit = speedLimit;
 		this.type = type;
 		this.restrictions = restrictions;
+		this.name = name;
 	}
 
 	public double getSpeedLimit() {
@@ -59,7 +61,7 @@ public class OSMRoadWay extends OSMWay {
 			if (node.getConnectionAmount() > 1) {
 				List<OSMNode> splitNodes = list.subList(i, list.size());
 				list = list.subList(0, i+1); //this uses i+1 since both lists needs to have the connecting node
-				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type, restrictions);
+				OSMRoadWay result = new OSMRoadWay(new OSMWay(id, splitNodes), speedLimit, type, restrictions, name);
 				for (OSMNode n : splitNodes) {
 					if (n == splitNodes.get(0)) {
 						continue;
@@ -86,6 +88,10 @@ public class OSMRoadWay extends OSMWay {
 
 	public WayType getType() {
 		return type;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public EnumSet<RoadRestriction> getRestrictions() {
