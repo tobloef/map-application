@@ -66,7 +66,8 @@ public class Route extends ArrayList<PolyRoad> {
 	private double getDegree(PolyRoad last, PolyRoad current) {
 		double lastDegree = last.getDegree(current);
 		double firstDegree = current.getDegree(last);
-		return clampAngle(lastDegree - firstDegree);
+		return clampAngle(lastDegree - firstDegree + 180); //the 180 is because directly ahead is 180, while one degree
+		// left of that is -179, so we basically flip the angle around so it's easier to work with
 	}
 
 	private int interpretDirection(double degree) {

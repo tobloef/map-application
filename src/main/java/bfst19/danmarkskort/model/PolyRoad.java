@@ -182,10 +182,10 @@ public class PolyRoad extends Polyline implements Serializable {
 		int end = coords.length;
 		double deltaX;
 		double deltaY;
-		if (connectedRoad.getFirstConnections().contains(this)) {
-			deltaX = coords[2] - coords[0];
-			deltaY = coords[3] - coords[1];
-		} else if (connectedRoad.getLastConnections().contains(this)) {
+		if (getFirstConnections().contains(connectedRoad)) {
+			deltaX = coords[0] - coords[2];
+			deltaY = coords[1] - coords[3];
+		} else if (getLastConnections().contains(connectedRoad)) {
 			deltaX = coords[end-2] - coords[end-4];
 			deltaY = coords[end-1] - coords[end-3];
 		}
