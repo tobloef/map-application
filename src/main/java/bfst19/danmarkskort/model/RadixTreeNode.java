@@ -18,18 +18,6 @@ public class RadixTreeNode {
         this.parent = parent;
     }
 
-    private RadixTreeNode getChildStartingWith(String word) {
-        if (children == null) {
-            return null;
-        }
-        for (RadixTreeNode child : children.values()) {
-            if (child.string.startsWith(word)) {
-                return child;
-            }
-        }
-        return null;
-    }
-
     public void insert(String word) {
         word = word.toLowerCase();
         RadixTreeNode candidate = null;
@@ -49,7 +37,6 @@ public class RadixTreeNode {
                     children.remove(candidate.string);
                     candidate.string = candidate.string.substring(i);
                     candidate.parent = newBranch;
-                    candidate.isWord = false;
                     newBranch.children = new HashMap<>();
                     RadixTreeNode newLeaf = new RadixTreeNode(rest, newBranch);
                     newLeaf.isWord = true;
@@ -72,18 +59,45 @@ public class RadixTreeNode {
 
     public RadixTreeNode search(String word) {
         word = word.toLowerCase();
-        if (word.equals(string) && isWord) {
-            return this;
+        if (word.equals(string)) {
+            if (isWord) {
+                return this;
+            } else {
+                return null;
+            }
         }
-        if (!word.startsWith(string)) {
-            return null;
+        if (string != null) {
+            if (!word.startsWith(string)) {
+                return null;
+            }
+            word = word.substring(string.length());
         }
-        String rest = word.substring(string.length());
-        RadixTreeNode child = children.get(rest);
+        RadixTreeNode child = null;
+        for (int i = 0; i < word.length(); i++) {
+            String subStr = word.substring(0, i + 1);
+            RadixTreeNode temp = getChildStartingWith(subStr);
+            if (temp != null) {
+                child = temp;
+            } else {
+                break;
+            }
+        }
         if (child == null) {
             return null;
         }
-        return child.search(rest);
+        return child.search(word);
+    }
+
+    private RadixTreeNode getChildStartingWith(String word) {
+        if (children == null) {
+            return null;
+        }
+        for (RadixTreeNode child : children.values()) {
+            if (child.string.startsWith(word)) {
+                return child;
+            }
+        }
+        return null;
     }
 
     public String getString() {
