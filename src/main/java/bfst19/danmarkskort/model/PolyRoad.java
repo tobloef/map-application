@@ -180,11 +180,17 @@ public class PolyRoad extends Polyline implements Serializable {
 
 	public double getDegree(PolyRoad connectedRoad) {
 		int end = coords.length;
-		double deltaX = coords[end-2] - coords[end-4];
-		double deltaY = coords[end-1] - coords[end-3];
+		double deltaX;
+		double deltaY;
 		if (connectedRoad.getFirstConnections().contains(this)) {
 			deltaX = coords[2] - coords[0];
 			deltaY = coords[3] - coords[1];
+		} else if (connectedRoad.getLastConnections().contains(this)) {
+			deltaX = coords[end-2] - coords[end-4];
+			deltaY = coords[end-1] - coords[end-3];
+		}
+		else {
+			throw new RuntimeException("Roads are not connected" + Arrays.toString(connectedRoad.getAllConnections()));
 		}
 		return Math.toDegrees(Math.atan2(deltaY, deltaX));
 	}

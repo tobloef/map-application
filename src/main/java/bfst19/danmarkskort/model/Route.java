@@ -15,20 +15,22 @@ public class Route extends ArrayList<PolyRoad> {
 	public List<String> getTextDescription() {
 		List<String> result = new ArrayList<>();
 		PolyRoad last = null;
+		PolyRoad actualLast = null;
 		double summedDuration = 0;
 		for (PolyRoad road : this) {
 			if (last == null) {
 				last = road;
+				actualLast = road;
 				continue;
 			}
 			double durationInMinutes = road.getDurationInMinutes();
 			summedDuration += durationInMinutes;
-			System.out.println();
 			if (last.getName().equals(road.getName())) {
+				actualLast = road;
 				continue;
 			}
 			String description = "";
-			double degree = getDegree(last, road);
+			double degree = getDegree(actualLast, road);
 			description += "(" + degree + ")";
 			int direction = interpretDirection(degree);
 			switch (direction) {
@@ -46,6 +48,7 @@ public class Route extends ArrayList<PolyRoad> {
 				}
 			}
 			last = road;
+			actualLast = road;
 			description += road.getName() + " for ";
 			if (durationInMinutes < 1) {
 				description += "less than a minute (" + summedDuration * 60 + " seconds)";
