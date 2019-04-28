@@ -19,9 +19,16 @@ public class Route extends ArrayList<PolyRoad> {
 		//fixme x.tostring should be replaced with the name of the road
 		List<String> result = new ArrayList<>();
 		PolyRoad last = null;
+		double summedDuration = 0;
 		for (PolyRoad road : this) {
 			if (last == null) {
 				last = road;
+				continue;
+			}
+			double durationInMinutes = road.getDurationInMinutes();
+			summedDuration += durationInMinutes;
+			System.out.println();
+			if (last.getName().equals(road.getName())) {
 				continue;
 			}
 			String description = "";
@@ -42,14 +49,14 @@ public class Route extends ArrayList<PolyRoad> {
 			}
 			last = road;
 			description += road.getName() + " for ";
-			double durationInMinutes = road.getDurationInMinutes();
 			if (durationInMinutes < 1) {
-				description += "less than a minute (" + durationInMinutes * 60 + " seconds)";
+				description += "less than a minute (" + summedDuration * 60 + " seconds)";
 			}
 			else {
-				description += String.format("%.0f", durationInMinutes) + " minutes";
+				description += String.format("%.0f", summedDuration) + " minutes";
 			}
 			result.add(description);
+			summedDuration = 0;
 		}
 		return result;
 		//return stream().map(x -> ("Drive on " + x.toString() + " for " + (x.getLength()*110 / x.getSpeedLimit())*60 + "minutes" )).collect(Collectors.toList());
