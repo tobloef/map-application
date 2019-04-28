@@ -52,4 +52,9 @@ public class BasicDrawableModel implements DrawableModel {
 		throw new RuntimeException("This methods does not make sense for a non spatial data type.");
 	}
 
+	@Override
+	public void insert(WayType type, Drawable drawable) {
+		wayTypeEnumMap.get(type).add(drawable);
+	}
+
 }

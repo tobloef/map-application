@@ -18,7 +18,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 		for (WayType wayType : WayType.values()){
 			List<Drawable> drawables = wayTypeEnumMap.get(wayType);
 			if (drawables.size() > 0) {
-				KDTree newTree = new KDTree(drawables, getModelBounds());
+				KDTree newTree = new KDTree(drawables);
 				wayTypeToKDTreeRoot.put(wayType, newTree);
 			}
 		}
@@ -90,5 +90,21 @@ public class KDTreeDrawableModel implements DrawableModel {
 		return null ;
 	}
 
+	@Override
+	public void insert(WayType type,Drawable drawable){
+		if(wayTypeToKDTreeRoot.containsKey(type)){
+			if (drawable instanceof SpatialIndexable){
+				wayTypeToKDTreeRoot.get(type).insert((SpatialIndexable)drawable);
+			}
+			else{
+				throw new IllegalArgumentException("tried inserting drawable which was not spatialindexable");
+			}
+		}
+		else {
+			List<Drawable> tempList = new ArrayList<>();
+			tempList.add(drawable);
+			wayTypeToKDTreeRoot.put(type, new KDTree(tempList));
+		}
+	}
 
 }
