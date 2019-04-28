@@ -8,6 +8,7 @@ import java.util.*;
 public class PolyRoad extends Polyline implements Serializable {
 	private int index;
 	private double speedLimit;
+	private String streetName;
 	private int[] firstConnections;
 	private int[] lastConnections;
 	private double length = 0;
@@ -22,7 +23,8 @@ public class PolyRoad extends Polyline implements Serializable {
 		super(way);
 		firstConnections = new int[0];
 		lastConnections = new int[0];
-		this.speedLimit = way.getSpeedLimit();
+		streetName = way.getStreetName();
+		speedLimit = way.getSpeedLimit();
 		index = -1;
 		restrictions = way.getRestrictions();
 		length = calculateLength();
@@ -170,6 +172,10 @@ public class PolyRoad extends Polyline implements Serializable {
 
 	public double getLength() {
 		return length;
+	}
+
+	public String getStreetName() {
+		return streetName;
 	}
 
 	public double getSpeedLimit() {

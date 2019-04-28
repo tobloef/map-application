@@ -82,7 +82,7 @@ public class OSMParser {
 		nodeGraphCreator.initPolyRoadConnections();
 		drawableModel.doneAdding();
 	}
-	
+
 	private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
 		return new BufferedInputStream(new FileInputStream(filename));
 	}

@@ -9,7 +9,7 @@ import java.util.*;
 public class NodeGraphCreator {
 	DrawableModel drawableModel;
 	private List<OSMRoadNode> roadNodes = new ArrayList<>();
-	private Set<OSMRoadWay> OSMRoads = new HashSet<>();
+	private Set<OSMRoadWay> osmRoads = new HashSet<>();
 	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
 	private Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
@@ -22,9 +22,9 @@ public class NodeGraphCreator {
 
 	public void initPolyRoadConnections() {
 		for (OSMRoadNode node : roadNodes) {
-			OSMRoads.addAll(node.getConnections());
+			osmRoads.addAll(node.getConnections());
 		}
-		OSMRoads.addAll(splitWays());
+		osmRoads.addAll(splitWays());
 		createPolyRoadsFromOSMRoads();
 		fillPolyRoadsIntoArray();
 		initializeConnections();
@@ -73,7 +73,7 @@ public class NodeGraphCreator {
 	}
 
 	private void createPolyRoadsFromOSMRoads() {
-		for (OSMRoadWay way : OSMRoads) {
+		for (OSMRoadWay way : osmRoads) {
 			PolyRoad newRoad = new PolyRoad(way);
 			roadWaysToPolyRoads.put(way, newRoad);
 			drawableModel.add(way.getType(), newRoad);
@@ -82,7 +82,7 @@ public class NodeGraphCreator {
 
 	private List<OSMRoadWay> splitWays() {
 		List<OSMRoadWay> toBeAdded = new ArrayList<>();
-		for (OSMRoadWay way : OSMRoads) {
+		for (OSMRoadWay way : osmRoads) {
 			OSMRoadWay newWay = way;
 			while (newWay != null) {
 				OSMRoadWay oldRoad = newWay;
@@ -100,7 +100,7 @@ public class NodeGraphCreator {
 
 
 	public void addRoad(OSMRoadWay currentWay) {
-		OSMRoads.add(currentWay);
+		osmRoads.add(currentWay);
 	}
 
 	public void addRoadNode(OSMRoadNode newNode) {
