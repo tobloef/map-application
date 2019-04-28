@@ -2,6 +2,9 @@ package bfst19.danmarkskort.model;
 
 import java.util.HashMap;
 
+/**
+ * Doubly linked Radix Tree for strings. Case insensitive.
+ */
 public class RadixTreeNode {
     private String string;
     private RadixTreeNode parent;
@@ -69,7 +72,7 @@ public class RadixTreeNode {
 
     public RadixTreeNode search(String word) {
         word = word.toLowerCase();
-        if (word.equals(string)) {
+        if (word.equals(string) && isWord) {
             return this;
         }
         if (!word.startsWith(string)) {

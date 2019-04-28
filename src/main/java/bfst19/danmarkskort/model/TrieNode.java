@@ -2,6 +2,9 @@ package bfst19.danmarkskort.model;
 
 import java.util.HashMap;
 
+/**
+ * Doubly linked String Trie. Case insensitive.
+ */
 public class TrieNode {
     private Character c;
     private TrieNode parent;
@@ -31,7 +34,7 @@ public class TrieNode {
             String subStr = word.substring(1);
             children.get(c).insert(subStr);
         } else {
-            isWord = true;
+            children.get(c).isWord = true;
         }
     }
 
@@ -45,7 +48,11 @@ public class TrieNode {
             }
             node = node.children.get(c);
         }
-        return node;
+        if (node.isWord()) {
+            return node;
+        } else {
+            return null;
+        }
     }
 
     public Character getCharacter() {
