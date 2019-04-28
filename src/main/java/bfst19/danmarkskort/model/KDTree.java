@@ -11,7 +11,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	List<T> leafElements;
 	KDTree lower;
 	KDTree higher;
+	//The value 250 was chosen as a good middle ground between memory and performance.
+	//A larger value will decrease memory footprint a bit and decrease performance as well.
 	private final static int MAX_NODES_PER_LEAF = 250;
+	//The value before rebalance is 150% of MAX_NODES_PER_LEAF, as until that point has a small impact on performance
+	//And if its less, then it rebalances too often.
 	private final static int MAX_NODES_BEFORE_REBALANCE = (MAX_NODES_PER_LEAF * 3) / 2;
 	private final static Random random = new Random();
 
