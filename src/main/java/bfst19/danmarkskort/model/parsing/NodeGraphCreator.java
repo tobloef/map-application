@@ -85,17 +85,14 @@ public class NodeGraphCreator {
 		for (OSMRoadWay way : OSMRoads) {
 			OSMRoadWay newWay = way;
 			while (newWay != null) {
+				OSMRoadWay oldRoad = newWay;
 				newWay = newWay.splitIfNeeded();
 				if (newWay != null) {
 					toBeAdded.add(newWay);
 				}
-			}
-			if (way.getRestrictions().contains(RoadRestriction.ROUNDABOUT)) {
-				OSMRoadWay lastWay = toBeAdded.get(toBeAdded.size()-1);
-				OSMRoadNode first = (OSMRoadNode) way.getFirst();
-				first.add(lastWay);
-				OSMRoadNode last = (OSMRoadNode) lastWay.getLast();
-				last.add(way);
+				else if (way.getRestrictions().contains(RoadRestriction.ROUNDABOUT)){
+					((OSMRoadNode) oldRoad.getLast()).add(way);
+				}
 			}
 		}
 		return toBeAdded;
