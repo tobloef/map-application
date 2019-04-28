@@ -14,6 +14,11 @@ import javafx.scene.transform.Affine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class MapCanvas extends Canvas {
 	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
@@ -23,6 +28,7 @@ public class MapCanvas extends Canvas {
 	private double degreesLatitudePerPixel;
 	private double minZoom = 0;
 	private double maxZoom = 1000000;
+	private AddressIndicatorDrawer addressDrawer;
 
 	public void initialize(Model model) {
 		this.model = model;
@@ -33,7 +39,8 @@ public class MapCanvas extends Canvas {
 		initializeDrawers(model);
 		panViewToMapBounds();
 		updateDegreesPerPixel();
-		model.addObserver(this::repaint);
+		model.addWayTypeObserver(this::repaint);
+		model.addMouseIdleObserver((Boolean isIdle) -> repaint());
 		makeCanvasUpdateOnResize();
 		repaint();
 	}
@@ -45,6 +52,9 @@ public class MapCanvas extends Canvas {
 		drawers.add(mapDrawer);
 		drawers.add(new RouteDrawer(this, model));
 		drawers.add(new ZoomIndicatorDrawer(this));
+		addressDrawer = new AddressIndicatorDrawer(this, model);
+		model.addMouseIdleObserver(addressDrawer::setEnabled);
+		drawers.add(addressDrawer);
 		drawers.add(new POIDrawer(this, model));
 	}
 

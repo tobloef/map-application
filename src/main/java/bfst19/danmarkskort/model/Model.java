@@ -1,10 +1,9 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
-import bfst19.danmarkskort.utils.EnumHelper;
 import bfst19.danmarkskort.utils.ResourceLoader;
+import bfst19.danmarkskort.view.drawers.AddressIndicatorDrawer;
 import javafx.geometry.Point2D;
-import javafx.scene.transform.Transform;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
@@ -12,16 +11,27 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class Model {
-	DrawableModel drawableModel = new KDTreeDrawableModel();
-	List<Runnable> observers = new ArrayList<>();
-	Set<WayType> blacklistedWaytypes = new HashSet<>();
+	private DrawableModel drawableModel = new KDTreeDrawableModel();
+	private Set<WayType> blacklistedWaytypes = new HashSet<>();
+	private float mouseModelX, mouseModelY;
+	private float mouseScreenX, mouseScreenY;
+	private PolyRoad start, end;
+	private List<PolyRoad> shortestPath;
+	private VehicleType currentVehicleType = VehicleType.CAR;
+	private List<Runnable> wayTypeObservers = new ArrayList<>();
+	private List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
+	private long mouseIdleTime = 100;
+	private ScheduledExecutorService executor;
+	private ScheduledFuture<?> mouseIdleTask;
+
 	public Rectangle modelBounds;
-	float mouseX, mouseY;
-	PolyRoad start, end;
-	List<PolyRoad> shortestPath;
-	VehicleType currentVehicleType = VehicleType.CAR;
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -35,8 +45,25 @@ public class Model {
 		return drawableModel.getAllDrawablesOfType(type);
 	}
 
-	public void addObserver(Runnable observer) {
-		observers.add(observer);
+	public void addWayTypeObserver(Runnable observer) {
+		wayTypeObservers.add(observer);
+	}
+
+	public void notifyWayTypeObservers() {
+		for (Runnable observer : wayTypeObservers) {
+			observer.run();
+		}
+	}
+
+	public void addMouseIdleObserver(Consumer<Boolean> observer) {
+		mouseIdleObservers.add(observer);
+	}
+
+
+	public void notifyMouseIdleObservers(boolean isIdle) {
+		for (Consumer<Boolean> observer : mouseIdleObservers) {
+			observer.accept(isIdle);
+		}
 	}
 
 	public void toggleBlacklistWaytype(WayType waytype){
@@ -45,25 +72,21 @@ public class Model {
 		} else {
 			blacklistedWaytypes.remove(waytype);
 		}
-		notifyObservers();
+		notifyWayTypeObservers();
 	}
 
 	public void emptyBlacklist(){
 		for (WayType wayType: WayType.values()){
 			blacklistedWaytypes.remove(wayType);
 		}
-		notifyObservers();
+		notifyWayTypeObservers();
 	}
 
 	public void fillBlacklist(){
 		for (WayType wayType: WayType.values()){
 			blacklistedWaytypes.add(wayType);
 		}
-		notifyObservers();
-	}
-
-	public void notifyObservers() {
-		for (Runnable observer : observers) observer.run();
+		notifyWayTypeObservers();
 	}
 
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
@@ -76,6 +99,8 @@ public class Model {
 		}
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
+
+		executor = Executors.newSingleThreadScheduledExecutor();
 	}
 
 	// TODO: Update the default data before final release.
@@ -131,9 +156,42 @@ public class Model {
 		return drawableModel.getNearestNeighbor(type, (float)modelCoords.getX(), (float)modelCoords.getY());
 	}
 
-	public void setMouseCoords(float mouseX, float mouseY) {
-		this.mouseX = mouseX;
-		this.mouseY = mouseY;
+	public void setMouseModelCoords(float mouseX, float mouseY) {
+		this.mouseModelX = mouseX;
+		this.mouseModelY = mouseY;
+	}
+
+	public void setMouseScreenCoords(float mouseX, float mouseY) {
+		this.mouseScreenX = mouseX;
+		this.mouseScreenY = mouseY;
+		updateMouseIdle();
+	}
+
+	public float getMouseModelX() {
+		return mouseModelX;
+	}
+
+	public float getMouseModelY() {
+		return mouseModelY;
+	}
+
+	public float getMouseScreenX() {
+		return mouseScreenX;
+	}
+
+	public float getMouseScreenY() {
+		return mouseScreenY;
+	}
+
+	private void updateMouseIdle() {
+		notifyMouseIdleObservers(false);
+		// Re-schedule the drawer to be shown after a period of no movement.
+		if (mouseIdleTask != null) {
+			mouseIdleTask.cancel(true);
+		}
+		mouseIdleTask = executor.schedule(() -> {
+			notifyMouseIdleObservers(true);
+		}, mouseIdleTime, TimeUnit.MILLISECONDS);
 	}
 
 	private void updateShortestPath() {
@@ -148,7 +206,7 @@ public class Model {
 		}
 		time += System.nanoTime();
 		System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
-		notifyObservers();
+		notifyWayTypeObservers();
 	}
 
 
@@ -161,7 +219,7 @@ public class Model {
 	}
 
 	public void updateEnd() {
-		Drawable nearest = getClosestRoad(mouseX, mouseY);
+		Drawable nearest = getClosestRoad(mouseModelX, mouseModelY);
 		if (nearest instanceof PolyRoad){
 			end = (PolyRoad) nearest;
 			updateShortestPath();
@@ -169,7 +227,7 @@ public class Model {
 	}
 
 	public void updateStart() {
-		Drawable nearest = getClosestRoad(mouseX, mouseY);
+		Drawable nearest = getClosestRoad(mouseModelX, mouseModelY);
 		if (nearest instanceof PolyRoad){
 			start = (PolyRoad) nearest;
 			updateShortestPath();
@@ -184,7 +242,7 @@ public class Model {
 	}
 
 	public PolyRoad getClosestRoad() {
-		return getClosestRoad(mouseX, mouseY);
+		return getClosestRoad(mouseModelX, mouseModelY);
 	}
 
 	private PolyRoad getClosestRoad(float x, float y) {
@@ -207,7 +265,7 @@ public class Model {
 
 	public void insert(WayType type,Drawable drawable){
 		drawableModel.insert(type, drawable);
-		notifyObservers();
+		notifyWayTypeObservers();
 	}
 
 	public void updateVehicleType(VehicleType vehicleType) {
@@ -216,7 +274,7 @@ public class Model {
 	}
 
 	public void addPOIAtCurrentMousePosition() {
-		this.addPOIAtPosition(mouseX, mouseY);
+		this.addPOIAtPosition(mouseModelX, mouseModelY);
 	}
 
 	private void addPOIAtPosition(float mouseX, float mouseY) {

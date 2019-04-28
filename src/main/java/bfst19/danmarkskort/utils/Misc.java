@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.utils;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class Misc {
     public static <T> T pickNotNull(T first, T second) {

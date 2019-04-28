@@ -14,6 +14,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class Controller {
 	private Model model;
@@ -26,7 +28,7 @@ public class Controller {
 	public void init(Model model) {
 		this.model = model;
 		mapCanvas.initialize(model);
-		waytypeSelectorController.init(model, borderPane);
+		WaytypeSelectorController.init(model, borderPane);
 	}
 
 	@FXML
@@ -95,10 +97,12 @@ public class Controller {
 		y = e.getY();
 	}
 
+	@FXML
 	public void onMouseMoved(MouseEvent mouseEvent) {
 		float localX = (float)mouseEvent.getX();
 		float localY = (float)mouseEvent.getY();
 		Point2D modelCoords = mapCanvas.modelCoords(localX, localY);
-		model.setMouseCoords((float)modelCoords.getX(), (float)modelCoords.getY());
+		model.setMouseModelCoords((float)modelCoords.getX(), (float)modelCoords.getY());
+		model.setMouseScreenCoords(localX, localY);
 	}
 }
