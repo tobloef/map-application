@@ -1,8 +1,10 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.VehicleType;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import bfst19.danmarkskort.view.View;
+import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
@@ -43,6 +45,30 @@ public class Controller {
 			}
 			case S: {
 				model.updateStart();
+				break;
+			}
+			case D: {
+				model.swapStartAndEnd();
+				break;
+			}
+			case F: {
+				RouteDrawer.debugging = !RouteDrawer.debugging;
+				break;
+			}
+			case G:{
+				RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
+				break;
+			}
+			case C:{
+				model.updateVehicleType(VehicleType.CAR);
+				break;
+			}
+			case B:{
+				model.updateVehicleType(VehicleType.BICYCLE);
+				break;
+			}
+			case P:{
+				model.addPOIAtCurrentMousePosition();
 				break;
 			}
 		}

@@ -29,6 +29,7 @@ public enum WayType {
 	BROWNFIELD,
 	SHRUB,
 
+
 	// Buildings
 	CONSTRUCTION,
 	INDUSTRIAL,
@@ -40,8 +41,17 @@ public enum WayType {
 	PITCH,
 	GROYNE,
 	PIER,
-	BRIDGE,
 	APRON,
+
+
+	// Water
+	WATER,
+	SWIMMINGPOOL,
+	CANAL,
+	BASIN,
+
+	//Navigable stuff that isnt roads.
+	BRIDGE,
 
 	// Exits
 	TERTIARY_ROAD_EXIT,
@@ -74,30 +84,10 @@ public enum WayType {
 	BRIDLEWAY,
 	CYCLEWAY,
 
-	// Water
-	WATER,
-	SWIMMINGPOOL,
-	CANAL,
-	BASIN,
 
 	// Misc.
 	UNKNOWN,
-	;
+	POI
 
-	public static List<WayType> getRoadTypes() {
-		List<WayType> roadTypes = new ArrayList<>();
-		roadTypes.add(RESIDENTIAL_ROAD);
-		roadTypes.add(SERVICE_ROAD);
-		roadTypes.add(TERTIARY_ROAD);
-		roadTypes.add(UNCLASSIFIED_ROAD);
-		roadTypes.add(ROUNDABOUT);
-		roadTypes.add(LIVING_STREET);
-		roadTypes.add(SECONDARY_ROAD);
-		roadTypes.add(PRIMARY_ROAD);
-		roadTypes.add(RAILWAY);
-		roadTypes.add(PEDESTRIAN);
-		roadTypes.add(RACEWAY);
-		roadTypes.add(MOTORWAY);
-		return roadTypes;
-	}
+
 }
