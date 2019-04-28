@@ -125,13 +125,13 @@ public class PolyRoad extends Polyline implements Serializable {
 		return (getLength() * 110 / getSpeedLimit()) * 60;
 	}
 
-	public double getDegree(boolean last) {
-		double deltaX = coords[2] - coords[0];
-		double deltaY = coords[3] - coords[1];
-		if (last) {
-			int end = coords.length;
-			deltaX = coords[end-2] - coords[end-4];
-			deltaY = coords[end-1] - coords[end-3];
+	public double getDegree(PolyRoad connectedRoad) {
+		int end = coords.length;
+		double deltaX = coords[end-2] - coords[end-4];
+		double deltaY = coords[end-1] - coords[end-3];
+		if (connectedRoad.getFirstConnections().contains(this)) {
+			deltaX = coords[2] - coords[0];
+			deltaY = coords[3] - coords[1];
 		}
 		return Math.toDegrees(Math.atan2(deltaY, deltaX));
 	}

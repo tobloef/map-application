@@ -49,8 +49,8 @@ public class Route extends ArrayList<PolyRoad> {
 	}
 
 	private int getDirection(PolyRoad last, PolyRoad current) {
-		double lastDegree = last.getDegree(true);
-		double firstDegree = current.getDegree(false);
+		double lastDegree = last.getDegree(current);
+		double firstDegree = current.getDegree(last);
 		double rightBound = 45;
 		double leftBound = -45;
 		double deltaDegree = clampAngle(lastDegree - firstDegree);
