@@ -220,6 +220,9 @@ public class OSMParser {
 				restrictions.add(vehicleRestriction);
 			}
 		}
+		if (tags.containsKey("junction") && tags.get("junction").equals("roundabout")) {
+			restrictions.add(RoadRestriction.ROUNDABOUT);
+		}
 		if(tags.containsKey("oneway") || tags.containsKey("junction")){
 			RoadRestriction oneWayType = getOneWayType();
 			if (oneWayType != null){

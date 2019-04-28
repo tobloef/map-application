@@ -43,7 +43,7 @@ public class MapCanvas extends Canvas {
 		mapDrawer = new MapDrawer(this, model);
 		drawers.add(mapDrawer);
 		drawers.add(new RouteDrawer(this, model));
-		drawers.add(new DebugDrawer(this, model));
+		drawers.add(new DebugDrawer(this, model)); //todo figure out if this should be in the final program or not
 		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
