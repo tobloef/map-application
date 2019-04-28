@@ -387,7 +387,7 @@ public class OSMParser {
 		String city = getWithFallback(tags, cityKeys);
 		String postCode = getWithFallback(tags, postCodeKeys);
 
-		Place place = new Place(
+		Place place1 = new Place(
 				id,
 				lat,
 				lon,
@@ -397,6 +397,17 @@ public class OSMParser {
 				city,
 				postCode
 		);
+
+		Place place2 = new Place.Builder()
+			.id(id)
+			.lat(lat)
+			.lon(lon)
+			.placeName(placeName)
+			.streetName(streetName)
+			.houseNumber(houseNumber)
+			.city(city)
+			.postCode(postCode)
+			.build();
 	}
 
 	private long getPlaceOSMId() {
