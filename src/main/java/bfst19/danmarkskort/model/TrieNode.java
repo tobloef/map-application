@@ -12,12 +12,13 @@ public class TrieNode {
 
     }
 
-    public TrieNode(Character c, TrieNode parent) {
+    private TrieNode(Character c, TrieNode parent) {
         this.c = c;
         this.parent = parent;
     }
 
     public void insert(String word) {
+        word = word.toLowerCase();
         char c = word.charAt(0);
         if (children == null) {
             children = new HashMap<>();
@@ -35,6 +36,7 @@ public class TrieNode {
     }
 
     public TrieNode search(String word) {
+        word = word.toLowerCase();
         TrieNode node = this;
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
