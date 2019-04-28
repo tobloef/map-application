@@ -86,8 +86,8 @@ public class Route extends ArrayList<PolyRoad> {
 		return angle;
 	}
 
-	public static void printAll(List<String> list) {
-		for (String string : list) {
+	public void print() {
+		for (String string : this.getTextDescription()) {
 			System.out.println(string);
 		}
 	}
