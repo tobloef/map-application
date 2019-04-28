@@ -1,14 +1,17 @@
 package bfst19.danmarkskort.model.parsing;
 
 import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.utils.ResourceLoader;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
+import static bfst19.danmarkskort.model.parsing.PlaceParsing.removeSavedPlaces;
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static bfst19.danmarkskort.utils.Misc.pickNotNull;
 import static javax.xml.stream.XMLStreamConstants.*;
@@ -65,11 +68,13 @@ public class OSMParser {
 		else {
 			throw new IOException();
 		}
+		removeSavedPlaces();
 		parseOSM(osmSource);
 		doneParsing();
 	}
 
 	private void doneParsing() {
+		PlaceParsing.closeStreams();
 		idToNode = null;
 		idToWay = null;
 		System.gc();
@@ -77,8 +82,7 @@ public class OSMParser {
 		nodeGraphCreator.initPolyRoadConnections();
 		drawableModel.doneAdding();
 	}
-
-
+	
 	private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
 		return new BufferedInputStream(new FileInputStream(filename));
 	}
@@ -370,7 +374,6 @@ public class OSMParser {
 	}
 
 	private void tryAddPlace() {
-
 		long id = getPlaceOSMId();
 		if (id == -1) {
 			return;
@@ -387,27 +390,16 @@ public class OSMParser {
 		String city = getWithFallback(tags, cityKeys);
 		String postCode = getWithFallback(tags, postCodeKeys);
 
-		Place place1 = new Place(
-				id,
-				lat,
-				lon,
-				placeName,
-				streetName,
-				houseNumber,
-				city,
-				postCode
-		);
-
-		Place place2 = new Place.Builder()
-			.id(id)
-			.lat(lat)
-			.lon(lon)
-			.placeName(placeName)
-			.streetName(streetName)
-			.houseNumber(houseNumber)
-			.city(city)
-			.postCode(postCode)
-			.build();
+		Address address = new Address(streetName, houseNumber, city, postCode);
+		Place place = new Place(id, lat, lon, placeName, address);
+		if (address.getStreetName() == null) {
+			return;
+		}
+		try {
+			PlaceParsing.savePlace(place);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private long getPlaceOSMId() {

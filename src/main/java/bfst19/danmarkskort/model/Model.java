@@ -78,6 +78,7 @@ public class Model {
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
 	}
 
+	// TODO: Update the default data before final release.
 	private void loadDefaultData() throws IOException, ClassNotFoundException {
 		InputStream inputStream = ResourceLoader.getResourceAsStream("data/default.osm.ser");
 		try {
