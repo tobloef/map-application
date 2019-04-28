@@ -1,10 +1,7 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.PolyRoad;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Route extends ArrayList<PolyRoad> {
 	public double sumLength() {
@@ -31,10 +28,12 @@ public class Route extends ArrayList<PolyRoad> {
 				continue;
 			}
 			String description = "";
-			int direction = getDirection(last, road);
+			double degree = getDegree(last, road);
+			description += "(" + degree + ")";
+			int direction = interpretDirection(degree);
 			switch (direction) {
 				case 1: {
-					description += "Turn left an drive on ";
+					description += "Turn right an drive on ";
 					break;
 				}
 				case 0: {
@@ -42,7 +41,7 @@ public class Route extends ArrayList<PolyRoad> {
 					break;
 				}
 				case -1: {
-					description += "Turn right and drive on ";
+					description += "Turn left and drive on ";
 					break;
 				}
 			}
@@ -61,16 +60,19 @@ public class Route extends ArrayList<PolyRoad> {
 		//return stream().map(x -> ("Drive on " + x.toString() + " for " + (x.getLength()*110 / x.getSpeedLimit())*60 + "minutes" )).collect(Collectors.toList());
 	}
 
-	private int getDirection(PolyRoad last, PolyRoad current) {
+	private double getDegree(PolyRoad last, PolyRoad current) {
 		double lastDegree = last.getDegree(current);
 		double firstDegree = current.getDegree(last);
+		return clampAngle(lastDegree - firstDegree);
+	}
+
+	private int interpretDirection(double degree) {
 		double rightBound = 45;
 		double leftBound = -45;
-		double deltaDegree = clampAngle(lastDegree - firstDegree);
-		if (deltaDegree > rightBound) {
+		if (degree > rightBound) {
 			return 1; //if you are going exactly backwards, you are technically turning left, since backwards would be 180 degrees.
 		}
-		if (deltaDegree > leftBound) {
+		if (degree > leftBound) {
 			return 0;
 		}
 		return -1;
