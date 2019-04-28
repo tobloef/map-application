@@ -178,6 +178,10 @@ public class Model {
 		updateShortestPath();
 	}
 
+	public PolyRoad getClosestRoad() {
+		return getClosestRoad(mouseX, mouseY);
+	}
+
 	private PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
@@ -196,8 +200,22 @@ public class Model {
 		return closestRoad;
 	}
 
+	public void insert(WayType type,Drawable drawable){
+		drawableModel.insert(type, drawable);
+		notifyObservers();
+	}
+
 	public void updateVehicleType(VehicleType vehicleType) {
 		this.currentVehicleType = vehicleType;
 		updateShortestPath();
+	}
+
+	public void addPOIAtCurrentMousePosition() {
+		this.addPOIAtPosition(mouseX, mouseY);
+	}
+
+	private void addPOIAtPosition(float mouseX, float mouseY) {
+		PointOfInterest pointOfInterest = new PointOfInterest(mouseX, mouseY);
+		this.insert(WayType.POI, pointOfInterest);
 	}
 }

@@ -87,7 +87,7 @@ public enum WayType {
 
 	// Misc.
 	UNKNOWN,
-	;
+	POI
 
 
 }
