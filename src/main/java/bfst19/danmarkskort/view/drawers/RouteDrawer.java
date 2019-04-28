@@ -13,14 +13,26 @@ import java.util.Set;
 import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 
 public class RouteDrawer implements Drawer{
+	private boolean enabled = true;
 	public static boolean ShowExplored;
 	private MapCanvas canvas;
 	private Model model;
 	public static boolean debugging = true;
 
+
 	public RouteDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.model = model;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public boolean getEnabled() {
+		return enabled;
 	}
 
 	@Override

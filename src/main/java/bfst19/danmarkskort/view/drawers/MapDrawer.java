@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 
 public class MapDrawer implements Drawer {
+	private boolean enabled = true;
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
@@ -27,6 +28,17 @@ public class MapDrawer implements Drawer {
 		theme = loadTheme("config/themes/default.yaml", null);
 	}
 
+	@Override
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public boolean getEnabled() {
+		return enabled;
+	}
+
+	@Override
 	public void draw() {
 		if (theme == null) {
 			return;
@@ -58,7 +70,6 @@ public class MapDrawer implements Drawer {
 			dontStrokeLastFill();
 		}
 	}
-
 
 	private boolean isVisibleAtZoom(DrawingInfo drawingInfo, double zoomLevel) {
 		// If no zoom level specified, just draw it.

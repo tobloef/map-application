@@ -53,7 +53,9 @@ public class MapCanvas extends Canvas {
 		clearBackground();
 		updateLineWidth();
 		for (Drawer drawer : drawers) {
-			drawer.draw();
+			if (drawer.getEnabled()) {
+				drawer.draw();
+			}
 		}
 	}
 

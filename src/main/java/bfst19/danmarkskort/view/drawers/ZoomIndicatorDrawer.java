@@ -9,6 +9,7 @@ import javafx.scene.transform.Affine;
 
 
 public class ZoomIndicatorDrawer implements Drawer {
+	private boolean enabled = true;
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private boolean leftAligned = false;
@@ -20,9 +21,20 @@ public class ZoomIndicatorDrawer implements Drawer {
 	private int boxWidth = 100;
 	private int boxHeight = 20;
 
+
 	public ZoomIndicatorDrawer(MapCanvas canvas) {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public boolean getEnabled() {
+		return enabled;
 	}
 
 	@Override
