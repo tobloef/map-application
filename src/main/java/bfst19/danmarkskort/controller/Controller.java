@@ -4,6 +4,7 @@ import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.VehicleType;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import bfst19.danmarkskort.view.View;
+import bfst19.danmarkskort.view.drawers.DebugDrawer;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -65,6 +66,11 @@ public class Controller {
 			}
 			case B:{
 				model.updateVehicleType(VehicleType.BICYCLE);
+				break;
+			}
+			case Q: {
+				DebugDrawer.toggle(model.getClosestRoad());
+				model.notifyObservers(); //discount repaint todo find a better solution
 				break;
 			}
 		}

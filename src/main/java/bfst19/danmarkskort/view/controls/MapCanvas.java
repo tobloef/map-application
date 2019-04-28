@@ -3,10 +3,7 @@ package bfst19.danmarkskort.view.controls;
 import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Rectangle;
-import bfst19.danmarkskort.view.drawers.RouteDrawer;
-import bfst19.danmarkskort.view.drawers.ZoomIndicatorDrawer;
-import bfst19.danmarkskort.view.drawers.Drawer;
-import bfst19.danmarkskort.view.drawers.MapDrawer;
+import bfst19.danmarkskort.view.drawers.*;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -46,6 +43,7 @@ public class MapCanvas extends Canvas {
 		mapDrawer = new MapDrawer(this, model);
 		drawers.add(mapDrawer);
 		drawers.add(new RouteDrawer(this, model));
+		drawers.add(new DebugDrawer(this, model));
 		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
