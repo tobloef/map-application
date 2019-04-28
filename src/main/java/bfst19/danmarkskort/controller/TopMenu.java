@@ -1,5 +1,6 @@
 package bfst19.danmarkskort.controller;
 
+import bfst19.danmarkskort.model.InvalidUserInputException;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Route;
 import javafx.event.ActionEvent;
@@ -49,8 +50,7 @@ public class TopMenu {
 		try {
 			Route route = model.getShortestPath();
 			if (route.isEmpty()) {
-				//Fixme find a better exception for this
-				throw new Exception("Please select a route.");
+				throw new InvalidUserInputException("Please select a route.");
 			}
 			//fixme figure out where the file should be outputted
 			//String fileName = route.get(0).getName() + "_" + route.get(route.size()-1).getName() + ".txt";
@@ -60,8 +60,15 @@ public class TopMenu {
 				bufferedWriter.write(string + String.format("%n"));
 			}
 			bufferedWriter.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (InvalidUserInputException e) {
+			Alert alert = new Alert(Alert.AlertType.ERROR,
+					e.getMessage(),
+					ButtonType.CLOSE);
+			alert.setTitle("Error: Wrong input");
+			alert.setHeaderText("Error: Wrong input");
+			alert.show();
 		}
 	}
 

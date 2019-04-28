@@ -16,7 +16,6 @@ public class Route extends ArrayList<PolyRoad> {
 	}
 
 	public List<String> getTextDescription() {
-		//fixme x.tostring should be replaced with the name of the road
 		List<String> result = new ArrayList<>();
 		PolyRoad last = null;
 		double summedDuration = 0;
