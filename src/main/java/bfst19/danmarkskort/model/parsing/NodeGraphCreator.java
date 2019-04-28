@@ -2,6 +2,7 @@ package bfst19.danmarkskort.model.parsing;
 
 import bfst19.danmarkskort.model.DrawableModel;
 import bfst19.danmarkskort.model.PolyRoad;
+import bfst19.danmarkskort.model.RoadRestriction;
 
 import java.util.*;
 
@@ -88,6 +89,13 @@ public class NodeGraphCreator {
 				if (newWay != null) {
 					toBeAdded.add(newWay);
 				}
+			}
+			if (way.getRestrictions().contains(RoadRestriction.ROUNDABOUT)) {
+				OSMRoadWay lastWay = toBeAdded.get(toBeAdded.size()-1);
+				OSMRoadNode first = (OSMRoadNode) way.getFirst();
+				first.add(lastWay);
+				OSMRoadNode last = (OSMRoadNode) lastWay.getLast();
+				last.add(way);
 			}
 		}
 		return toBeAdded;

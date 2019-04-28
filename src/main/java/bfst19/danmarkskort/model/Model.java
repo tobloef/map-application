@@ -182,6 +182,10 @@ public class Model {
 		updateShortestPath();
 	}
 
+	public PolyRoad getClosestRoad() {
+		return getClosestRoad(mouseX, mouseY);
+	}
+
 	private PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
