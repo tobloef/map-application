@@ -67,6 +67,10 @@ public class Controller {
 				model.updateVehicleType(VehicleType.BICYCLE);
 				break;
 			}
+			case P:{
+				model.addPOIAtCurrentMousePosition();
+				break;
+			}
 		}
 	}
 
