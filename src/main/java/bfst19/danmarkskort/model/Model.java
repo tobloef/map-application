@@ -23,7 +23,6 @@ public class Model {
 	PolyRoad start, end;
 	List<PolyRoad> shortestPath;
 	VehicleType currentVehicleType = VehicleType.CAR;
-	public static final List<WayType> roadTypes = WayType.getRoadTypes();
 	private Theme theme;
 	private boolean HDOn;
 
@@ -32,7 +31,6 @@ public class Model {
 	}
 
 	public void toggleHDTheme(){
-		//TODO: Toggle HD theme on and off
 		if (HDOn){
 			theme = ThemeLoader.loadTheme("config/themes/default.yaml",null);
 		} else {
