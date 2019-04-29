@@ -32,12 +32,12 @@ public class RouteDrawer implements Drawer{
 		}
 		
 		GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-		graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 4);
+		graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 2);
 		Set<PolyRoad> oneWayRoads = new HashSet<>();
 		graphicsContext.save();
 		if (ShowExplored) {
 			graphicsContext.setStroke(Color.RED);
-			for (PolyRoad road : Dijkstra.lastUsedRoads) {
+			for (PolyRoad road : Dijkstra.getLastVisitedRoads()) {
 				road.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
 				if (road.isOneWay()) {
 					oneWayRoads.add(road);
@@ -48,6 +48,7 @@ public class RouteDrawer implements Drawer{
 				road.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());
 			}
 		}
+		graphicsContext.setStroke(Color.BLACK);
 		graphicsContext.setLineWidth(canvas.getDegreesLatitudePerPixel() * 4);
 		for (Drawable drawable : model.getShortestPath()) {
 			drawable.stroke(graphicsContext, canvas.getDegreesLatitudePerPixel());

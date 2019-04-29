@@ -22,18 +22,14 @@ public class OSMParser {
 	private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
 
 	private Map<Long, OSMWay> idToWay = new HashMap<>();
+	NodeGraphCreator nodeGraphCreator;
 
 	private Map<String, String> tags = new HashMap<>();
-	private Map<String, Integer> speedLimits = new HashMap<>();
-	private List<OSMRoadNode> roadNodes = new ArrayList<>();
-	private Set<OSMRoadWay> OSMRoads = new HashSet<>();
-	private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
-	private Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
 	public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
 		InputStream osmSource;
-		initSpeedLimits();
 		this.drawableModel = drawableModel;
+		nodeGraphCreator = new NodeGraphCreator(this.drawableModel);
 		if (filename.endsWith(".zip")) {
 			osmSource = getZipFile(filename);
 		}
@@ -44,85 +40,18 @@ public class OSMParser {
 			throw new IOException();
 		}
 		parseOSM(osmSource);
+		doneParsing();
+	}
+
+	private void doneParsing() {
 		idToNode = null;
 		idToWay = null;
 		System.gc();
 		System.runFinalization();
-		initPolyRoadConnections();
+		nodeGraphCreator.initPolyRoadConnections();
 		drawableModel.doneAdding();
 	}
 
-	private void initPolyRoadConnections() {
-		for (OSMRoadNode node : roadNodes) {
-			OSMRoads.addAll(node.getConnections());
-		}
-		OSMRoads.addAll(splitWays());
-		createPolyRoadsFromOSMRoads();
-		fillPolyRoadsIntoArray();
-		initializeConnections();
-	}
-
-	private void initializeConnections() {
-		for (OSMRoadWay way : roadWaysToPolyRoads.keySet()) {
-			PolyRoad road = roadWaysToPolyRoads.get(way);
-			OSMRoadNode first = (OSMRoadNode) way.getFirst();
-			OSMRoadNode last = (OSMRoadNode) way.getLast();
-			for (OSMRoadWay connectedWay : first.getConnections()) {
-				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
-				if (road != otherRoad){
-					road.addConnectionToFirst(otherRoad);
-				}
-			}
-			for (OSMRoadWay connectedWay : last.getConnections()) {
-				PolyRoad otherRoad = roadWaysToPolyRoads.get(connectedWay);
-				if (road != otherRoad){
-					road.addConnectionToLast(otherRoad);
-				}
-			}
-		}
-	}
-
-	private void fillPolyRoadsIntoArray() {
-		PolyRoad.allPolyRoads = new PolyRoad[roadWaysToPolyRoads.values().size()];
-		int i = 0;
-		for (PolyRoad road : roadWaysToPolyRoads.values()) {
-			polyRoadToIntegers.put(road, i);
-			PolyRoad.allPolyRoads[i] = road;
-			road.setIndex(i);
-			i++;
-		}
-	}
-
-	private void createPolyRoadsFromOSMRoads() {
-		for (OSMRoadWay way : OSMRoads) {
-			PolyRoad newRoad = new PolyRoad(way);
-			roadWaysToPolyRoads.put(way, newRoad);
-			drawableModel.add(way.getType(), newRoad);
-		}
-	}
-
-	private List<OSMRoadWay> splitWays() {
-		List<OSMRoadWay> toBeAdded = new ArrayList<>();
-		for (OSMRoadWay way : OSMRoads) {
-			OSMRoadWay newWay = way;
-			while (newWay != null) {
-				newWay = newWay.splitIfNeeded();
-				if (newWay != null) {
-					toBeAdded.add(newWay);
-				}
-			}
-		}
-		return toBeAdded;
-	}
-
-	private void initSpeedLimits() {
-		speedLimits.put("residential", 50);
-		speedLimits.put("unclassified", 50);
-		speedLimits.put("tertiary", 65);
-		speedLimits.put("secondary", 80);
-		speedLimits.put("trunk", 90);
-		speedLimits.put("motorway", 130);
-	}
 
 	private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
 		return new BufferedInputStream(new FileInputStream(filename));
@@ -203,17 +132,17 @@ public class OSMParser {
 		if (currentWayIsRoad()) {
 			int nodeAmount = currentWay.getNodes().size();
 			if (nodeAmount <= 0) {
-				throw new RuntimeException("Way consists of zero nodes and is not a way");
+				throw new RuntimeException("Road consists of zero nodes and is not a way");
 			}
 			convertWayToRoadNodes(currentWay);
 			if (nodeAmount != currentWay.getNodes().size()) {
-				throw new RuntimeException("Road conversion removes nodes somehow");
+				throw new RuntimeException("Road conversion resulted in removal of nodes.");
 			}
 		}
 		idToWay.put(currentWay.getAsLong(), currentWay);
 		if (currentType != WayType.UNKNOWN) {
 			if (currentWay instanceof OSMRoadWay) {
-				OSMRoads.add((OSMRoadWay) currentWay);
+				nodeGraphCreator.addRoad((OSMRoadWay) currentWay);
 			}
 			else {
 				drawableModel.add(currentType, new Polyline(currentWay));
@@ -223,8 +152,7 @@ public class OSMParser {
 	}
 
 	private boolean currentWayIsRoad() {
-		//fixme this should not include footpaths
-		return tags.containsKey("highway");
+		return RoadInformation.roadTypes.contains(currentType);
 	}
 
 	private void handleStartRelation(XMLStreamReader reader) {
@@ -280,50 +208,115 @@ public class OSMParser {
 	}
 
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
-		Set<RoadRestriction> restrictions = new HashSet<>();
-		if (tags.get("oneway") != null) {
-			restrictions.add(RoadRestriction.ONE_WAY);
-		}
+		EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad(way);
 		return new OSMRoadWay(way, newNodes, getMaxSpeed(), currentType, restrictions);
+	}
+
+	private EnumSet<RoadRestriction> getRestrictionsOfRoad(OSMWay way) {
+		EnumSet<RoadRestriction> restrictions =EnumSet.noneOf(RoadRestriction.class);
+		if (tags.containsKey("highway")){
+			RoadRestriction vehicleRestriction = getVehicleRestriction();
+			if (vehicleRestriction != null){
+				restrictions.add(vehicleRestriction);
+			}
+		}
+		if (tags.containsKey("junction") && tags.get("junction").equals("roundabout")) {
+			restrictions.add(RoadRestriction.ROUNDABOUT);
+		}
+		if(tags.containsKey("oneway") || tags.containsKey("junction")){
+			RoadRestriction oneWayType = getOneWayType();
+			if (oneWayType != null){
+				restrictions.add(oneWayType);
+			}
+		}
+		return restrictions;
+	}
+
+	private RoadRestriction getVehicleRestriction() {
+		switch (tags.get("highway")){
+			case "motorway": return checkIfBikeAllowed();
+			case "trunk": return checkIfBikeAllowed();
+			case "primary": return checkIfBikeAllowed();
+			case "motorway_link": return checkIfBikeAllowed();
+			case "trunk_link": return checkIfBikeAllowed();
+			case "primary_link": return checkIfBikeAllowed();
+			case "pedestrian": return RoadRestriction.NO_CAR;
+			case "track": return RoadRestriction.NO_CAR;
+			case "escape": return RoadRestriction.NO_CAR;
+			case "footway": return RoadRestriction.NO_CAR;
+			case "bridleway": return RoadRestriction.NO_CAR;
+			case "steps": return RoadRestriction.NO_CAR;
+			case "path": return RoadRestriction.NO_CAR;
+			case "cycleway": return RoadRestriction.NO_CAR;
+			case "crossing": return RoadRestriction.NO_CAR;
+			default: return null;
+		}
+	}
+
+	private RoadRestriction checkIfBikeAllowed() {
+		if (tags.containsKey("bicycle")){
+			switch (tags.get("bicycle")){
+				case "yes": return null;
+				case "no": return RoadRestriction.CAR_ONLY;
+				default: return RoadRestriction.CAR_ONLY;
+			}
+		}
+		return RoadRestriction.CAR_ONLY;
+	}
+
+	private RoadRestriction getOneWayType() {
+		if (tags.containsKey("junction") && tags.get("junction").equals("roundabout")){
+			return RoadRestriction.ONE_WAY;
+		}
+		if (tags.get("oneway") != null) {
+			switch (tags.get("oneway")) {
+				case "yes":
+					return RoadRestriction.ONE_WAY;
+				case "true":
+					return RoadRestriction.ONE_WAY;
+				case "1":
+					return RoadRestriction.ONE_WAY;
+				case "-1":
+					return RoadRestriction.ONE_WAY_REVERSED;
+				case "reversible":
+					return RoadRestriction.ONE_WAY_REVERSED;
+				default:
+					return null;
+			}
+		}
+		return null;
 	}
 
 
 	private OSMRoadNode convertNodeToRoadNode(OSMNode node) {
 		OSMRoadNode newNode = new OSMRoadNode(node);
 		idToNode.replace(newNode);
-		roadNodes.add(newNode);
+		nodeGraphCreator.addRoadNode(newNode);
 		return newNode;
 	}
 
 	private int getMaxSpeed() {
-		int maxSpeed;
-		if (tags.containsKey("maxspeed")) {
+		int maxSpeed = 50;
+		if (tags.containsKey("maxspeed") && isInteger(tags.get("maxSpeed"))) {
 			try {
 				maxSpeed = Integer.parseInt(tags.get("maxspeed"));
 			}
 			catch (NumberFormatException e){
-				maxSpeed = 30;
+				e.printStackTrace();
+				maxSpeed = 50;
 			}
 		}
 		else {
-			if (speedLimits.get(tags.get("highway")) != null){
-				try {
-					maxSpeed = Integer.parseInt(tags.get("maxspeed"));
-				}
-				catch (NumberFormatException e){
-					maxSpeed = 30;
-				}
-			}
-			else {
-				maxSpeed = 30; //If we have absolutely no idea how fast we can drive on a road, we just give it the speed 30. //todo handle this better
-			}
+			maxSpeed = RoadInformation.speedLimitsFromTags.getOrDefault(tags.get("highway"), 50);
 		}
 		return maxSpeed;
 	}
 
+	private boolean isInteger(String string) {
+		return string != null && string.matches("-?\\d+");
+	}
 
-
-	private void handleStartND(XMLStreamReader reader) { //TODO find out what ND stands for and change the name to something readable
+	private void handleStartND(XMLStreamReader reader) {
 		long ref = Long.parseLong(reader.getAttributeValue(null, "ref"));
 		currentWay.add(idToNode.get(ref));
 	}

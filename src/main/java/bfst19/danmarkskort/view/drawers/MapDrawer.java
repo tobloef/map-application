@@ -45,7 +45,7 @@ public class MapDrawer implements Drawer {
 				drawablesToDraw = model.getWaysOfType(wayType);
 			}
 			else if (isVisibleAtZoom(drawingInfo, currentZoomLevel)) {
-				drawablesToDraw = model.getWaysOfType(wayType, getScreenBounds());
+				drawablesToDraw = model.getWaysOfType(wayType, canvas.getScreenBounds());
 			}
 			else {
 				continue;
@@ -149,30 +149,8 @@ public class MapDrawer implements Drawer {
 	}
 
 	private boolean coastlineIsVisible() {
-		return model.getWaysOfType(WayType.COASTLINE, getScreenBounds())
+		return model.getWaysOfType(WayType.COASTLINE, canvas.getScreenBounds())
 					.iterator()
 					.hasNext();
-	}
-
-	public Rectangle getScreenBounds(){
-		Bounds bounds = canvas.getBoundsInLocal();
-		Point2D min = canvas.modelCoords(bounds.getMinX(), bounds.getMinY());
-		Point2D max = canvas.modelCoords(bounds.getMaxX(), bounds.getMaxY());
-		// Needed because the model is flipped
-		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
-	}
-
-	//Test function to visualize if the KDTree works.
-	private Rectangle getSmallModelBounds(){
-		int boxsize = 100;
-		Bounds bounds = canvas.getBoundsInLocal();
-		double minX = bounds.getMinX() + bounds.getMaxX()/2 - boxsize;
-		double minY = bounds.getMinY()+ bounds.getMaxY()/2 - boxsize;
-		double maxX = bounds.getMaxX()/2 + boxsize;
-		double maxY = bounds.getMaxY()/2 + boxsize;
-		Point2D min = canvas.modelCoords(minX, minY);
-		Point2D max = canvas.modelCoords(maxX, maxY);
-				// Needed because the model is flipped
-		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
 	}
 }

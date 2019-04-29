@@ -4,21 +4,22 @@ import bfst19.danmarkskort.model.RoadRestriction;
 import bfst19.danmarkskort.model.WayType;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
 public class OSMRoadWay extends OSMWay {
 	private int speedLimit;
 	private WayType type;
-	private Set<RoadRestriction> restrictions;
+	private EnumSet<RoadRestriction> restrictions;
 
 	//used for making new road based on OSMWay
-	public OSMRoadWay(OSMWay way, int speedLimit, WayType type, Set<RoadRestriction> restrictions) {
+	public OSMRoadWay(OSMWay way, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions) {
 		this(way, way.getNodes(), speedLimit, type, restrictions);
 	}
 
 	//used for splitting existing road
-	public OSMRoadWay(OSMWay way, List<? extends OSMNode> newNodes, int speedLimit, WayType type, Set<RoadRestriction> restrictions) {
+	public OSMRoadWay(OSMWay way, List<? extends OSMNode> newNodes, int speedLimit, WayType type, EnumSet<RoadRestriction> restrictions) {
 		super(way.id);
 		list = new ArrayList<>();
 		for (OSMNode node : newNodes) {
@@ -87,7 +88,7 @@ public class OSMRoadWay extends OSMWay {
 		return type;
 	}
 
-	public Set<RoadRestriction> getRestrictions() {
+	public EnumSet<RoadRestriction> getRestrictions() {
 		return restrictions;
 	}
 
