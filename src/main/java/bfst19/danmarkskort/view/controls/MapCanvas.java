@@ -80,21 +80,21 @@ public class MapCanvas extends Canvas {
 	}
 
 	private void panViewToMapBounds() {
-		if (model.modelBounds == null) {
+		if (model.getModelBounds() == null) {
 			return;
 		}
-		pan(-model.modelBounds.xMin, model.modelBounds.yMax, false);
+		pan(-model.getModelBounds().xMin, model.getModelBounds().yMax, false);
 		zoom(findInitialZoomFactor(), 0,0, false);
-		double xMargin = (getWidth() - ((model.modelBounds.xMax - model.modelBounds.xMin) / degreesLatitudePerPixel))/2;
-		double yMargin = (getHeight() - ((model.modelBounds.yMax - model.modelBounds.yMin) / degreesLatitudePerPixel))/2;
+		double xMargin = (getWidth() - ((model.getModelBounds().xMax - model.getModelBounds().xMin) / degreesLatitudePerPixel))/2;
+		double yMargin = (getHeight() - ((model.getModelBounds().yMax - model.getModelBounds().yMin) / degreesLatitudePerPixel))/2;
 		pan(xMargin, yMargin);
 		Affine transform = graphicsContext.getTransform();
 		minZoom = transform.getMxx();
 	}
 
 	private double findInitialZoomFactor() {
-		double minRequiredWidthZoom = getWidth()/(model.modelBounds.xMax -model.modelBounds.xMin);
-		double minRequiredHeightZoom = getHeight()/(model.modelBounds.yMax -model.modelBounds.yMin);
+		double minRequiredWidthZoom = getWidth()/(model.getModelBounds().xMax -model.getModelBounds().xMin);
+		double minRequiredHeightZoom = getHeight()/(model.getModelBounds().yMax -model.getModelBounds().yMin);
 		double extraMarginFactor = 0.5; //if more than 1.0, the margin will become negative
 		double smallestRequiredZoom = minRequiredWidthZoom < minRequiredHeightZoom ? minRequiredWidthZoom : minRequiredHeightZoom;
 		return smallestRequiredZoom * extraMarginFactor;

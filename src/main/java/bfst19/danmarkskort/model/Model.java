@@ -30,8 +30,7 @@ public class Model {
 	private long mouseIdleTime = 250;
 	private ScheduledExecutorService executor;
 	private ScheduledFuture<?> mouseIdleTask;
-
-	public Rectangle modelBounds;
+	private Rectangle modelBounds;
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -58,7 +57,6 @@ public class Model {
 	public void addMouseIdleObserver(Consumer<Boolean> observer) {
 		mouseIdleObservers.add(observer);
 	}
-
 
 	public void notifyMouseIdleObservers(boolean isIdle) {
 		for (Consumer<Boolean> observer : mouseIdleObservers) {
@@ -209,8 +207,6 @@ public class Model {
 		notifyWayTypeObservers();
 	}
 
-
-
 	public List<? extends Drawable> getShortestPath() {
 		if (shortestPath != null){
 			return shortestPath;
@@ -306,5 +302,9 @@ public class Model {
 	private void addPOIAtPosition(float mouseX, float mouseY) {
 		PointOfInterest pointOfInterest = new PointOfInterest(mouseX, mouseY);
 		this.insert(WayType.POI, pointOfInterest);
+	}
+
+	public Rectangle getModelBounds() {
+		return modelBounds;
 	}
 }
