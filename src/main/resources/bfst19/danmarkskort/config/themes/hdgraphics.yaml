@@ -19,16 +19,30 @@
 
 - TREES:
     fillColor:
-    texture: "textures/forest-texture.jpg"
+    texture: "textures/woods.jpg"
 
 - GRASS:
     fillColor:
-    texture: "textures/grass.jpg"
+    texture: "textures/woods.jpg"
+
+- MEADOW:
+    fillcolor:
+    texture: "textures/stylised.jpg"
+
+- HEATH:
+    fillcolor:
+    texture: "textures/stylised.jpg"
 
 - FARMLAND:
     fillColor:
-    texture: "textures/farmland.jpg"
+    texture: "textures/farm.jpg"
 
 - SAND:
     fillColor:
-    texture: "textures/coastline-seamless.jpg"
+    texture: "textures/sand.jpg"
+
+- MOTORWAY:
+      fillColor:
+      strokeColor: "E43D1A"
+      lineWidth: 0.0005
+      zoomLevel:

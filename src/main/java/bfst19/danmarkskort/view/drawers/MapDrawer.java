@@ -14,7 +14,7 @@ public class MapDrawer implements Drawer {
 	private GraphicsContext graphicsContext;
 	private Model model;
 	private Rectangle textureDefaultRect;
-	private double textureScaleFactor = 10000;
+	private double textureScaleFactor = 50000;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
@@ -84,7 +84,7 @@ public class MapDrawer implements Drawer {
 		}
 		if (drawingInfo.hasTexture()) {
 			double width = (textureDefaultRect.xMax - textureDefaultRect.xMin) / textureScaleFactor;
-			double height = (textureDefaultRect.yMax - textureDefaultRect.yMin) / textureScaleFactor;
+			double height = -(textureDefaultRect.yMax - textureDefaultRect.yMin) / textureScaleFactor;
 			double modelX = (textureDefaultRect.xMin + (width/2));
 			double modelY = (textureDefaultRect.yMin + (height/2));
 			ImagePattern scaledImg = new ImagePattern(
