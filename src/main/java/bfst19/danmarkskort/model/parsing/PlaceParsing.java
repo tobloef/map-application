@@ -16,6 +16,7 @@ public class PlaceParsing {
     private static final String directory = "data/places/";
 
     private static Map<String, ObjectOutputStream> streetOutputStreams = new HashMap<>();
+    private static List<String> fileListCache;
 
     public static void savePlace(Place place) throws IOException {
         Address address = place.getAddress();
@@ -31,6 +32,7 @@ public class PlaceParsing {
             streetOutputStreams.put(key, outputStream);
         }
         streetOutputStreams.get(key).writeObject(place);
+        fileListCache = null;
     }
 
     public static List<Place> loadPlaces(String street, String city) throws IOException, ClassNotFoundException {
@@ -97,14 +99,16 @@ public class PlaceParsing {
     }
 
     public static List<String> getDecodedFileList() {
-        List<String> list = new ArrayList<>();
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        for (String str : getFileList()) {
-            String replace = str.replace(".ser", "");
-            byte[] bytes = decoder.decode(replace);
-            String s = new String(bytes, StandardCharsets.UTF_8);
-            list.add(s);
+        if (fileListCache == null) {
+            fileListCache = new ArrayList<>();
+            Base64.Decoder decoder = Base64.getUrlDecoder();
+            for (String str : getFileList()) {
+                String replace = str.replace(".ser", "");
+                byte[] bytes = decoder.decode(replace);
+                String s = new String(bytes, StandardCharsets.UTF_8);
+                fileListCache.add(s);
+            }
         }
-        return list;
+        return fileListCache;
     }
 }

@@ -1,25 +1,44 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.parsing.AddressParser;
 import bfst19.danmarkskort.model.parsing.PlaceParsing;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class AddressSearch {
-    public static void test() {
-        List<String> cities = getCities("Hf. Musikbyen");
-    }
+    private static List<String> fileList;
 
-    public List<String> getRecommendations(String query) {
+    public static Place test() {
+        try {
+            Address address = queryToAddress("Amagerbrogade 2, 709");
+            List<String> cities = getCities(address.getStreetName());
+            String city = cities.get(0);
+            List<Place> places = getPlaces(address.getStreetName(), city);
+            for (Place place : places) {
+                Address newAddress = place.getAddress();
+                boolean streetNamesMatch = Objects.equals(newAddress.getStreetName(), address.getStreetName());
+                boolean cityMatch = Objects.equals(newAddress.getCity(), address.getStreetName());
+                boolean houseNumberMatch = Objects.equals(newAddress.getHouseNumber(), address.getHouseNumber());
+                if (streetNamesMatch && cityMatch && houseNumberMatch) {
+                    System.out.println(address);
+                    System.out.println(newAddress);
+                    return place;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
-    public Address queryToAddress(String qeury) {
+    public static List<String> getRecommendations(String query) {
         return null;
+    }
+
+    public static Address queryToAddress(String query) {
+        return AddressParser.parse(query);
     }
 
     public static List<Place> getPlaces(String streetName, String city) throws IOException, ClassNotFoundException {
@@ -27,7 +46,7 @@ public class AddressSearch {
     }
 
     public static List<String> getCities(String streetName) {
-        List<String> list = new ArrayList<>();
+        Set<String> set = new HashSet<>();
         for (String str : PlaceParsing.getDecodedFileList()) {
             if (!str.toLowerCase().startsWith(streetName.toLowerCase() + "_")) {
                 continue;
@@ -36,29 +55,29 @@ public class AddressSearch {
             if (substring.equals("null")) {
                 continue;
             }
-            list.add(substring);
+            set.add(substring);
         }
-        return list;
+        return new ArrayList<>(set);
     }
 
     public static List<String> getStreets() {
-        List<String> list = new ArrayList<>();
+        Set<String> set = new HashSet<>();
         for (String str : PlaceParsing.getDecodedFileList()) {
             String substring = str.substring(0, str.indexOf("_"));
-            list.add(substring);
+            set.add(substring);
         }
-        return list;
+        return new ArrayList<>(set);
     }
 
     public static List<String> getStreets(String city) {
-        List<String> list = new ArrayList<>();
+        Set<String> set = new HashSet<>();
         for (String str : PlaceParsing.getDecodedFileList()) {
             if (!str.toLowerCase().endsWith("_" + city.toLowerCase())) {
                 continue;
             }
             String substring = str.substring(0, str.indexOf("_"));
-            list.add(substring);
+            set.add(substring);
         }
-        return list;
+        return new ArrayList<>(set);
     }
 }
