@@ -5,23 +5,22 @@ import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
-
-import java.util.ArrayList;
-
-import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 
 public class MapDrawer implements Drawer {
 	private MapCanvas canvas;
 	private GraphicsContext graphicsContext;
 	private Model model;
+	private Rectangle textureDefaultRect;
+	private double textureScaleFactor = 10000;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
+		textureDefaultRect = getSmallModelBounds();
 	}
 
 	public void draw() {
@@ -83,9 +82,20 @@ public class MapDrawer implements Drawer {
 		if (drawingInfo.hasFillColor()) {
 			fill = drawingInfo.getFillColor();
 		}
-		// TODO: Add clause to see if textures are enabled.
 		if (drawingInfo.hasTexture()) {
-			fill = drawingInfo.getTexture();
+			double width = (textureDefaultRect.xMax - textureDefaultRect.xMin) / textureScaleFactor;
+			double height = (textureDefaultRect.yMax - textureDefaultRect.yMin) / textureScaleFactor;
+			double modelX = (textureDefaultRect.xMin + (width/2));
+			double modelY = (textureDefaultRect.yMin + (height/2));
+			ImagePattern scaledImg = new ImagePattern(
+					drawingInfo.getTexture().getImage(),
+					modelX,
+					modelY,
+					width,
+					height,
+					false
+			);
+			fill = fill = scaledImg;
 		}
 		if (fill == null) {
 			return;
