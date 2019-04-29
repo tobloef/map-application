@@ -1,6 +1,5 @@
 package bfst19.danmarkskort.view.controls;
 
-import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Rectangle;
 import bfst19.danmarkskort.view.drawers.*;
@@ -13,12 +12,6 @@ import javafx.scene.transform.Affine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 public class MapCanvas extends Canvas {
 	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
@@ -64,7 +57,12 @@ public class MapCanvas extends Canvas {
 		updateLineWidth();
 		for (Drawer drawer : drawers) {
 			if (drawer.getEnabled()) {
-				drawer.draw();
+				graphicsContext.save();
+				try {
+					drawer.draw();
+				} finally {
+					graphicsContext.restore();
+				}
 			}
 		}
 	}
@@ -112,6 +110,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	public void pan(double deltaX, double deltaY, boolean shouldRepaint) {
+		model.updateMouseIdle();
 		Affine transform = graphicsContext.getTransform();
 		transform.prependTranslation(deltaX, deltaY);
 		graphicsContext.setTransform(transform);
@@ -125,6 +124,7 @@ public class MapCanvas extends Canvas {
 	}
 
 	public void zoom(double factor, double x, double y, boolean shouldRepaint) {
+		model.updateMouseIdle();
 		Affine transform = graphicsContext.getTransform();
 		factor = clampZoom(factor, transform);
 		if (factor == 1) {

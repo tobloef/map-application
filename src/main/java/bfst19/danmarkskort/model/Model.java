@@ -27,7 +27,7 @@ public class Model {
 	private VehicleType currentVehicleType = VehicleType.CAR;
 	private List<Runnable> wayTypeObservers = new ArrayList<>();
 	private List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
-	private long mouseIdleTime = 100;
+	private long mouseIdleTime = 250;
 	private ScheduledExecutorService executor;
 	private ScheduledFuture<?> mouseIdleTask;
 
@@ -183,7 +183,7 @@ public class Model {
 		return mouseScreenY;
 	}
 
-	private void updateMouseIdle() {
+	public void updateMouseIdle() {
 		notifyMouseIdleObservers(false);
 		// Re-schedule the drawer to be shown after a period of no movement.
 		if (mouseIdleTask != null) {
@@ -241,23 +241,49 @@ public class Model {
 		updateShortestPath();
 	}
 
-	public PolyRoad getClosestRoad() {
-		return getClosestRoad(mouseModelX, mouseModelY);
-	}
-
-	private PolyRoad getClosestRoad(float x, float y) {
+	public PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
-			if (close == null || !(close instanceof PolyRoad)){
+			if (!(close instanceof PolyRoad)){
 				continue;
 			}
-
 			PolyRoad closeRoad = (PolyRoad)close;
-			if (closestRoad == null || closestRoad.euclideanDistanceSquaredTo(x, y) > closeRoad.euclideanDistanceSquaredTo(x, y)) {
+			if (closestRoad == null) {
 				closestRoad = closeRoad;
+				continue;
 			}
+			boolean isCloser = closestRoad.euclideanDistanceSquaredTo(x, y) > closeRoad.euclideanDistanceSquaredTo(x, y);
+			if (!isCloser) {
+				continue;
+			}
+			closestRoad = closeRoad;
 
+		}
+
+		return closestRoad;
+	}
+
+	public PolyRoad getClosestRoadWithStreetName(float x, float y) {
+		PolyRoad closestRoad = null;
+		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
+			Drawable close = getNearest(roadType, new Point2D(x,y));
+			if (!(close instanceof PolyRoad)){
+				continue;
+			}
+			PolyRoad closeRoad = (PolyRoad)close;
+			if (closeRoad.getStreetName() == null) {
+				continue;
+			}
+			if (closestRoad == null) {
+				closestRoad = closeRoad;
+				continue;
+			}
+			boolean isCloser = closestRoad.euclideanDistanceSquaredTo(x, y) > closeRoad.euclideanDistanceSquaredTo(x, y);
+			if (!isCloser) {
+				continue;
+			}
+			closestRoad = closeRoad;
 		}
 
 		return closestRoad;

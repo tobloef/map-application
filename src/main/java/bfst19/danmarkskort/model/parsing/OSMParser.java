@@ -1,13 +1,11 @@
 package bfst19.danmarkskort.model.parsing;
 
 import bfst19.danmarkskort.model.*;
-import bfst19.danmarkskort.utils.ResourceLoader;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
@@ -22,7 +20,7 @@ public class OSMParser {
 		"osak:street_name",
 	};
 
-	final private String[] placeNameKeys = new String[] {
+	final private String[] nameKeys = new String[] {
 		"name",
 	};
 
@@ -245,12 +243,12 @@ public class OSMParser {
 	private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
 		EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad(way);
 		int speedLimit = getMaxSpeed();
-		String streetName = getWithFallback(tags, streetNameKeys);
+		String streetName = getWithFallback(tags, nameKeys);
 		return new OSMRoadWay(way, newNodes, streetName, speedLimit, currentType, restrictions);
 	}
 
 	private EnumSet<RoadRestriction> getRestrictionsOfRoad(OSMWay way) {
-		EnumSet<RoadRestriction> restrictions =EnumSet.noneOf(RoadRestriction.class);
+		EnumSet<RoadRestriction> restrictions = EnumSet.noneOf(RoadRestriction.class);
 		if (tags.containsKey("highway")){
 			RoadRestriction vehicleRestriction = getVehicleRestriction();
 			if (vehicleRestriction != null){
@@ -384,7 +382,7 @@ public class OSMParser {
 		}
 		float lat = positionNode.getLat();
 		float lon = positionNode.getLon();
-		String placeName = getWithFallback(tags, placeNameKeys);
+		String placeName = getWithFallback(tags, nameKeys);
 		String streetName = getWithFallback(tags, streetNameKeys);
 		String houseNumber = getWithFallback(tags, houseNumberKeys);
 		String city = getWithFallback(tags, cityKeys);
