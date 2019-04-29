@@ -164,8 +164,7 @@ public class MapCanvas extends Canvas {
 		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
 	}
 
-	//Test function to visualize if the KDTree works.
-	private Rectangle getSmallModelBounds(){
+	public Rectangle getSmallModelBounds(){
 		int boxsize = 100;
 		Bounds bounds = this.getBoundsInLocal();
 		double minX = bounds.getMinX() + bounds.getMaxX()/2 - boxsize;

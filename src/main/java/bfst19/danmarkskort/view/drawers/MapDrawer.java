@@ -14,13 +14,13 @@ public class MapDrawer implements Drawer {
 	private GraphicsContext graphicsContext;
 	private Model model;
 	private Rectangle textureDefaultRect;
-	private double textureScaleFactor = 50000;
+	private final double textureScaleFactor = 10000;
 
 	public MapDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
-		textureDefaultRect = getSmallModelBounds();
+		textureDefaultRect = new Rectangle(model.modelBounds);
 	}
 
 	public void draw() {
@@ -95,7 +95,7 @@ public class MapDrawer implements Drawer {
 					height,
 					false
 			);
-			fill = fill = scaledImg;
+			fill = scaledImg;
 		}
 		if (fill == null) {
 			return;
