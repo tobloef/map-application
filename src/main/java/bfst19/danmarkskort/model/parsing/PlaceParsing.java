@@ -8,6 +8,7 @@ import bfst19.danmarkskort.utils.ResourceLoader;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static bfst19.danmarkskort.utils.FileUtils.deleteDirectory;
 
@@ -32,10 +33,14 @@ public class PlaceParsing {
         streetOutputStreams.get(key).writeObject(place);
     }
 
-    public static Place[] loadPlaces(String street, String city) throws IOException, ClassNotFoundException {
+    public static List<Place> loadPlaces(String street, String city) throws IOException, ClassNotFoundException {
         List<Place> places = new ArrayList<>();
         String key = getKey(street, city);
         String path = getPath(key);
+        File file = new File(path);
+        if (!file.exists()) {
+            return places;
+        }
         InputStream inputStream = new FileInputStream(path);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
@@ -48,7 +53,7 @@ public class PlaceParsing {
                 }
             }
         }
-        return places.toArray(new Place[0]);
+        return places;
     }
 
     private static String getPath(String key) {
@@ -74,5 +79,32 @@ public class PlaceParsing {
 
     public static void removeSavedPlaces() {
         deleteDirectory(directory);
+    }
+
+    public static List<String> getFileList() {
+        List<String> fileNames = new ArrayList<>();
+        File folder = new File(directory);
+        File[] fileArray = folder.listFiles();
+        if (fileArray == null) {
+            return fileNames;
+        }
+        for (File aFileArray : fileArray) {
+            if (aFileArray.isFile()) {
+                fileNames.add(aFileArray.getName());
+            }
+        }
+        return fileNames;
+    }
+
+    public static List<String> getDecodedFileList() {
+        List<String> list = new ArrayList<>();
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        for (String str : getFileList()) {
+            String replace = str.replace(".ser", "");
+            byte[] bytes = decoder.decode(replace);
+            String s = new String(bytes, StandardCharsets.UTF_8);
+            list.add(s);
+        }
+        return list;
     }
 }

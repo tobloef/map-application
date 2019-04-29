@@ -69,6 +69,8 @@ public class OSMParser {
 		removeSavedPlaces();
 		parseOSM(osmSource);
 		doneParsing();
+
+		AddressSearch.test();
 	}
 
 	private void doneParsing() {
