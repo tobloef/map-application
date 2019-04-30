@@ -66,6 +66,8 @@ public class ThemeLoader {
         Wrapper<Color> strokeColor = null;
         Wrapper<Double> lineDash = null;
         Wrapper<Double> lineWidth = null;
+        Wrapper<Double> lineWidthMax = null;
+        Wrapper<Double> lineWidthMin = null;
         Wrapper<Double> zoomLevel = null;
         Wrapper<Boolean> alwaysDraw = null;
         Wrapper<ImagePattern> texture = null;
@@ -81,6 +83,12 @@ public class ThemeLoader {
         if (themeValuesMap.containsKey("lineWidth")) {
             lineWidth = new Wrapper<>(parseDouble(themeValuesMap, "lineWidth"));
         }
+        if (themeValuesMap.containsKey("lineWidthMax")) {
+            lineWidthMax = new Wrapper<>(parseDouble(themeValuesMap, "lineWidthMax"));
+        }
+        if (themeValuesMap.containsKey("lineWidthMin")) {
+            lineWidthMin = new Wrapper<>(parseDouble(themeValuesMap, "lineWidthMin"));
+        }
         if (themeValuesMap.containsKey("zoomLevel")) {
             zoomLevel = new Wrapper<>(parseDouble(themeValuesMap, "zoomLevel"));
         }
@@ -95,6 +103,8 @@ public class ThemeLoader {
                 strokeColor,
                 lineDash,
                 lineWidth,
+                lineWidthMax,
+                lineWidthMin,
                 zoomLevel,
                 alwaysDraw,
                 texture
