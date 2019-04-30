@@ -25,6 +25,7 @@ public class Model {
 	VehicleType currentVehicleType = VehicleType.CAR;
 	private Theme theme;
 	private boolean HDOn;
+	private String themePath;
 
 	public Theme getCurrentTheme(){
 		return theme;
@@ -32,12 +33,21 @@ public class Model {
 
 	public void toggleHDTheme(){
 		if (HDOn){
-			theme = ThemeLoader.loadTheme("config/themes/default.yaml",null);
+			theme = ThemeLoader.loadTheme(themePath, null);
 		} else {
-			theme = ThemeLoader.loadTheme("config/themes/hdgraphics.yaml", theme);
+			theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
 		}
 		HDOn = !HDOn;
 		notifyObservers();
+	}
+
+	public void changeDefaultTheme(String path){
+		themePath = path;
+		theme = ThemeLoader.loadTheme(themePath,null);
+	}
+
+	public void appendTheme(String path){
+		theme = ThemeLoader.loadTheme(path, theme);
 	}
 
 	public boolean dontDraw(WayType waytype){
@@ -92,16 +102,17 @@ public class Model {
 			loadDataFromArgs(args);
 		}
 		if (args.size() == 2){
-			theme = ThemeLoader.loadTheme(args.get(1), null);
+			themePath = args.get(1);
 		} else {
-			theme = ThemeLoader.loadTheme("config/themes/default.yaml",null);
+			themePath = "rs:config/themes/default.yaml";
 		}
+		theme = ThemeLoader.loadTheme(themePath, null);
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
 	}
 
 	private void loadDefaultData() throws IOException, ClassNotFoundException {
-		InputStream inputStream = ResourceLoader.getResourceAsStream("data/default.osm.ser");
+		InputStream inputStream = ResourceLoader.getResourceAsStream("rs:data/default.osm.ser");
 		try {
 			parseObj(inputStream);
 		} catch (InvalidClassException e) {

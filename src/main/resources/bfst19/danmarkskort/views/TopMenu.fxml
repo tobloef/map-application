@@ -17,5 +17,6 @@
             <MenuItem text="Points of Interest" onAction="#onPOI"/>
             <MenuItem text="HD Graphics" onAction="#onHDGraphics"/>
             <MenuItem text="Select Theme" onAction="#onSelectTheme"/>
+            <MenuItem text="Append Theme" onAction="#onAppendTheme"/>
         </Menu>
 </MenuBar>

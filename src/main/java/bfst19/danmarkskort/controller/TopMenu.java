@@ -1,6 +1,5 @@
 package bfst19.danmarkskort.controller;
 
-import bfst19.danmarkskort.Main;
 import bfst19.danmarkskort.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class TopMenu {
 
@@ -77,18 +77,34 @@ public class TopMenu {
 	private void onHDGraphics(final ActionEvent event){
 		model.toggleHDTheme();
 	}
+
 	@FXML
-	private void onSelectTheme(final ActionEvent event){
+	private void onSelectTheme(final ActionEvent event) throws IOException {
+		File file = loadAbsolutePath();
+
+		if (file != null) {
+			model.changeDefaultTheme(file.getAbsolutePath());
+		}
+	}
+
+	@FXML
+	private void onAppendTheme(final ActionEvent event) throws IOException{
+		File file = loadAbsolutePath();
+
+		if (file != null) {
+			model.appendTheme(file.getAbsolutePath());
+		}
+	}
+
+	private File loadAbsolutePath(){
 		//Create fileChooser and set default settings
+
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select map theme");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("YAML","*.yaml"));
 
-		File file = fileChooser.showOpenDialog(primaryStage);
-		System.out.println(file.getAbsolutePath());
-
-		//model.appendNewTheme(file);
+		return fileChooser.showOpenDialog(primaryStage);
 	}
 }

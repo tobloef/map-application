@@ -15,31 +15,31 @@
 
 - COASTLINE:
     fillColor:
-    texture: "textures/ground.jpg"
+    texture: "rs:textures/ground.jpg"
 
 - TREES:
     fillColor:
-    texture: "textures/woods.jpg"
+    texture: "rs:textures/woods.jpg"
 
 - GRASS:
     fillColor:
-    texture: "textures/woods.jpg"
+    texture: "rs:textures/woods.jpg"
 
 - MEADOW:
     fillcolor:
-    texture: "textures/stylised.jpg"
+    texture: "rs:textures/stylised.jpg"
 
 - HEATH:
     fillcolor:
-    texture: "textures/stylised.jpg"
+    texture: "rs:textures/stylised.jpg"
 
 - FARMLAND:
     fillColor:
-    texture: "textures/farm.jpg"
+    texture: "rs:textures/farm.jpg"
 
 - SAND:
     fillColor:
-    texture: "textures/sand.jpg"
+    texture: "rs:textures/sand.jpg"
 
 - MOTORWAY:
       fillColor:
