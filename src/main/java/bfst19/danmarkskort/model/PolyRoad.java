@@ -117,7 +117,7 @@ public class PolyRoad extends Polyline implements Serializable {
 		return findDistanceBetweenSquared(getRepresentativeX(), getRepresentativeY(), target.getRepresentativeX(), target.getRepresentativeY());
 	}
 
-	public double weightedEuclideanDistanceToSquared(PolyRoad target){
+	public double weightedEuclideanDistanceSquaredTo(PolyRoad target){
 		//130 km/t på motorveje
 		return euclideanDistanceSquaredToSqaured(target)/130;
 	}
