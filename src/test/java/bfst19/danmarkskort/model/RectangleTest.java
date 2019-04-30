@@ -51,4 +51,14 @@ class RectangleTest {
 		Rectangle rect1 = new Rectangle(0, 0, 10, 10); //The larger one
 		assertEquals((4*4)+(1), rect1.euclideanDistanceSquaredTo(14, -1), 0.02);
 	}
+
+	@Test
+	void wrongX() {
+		assertThrows( IllegalArgumentException.class, ()->new Rectangle(100, 0, 10, 10)); //The larger one
+	}
+
+	@Test
+	void wrongY() {
+		assertThrows( IllegalArgumentException.class, ()->new Rectangle(0, 100, 10, 10)); //The larger one
+	}
 }
