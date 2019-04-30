@@ -22,18 +22,18 @@ public class Route extends ArrayList<PolyRoad> {
 
 	public List<String> getTextDescription() {
 		List<String> result = new ArrayList<>();
-		PolyRoad last = null;
+		String lastName = "";
 		double summedDurationInMinutes = 0;
 		result.add("Start on " + get(0).getName());
 		for (int i = 0; i < this.size(); i++) {
 			PolyRoad road = get(i);
-			if (last == null) {
-				last = road;
+			if (lastName.equals("")) {
+				lastName = road.getName();
 				continue;
 			}
 			double durationInMinutes = road.getDurationInMinutes();
 			summedDurationInMinutes += durationInMinutes;
-			if (last.getName().equals(road.getName())) {
+			if (lastName.equals(road.getName())) {
 				continue;
 			}
 			String description = "";
@@ -43,7 +43,7 @@ public class Route extends ArrayList<PolyRoad> {
 			description += road.getName();
 			result.add(description);
 			summedDurationInMinutes = 0;
-			last = road;
+			lastName = road.getName();
 		}
 		result.add("You have arrived at your destination");
 		return result;
@@ -126,13 +126,17 @@ public class Route extends ArrayList<PolyRoad> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InvalidUserInputException e) {
-			Alert alert = new Alert(Alert.AlertType.ERROR,
-					e.getMessage(),
-					ButtonType.CLOSE);
-			alert.setTitle("Error: Wrong input");
-			alert.setHeaderText("Error: Wrong input");
-			alert.show();
+			makeAlert(e);
 		}
+	}
+
+	private void makeAlert(InvalidUserInputException e) {
+		Alert alert = new Alert(Alert.AlertType.ERROR,
+				e.getMessage(),
+				ButtonType.CLOSE);
+		alert.setTitle("Error: Wrong input");
+		alert.setHeaderText("Error: Wrong input");
+		alert.show();
 	}
 
 	public String getSuggestedFileName() {
