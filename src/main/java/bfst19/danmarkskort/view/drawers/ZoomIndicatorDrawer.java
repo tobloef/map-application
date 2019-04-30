@@ -19,7 +19,7 @@ public class ZoomIndicatorDrawer implements Drawer {
 	private int innerMargin = outerMargin;
 	private int boxWidth = 100;
 	private int boxHeight = 20;
-	int maxPixelWidth = boxWidth - (innerMargin * 2);
+	private int maxPixelWidth = boxWidth - (innerMargin * 2);
 
 	public ZoomIndicatorDrawer(MapCanvas canvas) {
 		this.canvas = canvas;
