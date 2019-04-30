@@ -58,6 +58,15 @@ public class KDTreeDrawableModel implements DrawableModel {
 		return;
 	}
 
+	@Override
+	public void doNewDataSet() {
+		if (wayTypeEnumMap == null) {
+			wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
+		}
+		initializeKDTree();
+	}
+
+
 	private void countFloats() {
 		System.out.println("Number of floats for each type");
 		for (WayType wayType : WayType.values()){

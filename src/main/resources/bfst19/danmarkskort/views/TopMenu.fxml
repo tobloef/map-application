@@ -3,8 +3,9 @@
 <?import javafx.scene.control.*?>
 <MenuBar xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
-         fx:controller="bfst19.danmarkskort.controller.TopMenu">
+         fx:controller="bfst19.danmarkskort.controller.TopMenuController">
         <Menu text="Program">
+            <MenuItem text="Load File" onAction="#onLoadFile"/>
             <MenuItem text="Help" onAction="#onHelp"/>
             <MenuItem text="About" onAction="#onAbout"/>
         </Menu>
@@ -16,5 +17,7 @@
         <Menu text="Extra">
             <MenuItem text="Points of Interest" onAction="#onPOI"/>
             <MenuItem text="HD Graphics" onAction="#onHDGraphics"/>
+            <MenuItem text="Select Theme" onAction="#onSelectTheme"/>
+            <MenuItem text="Append Theme" onAction="#onAppendTheme"/>
         </Menu>
 </MenuBar>

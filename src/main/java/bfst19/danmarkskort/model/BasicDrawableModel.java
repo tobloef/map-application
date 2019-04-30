@@ -38,6 +38,11 @@ public class BasicDrawableModel implements DrawableModel {
 	}
 
 	@Override
+	public void doNewDataSet(){
+		return;
+	}
+
+	@Override
 	public void setModelBounds(Rectangle bounds) {
 		modelBounds = bounds;
 	}

@@ -24,11 +24,11 @@ public class Controller {
 	@FXML
 	private BorderPane borderPane;
 
-	public void init(Model model) {
+	public void init(Model model, Stage stage) {
 		this.model = model;
 		mapCanvas.initialize(model);
 		WaytypeSelectorController.init(model, borderPane);
-		TopMenu.init(model);
+		TopMenuController.init(model, stage);
 	}
 
 	@FXML

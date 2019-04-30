@@ -177,10 +177,10 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		if (splitElement != null){
 			return lower.treeIsUnbalanced() || higher.treeIsUnbalanced();
 		}
-		if (leafElements != null){
-			return leafElements.size() > MAX_NODES_BEFORE_REBALANCE;
+		if (leafElements == null){
+			return false;
 		}
-		return false;
+		return leafElements.size() > MAX_NODES_BEFORE_REBALANCE;
 	}
 
 	private void insert(T insertionElement, boolean odd){

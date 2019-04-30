@@ -1,8 +1,6 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.view.drawers.MapDrawer;
-import bfst19.danmarkskort.model.InvalidUserInputException;
 import bfst19.danmarkskort.model.Route;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,24 +9,41 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.BufferedWriter;
+import javax.xml.stream.XMLStreamException;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
-public class TopMenu {
-
+public class TopMenuController {
 	private static Model model;
-	private static TopMenu singletonInstance;
-	private Stage primaryStage;
+	private static Stage primaryStage;
+	private static TopMenuController singletonInstance;
 
-	public static void init(Model modelParam){
+	public static void init(Model modelParam, Stage stage){
 		model = modelParam;
+		primaryStage = stage;
 	}
 
-	public TopMenu(){
+	public TopMenuController(){
 		singletonInstance = this;
+	}
+
+	@FXML
+	public void onLoadFile(final ActionEvent event) throws IOException, XMLStreamException, ClassNotFoundException {
+		//Create fileChooser and set default settings
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select data-file to load");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("All Files", "*.osm", "*.zip", "*.ser"),
+				new FileChooser.ExtensionFilter("OSM","*.osm"),
+				new FileChooser.ExtensionFilter("ZIP","*.zip"),
+				new FileChooser.ExtensionFilter("Serialised","*.ser"));
+
+		File file = fileChooser.showOpenDialog(primaryStage);
+		if (file != null){
+			model.loadNewDataset(file.getAbsolutePath());
+		}
 	}
 
 	@FXML
@@ -63,9 +78,7 @@ public class TopMenu {
 		fileChooser.setTitle("Select map theme");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setInitialFileName(route.getSuggestedFileName());
-
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text file","*.txt"));
-
 		File file = fileChooser.showSaveDialog(primaryStage);
 
 		route.printToFile(file);
@@ -92,4 +105,34 @@ public class TopMenu {
 	private void onHDGraphics(final ActionEvent event){
 		model.toggleHDTheme();
 	}
+
+	@FXML
+	private void onSelectTheme(final ActionEvent event) throws IOException {
+		File file = loadThemeAbsolutePath();
+
+		if (file != null) {
+			model.changeDefaultTheme(file.getAbsolutePath());
+		}
+	}
+
+	@FXML
+	private void onAppendTheme(final ActionEvent event) throws IOException{
+		File file = loadThemeAbsolutePath();
+
+		if (file != null) {
+			model.appendTheme(file.getAbsolutePath());
+		}
+	}
+
+	private File loadThemeAbsolutePath(){
+		//Create fileChooser and set default settings
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select map theme");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("YAML","*.yaml"));
+
+		return fileChooser.showOpenDialog(primaryStage);
+	}
+
 }

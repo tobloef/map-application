@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class PointOfInterest implements Drawable, SpatialIndexable, Serializable {
 	private float xCoord = 0, yCoord = 0;
-	private static String iconUrl = "textures/poi.png";
+	private static String iconUrl = "rs:textures/poi.png";
 	private static float imgFactor = 0.05f;
 	private static Image iconImg = new Image(ResourceLoader.getResourceAsStream(iconUrl));
 
