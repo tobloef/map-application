@@ -33,6 +33,7 @@ public class Controller {
 		this.model = model;
 		mapCanvas.initialize(model);
 		WaytypeSelectorController.init(model, borderPane);
+		AddressSearchController.init(model, borderPane);
 		TopMenuController.init(model, stage);
 	}
 
@@ -80,7 +81,7 @@ public class Controller {
 			}
 			case Q: {
 				PolyRoad road = model.getClosestRoad();
-				System.out.println(road.getStreetName() + " " + road.getRepresentativeX() + " " + road.getRepresentativeY());
+				System.out.println(road.getStreetNameOrDefault() + " " + road.getRepresentativeX() + " " + road.getRepresentativeY());
 			}
 		}
 	}

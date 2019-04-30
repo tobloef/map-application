@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="300.0"
+            fx:controller="bfst19.danmarkskort.controller.AddressSearchController"
+            fx:id="addressScrollPane">
+    <style>
+        -fx-background-color: #F5F5DC;
+        -fx-border-color: #000000;
+        -fx-border-width: 0px 2px 0px 0px;
+    </style>
+    <VBox fx:id="addressLayoutBox">
+
+    </VBox>
+</ScrollPane>

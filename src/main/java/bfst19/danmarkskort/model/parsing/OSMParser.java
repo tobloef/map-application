@@ -415,14 +415,14 @@ public class OSMParser {
                 .postCode(getWithFallback(tags, postCodeKeys))
                 .build();
         Place place = new Place(id, lat, lon, placeName, address);
-        if (address.getStreetName() == null) {
+        if (address.getStreetName() == null || address.getCity() == null) {
             return;
         }
-        try {
+        /*try {
             PlaceParsing.savePlace(place);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private long getPlaceOSMId() {

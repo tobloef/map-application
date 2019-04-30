@@ -15,9 +15,9 @@ import java.util.List;
 
 public class WaytypeSelectorController {
 	@FXML
-	private VBox layoutBox;
+	private VBox wayTypeLayoutBox;
 	@FXML
-	private ScrollPane scrollPane;
+	private ScrollPane waytypeScrollPane;
 	private BorderPane borderPane;
 
 	private List<CheckBox> waytypeSelectors = new ArrayList<>();
@@ -39,16 +39,16 @@ public class WaytypeSelectorController {
 	}
 
 	private void loadWaytypes(){
-		borderPane.setRight(scrollPane);
-		scrollPane.setContent(layoutBox);
-		scrollPane.setPannable(true);
+		borderPane.setRight(waytypeScrollPane);
+		waytypeScrollPane.setContent(wayTypeLayoutBox);
+		waytypeScrollPane.setPannable(true);
 
 		buildCheckboxes();
 	}
 
 	private void buildCheckboxes(){
 		for (CheckBox checkBox: waytypeSelectors){
-			layoutBox.getChildren().remove(checkBox);
+			wayTypeLayoutBox.getChildren().remove(checkBox);
 		}
 		waytypeSelectors.removeAll(waytypeSelectors);
 		for (WayType wayType: WayType.values()) {
@@ -59,7 +59,7 @@ public class WaytypeSelectorController {
 					(observable, oldValue, newValue) -> {
 						model.toggleBlacklistWaytype(wayType);
 					});
-			layoutBox.getChildren().add(checkBox);
+			wayTypeLayoutBox.getChildren().add(checkBox);
 			waytypeSelectors.add(checkBox);
 		}
 	}
@@ -86,8 +86,8 @@ public class WaytypeSelectorController {
 	}
 
 	private void removeUI(){
-		layoutBox.getChildren().removeAll();
-		scrollPane.setContent(null);
+		wayTypeLayoutBox.getChildren().removeAll();
+		waytypeScrollPane.setContent(null);
 		borderPane.setRight(null);
 	}
 }

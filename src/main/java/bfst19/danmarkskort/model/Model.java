@@ -35,28 +35,52 @@ public class Model {
     private boolean HDOn;
     private String themePath;
 
-    public Theme getCurrentTheme(){
-        return theme;
+	//Code duplication, sorry
+	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
+		System.out.println("Loading data...");
+		long time = -System.nanoTime();
+		if (args.size() == 0) {
+			loadDefaultData();
+		} else {
+			loadDataFromArgs(args);
+		}
+		if (args.size() == 2){
+			themePath = args.get(1);
+		} else {
+			themePath = "rs:config/themes/default.yaml";
+		}
+		theme = ThemeLoader.loadTheme(themePath, null);
+		time += System.nanoTime();
+		System.out.printf("Load time: %.1fs\n", time / 1e9);
+        executor = Executors.newSingleThreadScheduledExecutor();
     }
 
-    public void toggleHDTheme(){
-        if (HDOn){
-            theme = ThemeLoader.loadTheme(themePath, null);
-        } else {
-            theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
-        }
-        HDOn = !HDOn;
-        notifyWayTypeObservers();
-    }
+    public void cleanup() {
+		executor.shutdownNow();
+	}
 
-    public void changeDefaultTheme(String path){
-        themePath = path;
-        theme = ThemeLoader.loadTheme(themePath,null);
-    }
+	public Theme getCurrentTheme(){
+		return theme;
+	}
 
-    public void appendTheme(String path){
-        theme = ThemeLoader.loadTheme(path, theme);
-    }
+	public void toggleHDTheme(){
+		if (HDOn){
+			theme = ThemeLoader.loadTheme(themePath, null);
+		} else {
+			theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
+		}
+		HDOn = !HDOn;
+		notifyWayTypeObservers();
+	}
+
+	public void changeDefaultTheme(String path){
+		themePath = path;
+		theme = ThemeLoader.loadTheme(themePath,null);
+	}
+
+	public void appendTheme(String path){
+		theme = ThemeLoader.loadTheme(path, theme);
+	}
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -111,34 +135,14 @@ public class Model {
 	}
 
 	public void fillBlacklist(){
-        blacklistedWaytypes.addAll(Arrays.asList(WayType.values()));
-        notifyWayTypeObservers();
+		blacklistedWaytypes.addAll(Arrays.asList(WayType.values()));
+		notifyWayTypeObservers();
 	}
 
 	public void notifyReloadObservers() {
 		for (Runnable observer : reloadObservers) observer.run();
 	}
 
-	//Code duplication, sorry
-	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
-		System.out.println("Loading data...");
-		long time = -System.nanoTime();
-		if (args.size() == 0) {
-			loadDefaultData();
-		} else {
-			loadDataFromArgs(args);
-		}
-		if (args.size() == 2){
-			themePath = args.get(1);
-		} else {
-			themePath = "rs:config/themes/default.yaml";
-		}
-		theme = ThemeLoader.loadTheme(themePath, null);
-		time += System.nanoTime();
-		System.out.printf("Load time: %.1fs\n", time / 1e9);
-        executor = Executors.newSingleThreadScheduledExecutor();
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> executor.shutdown()));
-    }
 
 	public void loadNewDataset(String argumentPath) throws IOException, XMLStreamException, ClassNotFoundException{
 		System.out.println("Loading data...");

@@ -8,7 +8,6 @@ import bfst19.danmarkskort.utils.ResourceLoader;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static bfst19.danmarkskort.utils.FileUtils.deleteDirectory;
 
@@ -71,6 +70,7 @@ public class PlaceParsing {
     }
 
     public static void closeStreams() throws IOException {
+        System.out.println("Had " + streetOutputStreams.size() + " streams");
         for (ObjectOutputStream stream : streetOutputStreams.values()) {
             stream.close();
         }

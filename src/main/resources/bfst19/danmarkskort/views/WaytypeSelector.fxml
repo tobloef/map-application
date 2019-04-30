@@ -6,13 +6,13 @@
       xmlns:fx="http://javafx.com/fxml"
       prefWidth="210.0"
       fx:controller="bfst19.danmarkskort.controller.WaytypeSelectorController"
-      fx:id="scrollPane">
+      fx:id="waytypeScrollPane">
       <style>
             -fx-background-color: #F5F5DC;
             -fx-border-color: #000000;
             -fx-border-width: 0px 0px 0px 2px;
       </style>
-      <VBox fx:id="layoutBox">
+      <VBox fx:id="wayTypeLayoutBox">
           <Label text="Way types" style="-fx-font-size: 1.5em; -fx-font-weight: bold;"/>
           <Button text="Enable all waytypes" onAction="#onEnableAll" style="-fx-font-weight: bold"/>
           <Button text="Disable all waytypes" onAction="#onDisableAll" style="-fx-font-weight: bold"/>

@@ -40,6 +40,9 @@
                 <right>
                     <fx:include source="WaytypeSelector.fxml"/>
                 </right>
+                <left>
+                    <fx:include source="AddressSearch.fxml"/>
+                </left>
             </BorderPane>
 </Scene>
 
