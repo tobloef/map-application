@@ -27,6 +27,7 @@ public class Controller {
 		this.model = model;
 		mapCanvas.initialize(model);
 		waytypeSelectorController.init(model, borderPane);
+		TopMenu.init(model);
 	}
 
 	@FXML
