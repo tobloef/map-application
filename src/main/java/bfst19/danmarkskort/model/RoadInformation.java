@@ -19,16 +19,10 @@ public class RoadInformation {
 		allowedRoadTypes.get(VehicleType.CAR).add(WayType.LIVING_STREET);
 		allowedRoadTypes.get(VehicleType.CAR).add(WayType.SECONDARY_ROAD);
 		allowedRoadTypes.get(VehicleType.CAR).add(WayType.UNCLASSIFIED_ROAD);
-		allowedRoadTypes.get(VehicleType.CAR).add(WayType.ROUNDABOUT);
 		allowedRoadTypes.get(VehicleType.CAR).add(WayType.PRIMARY_ROAD);
 		allowedRoadTypes.get(VehicleType.CAR).add(WayType.MOTORWAY);
-		allowedRoadTypes.get(VehicleType.CAR).add(WayType.TERTIARY_ROAD_EXIT);
-		allowedRoadTypes.get(VehicleType.CAR).add(WayType.SECONDARY_ROAD_EXIT);
-		allowedRoadTypes.get(VehicleType.CAR).add(WayType.PRIMARY_ROAD_EXIT);
-		allowedRoadTypes.get(VehicleType.CAR).add(WayType.MOTORWAY_EXIT);
 		allowedRoadTypes.get(VehicleType.WALKING).addAll(getRoadTypes());
 		allowedRoadTypes.get(VehicleType.WALKING).remove(WayType.MOTORWAY);
-		allowedRoadTypes.get(VehicleType.WALKING).remove(WayType.MOTORWAY_EXIT);
 		allowedRoadTypes.get(VehicleType.BICYCLE).addAll(allowedRoadTypes.get(VehicleType.WALKING));
 		return allowedRoadTypes;
 	}
@@ -46,15 +40,10 @@ public class RoadInformation {
 		roadTypes.add(WayType.LIVING_STREET);
 		roadTypes.add(WayType.SECONDARY_ROAD);
 		roadTypes.add(WayType.UNCLASSIFIED_ROAD);
-		roadTypes.add(WayType.ROUNDABOUT);
 		roadTypes.add(WayType.PRIMARY_ROAD);
 		roadTypes.add(WayType.PEDESTRIAN);
 		roadTypes.add(WayType.RACEWAY);
 		roadTypes.add(WayType.MOTORWAY);
-		roadTypes.add(WayType.TERTIARY_ROAD_EXIT);
-		roadTypes.add(WayType.SECONDARY_ROAD_EXIT);
-		roadTypes.add(WayType.PRIMARY_ROAD_EXIT);
-		roadTypes.add(WayType.MOTORWAY_EXIT);
 		roadTypes.add(WayType.CYCLEWAY);
 		return roadTypes;
 	}

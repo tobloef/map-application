@@ -10,6 +10,8 @@ public class DrawingInfo {
     private Wrapper<Color> strokeColorWrapper;
     private Wrapper<Double> lineDashWrapper;
     private Wrapper<Double> lineWidthWrapper;
+    private Wrapper<Double> lineWidthMaxWrapper;
+    private Wrapper<Double> lineWidthMinWrapper;
     private Wrapper<Double> zoomLevelWrapper;
     private Wrapper<Boolean> alwaysDrawWrapper;
     private Wrapper<ImagePattern> textureWrapper;
@@ -19,6 +21,8 @@ public class DrawingInfo {
             Wrapper<Color> strokeColorWrapper,
             Wrapper<Double> lineDashWrapper,
             Wrapper<Double> lineWidthWrapper,
+            Wrapper<Double> lineWidthMaxWrapper,
+            Wrapper<Double> lineWidthMinWrapper,
             Wrapper<Double> zoomLevelWrapper,
             Wrapper<Boolean> alwaysDrawWrapper,
             Wrapper<ImagePattern> textureWrapper
@@ -27,6 +31,8 @@ public class DrawingInfo {
         this.strokeColorWrapper = strokeColorWrapper;
         this.lineDashWrapper = lineDashWrapper;
         this.lineWidthWrapper = lineWidthWrapper;
+        this.lineWidthMaxWrapper = lineWidthMaxWrapper;
+        this.lineWidthMinWrapper = lineWidthMinWrapper;
         this.zoomLevelWrapper = zoomLevelWrapper;
         this.alwaysDrawWrapper = alwaysDrawWrapper;
         this.textureWrapper = textureWrapper;
@@ -38,6 +44,8 @@ public class DrawingInfo {
                 pickNotNull(other.getStrokeColorWrapper(), this.getStrokeColorWrapper()),
                 pickNotNull(other.getLineDashWrapper(), this.getLineDashWrapper()),
                 pickNotNull(other.getLineWidthWrapper(), this.getLineWidthWrapper()),
+                pickNotNull(other.getLineWidthMaxWrapper(), this.getLineWidthMaxWrapper()),
+                pickNotNull(other.getLineWidthMinWrapper(), this.getLineWidthMinWrapper()),
                 pickNotNull(other.getZoomLevelWrapper(), this.getZoomLevelWrapper()),
                 pickNotNull(other.getAlwaysDrawWrapper(), this.getAlwaysDrawWrapper()),
                 pickNotNull(other.getTextureWrapper(), this.getTextureWrapper())
@@ -111,6 +119,14 @@ public class DrawingInfo {
         return lineWidthWrapper;
     }
 
+    public Wrapper<Double> getLineWidthMaxWrapper() {
+        return lineWidthMaxWrapper;
+    }
+
+    public Wrapper<Double> getLineWidthMinWrapper() {
+        return lineWidthMinWrapper;
+    }
+
     public Wrapper<Double> getZoomLevelWrapper() {
         return zoomLevelWrapper;
     }
@@ -153,4 +169,18 @@ public class DrawingInfo {
         return textureWrapper != null && textureWrapper.getValue() != null;
     }
 
+
+    public double calculateLineWidth(double currentZoomLevel) {
+        if (lineWidthMaxWrapper == null || lineWidthMinWrapper == null){
+            return lineWidthWrapper.getValue();
+        }
+        double lineWidth = lineWidthWrapper.getValue() * currentZoomLevel;
+        if (lineWidth < lineWidthMinWrapper.getValue()){
+            lineWidth = lineWidthMinWrapper.getValue();
+        }
+        if (lineWidth > lineWidthMaxWrapper.getValue()){
+            lineWidth = lineWidthMaxWrapper.getValue();
+        }
+        return lineWidth;
+    }
 }

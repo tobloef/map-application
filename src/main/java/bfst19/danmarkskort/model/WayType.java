@@ -53,18 +53,11 @@ public enum WayType {
 	//Navigable stuff that isnt roads.
 	BRIDGE,
 
-	// Exits
-	TERTIARY_ROAD_EXIT,
-	SECONDARY_ROAD_EXIT,
-	PRIMARY_ROAD_EXIT,
-	MOTORWAY_EXIT,
-
 	// Roads
 	RESIDENTIAL_ROAD,
 	TERTIARY_ROAD,
 	SERVICE_ROAD,
 	UNCLASSIFIED_ROAD,
-	ROUNDABOUT,
 	LIVING_STREET,
 	SECONDARY_ROAD,
 	PRIMARY_ROAD,
@@ -77,9 +70,6 @@ public enum WayType {
 	// Abstract Paths
 	MARKING, //TODO: Skal have en tykkelse
 	TRACK,
-	FERRY,
-	TOUR,
-	BUS_GUIDEWAY,
 	FOOTWAY,
 	BRIDLEWAY,
 	CYCLEWAY,

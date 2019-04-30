@@ -127,7 +127,7 @@ public class MapDrawer implements Drawer {
 			graphicsContext.setLineDashes(drawingInfo.getLineDash() / 10000);
 		}
 		if (drawingInfo.hasLineWidth()){
-			graphicsContext.setLineWidth(drawingInfo.getLineWidth());
+			graphicsContext.setLineWidth(drawingInfo.calculateLineWidth(currentZoomLevel));
 		}
 		for (Drawable drawable : drawables){
 			drawable.stroke(graphicsContext, currentZoomLevel);
