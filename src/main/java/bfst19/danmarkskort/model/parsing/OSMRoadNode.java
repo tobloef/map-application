@@ -1,14 +1,14 @@
 package bfst19.danmarkskort.model.parsing;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OSMRoadNode extends OSMNode{
-	private Set<OSMRoadWay> connections;
+	private List<OSMRoadWay> connections;
 
 	public OSMRoadNode(OSMNode node) {
 		super(node.getAsLong(), node.getLon(), node.getLat());
-		connections = new HashSet<>();
+		connections = new ArrayList<>();
 	}
 
 	public void add(OSMRoadWay newConnection) {
@@ -22,7 +22,7 @@ public class OSMRoadNode extends OSMNode{
 		return connections.size();
 	}
 
-	public Set<OSMRoadWay> getConnections() {
+	public List<OSMRoadWay> getConnections() {
 		return connections;
 	}
 

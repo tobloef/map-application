@@ -29,8 +29,8 @@ public class OSMRelation {
 	}
 
 	private static Collection<OSMWay> newMerge(Collection<OSMWay> inputList){
-		Map<OSMNode, OSMWay> piecesStarts = new HashMap<>();
-		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
+		Map<Long, OSMWay> piecesStarts = new HashMap<>();
+		Map<Long, OSMWay> piecesEnds = new HashMap<>();
 		for (OSMWay currentWay : inputList){
 			OSMWay result = new OSMWay(0);
 			reverseIfWayIsWrongDirection(piecesStarts, piecesEnds, currentWay);
@@ -45,8 +45,8 @@ public class OSMRelation {
 			mergeWithPriorResults(piecesStarts, piecesEnds, result);
 
 			//Add current result to the map of pieces.
-			piecesStarts.put(result.getFirst(), result);
-			piecesEnds.put(result.getLast(), result);
+			piecesStarts.put(result.getFirst().getAsLong(), result);
+			piecesEnds.put(result.getLast().getAsLong(), result);
 		}
 
 		List<OSMWay> finalElements = mergeMaps(piecesEnds);
@@ -56,54 +56,54 @@ public class OSMRelation {
 	}
 
 	//Merge the the results of the two maps, should be the same elements in both, but just to be sure.
-	private static List<OSMWay> mergeMaps(Map<OSMNode, OSMWay> piecesEnds) {
+	private static List<OSMWay> mergeMaps(Map<Long, OSMWay> piecesEnds) {
 		Set<OSMWay> finalElementsSet = new LinkedHashSet<>();
 		finalElementsSet.addAll(piecesEnds.values());
 		finalElementsSet.addAll(piecesEnds.values());
 		return new ArrayList<>(finalElementsSet);
 	}
 
-	private static void reverseIfWayIsWrongDirection(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay way) {
-		if (piecesStarts.containsKey(way.getFirst()) || piecesEnds.containsKey(way.getLast())){
+	private static void reverseIfWayIsWrongDirection(Map<Long, OSMWay> piecesStarts, Map<Long, OSMWay> piecesEnds, OSMWay way) {
+		if (piecesStarts.containsKey(way.getFirst().getAsLong()) || piecesEnds.containsKey(way.getLast().getAsLong())){
 			way.reverse();
 		}
 	}
 
-	private static void mergeWithPriorResults(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay res) {
+	private static void mergeWithPriorResults(Map<Long, OSMWay> piecesStarts, Map<Long, OSMWay> piecesEnds, OSMWay res) {
 		mergeResultsBefore(piecesStarts, piecesEnds, res);
 		mergeResultsAfter(piecesStarts, piecesEnds, res);
 	}
 
-	private static void mergeResultsBefore(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay res) {
-		if (piecesStarts.containsKey(res.getFirst())){
-			OSMWay duplicate = piecesStarts.remove(res.getFirst());
-			piecesEnds.remove(duplicate.getLast());
+	private static void mergeResultsBefore(Map<Long, OSMWay> piecesStarts, Map<Long, OSMWay> piecesEnds, OSMWay res) {
+		if (piecesStarts.containsKey(res.getFirst().getAsLong())){
+			OSMWay duplicate = piecesStarts.remove(res.getFirst().getAsLong());
+			piecesEnds.remove(duplicate.getLast().getAsLong());
 			duplicate.reverse();
 			addAtStart(res, duplicate);
 		}
 	}
 
-	private static void mergeResultsAfter(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay res) {
-		if (piecesEnds.containsKey(res.getLast())){
-			OSMWay duplicate = piecesEnds.remove(res.getLast());
-			piecesStarts.remove(duplicate.getFirst());
+	private static void mergeResultsAfter(Map<Long, OSMWay> piecesStarts, Map<Long, OSMWay> piecesEnds, OSMWay res) {
+		if (piecesEnds.containsKey(res.getLast().getAsLong())){
+			OSMWay duplicate = piecesEnds.remove(res.getLast().getAsLong());
+			piecesStarts.remove(duplicate.getFirst().getAsLong());
 			duplicate.reverse();
 			addNormal(res, duplicate);
 		}
 	}
 
-	private static void addWayAfter(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay way, OSMWay res) {
-		OSMWay after = piecesStarts.remove(way.getLast());
+	private static void addWayAfter(Map<Long, OSMWay> piecesStarts, Map<Long, OSMWay> piecesEnds, OSMWay way, OSMWay res) {
+		OSMWay after = piecesStarts.remove(way.getLast().getAsLong());
 		if (after != null){
-			piecesEnds.remove(after.getLast());
+			piecesEnds.remove(after.getLast().getAsLong());
 			addNormal(res, after);
 		}
 	}
 
-	private static void addWayBefore(Map<OSMNode, OSMWay> piecesStarts, Map<OSMNode, OSMWay> piecesEnds, OSMWay way, OSMWay res) {
-		OSMWay before = piecesEnds.remove(way.getFirst());
+	private static void addWayBefore(Map<Long, OSMWay> piecesStarts, Map<Long, OSMWay> piecesEnds, OSMWay way, OSMWay res) {
+		OSMWay before = piecesEnds.remove(way.getFirst().getAsLong());
 		if (before != null){
-			piecesStarts.remove(before.getFirst());
+			piecesStarts.remove(before.getFirst().getAsLong());
 			addNormal(res, before);
 		}
 	}

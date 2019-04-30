@@ -1,7 +1,8 @@
 package bfst19.danmarkskort.controller;
 
-import bfst19.danmarkskort.model.InvalidUserInputException;
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.view.drawers.MapDrawer;
+import bfst19.danmarkskort.model.InvalidUserInputException;
 import bfst19.danmarkskort.model.Route;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,9 +15,16 @@ import java.io.IOException;
 import java.util.List;
 
 public class TopMenu {
+
 	private static Model model;
-	public static void init(Model model) {
-		TopMenu.model = model;
+	private static TopMenu singletonInstance;
+
+	public static void init(Model modelParam){
+		model = modelParam;
+	}
+
+	public TopMenu(){
+		singletonInstance = this;
 	}
 
 	@FXML
@@ -79,7 +87,7 @@ public class TopMenu {
 	}
 
 	@FXML
-	private void onDjikstra(final ActionEvent event){
+	private void onDijkstra(final ActionEvent event){
 		//TODO: Enten AlertPane med dropdown selektion eller options knapper. Ellers skal den bare
 		//give en checkbox markering eller noget
 	}
@@ -90,7 +98,7 @@ public class TopMenu {
 	}
 
 	@FXML
-	private void onEE(final ActionEvent event){
-		//TODO: Alt upside down?
+	private void onHDGraphics(final ActionEvent event){
+		model.toggleHDTheme();
 	}
 }

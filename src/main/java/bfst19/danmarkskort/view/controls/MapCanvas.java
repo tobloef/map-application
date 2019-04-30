@@ -44,8 +44,8 @@ public class MapCanvas extends Canvas {
 		mapDrawer = new MapDrawer(this, model);
 		drawers.add(mapDrawer);
 		drawers.add(new RouteDrawer(this, model));
-		drawers.add(new ZoomIndicatorDrawer(this));
 		drawers.add(new POIDrawer(this, model));
+		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
 
@@ -160,20 +160,6 @@ public class MapCanvas extends Canvas {
 		Bounds bounds = this.getBoundsInLocal();
 		Point2D min = this.modelCoords(bounds.getMinX(), bounds.getMinY());
 		Point2D max = this.modelCoords(bounds.getMaxX(), bounds.getMaxY());
-		// Needed because the model is flipped
-		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
-	}
-
-	//Test function to visualize if the KDTree works.
-	private Rectangle getSmallModelBounds(){
-		int boxsize = 100;
-		Bounds bounds = this.getBoundsInLocal();
-		double minX = bounds.getMinX() + bounds.getMaxX()/2 - boxsize;
-		double minY = bounds.getMinY()+ bounds.getMaxY()/2 - boxsize;
-		double maxX = bounds.getMaxX()/2 + boxsize;
-		double maxY = bounds.getMaxY()/2 + boxsize;
-		Point2D min = this.modelCoords(minX, minY);
-		Point2D max = this.modelCoords(maxX, maxY);
 		// Needed because the model is flipped
 		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
 	}

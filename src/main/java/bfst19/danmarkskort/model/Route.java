@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Route extends ArrayList<PolyRoad> {
 	public double sumLength() {
-		return stream().mapToDouble(PolyRoad::getLength).sum();
+		return stream().mapToDouble(PolyRoad::getRealLength).sum();
 	}
 
 	public double sumTime() {
-		return stream().mapToDouble(PolyRoad::getDurationInMinutes).sum();
+		return stream().mapToDouble(PolyRoad::getDurationInMinutes).map(Math::sqrt).sum();
 	}
 
 	public List<String> getTextDescription() {
@@ -41,7 +41,6 @@ public class Route extends ArrayList<PolyRoad> {
 		}
 		result.add("You have arrived at your destination");
 		return result;
-		//return stream().map(x -> ("Drive on " + x.toString() + " for " + (x.getLength()*110 / x.getSpeedLimit())*60 + "minutes" )).collect(Collectors.toList());
 	}
 
 	private String getDirectionDescription(PolyRoad actualLast, PolyRoad road) {
