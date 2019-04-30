@@ -63,7 +63,8 @@ public class Route extends ArrayList<PolyRoad> {
 
 	private String getTimeDescription(double summedDurationInMinutes) {
 		if (summedDurationInMinutes < 1) {
-			return "less than a minute (" + String.format("%.0f", summedDurationInMinutes * 60) + " seconds)";
+			//(" + String.format("%.0f", summedDurationInMinutes * 60) + " seconds) // the calculation for getting the time in seconds
+			return "less than a minute ";
 		}
 		else {
 			return String.format("%.0f", summedDurationInMinutes) + " minutes";
