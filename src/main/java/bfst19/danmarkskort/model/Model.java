@@ -9,6 +9,8 @@ import javafx.scene.transform.Transform;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.Set;
 
 public class Model {
 	DrawableModel drawableModel = new KDTreeDrawableModel();
-	List<Runnable> observers = new ArrayList<>();
+	List<Runnable> observers = new ArrayList<>(), reloadObservers = new ArrayList<>();
 	Set<WayType> blacklistedWaytypes = new HashSet<>();
 	public Rectangle modelBounds;
 	float mouseX, mouseY;
@@ -25,6 +27,7 @@ public class Model {
 	VehicleType currentVehicleType = VehicleType.CAR;
 	private Theme theme;
 	private boolean HDOn;
+	private String themePath;
 
 	public Theme getCurrentTheme(){
 		return theme;
@@ -32,12 +35,21 @@ public class Model {
 
 	public void toggleHDTheme(){
 		if (HDOn){
-			theme = ThemeLoader.loadTheme("config/themes/default.yaml",null);
+			theme = ThemeLoader.loadTheme(themePath, null);
 		} else {
-			theme = ThemeLoader.loadTheme("config/themes/hdgraphics.yaml", theme);
+			theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
 		}
 		HDOn = !HDOn;
 		notifyObservers();
+	}
+
+	public void changeDefaultTheme(String path){
+		themePath = path;
+		theme = ThemeLoader.loadTheme(themePath,null);
+	}
+
+	public void appendTheme(String path){
+		theme = ThemeLoader.loadTheme(path, theme);
 	}
 
 	public boolean dontDraw(WayType waytype){
@@ -54,6 +66,10 @@ public class Model {
 
 	public void addObserver(Runnable observer) {
 		observers.add(observer);
+	}
+
+	public void addReloadObserver(Runnable observer) {
+		reloadObservers.add(observer);
 	}
 
 	public void toggleBlacklistWaytype(WayType waytype){
@@ -83,6 +99,12 @@ public class Model {
 		for (Runnable observer : observers) observer.run();
 	}
 
+	public void notifyReloadObservers() {
+		for (Runnable observer : reloadObservers) observer.run();
+	}
+
+
+	//Code duplication, sorry
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
 		System.out.println("Loading data...");
 		long time = -System.nanoTime();
@@ -92,16 +114,34 @@ public class Model {
 			loadDataFromArgs(args);
 		}
 		if (args.size() == 2){
-			theme = ThemeLoader.loadTheme(args.get(1), null);
+			themePath = args.get(1);
 		} else {
-			theme = ThemeLoader.loadTheme("config/themes/default.yaml",null);
+			themePath = "rs:config/themes/default.yaml";
 		}
+		theme = ThemeLoader.loadTheme(themePath, null);
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
 	}
 
+	public void loadNewDataset(String argumentPath) throws IOException, XMLStreamException, ClassNotFoundException{
+		System.out.println("Loading data...");
+		long time = -System.nanoTime();
+		List<String> tempList = new ArrayList<>();
+		tempList.add(argumentPath);
+		cleanUpShortestPath();
+		drawableModel.doNewDataSet();
+		loadDataFromArgs(tempList);
+		time += System.nanoTime();
+		System.out.printf("Load time: %.1fs\n", time / 1e9);
+		notifyReloadObservers();
+	}
+
+	private void cleanUpShortestPath(){
+		start = end = null;
+  	}
+
 	private void loadDefaultData() throws IOException, ClassNotFoundException {
-		InputStream inputStream = ResourceLoader.getResourceAsStream("data/default.osm.ser");
+		InputStream inputStream = ResourceLoader.getResourceAsStream("rs:data/default.osm.ser");
 		try {
 			parseObj(inputStream);
 		} catch (InvalidClassException e) {
@@ -244,4 +284,5 @@ public class Model {
 		PointOfInterest pointOfInterest = new PointOfInterest(mouseX, mouseY);
 		this.insert(WayType.POI, pointOfInterest);
 	}
+
 }

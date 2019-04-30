@@ -22,7 +22,7 @@ public class RouteDrawer implements Drawer{
 	public RouteDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.model = model;
-		theme = loadTheme("config/themes/default.yaml", null);
+		theme = model.getCurrentTheme();
 	}
 
 	@Override
