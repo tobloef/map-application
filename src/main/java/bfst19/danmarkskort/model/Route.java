@@ -22,31 +22,40 @@ public class Route extends ArrayList<PolyRoad> {
 
 	public List<String> getTextDescription() {
 		List<String> result = new ArrayList<>();
-		String lastName = "";
-		double summedDurationInMinutes = 0;
+		double summedLength = get(0).getRealLength();
 		result.add("Start on " + get(0).getName());
-		for (int i = 0; i < this.size(); i++) {
+		for (int i = 1; i < this.size(); i++) {
 			PolyRoad road = get(i);
-			if (lastName.equals("")) {
-				lastName = road.getName();
+			summedLength += road.getRealLength();
+			if (get(i-1).getName().equals(road.getName())) {
 				continue;
 			}
-			double durationInMinutes = road.getDurationInMinutes();
-			summedDurationInMinutes += durationInMinutes;
-			if (lastName.equals(road.getName())) {
-				continue;
-			}
-			String description = "";
-			description += "Drive for ";
-			description += getTimeDescription(summedDurationInMinutes);
-			description += getDirectionDescription(get(i-1), road);
-			description += road.getName();
+			String description = makeDescription(summedLength, i, road);
 			result.add(description);
-			summedDurationInMinutes = 0;
-			lastName = road.getName();
+			summedLength = 0;
 		}
-		result.add("You have arrived at your destination");
+		result.add("You will then arrive at your destination");
 		return result;
+	}
+
+	private String makeDescription(double summedLength, int i, PolyRoad road) {
+		String description = "";
+		description += "Drive ";
+		description += getLengthDescription(summedLength);
+		description += getDirectionDescription(get(i-1), road);
+		description += road.getName();
+		return description;
+	}
+
+	private String getLengthDescription(double summedLength) {
+		String unit = "km";
+		summedLength *= 110;
+		if (summedLength < 1) {
+			summedLength *= 1000;
+			unit = "m";
+			return "" + (int) summedLength + " " + unit;
+		}
+		return "" + String.format("%.1f", summedLength) + " " + unit;
 	}
 
 	private String getDirectionDescription(PolyRoad actualLast, PolyRoad road) {
@@ -74,6 +83,7 @@ public class Route extends ArrayList<PolyRoad> {
 			return String.format("%.0f", summedDurationInMinutes) + " minutes";
 		}
 	}
+
 
 	private double getDegree(PolyRoad last, PolyRoad current) {
 		double lastDegree = last.getDegree(current);
