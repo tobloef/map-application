@@ -16,7 +16,7 @@ public class Route extends ArrayList<PolyRoad> {
 		List<String> result = new ArrayList<>();
 		PolyRoad last = null;
 		PolyRoad actualLast = null;
-		double summedDuration = 0;
+		double summedDurationInMinutes = 0;
 		for (PolyRoad road : this) {
 			if (last == null) {
 				last = road;
@@ -24,7 +24,7 @@ public class Route extends ArrayList<PolyRoad> {
 				continue;
 			}
 			double durationInMinutes = road.getDurationInMinutes();
-			summedDuration += durationInMinutes;
+			summedDurationInMinutes += durationInMinutes;
 			if (last.getName().equals(road.getName())) {
 				actualLast = road;
 				continue;
@@ -51,13 +51,13 @@ public class Route extends ArrayList<PolyRoad> {
 			actualLast = road;
 			description += road.getName() + " for ";
 			if (durationInMinutes < 1) {
-				description += "less than a minute (" + summedDuration * 60 + " seconds)";
+				description += "less than a minute (" + summedDurationInMinutes * 60 + " seconds)";
 			}
 			else {
-				description += String.format("%.0f", summedDuration) + " minutes";
+				description += String.format("%.0f", summedDurationInMinutes) + " minutes";
 			}
 			result.add(description);
-			summedDuration = 0;
+			summedDurationInMinutes = 0;
 		}
 		return result;
 		//return stream().map(x -> ("Drive on " + x.toString() + " for " + (x.getLength()*110 / x.getSpeedLimit())*60 + "minutes" )).collect(Collectors.toList());
