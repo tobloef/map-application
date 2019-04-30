@@ -23,12 +23,12 @@ public class RouteTest {
 		float endX = 7.09944f;
 		float endY = 55.673607f;
 		PolyRoad end = model.getClosestRoad(endX, endY);
-		assertEquals("Wildersgade", start.getName());
-		assertEquals("Strandgade", end.getName());
+		assertEquals("Wildersgade", start.getStreetName());
+		assertEquals("Strandgade", end.getStreetName());
 
-		model.setMouseCoords(startX, startY);
+		model.setMouseModelCoords(startX, startY);
 		model.updateStart();
-		model.setMouseCoords(endX, endY);
+		model.setMouseModelCoords(endX, endY);
 		model.updateEnd();
 		Route route = model.getShortestPath();
 		assertEquals(3, route.size());

@@ -4,9 +4,61 @@ import bfst19.danmarkskort.model.parsing.AddressParser;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddressSearch {
     private static List<String> fileList;
+
+    public static List<Address> getReccomendations(List<Address> addresses, String stringQuery) {
+        AddressQuery addressQuery = AddressParser.parse(stringQuery);
+        if (addressQuery == null) {
+            return null;
+        }
+        if (addressQuery.getStreetName() == null) {
+            return null;
+        }
+        List<Address> matches = getAddressesWithStreetName(addresses, addressQuery.getStreetName());
+        matches = matches.stream()
+                .filter(a -> Objects.equals(a.getCity(), addressQuery.getCity()))
+                .filter(a -> Objects.equals(a.getHouseNumber(), addressQuery.getHouseNumber()))
+                .collect(Collectors.toList());
+        return matches;
+    }
+
+    public static List<Address> getAddressesWithStreetName(List<Address> addresses, String streetName) {
+        int low = 0;
+        int high = addresses.size();
+        int middle = 0;
+
+        while (high - low > 1) {
+            middle = low + (high - low) / 2;
+            String middleStr = addresses.get(middle).getStreetName();
+            int compare = streetName.compareToIgnoreCase(middleStr);
+            if (compare == 0) {
+                break;
+            } else if (compare < 0) {
+                high = middle;
+            } else {
+                low = middle;
+            }
+        }
+        low = middle;
+        while (low > 0) {
+            if (!Objects.equals(addresses.get(low - 1).getStreetName(), streetName)) {
+                break;
+            }
+            low--;
+        }
+        high = middle;
+        while (high + 2 < addresses.size()) {
+            if (!Objects.equals(addresses.get(high + 1).getStreetName(), streetName)) {
+                break;
+            }
+            high++;
+        }
+        return addresses.subList(low, high + 1);
+    }
+
 
     /*public static Place test() {
         try {

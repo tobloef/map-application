@@ -56,6 +56,7 @@ public class AddressParser {
             {streetRegex, houseRegex},
 
             {streetRegex, cityRegex, postcodeRegex},
+            {streetRegex, cityRegex},
 
             {streetRegex},
     };

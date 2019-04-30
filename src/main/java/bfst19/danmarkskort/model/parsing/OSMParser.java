@@ -78,7 +78,7 @@ public class OSMParser {
     }
 
     private void doneParsing() {
-        addresses.sort(Comparator.comparing(Address::getStreetName));
+        addresses.sort(Comparator.comparing(a -> a.getStreetName().toLowerCase()));
         idToNode = null;
         idToWay = null;
         System.gc();
