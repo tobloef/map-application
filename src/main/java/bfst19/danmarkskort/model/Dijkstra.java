@@ -93,7 +93,7 @@ public class Dijkstra {
 	private static double calculateHeuristics(PolyRoad polyRoad, PolyRoad destination, VehicleType vehicleType){
 		double weight;
 		if (vehicleType == VehicleType.CAR){
-			weight = polyRoad.weightedEuclideanDistanceTo(destination);
+			weight = polyRoad.weightedEuclideanDistanceSquaredTo(destination);
 		}
 		else {
 			weight = polyRoad.euclideanDistanceSquaredTo(destination);
