@@ -84,13 +84,17 @@ public class ZoomIndicatorDrawer implements Drawer {
 	}
 
 	private void drawBlackBars(double width) {
-		graphicsContext.setFill(Color.BLACK);
-		graphicsContext.setLineWidth(1);
 		double newMargin = (boxWidth - width) / 2;
 		double barsLeftEdge = xOrigin + newMargin;
 		double barsRightEdge = xOrigin + boxWidth - newMargin;
 		double barsTopEdge = yOrigin + innerMargin;
 		double barsBottomEdge = yOrigin + boxHeight - innerMargin;
+		strokeBars(barsLeftEdge, barsRightEdge, barsTopEdge, barsBottomEdge);
+	}
+
+	private void strokeBars(double barsLeftEdge, double barsRightEdge, double barsTopEdge, double barsBottomEdge) {
+		graphicsContext.setFill(Color.BLACK);
+		graphicsContext.setLineWidth(1);
 		graphicsContext.moveTo(barsLeftEdge, barsTopEdge); // left line, top side
 		graphicsContext.lineTo(barsLeftEdge, barsBottomEdge); // left line, bottom side
 		graphicsContext.lineTo(barsRightEdge, barsBottomEdge); //right line, bottom side
