@@ -1,12 +1,15 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.PolyRoad;
 import bfst19.danmarkskort.model.Rectangle;
 import bfst19.danmarkskort.view.drawers.*;
+import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
 
@@ -14,14 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapCanvas extends Canvas {
+	private static final float tooltipMaxDistance = 50f;
+	private static final float tooltipMinZoom = 0.00003f;
+
 	private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
 	private Model model;
 	private List<Drawer> drawers;
-	private MapDrawer mapDrawer;
 	private double degreesLatitudePerPixel;
 	private double minZoom = 0;
 	private double maxZoom = 1000000;
-	private AddressIndicatorDrawer addressDrawer;
+	private Tooltip tooltip;
 
 	public void initialize(Model model) {
 		this.model = model;
@@ -33,21 +38,27 @@ public class MapCanvas extends Canvas {
 		panViewToMapBounds();
 		updateDegreesPerPixel();
 		model.addWayTypeObserver(this::repaint);
-		model.addMouseIdleObserver((Boolean isIdle) -> repaint());
 		makeCanvasUpdateOnResize();
 		repaint();
+		model.addMouseIdleObserver(idle -> {
+			if (idle) {
+				showTooltip();
+			} else {
+				hideTooltip();
+			}
+		});
+
+		tooltip = new Tooltip();
+		tooltip.setAutoHide(false);
+		tooltip.setAutoFix(false);
 	}
 
 	private void initializeDrawers(Model model) {
 		//The order in which elements are drawn is fairly important, please check if everything works as intended after changing
 		drawers = new ArrayList<>();
-		mapDrawer = new MapDrawer(this, model);
-		drawers.add(mapDrawer);
+		drawers.add(new MapDrawer(this, model));
 		drawers.add(new RouteDrawer(this, model));
 		drawers.add(new ZoomIndicatorDrawer(this));
-		addressDrawer = new AddressIndicatorDrawer(this, model);
-		model.addMouseIdleObserver(addressDrawer::setEnabled);
-		drawers.add(addressDrawer);
 		drawers.add(new POIDrawer(this, model));
 	}
 
@@ -60,6 +71,9 @@ public class MapCanvas extends Canvas {
 				graphicsContext.save();
 				try {
 					drawer.draw();
+				} catch (Exception e) {
+					System.err.println("IT'S FUCKY WUCKY!");
+					e.printStackTrace();
 				} finally {
 					graphicsContext.restore();
 				}
@@ -110,7 +124,6 @@ public class MapCanvas extends Canvas {
 	}
 
 	public void pan(double deltaX, double deltaY, boolean shouldRepaint) {
-		model.updateMouseIdle();
 		Affine transform = graphicsContext.getTransform();
 		transform.prependTranslation(deltaX, deltaY);
 		graphicsContext.setTransform(transform);
@@ -124,7 +137,6 @@ public class MapCanvas extends Canvas {
 	}
 
 	public void zoom(double factor, double x, double y, boolean shouldRepaint) {
-		model.updateMouseIdle();
 		Affine transform = graphicsContext.getTransform();
 		factor = clampZoom(factor, transform);
 		if (factor == 1) {
@@ -188,5 +200,49 @@ public class MapCanvas extends Canvas {
 		Point2D max = this.modelCoords(maxX, maxY);
 		// Needed because the model is flipped
 		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
+	}
+
+	private void hideTooltip() {
+		if (tooltip != null) {
+			tooltip.hide();
+		}
+	}
+
+	private void showTooltip() {
+		if (!model.getIsMouseInWindow()) {
+			return;
+		}
+		if (tooltip == null) {
+			return;
+		}
+		if (getDegreesLatitudePerPixel() > tooltipMinZoom) {
+			return;
+		}
+
+		float mouseModelX = model.getMouseModelX();
+		float mouseModelY = model.getMouseModelY();
+
+		float mouseScreenX = model.getMouseScreenX();
+		float mouseScreenY = model.getMouseScreenY();
+
+
+		PolyRoad road = model.getClosestRoadWithStreetName(mouseModelX, mouseModelY);
+		if (road == null) {
+			return;
+		}
+
+		// TODO: Max distance to road, so we don't draw roads when hovering in the sea.
+		// TODO: This should be scaled to be the same, regardless of zoom level, so it's the same number of pixels you need to be within a road of.
+		double distance = Math.sqrt(road.euclideanDistanceSquaredTo(mouseModelX, mouseModelY));
+		distance = distance / getDegreesLatitudePerPixel();
+		if (distance > tooltipMaxDistance) {
+			return;
+		}
+
+		Platform.runLater(() -> {
+			tooltip.setText(road.getStreetName());
+			Point2D screenCoords = this.localToScreen(mouseScreenX, mouseScreenY);
+			tooltip.show(this, screenCoords.getX(), screenCoords.getY() - 30);
+		});
 	}
 }

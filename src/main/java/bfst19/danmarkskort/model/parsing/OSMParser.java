@@ -76,11 +76,11 @@ public class OSMParser {
         parseOSM(osmSource);
         doneParsing();
 
-        AddressSearch.test();
+        //AddressSearch.test();
     }
 
-    private void doneParsing() {
-        PlaceParsing.closeStreams();
+    private void doneParsing() throws IOException {
+        //PlaceParsing.closeStreams();
         idToNode = null;
         idToWay = null;
         System.gc();

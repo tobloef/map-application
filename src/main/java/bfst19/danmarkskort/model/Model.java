@@ -2,7 +2,6 @@ package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
-import bfst19.danmarkskort.view.drawers.AddressIndicatorDrawer;
 import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
@@ -18,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class Model {
+	private final static long mouseIdleTime = 250;
+
 	private DrawableModel drawableModel = new KDTreeDrawableModel();
 	private Set<WayType> blacklistedWaytypes = new HashSet<>();
 	private float mouseModelX, mouseModelY;
@@ -27,10 +28,10 @@ public class Model {
 	private VehicleType currentVehicleType = VehicleType.CAR;
 	private List<Runnable> wayTypeObservers = new ArrayList<>();
 	private List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
-	private long mouseIdleTime = 250;
 	private ScheduledExecutorService executor;
 	private ScheduledFuture<?> mouseIdleTask;
 	private Rectangle modelBounds;
+	private boolean isMouseInWindow;
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -162,7 +163,6 @@ public class Model {
 	public void setMouseScreenCoords(float mouseX, float mouseY) {
 		this.mouseScreenX = mouseX;
 		this.mouseScreenY = mouseY;
-		updateMouseIdle();
 	}
 
 	public float getMouseModelX() {
@@ -306,5 +306,13 @@ public class Model {
 
 	public Rectangle getModelBounds() {
 		return modelBounds;
+	}
+
+	public void setIsMouseInWindow(boolean isMouseInWindow) {
+		this.isMouseInWindow = isMouseInWindow;
+	}
+
+	public boolean getIsMouseInWindow() {
+		return isMouseInWindow;
 	}
 }

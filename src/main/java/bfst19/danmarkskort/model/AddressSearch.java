@@ -13,16 +13,11 @@ public class AddressSearch {
         try {
             Address address = queryToAddress("Amagerbrogade 2, 709");
             List<String> cities = getCities(address.getStreetName());
-            String city = cities.get(0);
-            List<Place> places = getPlaces(address.getStreetName(), city);
+            address.setCity(cities.get(0));
+            List<Place> places = getPlaces(address.getStreetName(), address.getCity());
             for (Place place : places) {
                 Address newAddress = place.getAddress();
-                boolean streetNamesMatch = Objects.equals(newAddress.getStreetName(), address.getStreetName());
-                boolean cityMatch = Objects.equals(newAddress.getCity(), address.getStreetName());
-                boolean houseNumberMatch = Objects.equals(newAddress.getHouseNumber(), address.getHouseNumber());
-                if (streetNamesMatch && cityMatch && houseNumberMatch) {
-                    System.out.println(address);
-                    System.out.println(newAddress);
+                if (isAddressMatch(address, newAddress)) {
                     return place;
                 }
             }
@@ -33,7 +28,33 @@ public class AddressSearch {
         return null;
     }
 
+    private static boolean isAddressMatch(Address address, Address newAddress) {
+        boolean streetNamesMatch = Objects.equals(
+                newAddress.getStreetName().toLowerCase(),
+                address.getStreetName().toLowerCase()
+        );
+        boolean cityMatch = Objects.equals(
+                newAddress.getCity().toLowerCase(),
+                address.getCity().toLowerCase()
+        );
+        boolean houseNumberMatch = Objects.equals(
+                newAddress.getHouseNumber().toLowerCase(),
+                address.getHouseNumber().toLowerCase()
+        );
+        return streetNamesMatch && cityMatch && houseNumberMatch;
+    }
+
     public static List<String> getRecommendations(String query) {
+        List<String> recommendations = new ArrayList<>();
+        Address address = queryToAddress(query);
+
+        /*
+        Get streets that start with query.
+        Get streets that match parsed and add house numbers.
+        Get cities that match parsed.
+        Read post code and recommend city.
+        If matches city, get streets in city.
+         */
         return null;
     }
 

@@ -52,6 +52,30 @@ public class Address implements Serializable {
         return postCode;
     }
 
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
+    public void setDoor(String door) {
+        this.door = door;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
+    }
+
     public static class Builder {
         private String streetName;
         private String houseNumber;

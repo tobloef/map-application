@@ -32,6 +32,8 @@
                                    onMousePressed="#onMousePressed"
                                    onMouseDragged="#onMouseDragged"
                                    onMouseMoved="#onMouseMoved"
+                                   onMouseExited="#onMouseExited"
+                                   onMouseEntered="#onMouseEntered"
                         />
                     </Pane>
                 </center>

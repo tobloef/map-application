@@ -19,6 +19,7 @@ public class PlaceParsing {
     private static List<String> fileListCache;
 
     public static void savePlace(Place place) throws IOException {
+        if (1==1) return; // TODO: Remove this line
         Address address = place.getAddress();
         String key = getKey(address.getStreetName(), address.getCity());
         if (!streetOutputStreams.containsKey(key)) {
@@ -65,16 +66,14 @@ public class PlaceParsing {
     }
 
     private static String getKey(String street, String city) {
-        return street + "_"+ city;
+        String key = street + "_"+ city;
+        //key = key.toLowerCase();
+        return key;
     }
 
-    public static void closeStreams() {
+    public static void closeStreams() throws IOException {
         for (ObjectOutputStream stream : streetOutputStreams.values()) {
-            try {
-                stream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            stream.close();
         }
         streetOutputStreams.clear();
     }
