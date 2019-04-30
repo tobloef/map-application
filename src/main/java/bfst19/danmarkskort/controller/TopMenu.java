@@ -36,13 +36,15 @@ public class TopMenu {
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
 		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("Serialised","*.ser"),
+				new FileChooser.ExtensionFilter("All Files", "*.osm", "*.zip", "*.ser"),
+				new FileChooser.ExtensionFilter("OSM","*.osm"),
 				new FileChooser.ExtensionFilter("ZIP","*.zip"),
-				new FileChooser.ExtensionFilter("OSM","*.osm"));
+				new FileChooser.ExtensionFilter("Serialised","*.ser"));
 
 		File file = fileChooser.showOpenDialog(primaryStage);
-
-		model.loadNewDataset(file.getAbsolutePath());
+		if (file != null){
+			model.loadNewDataset(file.getAbsolutePath());
+		}
 	}
 
 	@FXML
