@@ -2,8 +2,10 @@ package bfst19.danmarkskort.model;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.FileChooser;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -112,15 +114,13 @@ public class Route extends ArrayList<PolyRoad> {
 		}
 	}
 
-	public void printToFile() {
+	public void printToFile(File file) {
 		try {
 			if (isEmpty()) {
 				throw new InvalidUserInputException("Please select a route.");
 			}
 			//fixme figure out where the file should be outputted
-			//String fileName = route.get(0).getName() + "_" + route.get(route.size()-1).getName() + ".txt"; //todo change this back to normal when done with feature
-			String fileName = "sample.txt";
-			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
 			for (String string : getTextDescription()) {
 				bufferedWriter.write(string + String.format("%n"));
 			}
@@ -135,5 +135,9 @@ public class Route extends ArrayList<PolyRoad> {
 			alert.setHeaderText("Error: Wrong input");
 			alert.show();
 		}
+	}
+
+	public String getSuggestedFileName() {
+		return get(0).getName() + "_" + get(size()-1).getName() + ".txt";
 	}
 }
