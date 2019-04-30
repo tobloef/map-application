@@ -21,6 +21,6 @@ public class View {
 		stage.setScene(scene);
 		stage.show();
 		stage.setTitle("First year project: Map");
-		controller.init(model);
+		controller.init(model, stage);
 	}
 }

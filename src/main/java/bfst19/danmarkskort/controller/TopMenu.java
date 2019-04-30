@@ -1,19 +1,25 @@
 package bfst19.danmarkskort.controller;
 
+import bfst19.danmarkskort.Main;
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.view.drawers.MapDrawer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class TopMenu {
 
 	private static Model model;
+	private static Stage primaryStage;
 	private static TopMenu singletonInstance;
 
-	public static void init(Model modelParam){
+	public static void init(Model modelParam, Stage stage){
 		model = modelParam;
+		primaryStage = stage;
 	}
 
 	public TopMenu(){
@@ -70,5 +76,19 @@ public class TopMenu {
 	@FXML
 	private void onHDGraphics(final ActionEvent event){
 		model.toggleHDTheme();
+	}
+	@FXML
+	private void onSelectTheme(final ActionEvent event){
+		//Create fileChooser and set default settings
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select map theme");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("YAML","*.yaml"));
+
+		File file = fileChooser.showOpenDialog(primaryStage);
+		System.out.println(file.getAbsolutePath());
+
+		//model.appendNewTheme(file);
 	}
 }
