@@ -30,8 +30,8 @@ public class OSMRelation implements LongSupplier {
 	}
 
 	private static List<OSMWay> newMerge(List<OSMWay> inputList){
-		Map<OSMNode, OSMWay> piecesStarts = new HashMap<>();
-		Map<OSMNode, OSMWay> piecesEnds = new HashMap<>();
+		Map<Long, OSMWay> piecesStarts = new HashMap<>();
+		Map<Long, OSMWay> piecesEnds = new HashMap<>();
 		for (OSMWay currentWay : inputList){
 			OSMWay result = new OSMWay(0);
 			reverseIfWayIsWrongDirection(piecesStarts, piecesEnds, currentWay);

@@ -22,7 +22,7 @@ public class Model {
 	private float mouseModelX, mouseModelY;
 	private float mouseScreenX, mouseScreenY;
 	private PolyRoad start, end;
-	private List<PolyRoad> shortestPath;
+	private Route shortestPath;
 	private VehicleType currentVehicleType = VehicleType.CAR;
 	private List<Runnable> wayTypeObservers = new ArrayList<>();
 	private List<Runnable> reloadObservers = new ArrayList<>();
@@ -46,7 +46,7 @@ public class Model {
             theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
         }
         HDOn = !HDOn;
-        notifyObservers();
+        notifyWayTypeObservers();
     }
 
     public void changeDefaultTheme(String path){
@@ -294,12 +294,12 @@ public class Model {
 
 	public PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
-		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
-			Drawable close = getNearest(roadType, new Point2D(x,y));
-			if (!(close instanceof PolyRoad)){
+		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)) {
+			Drawable close = getNearest(roadType, new Point2D(x, y));
+			if (!(close instanceof PolyRoad)) {
 				continue;
 			}
-			PolyRoad closeRoad = (PolyRoad)close;
+			PolyRoad closeRoad = (PolyRoad) close;
 			if (closestRoad == null) {
 				closestRoad = closeRoad;
 				continue;
@@ -311,30 +311,11 @@ public class Model {
 			closestRoad = closeRoad;
 
 		}
-
-	private PolyRoad getClosestRoad(float x, float y) {
-		PolyRoad closestRoad = null;
-		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
-			Drawable close = getNearest(roadType, new Point2D(x,y));
-			if (!(close instanceof PolyRoad)){
-				continue;
-			}
-			PolyRoad closeRoad = (PolyRoad)close;
-			if (closeRoad.getStreetName() == null) {
-				continue;
-			}
-			if (closestRoad == null) {
-				closestRoad = closeRoad;
-				continue;
-			}
-			boolean isCloser = closestRoad.euclideanDistanceSquaredTo(x, y) > closeRoad.euclideanDistanceSquaredTo(x, y);
-			if (!isCloser) {
-				continue;
-			}
-			closestRoad = closeRoad;
-		}
-
 		return closestRoad;
+	}
+
+	public PolyRoad getClosestRoad() {
+    	return getClosestRoad(mouseModelX, mouseModelY);
 	}
 
 	public void insert(WayType type,Drawable drawable){

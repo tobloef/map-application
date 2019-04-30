@@ -14,7 +14,7 @@ import java.net.URL;
  */
 
 public class ResourceLoader {
-    private static String testFile = "DO_NOT_DELETE";
+    private static final String testFile = "DO_NOT_DELETE";
     private static Boolean useLeadingSlash = null;
 
     public static URL getResource(String name) {
@@ -23,14 +23,8 @@ public class ResourceLoader {
     }
 
     public static InputStream getResourceAsStream(String name) {
-        name = fixPath(name);
-        return Main.class.getResourceAsStream(name);
-    }
-
-    public static String fixPath(String path) {
-        if (path == null) {
-            return null;
         if (name.startsWith("rs:")) {
+            name = name.substring(3);
             name = fixPath(name);
             return Main.class.getResourceAsStream(name);
         } else {
@@ -44,7 +38,6 @@ public class ResourceLoader {
     }
 
     public static String fixPath(String path) {
-        path = path.substring(3);
         if (path == null) {
             return null;
         }

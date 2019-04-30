@@ -30,7 +30,7 @@ public class MapCanvas extends Canvas {
 
 	public void initialize(Model model) {
 		this.model = model;
-		model.addObserver(this::repaint);
+		model.addWayTypeObserver(this::repaint);
 		model.addReloadObserver(this::initialize);
 		initialize();
 	}
@@ -232,7 +232,7 @@ public class MapCanvas extends Canvas {
 		float mouseScreenY = model.getMouseScreenY();
 
 
-		PolyRoad road = model.getClosestRoadWithStreetName(mouseModelX, mouseModelY);
+		PolyRoad road = model.getClosestRoad(mouseModelX, mouseModelY);
 		if (road == null) {
 			return;
 		}

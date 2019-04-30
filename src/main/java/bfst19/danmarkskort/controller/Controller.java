@@ -80,7 +80,7 @@ public class Controller {
 			}
 			case Q: {
 				PolyRoad road = model.getClosestRoad();
-				System.out.println(road.getName() + " " + road.getRepresentativeX() + " " + road.getRepresentativeY());
+				System.out.println(road.getStreetName() + " " + road.getRepresentativeX() + " " + road.getRepresentativeY());
 			}
 		}
 	}

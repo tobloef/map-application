@@ -21,7 +21,7 @@ public class MapDrawer implements Drawer {
 		this.canvas = canvas;
 		this.graphicsContext = canvas.getGraphicsContext2D();
 		this.model = model;
-		textureDefaultRect = new Rectangle(model.modelBounds);
+		textureDefaultRect = new Rectangle(model.getModelBounds());
 	}
 
 	@Override

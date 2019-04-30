@@ -23,11 +23,11 @@ public class Route extends ArrayList<PolyRoad> {
 	public List<String> getTextDescription() {
 		List<String> result = new ArrayList<>();
 		double summedLength = get(0).getRealLength();
-		result.add("Start on " + get(0).getName());
+		result.add("Start on " + get(0).getStreetName());
 		for (int i = 1; i < this.size(); i++) {
 			PolyRoad road = get(i);
 			summedLength += road.getRealLength();
-			if (get(i-1).getName().equals(road.getName())) {
+			if (get(i-1).getStreetName().equals(road.getStreetName())) {
 				continue;
 			}
 			String description = makeDescription(summedLength, i, road);
@@ -43,7 +43,7 @@ public class Route extends ArrayList<PolyRoad> {
 		description += "Drive ";
 		description += getLengthDescription(summedLength);
 		description += getDirectionDescription(get(i-1), road);
-		description += road.getName();
+		description += road.getStreetName();
 		return description;
 	}
 
@@ -150,6 +150,6 @@ public class Route extends ArrayList<PolyRoad> {
 	}
 
 	public String getSuggestedFileName() {
-		return get(0).getName() + "_" + get(size()-1).getName() + ".txt";
+		return get(0).getStreetName() + "_" + get(size()-1).getStreetName() + ".txt";
 	}
 }
