@@ -7,6 +7,7 @@ public interface DrawableModel extends Serializable {
 	Iterable<Drawable> getDrawablesOfTypeInBounds(WayType type, Rectangle bounds);
 	Iterable<Drawable> getAllDrawablesOfType(WayType type);
 	void doneAdding();
+	void doNewDataSet();
 	void setModelBounds(Rectangle bounds);
 	Rectangle getModelBounds();
 	Drawable getNearestNeighbor(WayType type, float x, float y);

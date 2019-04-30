@@ -13,6 +13,7 @@ public class OSMRoadWay extends OSMWay {
 	private int speedLimit;
 	private WayType type;
 	private EnumSet<RoadRestriction> restrictions;
+	private String name;
 
 	//used for making new road based on OSMWay
 	public OSMRoadWay(
@@ -41,10 +42,14 @@ public class OSMRoadWay extends OSMWay {
 			actual.add(this);
 		}
 		list.addAll(newNodes);
+		if (list.size() <= 0) {
+			throw new RuntimeException("Created empty way");
+		}
 		this.streetName = streetName;
 		this.speedLimit = speedLimit;
 		this.type = type;
 		this.restrictions = restrictions;
+		this.name = name;
 	}
 
 	public double getSpeedLimit() {
@@ -92,9 +97,6 @@ public class OSMRoadWay extends OSMWay {
 					OSMRoadNode casted = (OSMRoadNode) n;
 					casted.removeConnection(this);
 				}
-				if (result.size() <= 0) {
-					throw new RuntimeException("Created empty way");
-				}
 				return result;
 			}
 		}
@@ -113,11 +115,11 @@ public class OSMRoadWay extends OSMWay {
 		return type;
 	}
 
-	public EnumSet<RoadRestriction> getRestrictions() {
-		return restrictions;
+	public String getName() {
+		return name;
 	}
 
-	public void addRestriction(RoadRestriction restriction) {
-		restrictions.add(restriction);
+	public EnumSet<RoadRestriction> getRestrictions() {
+		return restrictions;
 	}
 }

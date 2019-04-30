@@ -30,6 +30,12 @@ public class MapCanvas extends Canvas {
 
 	public void initialize(Model model) {
 		this.model = model;
+		model.addObserver(this::repaint);
+		model.addReloadObserver(this::initialize);
+		initialize();
+	}
+
+	public void initialize(){
 		Affine affine = new Affine();
 		affine.prependScale(1,-1, 0, 0);
 		graphicsContext.setTransform(affine);
@@ -58,8 +64,8 @@ public class MapCanvas extends Canvas {
 		drawers = new ArrayList<>();
 		drawers.add(new MapDrawer(this, model));
 		drawers.add(new RouteDrawer(this, model));
-		drawers.add(new ZoomIndicatorDrawer(this));
 		drawers.add(new POIDrawer(this, model));
+		drawers.add(new ZoomIndicatorDrawer(this));
 	}
 
 

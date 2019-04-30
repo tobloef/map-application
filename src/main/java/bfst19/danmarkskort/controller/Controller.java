@@ -29,10 +29,11 @@ public class Controller {
 	@FXML
 	private BorderPane borderPane;
 
-	public void init(Model model) {
+	public void init(Model model, Stage stage) {
 		this.model = model;
 		mapCanvas.initialize(model);
 		WaytypeSelectorController.init(model, borderPane);
+		TopMenuController.init(model, stage);
 	}
 
 	@FXML
@@ -76,6 +77,10 @@ public class Controller {
 			case P:{
 				model.addPOIAtCurrentMousePosition();
 				break;
+			}
+			case Q: {
+				PolyRoad road = model.getClosestRoad();
+				System.out.println(road.getName() + " " + road.getRepresentativeX() + " " + road.getRepresentativeY());
 			}
 		}
 	}

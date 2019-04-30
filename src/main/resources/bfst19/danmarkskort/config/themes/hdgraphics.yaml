@@ -1,0 +1,48 @@
+---
+
+# The format is:
+# way type name:
+#   fillColor: "Web color"
+#   strokeColor: "Web color"
+#   lineDash: Number
+#   lineWidth: Number
+#   texture: Path
+#
+# For more about web color formats, see:
+# https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
+
+# Constants, won't get parsed but are used for anchor references
+
+- COASTLINE:
+    fillColor:
+    texture: "rs:textures/ground.jpg"
+
+- TREES:
+    fillColor:
+    texture: "rs:textures/woods.jpg"
+
+- GRASS:
+    fillColor:
+    texture: "rs:textures/woods.jpg"
+
+- MEADOW:
+    fillcolor:
+    texture: "rs:textures/stylised.jpg"
+
+- HEATH:
+    fillcolor:
+    texture: "rs:textures/stylised.jpg"
+
+- FARMLAND:
+    fillColor:
+    texture: "rs:textures/farm.jpg"
+
+- SAND:
+    fillColor:
+    texture: "rs:textures/sand.jpg"
+
+- MOTORWAY:
+      fillColor:
+      strokeColor: "E43D1A"
+      lineWidth: 0.0005
+      zoomLevel:

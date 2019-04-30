@@ -18,11 +18,13 @@ public class RouteDrawer implements Drawer{
 	private MapCanvas canvas;
 	private Model model;
 	public static boolean debugging = true;
+	Theme theme;
 
 
 	public RouteDrawer(MapCanvas canvas, Model model) {
 		this.canvas = canvas;
 		this.model = model;
+		theme = model.getCurrentTheme();
 	}
 
 	@Override
@@ -40,8 +42,7 @@ public class RouteDrawer implements Drawer{
 		if (!debugging) {
 			return;
 		}
-
-		Theme theme = loadTheme("config/themes/default.yaml", null);
+		
 		GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 		graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 2);
 		Set<PolyRoad> oneWayRoads = new HashSet<>();

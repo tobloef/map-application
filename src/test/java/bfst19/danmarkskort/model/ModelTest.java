@@ -26,7 +26,7 @@ class ModelTest {
 	@Test
 	void loadFromObj() throws IOException, XMLStreamException, ClassNotFoundException {
 		//Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
-		String filePath = this.getClass().getResource("small.zip").getPath();
+		String filePath = this.getClass().getResource("small.osm").getPath();
 		List<String> args = new ArrayList<String>();
 		args.add(filePath);
 		Model model = new Model(args);

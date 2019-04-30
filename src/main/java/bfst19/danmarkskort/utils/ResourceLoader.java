@@ -2,6 +2,8 @@ package bfst19.danmarkskort.utils;
 
 import bfst19.danmarkskort.Main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -26,6 +28,23 @@ public class ResourceLoader {
     }
 
     public static String fixPath(String path) {
+        if (path == null) {
+            return null;
+        if (name.startsWith("rs:")) {
+            name = fixPath(name);
+            return Main.class.getResourceAsStream(name);
+        } else {
+            try {
+                return new FileInputStream(name);
+            } catch(FileNotFoundException e){
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+    }
+
+    public static String fixPath(String path) {
+        path = path.substring(3);
         if (path == null) {
             return null;
         }

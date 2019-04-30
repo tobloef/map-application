@@ -19,6 +19,15 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 	private final static int MAX_NODES_BEFORE_REBALANCE = (MAX_NODES_PER_LEAF * 3) / 2;
 	private final static Random random = new Random();
 
+	private class NearestNeighbor{
+		private T element;
+		private float distance;
+		NearestNeighbor (T element, float distance){
+			this.element = element;
+			this.distance = distance;
+		}
+	}
+
 	public KDTree(List<T> inputElements){
 		this(inputElements, true);
 	}
@@ -86,38 +95,56 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 
 
 	public T getNearestNeighbor(float x, float y){
-		return getNearestNeighbor(x, y, Float.POSITIVE_INFINITY);
+		if (splitElement == null)
+			return getClosestElement(x, y);
+		NearestNeighbor tempNearestNeighbor = new NearestNeighbor(splitElement, splitElement.euclideanDistanceSquaredTo(x,y));
+		return getNearestNeighbor(x, y, tempNearestNeighbor).element;
 	}
 
-	private T getNearestNeighbor(float x, float y, float distance){
+	private NearestNeighbor getNearestNeighbor(float x, float y, NearestNeighbor nearestNeighbor){
 		if (splitElement == null){
-			return getClosestElement(x, y, distance);
+			T closestElement = getClosestElement(x, y);
+			nearestNeighbor.element = closestElement;
+			nearestNeighbor.distance = closestElement.euclideanDistanceSquaredTo(x,y);
+			return nearestNeighbor;
 		}
-		T closestElement = null;
-		if (lower.bbox.euclideanDistanceSquaredTo(x,y) < distance){
-			T lowerClosestElement = (T) lower.getNearestNeighbor(x, y, distance);
-			if (lowerClosestElement != null && lowerClosestElement.euclideanDistanceSquaredTo(x, y) < distance) {
-				closestElement = lowerClosestElement;
-				distance = closestElement.euclideanDistanceSquaredTo(x, y);
-			}
-		}
-		float splitElementDistance = splitElement.euclideanDistanceSquaredTo(x ,y);
-		if (splitElementDistance < distance){
-			distance = splitElementDistance;
-			closestElement = splitElement;
-		}
-		if (higher.bbox.euclideanDistanceSquaredTo(x,y) < distance){
-			T higherClosestElement = (T) higher.getNearestNeighbor(x, y, distance);
-			if (higherClosestElement != null && higherClosestElement.euclideanDistanceSquaredTo(x, y) < distance) {
-				closestElement = higherClosestElement;
-				distance = closestElement.euclideanDistanceSquaredTo(x, y);
-			}
-		}
-		return closestElement;
+		checkIfSplitElementIsNearestNeighbor(x, y, nearestNeighbor);
+		getNearestNeighborInSubTree(x, y, nearestNeighbor, closestSubTreeToPoint(x,y));
+		getNearestNeighborInSubTree(x, y, nearestNeighbor, furthestSubTreeFromPoint(x,y));
+		return nearestNeighbor;
 	}
 
-	private T getClosestElement(float x, float y, float distance) {
+	private void checkIfSplitElementIsNearestNeighbor(float x, float y, NearestNeighbor nearestNeighbor) {
+		float splitElementDistance = splitElement.euclideanDistanceSquaredTo(x ,y);
+		if (splitElementDistance < nearestNeighbor.distance){
+			nearestNeighbor.distance = splitElementDistance;
+			nearestNeighbor.element = splitElement;
+		}
+	}
+
+	private KDTree closestSubTreeToPoint(float x, float y){
+		if (higher.bbox.euclideanDistanceSquaredTo(x,y) < lower.bbox.euclideanDistanceSquaredTo(x,y)){
+			return higher;
+		}
+		else return lower;
+	}
+
+	private KDTree furthestSubTreeFromPoint(float x, float y){
+		if (higher.bbox.euclideanDistanceSquaredTo(x,y) > lower.bbox.euclideanDistanceSquaredTo(x,y)){
+			return higher;
+		}
+		else return lower;
+	}
+
+	private void getNearestNeighborInSubTree(float x, float y, NearestNeighbor nearestNeighbor, KDTree subTree) {
+		if (subTree.bbox.euclideanDistanceSquaredTo(x, y) < nearestNeighbor.distance) {
+			subTree.getNearestNeighbor(x, y, nearestNeighbor);
+		}
+	}
+
+	private T getClosestElement(float x, float y) {
 		T closestElement = null;
+		float distance = Float.POSITIVE_INFINITY;
 		for (T element : leafElements){
 			float tempDistance = element.euclideanDistanceSquaredTo(x, y);
 			if (tempDistance < distance){
@@ -150,10 +177,10 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		if (splitElement != null){
 			return lower.treeIsUnbalanced() || higher.treeIsUnbalanced();
 		}
-		if (leafElements != null){
-			return leafElements.size() > MAX_NODES_BEFORE_REBALANCE;
+		if (leafElements == null){
+			return false;
 		}
-		return false;
+		return leafElements.size() > MAX_NODES_BEFORE_REBALANCE;
 	}
 
 	private void insert(T insertionElement, boolean odd){

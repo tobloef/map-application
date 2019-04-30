@@ -58,6 +58,15 @@ public class KDTreeDrawableModel implements DrawableModel {
 		return;
 	}
 
+	@Override
+	public void doNewDataSet() {
+		if (wayTypeEnumMap == null) {
+			wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
+		}
+		initializeKDTree();
+	}
+
+
 	private void countFloats() {
 		System.out.println("Number of floats for each type");
 		for (WayType wayType : WayType.values()){
@@ -65,7 +74,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 			for (Drawable drawable : wayTypeEnumMap.get(wayType)){
 				numOfFloats += drawable.getNumOfFloats();
 			}
-			System.out.println( wayTypeEnumMap.get(wayType).size() + " of " + wayType.name() + " having : " + numOfFloats + " floats");
+			//System.out.println( wayTypeEnumMap.get(wayType).size() + " of " + wayType.name() + " having : " + numOfFloats + " floats");
 		}
 	}
 

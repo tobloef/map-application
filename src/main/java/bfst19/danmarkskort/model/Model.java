@@ -2,14 +2,12 @@ package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
+import bfst19.danmarkskort.utils.ThemeLoader;
 import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -27,11 +25,38 @@ public class Model {
 	private List<PolyRoad> shortestPath;
 	private VehicleType currentVehicleType = VehicleType.CAR;
 	private List<Runnable> wayTypeObservers = new ArrayList<>();
+	private List<Runnable> reloadObservers = new ArrayList<>();
 	private List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
 	private ScheduledExecutorService executor;
 	private ScheduledFuture<?> mouseIdleTask;
 	private Rectangle modelBounds;
 	private boolean isMouseInWindow;
+    private Theme theme;
+    private boolean HDOn;
+    private String themePath;
+
+    public Theme getCurrentTheme(){
+        return theme;
+    }
+
+    public void toggleHDTheme(){
+        if (HDOn){
+            theme = ThemeLoader.loadTheme(themePath, null);
+        } else {
+            theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
+        }
+        HDOn = !HDOn;
+        notifyObservers();
+    }
+
+    public void changeDefaultTheme(String path){
+        themePath = path;
+        theme = ThemeLoader.loadTheme(themePath,null);
+    }
+
+    public void appendTheme(String path){
+        theme = ThemeLoader.loadTheme(path, theme);
+    }
 
 	public boolean dontDraw(WayType waytype){
 		return blacklistedWaytypes.contains(waytype);
@@ -65,6 +90,10 @@ public class Model {
 		}
 	}
 
+	public void addReloadObserver(Runnable observer) {
+		reloadObservers.add(observer);
+	}
+
 	public void toggleBlacklistWaytype(WayType waytype){
 		if (!blacklistedWaytypes.contains(waytype)) {
 			blacklistedWaytypes.add(waytype);
@@ -82,12 +111,15 @@ public class Model {
 	}
 
 	public void fillBlacklist(){
-		for (WayType wayType: WayType.values()){
-			blacklistedWaytypes.add(wayType);
-		}
-		notifyWayTypeObservers();
+        blacklistedWaytypes.addAll(Arrays.asList(WayType.values()));
+        notifyWayTypeObservers();
 	}
 
+	public void notifyReloadObservers() {
+		for (Runnable observer : reloadObservers) observer.run();
+	}
+
+	//Code duplication, sorry
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
 		System.out.println("Loading data...");
 		long time = -System.nanoTime();
@@ -96,15 +128,37 @@ public class Model {
 		} else {
 			loadDataFromArgs(args);
 		}
+		if (args.size() == 2){
+			themePath = args.get(1);
+		} else {
+			themePath = "rs:config/themes/default.yaml";
+		}
+		theme = ThemeLoader.loadTheme(themePath, null);
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
+        executor = Executors.newSingleThreadScheduledExecutor();
+    }
 
-		executor = Executors.newSingleThreadScheduledExecutor();
-	}
+	public void loadNewDataset(String argumentPath) throws IOException, XMLStreamException, ClassNotFoundException{
+		System.out.println("Loading data...");
+		long time = -System.nanoTime();
+		List<String> tempList = new ArrayList<>();
+		tempList.add(argumentPath);
+		cleanUpShortestPath();
+		drawableModel.doNewDataSet();
+		loadDataFromArgs(tempList);
+		time += System.nanoTime();
+		System.out.printf("Load time: %.1fs\n", time / 1e9);
+        notifyReloadObservers();
+    }
+
+	private void cleanUpShortestPath(){
+		start = end = null;
+  	}
 
 	// TODO: Update the default data before final release.
 	private void loadDefaultData() throws IOException, ClassNotFoundException {
-		InputStream inputStream = ResourceLoader.getResourceAsStream("data/default.osm.ser");
+		InputStream inputStream = ResourceLoader.getResourceAsStream("rs:data/default.osm.ser");
 		try {
 			parseObj(inputStream);
 		} catch (InvalidClassException e) {
@@ -200,18 +254,19 @@ public class Model {
 			shortestPath = Dijkstra.getShortestPath(start, end, currentVehicleType);
 		}
 		catch (DisconnectedRoadsException e) {
-			shortestPath = new ArrayList<>();
+			shortestPath = new Route();
 		}
 		time += System.nanoTime();
 		System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
-		notifyWayTypeObservers();
-	}
+        shortestPath.print();
+        notifyWayTypeObservers();
+    }
 
-	public List<? extends Drawable> getShortestPath() {
+	public Route getShortestPath() {
 		if (shortestPath != null){
 			return shortestPath;
 		}
-		else return new ArrayList<>();
+		else return new Route();
 	}
 
 	public void updateEnd() {
@@ -257,10 +312,7 @@ public class Model {
 
 		}
 
-		return closestRoad;
-	}
-
-	public PolyRoad getClosestRoadWithStreetName(float x, float y) {
+	private PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
