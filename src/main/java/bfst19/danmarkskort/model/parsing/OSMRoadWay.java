@@ -27,6 +27,9 @@ public class OSMRoadWay extends OSMWay {
 			actual.add(this);
 		}
 		list.addAll(newNodes);
+		if (list.size() <= 0) {
+			throw new RuntimeException("Created empty way");
+		}
 		this.speedLimit = speedLimit;
 		this.type = type;
 		this.restrictions = restrictions;
@@ -67,9 +70,6 @@ public class OSMRoadWay extends OSMWay {
 					OSMRoadNode casted = (OSMRoadNode) n;
 					casted.removeConnection(this);
 				}
-				if (result.size() <= 0) {
-					throw new RuntimeException("Created empty way");
-				}
 				return result;
 			}
 		}
@@ -90,9 +90,5 @@ public class OSMRoadWay extends OSMWay {
 
 	public EnumSet<RoadRestriction> getRestrictions() {
 		return restrictions;
-	}
-
-	public void addRestriction(RoadRestriction restriction) {
-		restrictions.add(restriction);
 	}
 }
