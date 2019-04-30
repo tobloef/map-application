@@ -30,44 +30,51 @@ public class Route extends ArrayList<PolyRoad> {
 				continue;
 			}
 			String description = "";
-			double degree = getDegree(actualLast, road);
-			description += "(" + degree + ")";
-			int direction = interpretDirection(degree);
-			switch (direction) {
-				case 1: {
-					description += "Turn right an drive on ";
-					break;
-				}
-				case 0: {
-					description += "Continue forward on ";
-					break;
-				}
-				case -1: {
-					description += "Turn left and drive on ";
-					break;
-				}
-			}
-			last = road;
-			actualLast = road;
-			description += road.getName() + " for ";
-			if (durationInMinutes < 1) {
-				description += "less than a minute (" + summedDurationInMinutes * 60 + " seconds)";
-			}
-			else {
-				description += String.format("%.0f", summedDurationInMinutes) + " minutes";
-			}
+			description += "Drive for ";
+			description += getTimeDescription(summedDurationInMinutes);
+			description += getDirectionDescription(actualLast, road);
+			description += road.getName();
 			result.add(description);
 			summedDurationInMinutes = 0;
+			last = road;
+			actualLast = road;
 		}
+		result.add("You have arrived at your destination");
 		return result;
 		//return stream().map(x -> ("Drive on " + x.toString() + " for " + (x.getLength()*110 / x.getSpeedLimit())*60 + "minutes" )).collect(Collectors.toList());
+	}
+
+	private String getDirectionDescription(PolyRoad actualLast, PolyRoad road) {
+		double degree = getDegree(actualLast, road);
+		int direction = interpretDirection(degree);
+		switch (direction) {
+			case 1: {
+				return " and turn right onto ";
+			}
+			case 0: {
+				return  " and continue forward onto ";
+			}
+			case -1: {
+				return " and turn left onto ";
+			}
+		}
+		throw new RuntimeException("interpretDirection returned a number that isn't -1, 0 or 1");
+	}
+
+	private String getTimeDescription(double summedDurationInMinutes) {
+		if (summedDurationInMinutes < 1) {
+			return "less than a minute (" + summedDurationInMinutes * 60 + " seconds)";
+		}
+		else {
+			return String.format("%.0f", summedDurationInMinutes) + " minutes";
+		}
 	}
 
 	private double getDegree(PolyRoad last, PolyRoad current) {
 		double lastDegree = last.getDegree(current);
 		double firstDegree = current.getDegree(last);
 		return clampAngle(lastDegree - firstDegree + 180); //the 180 is because directly ahead is 180, while one degree
-		// left of that is -179, so we basically flip the angle around so it's easier to work with
+		// left of that is -179, so we flip the angle around so it's easier to work with
 	}
 
 	private int interpretDirection(double degree) {
