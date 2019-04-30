@@ -11,10 +11,10 @@
         <Menu text="Route">
             <MenuItem text="Print to file" onAction="#onPrintToFile"/>
             <MenuItem text="A*" onAction="#onAStar"/>
-            <MenuItem text="Djikstra" onAction="#onDjikstra"/>
+            <MenuItem text="Dijkstra" onAction="#onDijkstra"/>
         </Menu>
         <Menu text="Extra">
             <MenuItem text="Points of Interest" onAction="#onPOI"/>
-            <MenuItem text="Easter Egg" onAction="#onEE"/>
+            <MenuItem text="HD Graphics" onAction="#onHDGraphics"/>
         </Menu>
 </MenuBar>
