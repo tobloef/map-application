@@ -14,6 +14,13 @@ class RectangleTest {
 	}
 
 	@Test
+	void CopyRectangle() {
+		Rectangle rect1 = new Rectangle(0, 0, 5, 10);
+		Rectangle rect2 = new Rectangle(rect1);
+		assertTrue(rect1.intersect(rect2));
+	}
+
+	@Test
 	void intersectFalse() {
 		Rectangle rect1 = new Rectangle(0, 0, 4, 10);
 		Rectangle rect2 = new Rectangle(5, 1, 9, 9);
@@ -31,7 +38,7 @@ class RectangleTest {
 	@Test
 	void containsPoint() {
 		Rectangle rect1 = new Rectangle(0, 0, 10, 10); //The larger one
-		assertEquals(2*2,rect1.euclideanDistanceSquaredTo(2, 12),  0.02);
+		assertEquals(0,rect1.euclideanDistanceSquaredTo(2, 2),  0.02);
 	}
 
 	@Test

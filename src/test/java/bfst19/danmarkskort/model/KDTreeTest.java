@@ -25,19 +25,57 @@ public class KDTreeTest {
 	}
 
 	@Test
-	void OneWayInSight() {
+	void oneWayInSight() {
 		Rectangle rect = new Rectangle( 7.0878f, 55.71057f, 7.0916f, 55.713f);
 		Iterable ways = model.getWaysOfType(WayType.RAILWAY, rect);
 		assertEquals(1, countIterable(ways));
 	}
 
 	@Test
-	void NoWayInSight() {
+	void noWayInSight() {
 		Rectangle rect = new Rectangle( 7.0878f, 56.71057f, 7.0916f, 56.713f);
 		for (WayType wayType : WayType.values()) {
 			Iterable ways = model.getWaysOfType(wayType, rect);
 			assertEquals(0, countIterable(ways));
 		}
+	}
+
+	@Test
+	void countAllFootWaysWithQuery(){
+		Rectangle rect = new Rectangle( 0f, 0f, 180f, 180f);
+		Iterable ways = model.getWaysOfType(WayType.FOOTWAY, rect);
+		assertEquals(773, countIterable(ways));
+	}
+
+	@Test
+	void countAllFootWaysWithoutQuery(){
+		Iterable ways = model.getWaysOfType(WayType.FOOTWAY);
+		assertEquals(773, countIterable(ways));
+	}
+
+	@Test
+	void testInsertion(){
+		Rectangle rect = new Rectangle( 0f, 0f, 180f, 180f);
+		model.insert(WayType.POI, new PointOfInterest(20,20));
+		Iterable ways = model.getWaysOfType(WayType.POI, rect);
+		assertEquals(1, countIterable(ways));
+	}
+
+	@Test
+	void rebalanceOffKDTree(){
+		for (int x = 0; x < 100; x++){
+			for (int y = 0; y < 100; y++){
+				model.insert(WayType.RACEWAY, new PointOfInterest(x,y));
+			}
+		}
+		assertEquals(10000, countIterable(model.getWaysOfType(WayType.RACEWAY)));
+		Rectangle rect = new Rectangle( 0.5f, 0.5f, 10.5f, 10.5f);
+		Iterable<Drawable> ways = model.getWaysOfType(WayType.RACEWAY, rect);
+		for(Drawable drawable : ways) {
+			PointOfInterest poi = ((PointOfInterest)drawable);
+			assertEquals(0, rect.euclideanDistanceSquaredTo(poi.getRepresentativeX(), poi.getRepresentativeY()));
+		}
+		assertEquals(100, countIterable(ways));
 	}
 
 	private static long countIterable(Iterable iterable){
