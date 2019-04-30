@@ -5,6 +5,7 @@
          xmlns:fx="http://javafx.com/fxml"
          fx:controller="bfst19.danmarkskort.controller.TopMenu">
         <Menu text="Program">
+            <MenuItem text="Load File" onAction="#onLoadFile"/>
             <MenuItem text="Help" onAction="#onHelp"/>
             <MenuItem text="About" onAction="#onAbout"/>
         </Menu>

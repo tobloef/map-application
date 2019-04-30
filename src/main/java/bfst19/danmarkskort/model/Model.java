@@ -9,6 +9,8 @@ import javafx.scene.transform.Transform;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.Set;
 
 public class Model {
 	DrawableModel drawableModel = new KDTreeDrawableModel();
-	List<Runnable> observers = new ArrayList<>();
+	List<Runnable> observers = new ArrayList<>(), reloadObservers = new ArrayList<>();
 	Set<WayType> blacklistedWaytypes = new HashSet<>();
 	public Rectangle modelBounds;
 	float mouseX, mouseY;
@@ -66,6 +68,10 @@ public class Model {
 		observers.add(observer);
 	}
 
+	public void addReloadObserver(Runnable observer) {
+		reloadObservers.add(observer);
+	}
+
 	public void toggleBlacklistWaytype(WayType waytype){
 		if (!blacklistedWaytypes.contains(waytype)) {
 			blacklistedWaytypes.add(waytype);
@@ -93,6 +99,12 @@ public class Model {
 		for (Runnable observer : observers) observer.run();
 	}
 
+	public void notifyReloadObservers() {
+		for (Runnable observer : reloadObservers) observer.run();
+	}
+
+
+	//Code duplication, sorry
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
 		System.out.println("Loading data...");
 		long time = -System.nanoTime();
@@ -110,6 +122,23 @@ public class Model {
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
 	}
+
+	public void loadNewDataset(String argumentPath) throws IOException, XMLStreamException, ClassNotFoundException{
+		System.out.println("Loading data...");
+		long time = -System.nanoTime();
+		List<String> tempList = new ArrayList<>();
+		tempList.add(argumentPath);
+		cleanUpShortestPath();
+		drawableModel.doNewDataSet();
+		loadDataFromArgs(tempList);
+		time += System.nanoTime();
+		System.out.printf("Load time: %.1fs\n", time / 1e9);
+		notifyReloadObservers();
+	}
+
+	private void cleanUpShortestPath(){
+		start = end = null;
+  	}
 
 	private void loadDefaultData() throws IOException, ClassNotFoundException {
 		InputStream inputStream = ResourceLoader.getResourceAsStream("rs:data/default.osm.ser");
@@ -255,4 +284,5 @@ public class Model {
 		PointOfInterest pointOfInterest = new PointOfInterest(mouseX, mouseY);
 		this.insert(WayType.POI, pointOfInterest);
 	}
+
 }

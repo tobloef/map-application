@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -8,11 +9,12 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class TopMenu {
-
 	private static Model model;
 	private static Stage primaryStage;
 	private static TopMenu singletonInstance;
@@ -24,6 +26,23 @@ public class TopMenu {
 
 	public TopMenu(){
 		singletonInstance = this;
+	}
+
+	@FXML
+	public void onLoadFile(final ActionEvent event) throws IOException, XMLStreamException, ClassNotFoundException {
+		//Create fileChooser and set default settings
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select data-file to load");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("Serialised","*.ser"),
+				new FileChooser.ExtensionFilter("ZIP","*.zip"),
+				new FileChooser.ExtensionFilter("OSM","*.osm"));
+
+		File file = fileChooser.showOpenDialog(primaryStage);
+
+		model.loadNewDataset(file.getAbsolutePath());
 	}
 
 	@FXML
@@ -80,7 +99,7 @@ public class TopMenu {
 
 	@FXML
 	private void onSelectTheme(final ActionEvent event) throws IOException {
-		File file = loadAbsolutePath();
+		File file = loadThemeAbsolutePath();
 
 		if (file != null) {
 			model.changeDefaultTheme(file.getAbsolutePath());
@@ -89,16 +108,15 @@ public class TopMenu {
 
 	@FXML
 	private void onAppendTheme(final ActionEvent event) throws IOException{
-		File file = loadAbsolutePath();
+		File file = loadThemeAbsolutePath();
 
 		if (file != null) {
 			model.appendTheme(file.getAbsolutePath());
 		}
 	}
 
-	private File loadAbsolutePath(){
+	private File loadThemeAbsolutePath(){
 		//Create fileChooser and set default settings
-
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select map theme");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -107,4 +125,5 @@ public class TopMenu {
 
 		return fileChooser.showOpenDialog(primaryStage);
 	}
+
 }
