@@ -122,7 +122,6 @@ public class Route extends ArrayList<PolyRoad> {
 			if (isEmpty()) {
 				throw new InvalidUserInputException("Please select a route.");
 			}
-			//fixme figure out where the file should be outputted
 			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
 			for (String string : getTextDescription()) {
 				bufferedWriter.write(string + String.format("%n"));
