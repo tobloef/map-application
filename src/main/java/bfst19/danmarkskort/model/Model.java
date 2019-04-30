@@ -34,6 +34,7 @@ public class Model {
     private Theme theme;
     private boolean HDOn;
     private String themePath;
+	private List<Address> addresses = new ArrayList<>();
 
 	//Code duplication, sorry
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
@@ -182,6 +183,7 @@ public class Model {
 		} else {
 			OSMParser parser = new OSMParser(filename, drawableModel);
 			modelBounds = parser.getModelBounds();
+			addresses = parser.getAddresses();
 			String path = filename + ".ser";
 			serializeData(path);
 		}

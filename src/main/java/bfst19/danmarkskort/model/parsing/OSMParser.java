@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
-import static bfst19.danmarkskort.model.parsing.PlaceParsing.removeSavedPlaces;
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
@@ -59,6 +58,7 @@ public class OSMParser {
     private Map<Long, OSMWay> idToWay = new HashMap<>();
     private NodeGraphCreator nodeGraphCreator;
     private Map<String, String> tags = new HashMap<>();
+    private List<Address> addresses = new ArrayList<>();
 
     public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
         InputStream osmSource;
@@ -71,15 +71,14 @@ public class OSMParser {
         } else {
             throw new IOException();
         }
-        removeSavedPlaces();
         parseOSM(osmSource);
         doneParsing();
 
         //AddressSearch.test();
     }
 
-    private void doneParsing() throws IOException {
-        PlaceParsing.closeStreams();
+    private void doneParsing() {
+        addresses.sort(Comparator.comparing(Address::getStreetName));
         idToNode = null;
         idToWay = null;
         System.gc();
@@ -97,7 +96,6 @@ public class OSMParser {
         zip.getNextEntry();
         return zip;
     }
-
 
     private void parseOSM(InputStream osmSource) throws XMLStreamException {
         XMLStreamReader reader = XMLInputFactory
@@ -404,25 +402,14 @@ public class OSMParser {
         }
         float lat = positionNode.getLat();
         float lon = positionNode.getLon();
-        String placeName = getWithFallback(tags, nameKeys);
-
-        Address address = new Address.Builder()
-                .streetName(getWithFallback(tags, streetNameKeys))
-                .houseNumber(getWithFallback(tags, houseNumberKeys))
-                .floor(getWithFallback(tags, floorKeys))
-                .door(getWithFallback(tags, doorKeys))
-                .city(getWithFallback(tags, cityKeys))
-                .postCode(getWithFallback(tags, postCodeKeys))
-                .build();
-        Place place = new Place(id, lat, lon, placeName, address);
-        if (address.getStreetName() == null || address.getCity() == null) {
+        String streetName = getWithFallback(tags, streetNameKeys);
+        String houseNumber = getWithFallback(tags, houseNumberKeys);
+        String city = getWithFallback(tags, cityKeys);
+        if (streetName == null) {
             return;
         }
-        /*try {
-            PlaceParsing.savePlace(place);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        Address address = new Address(lat, lon, streetName, houseNumber, city);
+        addresses.add(address);
     }
 
     private long getPlaceOSMId() {
@@ -464,5 +451,9 @@ public class OSMParser {
 
     public Rectangle getModelBounds() {
         return bounds;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
     }
 }

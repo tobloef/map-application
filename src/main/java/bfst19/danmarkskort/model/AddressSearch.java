@@ -1,7 +1,6 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.AddressParser;
-import bfst19.danmarkskort.model.parsing.PlaceParsing;
 
 import java.io.IOException;
 import java.util.*;
@@ -9,7 +8,7 @@ import java.util.*;
 public class AddressSearch {
     private static List<String> fileList;
 
-    public static Place test() {
+    /*public static Place test() {
         try {
             Address address = queryToAddress("Amagerbrogade 2, 709");
             List<String> cities = getCities(address.getStreetName());
@@ -48,13 +47,11 @@ public class AddressSearch {
         List<String> recommendations = new ArrayList<>();
         Address address = queryToAddress(query);
 
-        /*
-        Get streets that start with query.
-        Get streets that match parsed and add house numbers.
-        Get cities that match parsed.
-        Read post code and recommend city.
-        If matches city, get streets in city.
-         */
+        //Get streets that start with query.
+        //Get streets that match parsed and add house numbers.
+        //Get cities that match parsed.
+        //Read post code and recommend city.
+        //If matches city, get streets in city.
         return null;
     }
 
@@ -100,5 +97,5 @@ public class AddressSearch {
             set.add(substring);
         }
         return new ArrayList<>(set);
-    }
+    }*/
 }
