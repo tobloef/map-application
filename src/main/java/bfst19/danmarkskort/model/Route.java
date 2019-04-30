@@ -60,7 +60,7 @@ public class Route extends ArrayList<PolyRoad> {
 				return " and turn right onto ";
 			}
 			case 0: {
-				return  " and continue forward onto ";
+				return " and continue forward onto ";
 			}
 			case -1: {
 				return " and turn left onto ";
@@ -72,7 +72,7 @@ public class Route extends ArrayList<PolyRoad> {
 	private String getTimeDescription(double summedDurationInMinutes) {
 		if (summedDurationInMinutes < 1) {
 			//(" + String.format("%.0f", summedDurationInMinutes * 60) + " seconds) // the calculation for getting the time in seconds
-			return "less than a minute ";
+			return "less than a minute";
 		}
 		else {
 			return String.format("%.0f", summedDurationInMinutes) + " minutes";

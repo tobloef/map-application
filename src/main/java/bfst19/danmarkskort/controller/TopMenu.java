@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,6 +21,7 @@ public class TopMenu {
 
 	private static Model model;
 	private static TopMenu singletonInstance;
+	private Stage primaryStage;
 
 	public static void init(Model modelParam){
 		model = modelParam;
@@ -57,15 +59,12 @@ public class TopMenu {
 	@FXML
 	private void onPrintToFile(final ActionEvent event){
 		Route route = model.getShortestPath();
-		//TODO: Tænker der kan være en alert med et indtastningsfelt, til filnavn fx
-		//Create fileChooser and set default settings
-
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select map theme");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setInitialFileName(route.getSuggestedFileName());
 
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("YAML","*.yaml"));
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text file","*.txt"));
 
 		File file = fileChooser.showSaveDialog(primaryStage);
 

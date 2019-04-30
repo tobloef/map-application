@@ -204,7 +204,7 @@ public class Model {
 		return getClosestRoad(mouseX, mouseY);
 	}
 
-	private PolyRoad getClosestRoad(float x, float y) {
+	public PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
