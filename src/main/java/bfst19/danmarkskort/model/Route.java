@@ -23,30 +23,27 @@ public class Route extends ArrayList<PolyRoad> {
 	public List<String> getTextDescription() {
 		List<String> result = new ArrayList<>();
 		PolyRoad last = null;
-		PolyRoad actualLast = null;
 		double summedDurationInMinutes = 0;
 		result.add("Start on " + get(0).getName());
-		for (PolyRoad road : this) {
+		for (int i = 0; i < this.size(); i++) {
+			PolyRoad road = get(i);
 			if (last == null) {
 				last = road;
-				actualLast = road;
 				continue;
 			}
 			double durationInMinutes = road.getDurationInMinutes();
 			summedDurationInMinutes += durationInMinutes;
 			if (last.getName().equals(road.getName())) {
-				actualLast = road;
 				continue;
 			}
 			String description = "";
 			description += "Drive for ";
 			description += getTimeDescription(summedDurationInMinutes);
-			description += getDirectionDescription(actualLast, road);
+			description += getDirectionDescription(get(i-1), road);
 			description += road.getName();
 			result.add(description);
 			summedDurationInMinutes = 0;
 			last = road;
-			actualLast = road;
 		}
 		result.add("You have arrived at your destination");
 		return result;
@@ -71,7 +68,6 @@ public class Route extends ArrayList<PolyRoad> {
 
 	private String getTimeDescription(double summedDurationInMinutes) {
 		if (summedDurationInMinutes < 1) {
-			//(" + String.format("%.0f", summedDurationInMinutes * 60) + " seconds) // the calculation for getting the time in seconds
 			return "less than a minute";
 		}
 		else {
