@@ -13,6 +13,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	private double length = 0;
 	private static PolyRoad[] allPolyRoads;
 	private EnumSet<RoadRestriction> restrictions;
+	private String name;
 
 	public static PolyRoad getPolyRoadFromIndex(int index){
 		return allPolyRoads[index];
@@ -25,7 +26,8 @@ public class PolyRoad extends Polyline implements Serializable {
 		this.speedLimit = way.getSpeedLimit();
 		index = -1;
 		restrictions = way.getRestrictions();
-		length = calculateLength();
+		length = calculateLengthSquared();
+		name = way.getName();
 	}
 
 	public static int getNumberOfRoads() {
@@ -76,7 +78,7 @@ public class PolyRoad extends Polyline implements Serializable {
 		return tempToSize;
 	}
 
-	private double calculateLength() {
+	private double calculateLengthSquared() {
 		double result = 0;
 		for (int i = 0; i < coords.length - 2; i += 2) {
 			result += findDistanceBetweenSquared(coords[i], coords[i+1], coords[i+2], coords[i+3]);
@@ -111,13 +113,13 @@ public class PolyRoad extends Polyline implements Serializable {
 		lastConnections = add(lastConnections, road.getIndex());
 	}
 
-	public double euclideanDistanceSquaredTo(PolyRoad target){
+	public double euclideanDistanceSquaredToSqaured(PolyRoad target){
 		return findDistanceBetweenSquared(getRepresentativeX(), getRepresentativeY(), target.getRepresentativeX(), target.getRepresentativeY());
 	}
 
 	public double weightedEuclideanDistanceSquaredTo(PolyRoad target){
 		//130 km/t på motorveje
-		return euclideanDistanceSquaredTo(target)/130;
+		return euclideanDistanceSquaredToSqaured(target)/130;
 	}
 
 	private static double findDistanceBetweenSquared(double x1, double y1, double x2, double y2) {
@@ -172,6 +174,39 @@ public class PolyRoad extends Polyline implements Serializable {
 		return length;
 	}
 
+	public double getRealLength(){
+		double length = 0;
+		for (int i = 0; i < coords.length - 2; i += 2) {
+			length += findDistanceBetween(coords[i], coords[i+1], coords[i+2], coords[i+3]);
+		}
+		return length;
+	}
+
+	private double findDistanceBetween(float x1, float y1, float x2, float y2) {
+		return Math.sqrt(findDistanceBetweenSquared(x1,y1,x2,y2));
+	}
+
+	public double getDurationInMinutes() {
+		return (getRealLength() * 110 / getSpeedLimit()) * 60;
+	}
+
+	public double getDegree(PolyRoad connectedRoad) {
+		int end = coords.length;
+		double deltaX;
+		double deltaY;
+		if (getFirstConnections().contains(connectedRoad)) {
+			deltaX = coords[0] - coords[2];
+			deltaY = coords[1] - coords[3];
+		} else if (getLastConnections().contains(connectedRoad)) {
+			deltaX = coords[end-2] - coords[end-4];
+			deltaY = coords[end-1] - coords[end-3];
+		}
+		else {
+			throw new RuntimeException("Roads are not connected" + Arrays.toString(connectedRoad.getAllConnections()));
+		}
+		return Math.toDegrees(Math.atan2(deltaY, deltaX));
+	}
+
 	public double getSpeedLimit() {
 		return speedLimit;
 	}
@@ -211,5 +246,12 @@ public class PolyRoad extends Polyline implements Serializable {
 			return !restrictions.contains(RoadRestriction.CAR_ONLY);
 		}
 		return true;
+	}
+
+	public String getName() {
+		if (name == null) {
+			return "unknown road";
+		}
+		return name;
 	}
 }

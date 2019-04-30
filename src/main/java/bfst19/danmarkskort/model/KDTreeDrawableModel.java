@@ -74,7 +74,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 			for (Drawable drawable : wayTypeEnumMap.get(wayType)){
 				numOfFloats += drawable.getNumOfFloats();
 			}
-			System.out.println( wayTypeEnumMap.get(wayType).size() + " of " + wayType.name() + " having : " + numOfFloats + " floats");
+			//System.out.println( wayTypeEnumMap.get(wayType).size() + " of " + wayType.name() + " having : " + numOfFloats + " floats");
 		}
 	}
 

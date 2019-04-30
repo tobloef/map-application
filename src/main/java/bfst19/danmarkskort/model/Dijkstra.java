@@ -6,7 +6,7 @@ public class Dijkstra {
 	public static int[] pathToRoad;
 	private static double[] distTo;
 
-	public static List<PolyRoad> getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
+	public static Route getShortestPath(PolyRoad origin, PolyRoad destination, VehicleType vehicleType) throws DisconnectedRoadsException {
 		distTo = initializeDistTo(origin);
 		pathToRoad = new int[PolyRoad.getNumberOfRoads()];
 		IndexMinPQ<Double> remainingPolyRoads = new IndexMinPQ<>(PolyRoad.getNumberOfRoads());
@@ -37,9 +37,9 @@ public class Dijkstra {
 				}
 			}
 			if(foundPathTo(destination)){
-				List<PolyRoad> route = makeRoute(origin, destination, pathToRoad);
+				Route route = makeRoute(origin, destination, pathToRoad);
 				cleanup();
-				System.out.println(routeLength(route));
+				System.out.println(route.sumLength());
 				return route;
 			}
 		}
@@ -96,7 +96,7 @@ public class Dijkstra {
 			weight = polyRoad.weightedEuclideanDistanceSquaredTo(destination);
 		}
 		else {
-			weight = polyRoad.euclideanDistanceSquaredTo(destination);
+			weight = polyRoad.euclideanDistanceSquaredToSqaured(destination);
 		}
 		return weight;
 	}
@@ -110,8 +110,8 @@ public class Dijkstra {
 		return distTo;
 	}
 
-	private static List<PolyRoad> makeRoute(PolyRoad origin, PolyRoad destination, int[] previousRoads) {
-		List<PolyRoad> path = new ArrayList<>();
+	private static Route makeRoute(PolyRoad origin, PolyRoad destination, int[] previousRoads) {
+		Route path = new Route();
 		path.add(destination);
 		while(path.get(path.size()-1) != origin){
 			int prevRoadIndex = previousRoads[(path.get(path.size()-1)).getIndex()];
@@ -120,10 +120,6 @@ public class Dijkstra {
 		}
 		Collections.reverse(path);
 		return path;
-	}
-
-	public static double routeLength(List<PolyRoad> route) {
-		return route.stream().mapToDouble(PolyRoad::getLength).sum();
 	}
 
 	public static Iterable<? extends PolyRoad> getLastVisitedRoads() {

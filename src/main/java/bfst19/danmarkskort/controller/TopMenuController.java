@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.Route;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -72,7 +73,15 @@ public class TopMenuController {
 
 	@FXML
 	private void onPrintToFile(final ActionEvent event){
-		//TODO: Tænker der kan være en alert med et indtastningsfelt, til filnavn fx
+		Route route = model.getShortestPath();
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select map theme");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setInitialFileName(route.getSuggestedFileName());
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text file","*.txt"));
+		File file = fileChooser.showSaveDialog(primaryStage);
+
+		route.printToFile(file);
 	}
 
 	@FXML

@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.PolyRoad;
 import bfst19.danmarkskort.model.VehicleType;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import bfst19.danmarkskort.view.View;
@@ -26,7 +27,7 @@ public class Controller {
 	public void init(Model model, Stage stage) {
 		this.model = model;
 		mapCanvas.initialize(model);
-		waytypeSelectorController.init(model, borderPane);
+		WaytypeSelectorController.init(model, borderPane);
 		TopMenuController.init(model, stage);
 	}
 
@@ -71,6 +72,10 @@ public class Controller {
 			case P:{
 				model.addPOIAtCurrentMousePosition();
 				break;
+			}
+			case Q: {
+				PolyRoad road = model.getClosestRoad();
+				System.out.println(road.getName() + " " + road.getRepresentativeX() + " " + road.getRepresentativeY());
 			}
 		}
 	}

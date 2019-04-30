@@ -9,12 +9,7 @@ import javafx.scene.transform.Transform;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Model {
 	DrawableModel drawableModel = new KDTreeDrawableModel();
@@ -23,7 +18,7 @@ public class Model {
 	public Rectangle modelBounds;
 	float mouseX, mouseY;
 	PolyRoad start, end;
-	List<PolyRoad> shortestPath;
+	Route shortestPath;
 	VehicleType currentVehicleType = VehicleType.CAR;
 	private Theme theme;
 	private boolean HDOn;
@@ -89,9 +84,7 @@ public class Model {
 	}
 
 	public void fillBlacklist(){
-		for (WayType wayType: WayType.values()){
-			blacklistedWaytypes.add(wayType);
-		}
+		blacklistedWaytypes.addAll(Arrays.asList(WayType.values()));
 		notifyObservers();
 	}
 
@@ -205,20 +198,21 @@ public class Model {
 			shortestPath = Dijkstra.getShortestPath(start, end, currentVehicleType);
 		}
 		catch (DisconnectedRoadsException e) {
-			shortestPath = new ArrayList<>();
+			shortestPath = new Route();
 		}
 		time += System.nanoTime();
 		System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
+		shortestPath.print();
 		notifyObservers();
 	}
 
 
 
-	public List<? extends Drawable> getShortestPath() {
+	public Route getShortestPath() {
 		if (shortestPath != null){
 			return shortestPath;
 		}
-		else return new ArrayList<>();
+		else return new Route();
 	}
 
 	public void updateEnd() {
@@ -248,7 +242,7 @@ public class Model {
 		return getClosestRoad(mouseX, mouseY);
 	}
 
-	private PolyRoad getClosestRoad(float x, float y) {
+	public PolyRoad getClosestRoad(float x, float y) {
 		PolyRoad closestRoad = null;
 		for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)){
 			Drawable close = getNearest(roadType, new Point2D(x,y));
