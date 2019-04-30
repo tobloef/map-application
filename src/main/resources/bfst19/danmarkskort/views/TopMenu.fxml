@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <MenuBar xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
-         fx:controller="bfst19.danmarkskort.controller.TopMenu">
+         fx:controller="bfst19.danmarkskort.controller.TopMenuController">
         <Menu text="Program">
             <MenuItem text="Load File" onAction="#onLoadFile"/>
             <MenuItem text="Help" onAction="#onHelp"/>

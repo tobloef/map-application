@@ -1,7 +1,6 @@
 package bfst19.danmarkskort.controller;
 
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,19 +11,18 @@ import javafx.stage.Stage;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
-public class TopMenu {
+public class TopMenuController {
 	private static Model model;
 	private static Stage primaryStage;
-	private static TopMenu singletonInstance;
+	private static TopMenuController singletonInstance;
 
 	public static void init(Model modelParam, Stage stage){
 		model = modelParam;
 		primaryStage = stage;
 	}
 
-	public TopMenu(){
+	public TopMenuController(){
 		singletonInstance = this;
 	}
 
