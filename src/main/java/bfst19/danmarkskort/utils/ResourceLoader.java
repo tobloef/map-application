@@ -18,6 +18,9 @@ public class ResourceLoader {
     private static Boolean useLeadingSlash = null;
 
     public static URL getResource(String name) {
+        if (name.startsWith("rs:")) {
+            name = name.substring(3);
+        }
         name = fixPath(name);
         return Main.class.getResource(name);
     }

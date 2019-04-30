@@ -224,27 +224,22 @@ public class MapCanvas extends Canvas {
 		if (getDegreesLatitudePerPixel() > tooltipMinZoom) {
 			return;
 		}
-
 		float mouseModelX = model.getMouseModelX();
 		float mouseModelY = model.getMouseModelY();
-
 		float mouseScreenX = model.getMouseScreenX();
 		float mouseScreenY = model.getMouseScreenY();
-
-
 		PolyRoad road = model.getClosestRoad(mouseModelX, mouseModelY);
 		if (road == null) {
 			return;
 		}
-
-		// TODO: Max distance to road, so we don't draw roads when hovering in the sea.
-		// TODO: This should be scaled to be the same, regardless of zoom level, so it's the same number of pixels you need to be within a road of.
+		if (road.getStreetName() == null) {
+			return;
+		}
 		double distance = Math.sqrt(road.euclideanDistanceSquaredTo(mouseModelX, mouseModelY));
 		distance = distance / getDegreesLatitudePerPixel();
 		if (distance > tooltipMaxDistance) {
 			return;
 		}
-
 		Platform.runLater(() -> {
 			tooltip.setText(road.getStreetName());
 			Point2D screenCoords = this.localToScreen(mouseScreenX, mouseScreenY);

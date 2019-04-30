@@ -137,6 +137,7 @@ public class Model {
 		time += System.nanoTime();
 		System.out.printf("Load time: %.1fs\n", time / 1e9);
         executor = Executors.newSingleThreadScheduledExecutor();
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> executor.shutdown()));
     }
 
 	public void loadNewDataset(String argumentPath) throws IOException, XMLStreamException, ClassNotFoundException{
