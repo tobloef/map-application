@@ -19,7 +19,6 @@ public class PlaceParsing {
     private static List<String> fileListCache;
 
     public static void savePlace(Place place) throws IOException {
-        if (1==1) return; // TODO: Remove this line
         Address address = place.getAddress();
         String key = getKey(address.getStreetName(), address.getCity());
         if (!streetOutputStreams.containsKey(key)) {

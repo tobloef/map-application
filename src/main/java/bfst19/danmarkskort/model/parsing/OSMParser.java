@@ -48,7 +48,6 @@ public class OSMParser {
             "addr:postcode",
     };
 
-
     private float lonFactor = 1.0f;
     private LongMap<OSMNode> idToNode = new LongMap<>();
     private OSMNode currentNode = null;
@@ -80,7 +79,7 @@ public class OSMParser {
     }
 
     private void doneParsing() throws IOException {
-        //PlaceParsing.closeStreams();
+        PlaceParsing.closeStreams();
         idToNode = null;
         idToWay = null;
         System.gc();

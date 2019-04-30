@@ -7,10 +7,10 @@ public class Rectangle implements Serializable {
 
 	public Rectangle(float xMin, float yMin, float xMax, float yMax) {
 		if (yMax < yMin){
-			//throw new IllegalArgumentException("yMax (" + yMax +") less then yMin (" + yMin + ")");
+			throw new IllegalArgumentException("yMax (" + yMax +") less then yMin (" + yMin + ")");
 		}
 		else if (xMax < xMin){
-			//throw new IllegalArgumentException("xMax (" + xMax +") less then xMin (" + xMin + ")");
+			throw new IllegalArgumentException("xMax (" + xMax +") less then xMin (" + xMin + ")");
 		}
 		this.xMin = xMin;
 		this.yMin = yMin;
