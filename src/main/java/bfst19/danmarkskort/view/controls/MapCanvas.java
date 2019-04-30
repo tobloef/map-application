@@ -163,17 +163,4 @@ public class MapCanvas extends Canvas {
 		// Needed because the model is flipped
 		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
 	}
-
-	public Rectangle getSmallModelBounds(){
-		int boxsize = 100;
-		Bounds bounds = this.getBoundsInLocal();
-		double minX = bounds.getMinX() + bounds.getMaxX()/2 - boxsize;
-		double minY = bounds.getMinY()+ bounds.getMaxY()/2 - boxsize;
-		double maxX = bounds.getMaxX()/2 + boxsize;
-		double maxY = bounds.getMaxY()/2 + boxsize;
-		Point2D min = this.modelCoords(minX, minY);
-		Point2D max = this.modelCoords(maxX, maxY);
-		// Needed because the model is flipped
-		return new Rectangle((float)min.getX(), (float)max.getY(), (float)max.getX(), (float)min.getY());
-	}
 }
