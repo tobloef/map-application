@@ -55,29 +55,7 @@ public class TopMenu {
 	@FXML
 	private void onPrintToFile(final ActionEvent event){
 		//TODO: Tænker der kan være en alert med et indtastningsfelt, til filnavn fx
-		try {
-			Route route = model.getShortestPath();
-			if (route.isEmpty()) {
-				throw new InvalidUserInputException("Please select a route.");
-			}
-			//fixme figure out where the file should be outputted
-			//String fileName = route.get(0).getName() + "_" + route.get(route.size()-1).getName() + ".txt";
-			String fileName = "sample.txt";
-			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
-			for (String string : route.getTextDescription()) {
-				bufferedWriter.write(string + String.format("%n"));
-			}
-			bufferedWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidUserInputException e) {
-			Alert alert = new Alert(Alert.AlertType.ERROR,
-					e.getMessage(),
-					ButtonType.CLOSE);
-			alert.setTitle("Error: Wrong input");
-			alert.setHeaderText("Error: Wrong input");
-			alert.show();
-		}
+		model.getShortestPath().printToFile();
 	}
 
 	@FXML
