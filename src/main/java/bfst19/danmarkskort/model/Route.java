@@ -17,6 +17,7 @@ public class Route extends ArrayList<PolyRoad> {
 		PolyRoad last = null;
 		PolyRoad actualLast = null;
 		double summedDurationInMinutes = 0;
+		result.add("Start on " + get(0).getName());
 		for (PolyRoad road : this) {
 			if (last == null) {
 				last = road;
@@ -62,7 +63,7 @@ public class Route extends ArrayList<PolyRoad> {
 
 	private String getTimeDescription(double summedDurationInMinutes) {
 		if (summedDurationInMinutes < 1) {
-			return "less than a minute (" + summedDurationInMinutes * 60 + " seconds)";
+			return "less than a minute (" + String.format("%.0f", summedDurationInMinutes * 60) + " seconds)";
 		}
 		else {
 			return String.format("%.0f", summedDurationInMinutes) + " minutes";
