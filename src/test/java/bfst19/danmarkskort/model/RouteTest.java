@@ -17,10 +17,26 @@ public class RouteTest {
 		List<String> args = new ArrayList<String>();
 		args.add(filePath);
 		Model model = new Model(args);
-		PolyRoad start = model.getClosestRoad(7.0991707f, 55.672295f);
-		PolyRoad end = model.getClosestRoad(7.09944f, 55.673607f);
+		float startX = 7.0991707f;
+		float startY = 55.672295f;
+		PolyRoad start = model.getClosestRoad(startX, startY);
+		float endX = 7.09944f;
+		float endY = 55.673607f;
+		PolyRoad end = model.getClosestRoad(endX, endY);
 		assertEquals("Wildersgade", start.getName());
 		assertEquals("Strandgade", end.getName());
 
+		model.setMouseCoords(startX, startY);
+		model.updateStart();
+		model.setMouseCoords(endX, endY);
+		model.updateEnd();
+		Route route = model.getShortestPath();
+		assertEquals(4, route.size());
+		List<String> fakeDescription = new ArrayList<>();
+		fakeDescription.add("Start on Wildersgade");
+		fakeDescription.add("Drive for less than a minute and turn left onto Torvegade");
+		fakeDescription.add("Drive for less than a minute and turn right onto Strandgade");
+		fakeDescription.add("You have arrived at your destination");
+		assertEquals(fakeDescription, route.getTextDescription());
 	}
 }
