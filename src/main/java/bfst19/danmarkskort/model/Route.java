@@ -115,6 +115,9 @@ public class Route extends ArrayList<PolyRoad> {
 	}
 
 	public void printToFile(File file) {
+		if (file == null) {
+			return;
+		}
 		try {
 			if (isEmpty()) {
 				throw new InvalidUserInputException("Please select a route.");
