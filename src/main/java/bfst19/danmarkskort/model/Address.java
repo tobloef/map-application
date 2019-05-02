@@ -9,8 +9,6 @@ public class Address implements Serializable {
     private String houseNumber;
     private String city;
 
-    public Address() {}
-
     public Address(
             float lat,
             float lon,
@@ -35,5 +33,10 @@ public class Address implements Serializable {
 
     public String getCity() {
         return city;
+    }
+
+    @Override
+    public String toString() {
+        return streetName + " " + houseNumber + ", " + city;
     }
 }

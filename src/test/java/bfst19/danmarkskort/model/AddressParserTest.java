@@ -154,4 +154,17 @@ public class AddressParserTest {
         assertEquals(null, result.getFloor());
         assertEquals(null, result.getDoor());
     }
+
+    @Test
+    public void testParse_StreetHouseNumberCommaCity() {
+        String query = "Vej To 2, By Et";
+        AddressQuery result = addressParser.parse(query);
+        assertNotNull(result);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals("By Et", result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals("2", result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
+    }
 }

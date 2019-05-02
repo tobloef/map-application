@@ -38,7 +38,8 @@ public class AddressSearch {
         List<Address> matches = null;
         if (addressQuery.getStreetName() != null) {
             matches = getAddressesWithStreetName(addressQuery.getStreetName());
-        } else if (addressQuery.getCity() != null) {
+        }
+        if (matches == null && addressQuery.getCity() != null) {
             matches = getAddressesWithCity(addressQuery.getCity());
             matches.sort(Comparator.comparing(Address::getStreetName));
         }
@@ -73,6 +74,9 @@ public class AddressSearch {
 
     private <T> List<Address> getAddressesWithProperty(List<Address> addresses, T value, Function<Address, T> getter, Comparator<T> comparator) {
         int middle = BinarySearch.search(addresses, value, getter, comparator);
+        if (middle == -1) {
+            return null;
+        }
         int low = middle;
         int high = middle;
         while (low > 0) {
