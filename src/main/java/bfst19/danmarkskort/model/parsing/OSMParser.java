@@ -59,7 +59,7 @@ public class OSMParser {
     private NodeGraphCreator nodeGraphCreator;
     private Map<String, String> tags = new HashMap<>();
     private List<Address> addresses = new ArrayList<>();
-    private List<String> cities = new ArrayList<>();
+    private Set<String> cities = new HashSet<>();
 
     public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
         InputStream osmSource;
@@ -79,7 +79,6 @@ public class OSMParser {
     }
 
     private void doneParsing() {
-        addresses.sort(Comparator.comparing(a -> a.getStreetName().toLowerCase()));
         idToNode = null;
         idToWay = null;
         System.gc();
@@ -459,5 +458,9 @@ public class OSMParser {
 
     public List<Address> getAddresses() {
         return addresses;
+    }
+
+    public Set<String> getCities() {
+        return cities;
     }
 }

@@ -34,7 +34,8 @@ public class Model {
     private Theme theme;
     private boolean HDOn;
     private String themePath;
-	private List<Address> addresses = new ArrayList<>();
+	private Address[] addresses;
+	private String[] cities;
 
 	//Code duplication, sorry
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
@@ -182,11 +183,23 @@ public class Model {
 			}
 		} else {
 			OSMParser parser = new OSMParser(filename, drawableModel);
-			modelBounds = parser.getModelBounds();
-			addresses = parser.getAddresses();
+			setFieldsFromParser(parser);
 			String path = filename + ".ser";
 			serializeData(path);
 		}
+	}
+
+	private void setFieldsFromParser(OSMParser parser) {
+		// Set model bounds
+		modelBounds = parser.getModelBounds();
+		// Set addresses
+		List<Address> addressList = parser.getAddresses();
+		addressList.sort(Comparator.comparing(a -> a.getStreetName().toLowerCase()));
+		addresses = addressList.toArray(new Address[0]);
+		// Set cities
+		List<String> cityList = new ArrayList<>(parser.getCities());
+		Collections.sort(cityList);
+		cities = cityList.toArray(new String[0]);
 	}
 
 	private void parseObj(String path) throws IOException, ClassNotFoundException {
