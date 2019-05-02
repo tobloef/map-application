@@ -61,6 +61,7 @@ public class OSMParser {
     private Map<String, String> tags = new HashMap<>();
     private List<Address> addresses = new ArrayList<>();
     private Set<String> cities = new HashSet<>();
+    private Set<String> streetNames = new HashSet<>();
 
     public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
         InputStream osmSource;
@@ -409,11 +410,12 @@ public class OSMParser {
         if (streetName == null) {
             return;
         }
-        Address address = new Address(lat, lon, streetName, houseNumber, city);
-        addresses.add(address);
+        streetNames.add(streetName);
         if (city != null) {
             cities.add(city);
         }
+        Address address = new Address(lat, lon, streetName, houseNumber, city);
+        addresses.add(address);
     }
 
     private long getPlaceOSMId() {
@@ -463,5 +465,9 @@ public class OSMParser {
 
     public Set<String> getCities() {
         return cities;
+    }
+
+    public Set<String> getStreetNames() {
+        return streetNames;
     }
 }

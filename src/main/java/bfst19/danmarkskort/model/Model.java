@@ -13,6 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Model {
 	private final static long mouseIdleTime = 250;
@@ -34,8 +35,10 @@ public class Model {
     private Theme theme;
     private boolean HDOn;
     private String themePath;
-	private Address[] addresses;
-	private String[] cities;
+	private List<Address> addressesByStreetName;
+	private List<Address> addressesByCity;
+	private List<String> cities;
+	private List<String> streetNames;
 
 	//Code duplication, sorry
 	public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
@@ -193,13 +196,19 @@ public class Model {
 		// Set model bounds
 		modelBounds = parser.getModelBounds();
 		// Set addresses
-		List<Address> addressList = parser.getAddresses();
-		addressList.sort(Comparator.comparing(a -> a.getStreetName().toLowerCase()));
-		addresses = addressList.toArray(new Address[0]);
+		addressesByStreetName = parser.getAddresses();
+		addressesByStreetName.sort(Comparator.comparing(a -> a.getStreetName().toLowerCase()));
+		addressesByCity = parser.getAddresses();
+		addressesByCity = addressesByCity.stream()
+				.filter(a -> a.getCity() != null)
+				.sorted(Comparator.comparing(a -> a.getCity().toLowerCase()))
+				.collect(Collectors.toList());
 		// Set cities
-		List<String> cityList = new ArrayList<>(parser.getCities());
-		Collections.sort(cityList);
-		cities = cityList.toArray(new String[0]);
+		cities = new ArrayList<>(parser.getCities());
+		Collections.sort(cities);
+		// Set cities
+		streetNames = new ArrayList<>(parser.getStreetNames());
+		Collections.sort(streetNames);
 	}
 
 	private void parseObj(String path) throws IOException, ClassNotFoundException {

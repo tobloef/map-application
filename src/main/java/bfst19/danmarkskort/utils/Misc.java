@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Misc {
     public static <T> T pickNotNull(T first, T second) {
@@ -35,9 +36,15 @@ public class Misc {
     }
 
     public static String internIfNotNull(String str) {
-        if (str != null && false) {
+        if (str != null) {
             str = str.intern();
         }
         return str;
+    }
+
+    public static List<String> trimList(List<String> list) {
+        return list.stream()
+                .map(String::trim)
+                .collect(Collectors.toList());
     }
 }

@@ -1,43 +1,88 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.AddressParser;
+import bfst19.danmarkskort.model.parsing.AddressParserFromData;
 import bfst19.danmarkskort.utils.BinarySearch;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class AddressSearch {
-    private static List<String> fileList;
+    private List<Address> addressesByStreetName;
+    private List<Address> addressesByCity;
+    private List<String> streetNames;
+    private List<String> cities;
+    private AddressParser addressParser;
 
-    public static List<Address> getRecommendations(List<Address> addresses, List<String> cities, String stringQuery) {
-        AddressQuery addressQuery = AddressParser.parse(addresses, cities, stringQuery);
+    public AddressSearch(
+            List<Address> addressesByStreetName,
+            List<Address> addressesByCity,
+            List<String> streetNames,
+            List<String> cities
+    ) {
+        this.addressesByStreetName = addressesByStreetName;
+        this.addressesByCity = addressesByCity;
+        this.streetNames = streetNames;
+        this.cities = cities;
+        addressParser = new AddressParserFromData(streetNames, cities);
+    }
+
+    public List<Address> getRecommendations(String stringQuery) {
+        AddressQuery addressQuery = addressParser.parse(stringQuery);
         if (addressQuery == null) {
             return null;
         }
-        if (addressQuery.getStreetName() == null) {
+        List<Address> matches = null;
+        if (addressQuery.getStreetName() != null) {
+            matches = getAddressesWithStreetName(addressQuery.getStreetName());
+        } else if (addressQuery.getCity() != null) {
+            matches = getAddressesWithCity(addressQuery.getCity());
+            matches.sort(Comparator.comparing(Address::getStreetName));
+        }
+        if (matches == null) {
             return null;
         }
-        List<Address> matches = getAddressesWithStreetName(addresses, addressQuery.getStreetName());
         matches = matches.stream()
-                .filter(a -> Objects.equals(a.getCity(), addressQuery.getCity()))
-                .filter(a -> Objects.equals(a.getHouseNumber(), addressQuery.getHouseNumber()))
-                .collect(Collectors.toList());
+            .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getStreetName, Address::getStreetName))
+            .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getCity, Address::getCity))
+            .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getHouseNumber, Address::getHouseNumber))
+            .collect(Collectors.toList());
         return matches;
     }
 
-    public static List<Address> getAddressesWithStreetName(List<Address> addresses, String streetName) {
-        int middle = BinarySearch.search(addresses, streetName, Address::getStreetName, String::compareToIgnoreCase);
+    public List<Address> getAddressesWithStreetName(String streetName) {
+        return getAddressesWithProperty(
+                addressesByStreetName,
+                streetName,
+                Address::getStreetName,
+                String::compareToIgnoreCase
+        );
+    }
+
+    public List<Address> getAddressesWithCity(String city) {
+        return getAddressesWithProperty(
+                addressesByCity,
+                city,
+                Address::getCity,
+                String::compareToIgnoreCase
+        );
+    }
+
+    private <T> List<Address> getAddressesWithProperty(List<Address> addresses, T value, Function<Address, T> getter, Comparator<T> comparator) {
+        int middle = BinarySearch.search(addresses, value, getter, comparator);
         int low = middle;
         int high = middle;
         while (low > 0) {
-            if (!Objects.equals(addresses.get(low - 1).getStreetName(), streetName)) {
+            if (!Objects.equals(getter.apply(addresses.get(low - 1)), value)) {
                 break;
             }
             low--;
         }
         while (high + 2 < addresses.size()) {
-            if (!Objects.equals(addresses.get(high + 1).getStreetName(), streetName)) {
+            if (!Objects.equals(getter.apply(addresses.get(high + 1)), value)) {
                 break;
             }
             high++;
@@ -45,95 +90,19 @@ public class AddressSearch {
         return addresses.subList(low, high + 1);
     }
 
-
-    /*public static Place test() {
-        try {
-            Address address = queryToAddress("Amagerbrogade 2, 709");
-            List<String> cities = getCities(address.getStreetName());
-            address.setCity(cities.get(0));
-            List<Place> places = getPlaces(address.getStreetName(), address.getCity());
-            for (Place place : places) {
-                Address newAddress = place.getAddress();
-                if (isAddressMatch(address, newAddress)) {
-                    return place;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    private boolean searchIfQueryNotNull(
+            AddressQuery query,
+            Address address,
+            Function<AddressQuery, String> queryGetter,
+            Function<Address, String> addressGetter
+    ) {
+        String queryString = queryGetter.apply(query);
+        String addressString = addressGetter.apply(address);
+        if (queryString != null && addressString != null) {
+            boolean isEqual = addressString.equalsIgnoreCase(queryString);
+            boolean startsWith = addressString.startsWith(queryString);
+            return isEqual || startsWith;
         }
-
-        return null;
+        return true;
     }
-
-    private static boolean isAddressMatch(Address address, Address newAddress) {
-        boolean streetNamesMatch = Objects.equals(
-                newAddress.getStreetName().toLowerCase(),
-                address.getStreetName().toLowerCase()
-        );
-        boolean cityMatch = Objects.equals(
-                newAddress.getCity().toLowerCase(),
-                address.getCity().toLowerCase()
-        );
-        boolean houseNumberMatch = Objects.equals(
-                newAddress.getHouseNumber().toLowerCase(),
-                address.getHouseNumber().toLowerCase()
-        );
-        return streetNamesMatch && cityMatch && houseNumberMatch;
-    }
-
-    public static List<String> getRecommendations(String query) {
-        List<String> recommendations = new ArrayList<>();
-        Address address = queryToAddress(query);
-
-        //Get streets that start with query.
-        //Get streets that match parsed and add house numbers.
-        //Get cities that match parsed.
-        //Read post code and recommend city.
-        //If matches city, get streets in city.
-        return null;
-    }
-
-    public static Address queryToAddress(String query) {
-        return AddressParser.parse(query);
-    }
-
-    public static List<Place> getPlaces(String streetName, String city) throws IOException, ClassNotFoundException {
-        return PlaceParsing.loadPlaces(streetName, city);
-    }
-
-    public static List<String> getCities(String streetName) {
-        Set<String> set = new HashSet<>();
-        for (String str : PlaceParsing.getDecodedFileList()) {
-            if (!str.toLowerCase().startsWith(streetName.toLowerCase() + "_")) {
-                continue;
-            }
-            String substring = str.substring(str.indexOf("_") + 1);
-            if (substring.equals("null")) {
-                continue;
-            }
-            set.add(substring);
-        }
-        return new ArrayList<>(set);
-    }
-
-    public static List<String> getStreets() {
-        Set<String> set = new HashSet<>();
-        for (String str : PlaceParsing.getDecodedFileList()) {
-            String substring = str.substring(0, str.indexOf("_"));
-            set.add(substring);
-        }
-        return new ArrayList<>(set);
-    }
-
-    public static List<String> getStreets(String city) {
-        Set<String> set = new HashSet<>();
-        for (String str : PlaceParsing.getDecodedFileList()) {
-            if (!str.toLowerCase().endsWith("_" + city.toLowerCase())) {
-                continue;
-            }
-            String substring = str.substring(0, str.indexOf("_"));
-            set.add(substring);
-        }
-        return new ArrayList<>(set);
-    }*/
 }

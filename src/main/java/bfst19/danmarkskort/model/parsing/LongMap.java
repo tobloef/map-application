@@ -43,14 +43,4 @@ public class LongMap<T extends LongSupplier> {
 		}
 		return BinarySearch.search(elements, ref, getter, Long::compareTo);
 	}
-
-	public boolean hasDuplicates() {
-		Set<Long> foundLongs = new HashSet<>();
-		for (T element : elements) {
-			if (foundLongs.contains(element.getAsLong())) return true;
-			foundLongs.add(element.getAsLong());
-		}
-		return false;
-	}
-
 }
