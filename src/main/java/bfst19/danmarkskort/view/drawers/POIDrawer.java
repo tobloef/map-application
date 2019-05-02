@@ -2,9 +2,8 @@ package bfst19.danmarkskort.view.drawers;
 
 import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.PointOfInterest;
 import bfst19.danmarkskort.model.WayType;
-import bfst19.danmarkskort.view.controls.MapCanvas;
+import bfst19.danmarkskort.view.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class POIDrawer implements Drawer{

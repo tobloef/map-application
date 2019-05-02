@@ -35,6 +35,14 @@ public class Address implements Serializable {
         return city;
     }
 
+    public float getLat() {
+        return lat;
+    }
+
+    public float getLon() {
+        return lon;
+    }
+
     @Override
     public String toString() {
         return streetName + " " + houseNumber + ", " + city;

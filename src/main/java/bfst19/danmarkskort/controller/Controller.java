@@ -3,23 +3,18 @@ package bfst19.danmarkskort.controller;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.PolyRoad;
 import bfst19.danmarkskort.model.VehicleType;
-import bfst19.danmarkskort.view.controls.MapCanvas;
+import bfst19.danmarkskort.view.MapCanvas;
 import bfst19.danmarkskort.view.View;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import javax.tools.Tool;
 import java.io.IOException;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 public class Controller {
 	private Model model;

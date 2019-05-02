@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.view.controls;
+package bfst19.danmarkskort.view;
 
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.PolyRoad;

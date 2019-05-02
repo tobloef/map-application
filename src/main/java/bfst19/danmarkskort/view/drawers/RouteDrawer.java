@@ -1,16 +1,12 @@
 package bfst19.danmarkskort.view.drawers;
 
 import bfst19.danmarkskort.model.*;
-import bfst19.danmarkskort.view.controls.MapCanvas;
+import bfst19.danmarkskort.view.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import static bfst19.danmarkskort.utils.ThemeLoader.loadTheme;
 
 public class RouteDrawer implements Drawer{
 	private boolean enabled = true;
