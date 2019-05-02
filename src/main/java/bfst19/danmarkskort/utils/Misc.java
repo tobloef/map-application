@@ -1,7 +1,11 @@
 package bfst19.danmarkskort.utils;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Misc {
     public static <T> T pickNotNull(T first, T second) {
@@ -31,7 +35,7 @@ public class Misc {
     }
 
     public static String internIfNotNull(String str) {
-        if (str != null) {
+        if (str != null && false) {
             str = str.intern();
         }
         return str;

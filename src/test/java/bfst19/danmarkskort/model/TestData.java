@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestData {
     public final static List<Address> addresses = new ArrayList<>(Arrays.asList(
@@ -18,4 +19,9 @@ public class TestData {
             new Address(0, 0, "Vej Tre", "2", "By To"),
             new Address(0, 0, "Vej Tre", "3", "By To")
     ));
+
+    public final static List<String> cities = TestData.addresses.stream()
+            .map(Address::getCity)
+            .distinct()
+            .collect(Collectors.toList());
 }

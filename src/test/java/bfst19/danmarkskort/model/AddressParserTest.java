@@ -3,7 +3,11 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.AddressParser;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SuppressWarnings("SimplifiableJUnitAssertion")
 public class AddressParserTest {
@@ -11,7 +15,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_Street() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "Vej");
+        String query = "Vej";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej");
         assertEquals(result.getCity(), null);
         assertEquals(result.getPostCode(), null);
@@ -22,7 +28,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_StreetWithSpace() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "Vej To");
+        String query = "Vej To";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej To");
         assertEquals(result.getCity(), null);
         assertEquals(result.getPostCode(), null);
@@ -33,7 +41,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_StreetWithSpaceAndCity() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "Vej To By");
+        String query = "Vej To By";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej To");
         assertEquals(result.getCity(), "By");
         assertEquals(result.getPostCode(), null);
@@ -44,7 +54,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_StreetWithSpaceCommaCity() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "Vej To, By");
+        String query = "Vej To, By";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej To");
         assertEquals(result.getCity(), "By");
         assertEquals(result.getPostCode(), null);
@@ -55,7 +67,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_CityStreetName() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "By Vej To");
+        String query = "By Vej To";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej To");
         assertEquals(result.getCity(), "By");
         assertEquals(result.getPostCode(), null);
@@ -66,7 +80,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_CityStreetNameHouseNumberCommas() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "By, Vej To, 268");
+        String query = "By, Vej To, 268";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej To");
         assertEquals(result.getCity(), "By");
         assertEquals(result.getPostCode(), null);
@@ -77,7 +93,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_testParse_CityStreetNameHouseNumber() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "By Vej To 268");
+        String query = "By Vej To 268";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej To");
         assertEquals(result.getCity(), "By");
         assertEquals(result.getPostCode(), null);
@@ -88,7 +106,9 @@ public class AddressParserTest {
 
     @Test
     public void testParse_StreetNameHouseNumberCity() {
-        AddressQuery result = AddressParser.parse(TestData.addresses, "Vej To 268 By");
+        String query = "Vej To 268 By";
+        AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
+        assertNotNull(result);
         assertEquals(result.getStreetName(), "Vej To");
         assertEquals(result.getCity(), "By");
         assertEquals(result.getPostCode(), null);

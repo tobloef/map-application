@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.AddressParser;
+import bfst19.danmarkskort.utils.BinarySearch;
 
 import java.io.IOException;
 import java.util.*;
@@ -9,8 +10,8 @@ import java.util.stream.Collectors;
 public class AddressSearch {
     private static List<String> fileList;
 
-    public static List<Address> getRecommendations(List<Address> addresses, String stringQuery) {
-        AddressQuery addressQuery = AddressParser.parse(addresses, stringQuery);
+    public static List<Address> getRecommendations(List<Address> addresses, List<String> cities, String stringQuery) {
+        AddressQuery addressQuery = AddressParser.parse(addresses, cities, stringQuery);
         if (addressQuery == null) {
             return null;
         }
@@ -26,30 +27,15 @@ public class AddressSearch {
     }
 
     public static List<Address> getAddressesWithStreetName(List<Address> addresses, String streetName) {
-        int low = 0;
-        int high = addresses.size();
-        int middle = 0;
-
-        while (high - low > 1) {
-            middle = low + (high - low) / 2;
-            String middleStr = addresses.get(middle).getStreetName();
-            int compare = streetName.compareToIgnoreCase(middleStr);
-            if (compare == 0) {
-                break;
-            } else if (compare < 0) {
-                high = middle;
-            } else {
-                low = middle;
-            }
-        }
-        low = middle;
+        int middle = BinarySearch.search(addresses, streetName, Address::getStreetName, String::compareToIgnoreCase);
+        int low = middle;
+        int high = middle;
         while (low > 0) {
             if (!Objects.equals(addresses.get(low - 1).getStreetName(), streetName)) {
                 break;
             }
             low--;
         }
-        high = middle;
         while (high + 2 < addresses.size()) {
             if (!Objects.equals(addresses.get(high + 1).getStreetName(), streetName)) {
                 break;

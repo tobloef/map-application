@@ -4,6 +4,7 @@ import bfst19.danmarkskort.model.Address;
 import bfst19.danmarkskort.model.AddressQuery;
 import bfst19.danmarkskort.model.AddressSearch;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -76,19 +77,14 @@ public class AddressParser {
         }
     }
 
-    public static AddressQuery parse(List<Address> addresses, String query) {
-        // TODO:
-        return null;
-    }
-
-    private List<List<String>> getPossibleSplits(String query) {
+    public static AddressQuery parse(List<Address> addresses, List<String> cities, String query) {
         List<String> commaSplits = Arrays.asList(query.split(","));
         commaSplits = trimList(commaSplits);
-        // TODO:
+        // TODO: Implement this
         return null;
     }
 
-    private List<String> trimList(List<String> list) {
+    private static List<String> trimList(List<String> list) {
         return list.stream()
                 .map(String::trim)
                 .collect(Collectors.toList());
