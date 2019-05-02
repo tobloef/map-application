@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model.parsing;
 import bfst19.danmarkskort.model.Address;
 import bfst19.danmarkskort.model.AddressQuery;
 import bfst19.danmarkskort.model.AddressSearch;
+import bfst19.danmarkskort.utils.BinarySearch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,8 +81,68 @@ public class AddressParser {
     public static AddressQuery parse(List<Address> addresses, List<String> cities, String query) {
         List<String> commaSplits = Arrays.asList(query.split(","));
         commaSplits = trimList(commaSplits);
-        // TODO: Implement this
-        return null;
+        AddressQuery addressQuery = new AddressQuery();
+        for (String commaSplit : commaSplits) {
+            List<String> splits = Arrays.asList(commaSplit.split(" "));
+            if (addressQuery.getStreetName() == null) {
+                trySetStreetName(addresses, cities, addressQuery, splits);
+                if (addressQuery.getStreetName() != null) {
+                    continue;
+                }
+            }
+            if (addressQuery.getCity() == null) {
+                trySetCity(cities, addressQuery, splits, 0, splits.size());
+                if (addressQuery.getCity() != null) {
+                    continue;
+                }
+            }
+            if (addressQuery.getHouseNumber() == null) {
+                trySetHouseNumber(addressQuery, splits, 0);
+            }
+        }
+        return addressQuery;
+    }
+
+    private static void trySetStreetName(List<Address> addresses, List<String> cities, AddressQuery addressQuery, List<String> splits) {
+        for (int i = 0; i < splits.size(); i++) {
+            for (int j = splits.size(); j > 0; j--) {
+                String candidate = String.join(" ", splits.subList(i, j));
+                int streetIndex = BinarySearch.search(addresses, candidate, Address::getStreetName, String::compareToIgnoreCase);
+                if (streetIndex != -1) {
+                    addressQuery.setStreetName(candidate);
+                    // Try set house
+                    trySetHouseNumber(addressQuery, splits, j);
+                    // Try set city
+                    trySetCity(cities, addressQuery, splits, 0, i);
+                    if (addressQuery.getCity() == null) {
+                        trySetCity(cities, addressQuery, splits, j, splits.size());
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    private static void trySetHouseNumber(AddressQuery addressQuery, List<String> splits, int startIndex) {
+        if (startIndex < splits.size()) {
+            String houseCandidate = splits.get(startIndex);
+            if (houseCandidate.matches(houseRegex)) {
+                addressQuery.setHouseNumber(houseCandidate);
+            }
+        }
+    }
+
+    private static void trySetCity(List<String> cities, AddressQuery addressQuery, List<String> splits, int startIndex, int endIndex) {
+        for (int i = startIndex; i < endIndex; i++) {
+            for (int j = endIndex - 1; j >= startIndex; j--) {
+                String candidate = String.join(" ", splits.subList(i, j + 1));
+                int cityIndex = BinarySearch.search(cities, candidate, String::compareToIgnoreCase);
+                if (cityIndex != -1) {
+                    addressQuery.setCity(candidate);
+                    return;
+                }
+            }
+        }
     }
 
     private static List<String> trimList(List<String> list) {

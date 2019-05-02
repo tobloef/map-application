@@ -3,9 +3,6 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.AddressParser;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -15,15 +12,15 @@ public class AddressParserTest {
 
     @Test
     public void testParse_Street() {
-        String query = "Vej";
+        String query = "Vej Et";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej");
-        assertEquals(result.getCity(), null);
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), null);
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej Et", result.getStreetName());
+        assertEquals(null, result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals(null, result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 
     @Test
@@ -31,89 +28,89 @@ public class AddressParserTest {
         String query = "Vej To";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej To");
-        assertEquals(result.getCity(), null);
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), null);
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals(null, result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals(null, result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 
     @Test
     public void testParse_StreetWithSpaceAndCity() {
-        String query = "Vej To By";
+        String query = "Vej To By Et";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej To");
-        assertEquals(result.getCity(), "By");
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), null);
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals("By Et", result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals(null, result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 
     @Test
     public void testParse_StreetWithSpaceCommaCity() {
-        String query = "Vej To, By";
+        String query = "Vej To, By Et";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej To");
-        assertEquals(result.getCity(), "By");
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), null);
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals("By Et", result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals(null, result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 
     @Test
     public void testParse_CityStreetName() {
-        String query = "By Vej To";
+        String query = "By Et Vej To";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej To");
-        assertEquals(result.getCity(), "By");
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), null);
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals("By Et", result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals(null, result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 
     @Test
     public void testParse_CityStreetNameHouseNumberCommas() {
-        String query = "By, Vej To, 268";
+        String query = "By Et, Vej To, 268";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej To");
-        assertEquals(result.getCity(), "By");
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), "268");
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals("By Et", result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals("268", result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 
     @Test
     public void testParse_testParse_CityStreetNameHouseNumber() {
-        String query = "By Vej To 268";
+        String query = "By Et Vej To 268";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej To");
-        assertEquals(result.getCity(), "By");
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), "268");
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals("By Et", result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals("268", result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 
     @Test
     public void testParse_StreetNameHouseNumberCity() {
-        String query = "Vej To 268 By";
+        String query = "Vej To 268 By Et";
         AddressQuery result = AddressParser.parse(TestData.addresses, TestData.cities, query);
         assertNotNull(result);
-        assertEquals(result.getStreetName(), "Vej To");
-        assertEquals(result.getCity(), "By");
-        assertEquals(result.getPostCode(), null);
-        assertEquals(result.getHouseNumber(), "268");
-        assertEquals(result.getFloor(), null);
-        assertEquals(result.getDoor(), null);
+        assertEquals("Vej To", result.getStreetName());
+        assertEquals("By Et", result.getCity());
+        assertEquals(null, result.getPostCode());
+        assertEquals("268", result.getHouseNumber());
+        assertEquals(null, result.getFloor());
+        assertEquals(null, result.getDoor());
     }
 }
