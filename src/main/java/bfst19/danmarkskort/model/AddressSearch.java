@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 public class AddressSearch {
     private static List<String> fileList;
 
-    public static List<Address> getReccomendations(List<Address> addresses, String stringQuery) {
-        AddressQuery addressQuery = AddressParser.parse(stringQuery);
+    public static List<Address> getRecommendations(List<Address> addresses, String stringQuery) {
+        AddressQuery addressQuery = AddressParser.parse(addresses, stringQuery);
         if (addressQuery == null) {
             return null;
         }

@@ -2,10 +2,13 @@ package bfst19.danmarkskort.model.parsing;
 
 import bfst19.danmarkskort.model.Address;
 import bfst19.danmarkskort.model.AddressQuery;
+import bfst19.danmarkskort.model.AddressSearch;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class AddressParser {
     // The regular expressions below are based on the actual legal requirements.
@@ -56,7 +59,6 @@ public class AddressParser {
             {streetRegex, houseRegex},
 
             {streetRegex, cityRegex, postcodeRegex},
-            {streetRegex, cityRegex},
 
             {streetRegex},
     };
@@ -74,10 +76,28 @@ public class AddressParser {
         }
     }
 
-    public static AddressQuery parse(String str) {
+    public static AddressQuery parse(List<Address> addresses, String query) {
+        // TODO:
+        return null;
+    }
+
+    private List<List<String>> getPossibleSplits(String query) {
+        List<String> commaSplits = Arrays.asList(query.split(","));
+        commaSplits = trimList(commaSplits);
+        // TODO:
+        return null;
+    }
+
+    private List<String> trimList(List<String> list) {
+        return list.stream()
+                .map(String::trim)
+                .collect(Collectors.toList());
+    }
+
+    private static AddressQuery parseWithPatterns(String query) {
         // We simply try each pattern until a match is found
         for (Pattern pattern : compiledPatterns) {
-            Matcher matcher = pattern.matcher(str.trim());
+            Matcher matcher = pattern.matcher(query.trim());
             if (matcher.matches()) {
                 // Try to get the properties from each named group, ignoring the group if it isn't found.
                 return new AddressQuery.Builder()

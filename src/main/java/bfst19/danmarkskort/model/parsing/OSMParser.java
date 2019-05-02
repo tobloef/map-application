@@ -59,6 +59,7 @@ public class OSMParser {
     private NodeGraphCreator nodeGraphCreator;
     private Map<String, String> tags = new HashMap<>();
     private List<Address> addresses = new ArrayList<>();
+    private List<String> cities = new ArrayList<>();
 
     public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
         InputStream osmSource;
@@ -410,6 +411,9 @@ public class OSMParser {
         }
         Address address = new Address(lat, lon, streetName, houseNumber, city);
         addresses.add(address);
+        if (city != null) {
+            cities.add(city);
+        }
     }
 
     private long getPlaceOSMId() {
