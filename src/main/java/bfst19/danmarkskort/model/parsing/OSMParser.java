@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.zip.ZipInputStream;
 
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
+import static bfst19.danmarkskort.utils.Misc.internIfNotNull;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
@@ -246,7 +247,7 @@ public class OSMParser {
     private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
         EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad(way);
         int speedLimit = getMaxSpeed();
-        String streetName = getWithFallback(tags, nameKeys);
+        String streetName = internIfNotNull(getWithFallback(tags, nameKeys));
         return new OSMRoadWay(way, newNodes, streetName, speedLimit, currentType, restrictions);
     }
 
@@ -402,9 +403,9 @@ public class OSMParser {
         }
         float lat = positionNode.getLat();
         float lon = positionNode.getLon();
-        String streetName = getWithFallback(tags, streetNameKeys);
-        String houseNumber = getWithFallback(tags, houseNumberKeys);
-        String city = getWithFallback(tags, cityKeys);
+        String streetName = internIfNotNull(getWithFallback(tags, streetNameKeys));
+        String houseNumber = internIfNotNull(getWithFallback(tags, houseNumberKeys));
+        String city = internIfNotNull(getWithFallback(tags, cityKeys));
         if (streetName == null) {
             return;
         }

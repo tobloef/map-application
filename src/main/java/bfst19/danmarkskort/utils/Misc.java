@@ -29,4 +29,11 @@ public class Misc {
         }
         return null;
     }
+
+    public static String internIfNotNull(String str) {
+        if (str != null) {
+            str = str.intern();
+        }
+        return str;
+    }
 }
