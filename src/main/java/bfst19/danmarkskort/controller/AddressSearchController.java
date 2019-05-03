@@ -3,18 +3,23 @@ package bfst19.danmarkskort.controller;
 import bfst19.danmarkskort.model.Address;
 import bfst19.danmarkskort.model.AddressSearch;
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.Route;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class AddressSearchController {
     private static final int MAX_SUGGESTIONS = 10;
@@ -58,6 +63,76 @@ public class AddressSearchController {
         instance.togglePanel();
     }
 
+    public void togglePanel() {
+        if (enabled) {
+            removeUI();
+        } else {
+            addUI();
+        }
+        enabled = !enabled;
+    }
+
+    private void addUI() {
+        borderPane.setLeft(addressPane);
+        addressPane.setCenter(addressLayoutBox);
+        startPopup = new ContextMenu();
+        endPopup = new ContextMenu();
+        initializePopup(startPopup, startField, endPopup, Model::setStart);
+        initializePopup(endPopup, endField, startPopup, Model::setEnd);
+    }
+
+    private void initializePopup(ContextMenu popup, TextField field, ContextMenu otherPopup, BiConsumer<Model, Address> modelSetter) {
+        popup.setAutoHide(false);
+        popup.setAutoFix(false);
+        popup.setOnShowing(newValue -> {
+            System.out.println("onShowing");
+        });
+        popup.setOnHiding(newValue -> {
+            System.out.println("onHiding");
+        });
+        Duration pauseTime = Duration.millis(DEBOUNCE_DELAY);
+        PauseTransition debounce = new PauseTransition(pauseTime);
+        field.textProperty().addListener((observable, oldValue, newValue) -> {
+            debounce.setOnFinished(event -> {
+                updatePopup(popup, field, otherPopup, newValue, (address) -> {
+                    modelSetter.accept(model, address);
+                    updateRouteDescription();
+                });
+            });
+            debounce.playFromStart();
+        });
+        field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                popup.hide();
+            }
+        });
+    }
+
+    private void updateRouteDescription() {
+        Route route = model.getShortestPath();
+        if (route == null) {
+            return;
+        }
+        VBox vbox = new VBox();
+        vbox.setFillWidth(true);
+        for (String text : route.getTextDescription()) {
+            Label label = new Label(" • " + text);
+            label.setStyle("-fx-font-size: 15px");
+            label.setWrapText(true);
+            vbox.getChildren().add(label);
+            vbox.getChildren().add(new Separator());
+        }
+        directionsScrollPane.setContent(vbox);
+    }
+
+    private void removeUI(){
+        addressLayoutBox.getChildren().removeAll();
+        addressPane.setCenter(null);
+        borderPane.setLeft(null);
+    }
+
+
+
     private void updatePopup(ContextMenu popup, TextField field, ContextMenu otherPopup, String newValue, Consumer<Address> addressHandler) {
         if (otherPopup != null) {
             otherPopup.hide();
@@ -84,6 +159,9 @@ public class AddressSearchController {
             String string = suggestion.getKey();
             Address address = suggestion.getValue();
             Label entryLabel = new Label(string);
+            double width = field.getWidth() - field.getInsets().getLeft() - field.getInsets().getRight();
+            entryLabel.setPrefWidth(width);
+            entryLabel.setWrapText(true);
             CustomMenuItem item = new CustomMenuItem(entryLabel, true);
             item.setOnAction(event -> {
                 field.textProperty().setValue(string);
@@ -97,45 +175,5 @@ public class AddressSearchController {
         }
         popup.getItems().clear();
         popup.getItems().addAll(items);
-    }
-
-    public void togglePanel() {
-        if (enabled) {
-            removeUI();
-        } else {
-            addUI();
-        }
-        enabled = !enabled;
-    }
-
-    private void addUI() {
-        borderPane.setLeft(addressPane);
-        addressPane.setCenter(addressLayoutBox);
-        startPopup = new ContextMenu();
-        Duration pauseTime = Duration.millis(DEBOUNCE_DELAY);
-        // Start position controls
-        PauseTransition pauseStart = new PauseTransition(pauseTime);
-        startField.textProperty().addListener((observable, oldValue, newValue) -> {
-            pauseStart.setOnFinished(event -> {
-                updatePopup(startPopup, startField, endPopup, newValue, model::setStart);
-            });
-            pauseStart.playFromStart();
-        });
-        startField.focusedProperty().addListener((observable, oldValue, newValue) -> startPopup.hide());
-        // End position controls
-        endPopup = new ContextMenu();
-        PauseTransition pauseEnd = new PauseTransition(pauseTime);
-        endField.textProperty().addListener((observable, oldValue, newValue) -> {
-            pauseEnd.setOnFinished(event -> {
-                updatePopup(endPopup, endField, startPopup, newValue, model::setEnd);
-            });
-        });
-        endField.focusedProperty().addListener((observable, oldValue, newValue) -> endPopup.hide());
-    }
-
-    private void removeUI(){
-        addressLayoutBox.getChildren().removeAll();
-        addressPane.setCenter(null);
-        borderPane.setLeft(null);
     }
 }

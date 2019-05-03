@@ -68,7 +68,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 
 
 	private void countFloats() {
-		System.out.println("Number of floats for each type");
+		//System.out.println("Number of floats for each type");
 		for (WayType wayType : WayType.values()){
 			long numOfFloats = 0;
 			for (Drawable drawable : wayTypeEnumMap.get(wayType)){

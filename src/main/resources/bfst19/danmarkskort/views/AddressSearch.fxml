@@ -20,7 +20,7 @@
             fx:id="addressLayoutBox"
             style="-fx-padding: 10px;"
         >
-            <Label>Start-position</Label>
+            <Label style="-fx-font-weight: bold">Start-position</Label>
             <TextField fx:id="startField">
                 <VBox.margin>
                     <Insets>
@@ -28,7 +28,7 @@
                     </Insets>
                 </VBox.margin>
             </TextField>
-            <Label>Destination</Label>
+            <Label style="-fx-font-weight: bold">Destination</Label>
             <TextField fx:id="endField">
                 <VBox.margin>
                     <Insets>
@@ -36,11 +36,12 @@
                     </Insets>
                 </VBox.margin>
             </TextField>
-            <Label>Rutevejledning</Label>
+            <Label style="-fx-font-weight: bold">Rutevejledning</Label>
             <ScrollPane
                 fx:id="directionsScrollPane"
                 VBox.vgrow="ALWAYS"
                 style="-fx-focus-color: transparent; -fx-background-insets: 0"
+                fitToWidth="true"
             />
         </VBox>
     </center>

@@ -32,7 +32,6 @@ public class RouteTest {
 		model.updateEnd();
 		Route route = model.getShortestPath();
 		assertEquals(3, route.size());
-		route.print();
 		List<String> fakeDescription = new ArrayList<>();
 		fakeDescription.add("Start on Wildersgade");
 		fakeDescription.add("Drive 199 m and turn left onto Torvegade");

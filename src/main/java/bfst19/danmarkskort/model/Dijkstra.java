@@ -39,7 +39,6 @@ public class Dijkstra {
 			if(foundPathTo(destination)){
 				Route route = makeRoute(origin, destination, pathToRoad);
 				cleanup();
-				System.out.println(route.sumLength());
 				return route;
 			}
 		}

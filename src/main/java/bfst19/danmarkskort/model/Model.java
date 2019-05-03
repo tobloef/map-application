@@ -287,7 +287,6 @@ public class Model {
 		}
 		time += System.nanoTime();
 		System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
-        shortestPath.print();
         notifyWayTypeObservers();
     }
 
@@ -394,9 +393,17 @@ public class Model {
 		return streetNames;
 	}
 
+	public PolyRoad getStart() {
+		return start;
+	}
+
 	public void setStart(Address address) {
 		start = getClosestRoad(address.getLon(), address.getLat());
 		updateShortestPath();
+	}
+
+	public PolyRoad getEnd() {
+		return end;
 	}
 
 	public void setEnd(Address address) {

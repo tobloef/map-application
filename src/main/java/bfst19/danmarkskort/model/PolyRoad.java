@@ -14,7 +14,7 @@ public class PolyRoad extends Polyline implements Serializable {
 	private double length = 0;
 	private static PolyRoad[] allPolyRoads;
 	private EnumSet<RoadRestriction> restrictions;
-	final static String defaultStreetName = "Ukendt vej";
+	final static String defaultStreetName = "ukendt vej";
 
 	public static PolyRoad getPolyRoadFromIndex(int index){
 		return allPolyRoads[index];

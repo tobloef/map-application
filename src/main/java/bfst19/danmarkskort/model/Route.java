@@ -21,6 +21,9 @@ public class Route extends ArrayList<PolyRoad> {
 	}
 
 	public List<String> getTextDescription() {
+		if (size() == 0) {
+			return new ArrayList<>();
+		}
 		List<String> result = new ArrayList<>();
 		double summedLength = get(0).getRealLength();
 		result.add("Start on " + get(0).getStreetNameOrDefault());
@@ -112,12 +115,6 @@ public class Route extends ArrayList<PolyRoad> {
 			angle += 360;
 		}
 		return angle;
-	}
-
-	public void print() {
-		for (String string : this.getTextDescription()) {
-			System.out.println(string);
-		}
 	}
 
 	public void printToFile(File file) {
