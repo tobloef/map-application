@@ -377,4 +377,30 @@ public class Model {
 	public boolean getIsMouseInWindow() {
 		return isMouseInWindow;
 	}
+
+	public List<Address> getAddressesByStreetName() {
+		return addressesByStreetName;
+	}
+
+	public List<Address> getAddressesByCity() {
+		return addressesByCity;
+	}
+
+	public List<String> getCities() {
+		return cities;
+	}
+
+	public List<String> getStreetNames() {
+		return streetNames;
+	}
+
+	public void setStart(Address address) {
+		start = getClosestRoad(address.getLon(), address.getLat());
+		updateShortestPath();
+	}
+
+	public void setEnd(Address address) {
+		end = getClosestRoad(address.getLon(), address.getLat());
+		updateShortestPath();
+	}
 }

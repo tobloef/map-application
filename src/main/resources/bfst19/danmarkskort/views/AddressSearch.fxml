@@ -13,6 +13,11 @@
         -fx-border-width: 0px 2px 0px 0px;
     </style>
     <VBox fx:id="addressLayoutBox">
-
+        <TextField
+            fx:id="startField"
+        />
+        <TextField
+            fx:id="endField"
+        />
     </VBox>
 </ScrollPane>

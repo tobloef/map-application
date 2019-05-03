@@ -29,12 +29,12 @@ public class AddressSearchTest {
     }
 
     @Test
-    public void testGetRecommendations_Street() {
+    public void testgetSuggestions_Street() {
         String query = "Vej To";
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .collect(Collectors.toList());
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -43,13 +43,13 @@ public class AddressSearchTest {
     }
 
     @Test
-    public void testGetRecommendations_StreetCity() {
+    public void testgetSuggestions_StreetCity() {
         String query = "Vej To By Et";
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .collect(Collectors.toList());
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -58,13 +58,13 @@ public class AddressSearchTest {
     }
 
     @Test
-    public void testGetRecommendations_CityStreet() {
+    public void testgetSuggestions_CityStreet() {
         String query = "By Et Vej To";
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .collect(Collectors.toList());
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -73,14 +73,14 @@ public class AddressSearchTest {
     }
 
     @Test
-    public void testGetRecommendations_CityStreetHouseNumber() {
+    public void testgetSuggestions_CityStreetHouseNumber() {
         String query = "By Et Vej To 1";
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .filter(address -> address.getHouseNumber().startsWith("1"))
                 .collect(Collectors.toList());
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -89,22 +89,22 @@ public class AddressSearchTest {
     }
 
     @Test
-    public void testGetRecommendations_PartialStreet() {
+    public void testgetSuggestions_PartialStreet() {
         String query = "Vej T";
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         if (actual != null) {
             assertEquals(0, actual.size());
         }
     }
 
     @Test
-    public void testGetRecommendations_CityPartialStreet() {
+    public void testgetSuggestions_CityPartialStreet() {
         String query = "By Et Vej";
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> address.getStreetName().startsWith("Vej"))
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .collect(Collectors.toList());
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -113,13 +113,13 @@ public class AddressSearchTest {
     }
 
     @Test
-    public void testGetRecommendations_StreetPartialCity() {
+    public void testgetSuggestions_StreetPartialCity() {
         String query = "Vej To By";
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> address.getCity().startsWith("By"))
                 .collect(Collectors.toList());
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -128,13 +128,13 @@ public class AddressSearchTest {
     }
 
     @Test
-    public void testGetRecommendations_StreetPartialHouseNumber() {
+    public void testgetSuggestions_StreetPartialHouseNumber() {
         String query = "Vej To 1";
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> address.getHouseNumber().startsWith("1"))
                 .collect(Collectors.toList());
-        List<Address> actual = addressSearch.getRecommendations(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {

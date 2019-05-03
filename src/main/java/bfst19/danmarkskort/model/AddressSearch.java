@@ -3,7 +3,9 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.AddressParser;
 import bfst19.danmarkskort.model.parsing.AddressParserFromData;
 import bfst19.danmarkskort.utils.BinarySearch;
+import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +32,7 @@ public class AddressSearch {
         addressParser = new AddressParserFromData(streetNames, cities);
     }
 
-    public List<Address> getRecommendations(String stringQuery) {
+    public List<Pair<String, Address>> getSuggestions(String stringQuery) {
         AddressQuery addressQuery = addressParser.parse(stringQuery);
         if (addressQuery == null) {
             return null;
@@ -43,15 +45,27 @@ public class AddressSearch {
             matches = getAddressesWithCity(addressQuery.getCity());
             matches.sort(Comparator.comparing(Address::getStreetName));
         }
-        if (matches == null) {
-            return null;
+        List<Pair<String, Address>> suggestions;
+        if (matches != null) {
+            suggestions = matches.stream()
+                    .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getStreetName, Address::getStreetName))
+                    .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getCity, Address::getCity))
+                    .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getHouseNumber, Address::getHouseNumber))
+                    .map(a -> new Pair<>(a.toString(), a))
+                    .collect(Collectors.toList());
+        } else {
+            suggestions = streetNames.stream()
+                    .filter(s -> s.toLowerCase().startsWith(stringQuery.toLowerCase()))
+                    .map(s -> new Pair<String, Address>(s, null))
+                    .collect(Collectors.toList());
+            if (suggestions.size() == 0) {
+                suggestions = cities.stream()
+                        .filter(s -> s.toLowerCase().startsWith(stringQuery.toLowerCase()))
+                        .map(s -> new Pair<String, Address>(s, null))
+                        .collect(Collectors.toList());
+            }
         }
-        matches = matches.stream()
-            .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getStreetName, Address::getStreetName))
-            .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getCity, Address::getCity))
-            .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getHouseNumber, Address::getHouseNumber))
-            .collect(Collectors.toList());
-        return matches;
+        return suggestions;
     }
 
     public List<Address> getAddressesWithStreetName(String streetName) {
