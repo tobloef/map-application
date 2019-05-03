@@ -1,8 +1,6 @@
 package bfst19.danmarkskort.view;
 
-import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.PolyRoad;
-import bfst19.danmarkskort.model.Rectangle;
+import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.view.drawers.*;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
@@ -73,16 +71,14 @@ public class MapCanvas extends Canvas {
 		clearBackground();
 		updateLineWidth();
 		for (Drawer drawer : drawers) {
-			if (drawer.getEnabled()) {
-				graphicsContext.save();
-				try {
-					drawer.draw();
-				} catch (Exception e) {
-					System.err.println("IT'S FUCKY WUCKY!");
-					e.printStackTrace();
-				} finally {
-					graphicsContext.restore();
-				}
+			if (!drawer.getEnabled()) {
+				continue;
+			}
+			graphicsContext.save();
+			try {
+				drawer.draw();
+			} finally {
+				graphicsContext.restore();
 			}
 		}
 	}
@@ -110,6 +106,14 @@ public class MapCanvas extends Canvas {
 		pan(xMargin, yMargin);
 		Affine transform = graphicsContext.getTransform();
 		minZoom = transform.getMxx();
+	}
+
+	public void panViewToAddress(Address address) {
+		// TODO: Implement
+	}
+
+	public void panViewToRoute(Route route) {
+		// TODO: Implement
 	}
 
 	private double findInitialZoomFactor() {

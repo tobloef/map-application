@@ -33,7 +33,7 @@ public class Controller {
 		this.model = model;
 		mapCanvas.initialize(model);
 		WaytypeSelectorController.init(model, borderPane);
-		AddressSearchController.init(model, borderPane);
+		AddressSearchController.init(model, borderPane, mapCanvas);
 		TopMenuController.init(model, stage);
 		updateSearchToggleButtonText();
 	}

@@ -4,28 +4,23 @@ import bfst19.danmarkskort.model.Address;
 import bfst19.danmarkskort.model.AddressSearch;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Route;
+import bfst19.danmarkskort.view.MapCanvas;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class AddressSearchController {
     private static final int MAX_SUGGESTIONS = 10;
     private static final int DEBOUNCE_DELAY = 300;
-
 
     @FXML
     private ScrollPane directionsScrollPane;
@@ -38,24 +33,21 @@ public class AddressSearchController {
     @FXML
     private TextField endField;
 
-    private BorderPane borderPane;
-
-    private ContextMenu startPopup;
-    private ContextMenu endPopup;
+    private BorderPane parent;
+    private boolean dontReopenPopup = false;
+    public boolean enabled = false;
 
     private static Model model;
     private static AddressSearch addressSearch;
-    private boolean dontReopenPopup = false;
-
-    public boolean enabled = false;
+    private static MapCanvas mapCanvas;
     public static AddressSearchController instance;
 
     public AddressSearchController(){
         instance = this;
     }
 
-    public static void init(Model model, BorderPane borderPane){
-        instance.borderPane = borderPane;
+    public static void init(Model model, BorderPane parent, MapCanvas mapCanvas){
+        instance.parent = parent;
         AddressSearchController.model = model;
         addressSearch = new AddressSearch(
                 model.getAddressesByStreetName(),
@@ -63,6 +55,7 @@ public class AddressSearchController {
                 model.getStreetNames(),
                 model.getCities()
         );
+        AddressSearchController.mapCanvas = mapCanvas;
         instance.togglePanel();
     }
 
@@ -76,10 +69,10 @@ public class AddressSearchController {
     }
 
     private void addUI() {
-        borderPane.setLeft(addressPane);
+        parent.setLeft(addressPane);
         addressPane.setCenter(addressLayoutBox);
-        startPopup = new ContextMenu();
-        endPopup = new ContextMenu();
+        ContextMenu startPopup = new ContextMenu();
+        ContextMenu endPopup = new ContextMenu();
         initializePopup(startPopup, startField, endPopup, address -> model.setStart(address));
         initializePopup(endPopup, endField, startPopup, address -> model.setEnd(address));
     }
@@ -95,7 +88,13 @@ public class AddressSearchController {
             debounce.setOnFinished(event -> {
                 updatePopup(popup, field, otherPopup, newValue, (address) -> {
                     addressHandler.accept(address);
-                    updateRouteDescription();
+                    Route route = model.getShortestPath();
+                    if (route != null) {
+                        mapCanvas.panViewToRoute(route);
+                    } else if (address != null) {
+                        mapCanvas.panViewToAddress(address);
+                    }
+                    updateRouteDescription(route);
                 });
                 dontReopenPopup = false;
             });
@@ -108,8 +107,7 @@ public class AddressSearchController {
         });
     }
 
-    private void updateRouteDescription() {
-        Route route = model.getShortestPath();
+    private void updateRouteDescription(Route route) {
         if (route == null) {
             return;
         }
@@ -128,7 +126,7 @@ public class AddressSearchController {
     private void removeUI(){
         addressLayoutBox.getChildren().removeAll();
         addressPane.setCenter(null);
-        borderPane.setLeft(null);
+        parent.setLeft(null);
     }
 
     private void updatePopup(ContextMenu popup, TextField field, ContextMenu otherPopup, String newValue, Consumer<Address> addressHandler) {
