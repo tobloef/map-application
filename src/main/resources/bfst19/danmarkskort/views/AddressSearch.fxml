@@ -2,22 +2,46 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<ScrollPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefWidth="300.0"
-            fx:controller="bfst19.danmarkskort.controller.AddressSearchController"
-            fx:id="addressScrollPane">
+<?import javafx.geometry.Insets?>
+<BorderPane
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+    prefWidth="300.0"
+    fx:controller="bfst19.danmarkskort.controller.AddressSearchController"
+    fx:id="addressPane"
+>
     <style>
-        -fx-background-color: #F5F5DC;
+        -fx-background-color: #FFFFFF;
         -fx-border-color: #000000;
         -fx-border-width: 0px 2px 0px 0px;
     </style>
-    <VBox fx:id="addressLayoutBox">
-        <TextField
-            fx:id="startField"
-        />
-        <TextField
-            fx:id="endField"
-        />
-    </VBox>
-</ScrollPane>
+    <center>
+        <VBox
+            fx:id="addressLayoutBox"
+            style="-fx-padding: 10px;"
+        >
+            <Label>Start-position</Label>
+            <TextField fx:id="startField">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </TextField>
+            <Label>Destination</Label>
+            <TextField fx:id="endField">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </TextField>
+            <Label>Rutevejledning</Label>
+            <ScrollPane
+                fx:id="directionsScrollPane"
+                VBox.vgrow="ALWAYS"
+                style="-fx-focus-color: transparent; -fx-background-insets: 0"
+            />
+        </VBox>
+    </center>
+</BorderPane>

@@ -8,7 +8,7 @@
       fx:controller="bfst19.danmarkskort.controller.WaytypeSelectorController"
       fx:id="waytypeScrollPane">
       <style>
-            -fx-background-color: #F5F5DC;
+            -fx-background-color: #FFFFFF;
             -fx-border-color: #000000;
             -fx-border-width: 0px 0px 0px 2px;
       </style>

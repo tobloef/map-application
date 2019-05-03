@@ -3,25 +3,30 @@ package bfst19.danmarkskort.controller;
 import bfst19.danmarkskort.model.Address;
 import bfst19.danmarkskort.model.AddressSearch;
 import bfst19.danmarkskort.model.Model;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
-import java.awt.color.CMMException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class AddressSearchController {
     private static final int MAX_SUGGESTIONS = 10;
+    private static final int DEBOUNCE_DELAY = 300;
 
+
+    @FXML
+    private ScrollPane directionsScrollPane;
     @FXML
     private VBox addressLayoutBox;
     @FXML
-    private ScrollPane addressScrollPane;
+    private BorderPane addressPane;
     @FXML
     private TextField startField;
     @FXML
@@ -31,17 +36,18 @@ public class AddressSearchController {
     private ContextMenu startPopup;
     private ContextMenu endPopup;
 
-    private static boolean enabled = false;
     private static Model model;
-    private static AddressSearchController singletonInstance;
     private static AddressSearch addressSearch;
 
+    public boolean enabled = false;
+    public static AddressSearchController instance;
+
     public AddressSearchController(){
-        singletonInstance = this;
+        instance = this;
     }
 
     public static void init(Model model, BorderPane borderPane){
-        singletonInstance.borderPane = borderPane;
+        instance.borderPane = borderPane;
         AddressSearchController.model = model;
         addressSearch = new AddressSearch(
                 model.getAddressesByStreetName(),
@@ -49,7 +55,7 @@ public class AddressSearchController {
                 model.getStreetNames(),
                 model.getCities()
         );
-        singletonInstance.togglePanel();
+        instance.togglePanel();
     }
 
     private void updatePopup(ContextMenu popup, TextField field, ContextMenu otherPopup, String newValue, Consumer<Address> addressHandler) {
@@ -103,25 +109,33 @@ public class AddressSearchController {
     }
 
     private void addUI() {
-        borderPane.setLeft(addressScrollPane);
-        addressScrollPane.setContent(addressLayoutBox);
-        addressScrollPane.setPannable(true);
-
+        borderPane.setLeft(addressPane);
+        addressPane.setCenter(addressLayoutBox);
         startPopup = new ContextMenu();
+        Duration pauseTime = Duration.millis(DEBOUNCE_DELAY);
+        // Start position controls
+        PauseTransition pauseStart = new PauseTransition(pauseTime);
         startField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updatePopup(startPopup, startField, endPopup, newValue, model::setStart);
+            pauseStart.setOnFinished(event -> {
+                updatePopup(startPopup, startField, endPopup, newValue, model::setStart);
+            });
+            pauseStart.playFromStart();
         });
         startField.focusedProperty().addListener((observable, oldValue, newValue) -> startPopup.hide());
+        // End position controls
         endPopup = new ContextMenu();
+        PauseTransition pauseEnd = new PauseTransition(pauseTime);
         endField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updatePopup(endPopup, endField, startPopup, newValue, model::setEnd);
+            pauseEnd.setOnFinished(event -> {
+                updatePopup(endPopup, endField, startPopup, newValue, model::setEnd);
+            });
         });
         endField.focusedProperty().addListener((observable, oldValue, newValue) -> endPopup.hide());
     }
 
     private void removeUI(){
         addressLayoutBox.getChildren().removeAll();
-        addressScrollPane.setContent(null);
+        addressPane.setCenter(null);
         borderPane.setLeft(null);
     }
 }

@@ -6,8 +6,10 @@ import bfst19.danmarkskort.model.VehicleType;
 import bfst19.danmarkskort.view.MapCanvas;
 import bfst19.danmarkskort.view.View;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -17,12 +19,15 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Controller {
-	private Model model;
-	private double x, y;
 	@FXML
 	private MapCanvas mapCanvas;
 	@FXML
 	private BorderPane borderPane;
+	@FXML
+	private Button toggleSearchButton;
+
+	private Model model;
+	private double x, y;
 
 	public void init(Model model, Stage stage) {
 		this.model = model;
@@ -30,6 +35,7 @@ public class Controller {
 		WaytypeSelectorController.init(model, borderPane);
 		AddressSearchController.init(model, borderPane);
 		TopMenuController.init(model, stage);
+		updateSearchToggleButtonText();
 	}
 
 	@FXML
@@ -120,5 +126,20 @@ public class Controller {
 	@FXML
 	public void onMouseExited(MouseEvent mouseEvent) {
 		model.setIsMouseInWindow(false);
+	}
+
+
+	@FXML
+	private void toggleSearchPane(ActionEvent actionEvent) {
+		AddressSearchController.instance.togglePanel();
+		updateSearchToggleButtonText();
+	}
+
+	private void updateSearchToggleButtonText() {
+		if (AddressSearchController.instance.enabled) {
+			toggleSearchButton.setText("<<");
+		} else {
+			toggleSearchButton.setText(">>");
+		}
 	}
 }
