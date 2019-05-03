@@ -17,6 +17,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -38,11 +39,13 @@ public class AddressSearchController {
     private TextField endField;
 
     private BorderPane borderPane;
+
     private ContextMenu startPopup;
     private ContextMenu endPopup;
 
     private static Model model;
     private static AddressSearch addressSearch;
+    private boolean dontReopenPopup = false;
 
     public boolean enabled = false;
     public static AddressSearchController instance;
@@ -77,27 +80,24 @@ public class AddressSearchController {
         addressPane.setCenter(addressLayoutBox);
         startPopup = new ContextMenu();
         endPopup = new ContextMenu();
-        initializePopup(startPopup, startField, endPopup, Model::setStart);
-        initializePopup(endPopup, endField, startPopup, Model::setEnd);
+        initializePopup(startPopup, startField, endPopup, address -> model.setStart(address));
+        initializePopup(endPopup, endField, startPopup, address -> model.setEnd(address));
     }
 
-    private void initializePopup(ContextMenu popup, TextField field, ContextMenu otherPopup, BiConsumer<Model, Address> modelSetter) {
+    private void initializePopup(ContextMenu popup, TextField field, ContextMenu otherPopup, Consumer<Address> addressHandler) {
         popup.setAutoHide(false);
         popup.setAutoFix(false);
-        popup.setOnShowing(newValue -> {
-            System.out.println("onShowing");
-        });
-        popup.setOnHiding(newValue -> {
-            System.out.println("onHiding");
-        });
+        popup.setHideOnEscape(false);
         Duration pauseTime = Duration.millis(DEBOUNCE_DELAY);
         PauseTransition debounce = new PauseTransition(pauseTime);
         field.textProperty().addListener((observable, oldValue, newValue) -> {
+            field.positionCaret(newValue.length());
             debounce.setOnFinished(event -> {
                 updatePopup(popup, field, otherPopup, newValue, (address) -> {
-                    modelSetter.accept(model, address);
+                    addressHandler.accept(address);
                     updateRouteDescription();
                 });
+                dontReopenPopup = false;
             });
             debounce.playFromStart();
         });
@@ -131,10 +131,8 @@ public class AddressSearchController {
         borderPane.setLeft(null);
     }
 
-
-
     private void updatePopup(ContextMenu popup, TextField field, ContextMenu otherPopup, String newValue, Consumer<Address> addressHandler) {
-        if (otherPopup != null) {
+        if (otherPopup != null && otherPopup.isShowing()) {
             otherPopup.hide();
         }
         if (newValue == null || newValue.isBlank() || newValue.isEmpty()) {
@@ -147,7 +145,7 @@ public class AddressSearchController {
             return;
         }
         populatePopup(popup, field, suggestions, addressHandler);
-        if (!popup.isShowing()) {
+        if (!popup.isShowing() && !dontReopenPopup) {
             popup.show(field, Side.BOTTOM, 0, 0);
         }
     }
@@ -163,13 +161,15 @@ public class AddressSearchController {
             entryLabel.setPrefWidth(width);
             entryLabel.setWrapText(true);
             CustomMenuItem item = new CustomMenuItem(entryLabel, true);
+            item.setHideOnClick(false);
             item.setOnAction(event -> {
+                if (address != null) {
+                    dontReopenPopup = true;
+                    addressHandler.accept(address);
+                    popup.hide();
+                }
                 field.textProperty().setValue(string);
                 field.positionCaret(string.length());
-                if (address != null) {
-                    popup.hide();
-                    addressHandler.accept(address);
-                }
             });
             items.add(item);
         }
