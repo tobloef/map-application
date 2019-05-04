@@ -9,45 +9,13 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
+import static bfst19.danmarkskort.model.parsing.OSMTagKeys.*;
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static bfst19.danmarkskort.utils.Misc.internIfNotNull;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
 public class OSMParser {
-    final private String[] streetNameKeys = new String[]{
-            "addr:street",
-            "osak:street_name",
-    };
-
-    final private String[] nameKeys = new String[]{
-            "name",
-    };
-
-    final private String[] houseNumberKeys = new String[]{
-            "addr:housenumber",
-            "osak:house_no",
-    };
-
-    final private String[] floorKeys = new String[]{
-            "addr:floor",
-    };
-
-    final private String[] doorKeys = new String[]{
-            "addr:door",
-    };
-
-    final private String[] cityKeys = new String[]{
-            "addr:city",
-            "is_in:city",
-            "osak:municipality_name",
-            "is_in",
-    };
-
-    final private String[] postCodeKeys = new String[]{
-            "addr:postcode",
-    };
-
     private float lonFactor = 1.0f;
     private LongMap<OSMNode> idToNode = new LongMap<>();
     private OSMNode currentNode = null;
@@ -76,8 +44,6 @@ public class OSMParser {
         }
         parseOSM(osmSource);
         doneParsing();
-
-        //AddressSearch.test();
     }
 
     private void doneParsing() {
