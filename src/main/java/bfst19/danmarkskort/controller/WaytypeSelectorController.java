@@ -14,80 +14,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WaytypeSelectorController {
-	@FXML
-	private VBox wayTypeLayoutBox;
-	@FXML
-	private ScrollPane waytypeScrollPane;
-	private BorderPane borderPane;
+    private static Model model;
+    private static WaytypeSelectorController singletonInstance;
+    @FXML
+    private VBox wayTypeLayoutBox;
+    @FXML
+    private ScrollPane waytypeScrollPane;
+    private BorderPane borderPane;
+    private List<CheckBox> waytypeSelectors = new ArrayList<>();
+    private boolean enabled = true;
 
-	private List<CheckBox> waytypeSelectors = new ArrayList<>();
+    public WaytypeSelectorController() {
+        singletonInstance = this;
+        SettingsController.init(this);
+    }
 
-	private boolean enabled = true;
-	private static Model model;
-	private static WaytypeSelectorController singletonInstance;
+    public static void init(Model modelParam, BorderPane borderPane) {
+        singletonInstance.borderPane = borderPane;
+        model = modelParam;
+        singletonInstance.loadWaytypes();
+        singletonInstance.togglePanel();
+    }
 
-	public static void init(Model modelParam, BorderPane borderPane){
-		singletonInstance.borderPane = borderPane;
-		model = modelParam;
-		singletonInstance.loadWaytypes();
-		singletonInstance.togglePanel();
-	}
+    private void loadWaytypes() {
+        borderPane.setRight(waytypeScrollPane);
+        waytypeScrollPane.setContent(wayTypeLayoutBox);
+        waytypeScrollPane.setPannable(true);
 
-	public WaytypeSelectorController(){
-		singletonInstance = this;
-		SettingsController.init(this);
-	}
+        buildCheckboxes();
+    }
 
-	private void loadWaytypes(){
-		borderPane.setRight(waytypeScrollPane);
-		waytypeScrollPane.setContent(wayTypeLayoutBox);
-		waytypeScrollPane.setPannable(true);
+    private void buildCheckboxes() {
+        for (CheckBox checkBox : waytypeSelectors) {
+            wayTypeLayoutBox.getChildren().remove(checkBox);
+        }
+        waytypeSelectors.removeAll(waytypeSelectors);
+        for (WayType wayType : WayType.values()) {
+            CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
+            checkBox.setSelected(!model.dontDraw(wayType));
+            checkBox.selectedProperty().addListener(
+                    //The parameters are not used, only for syntax
+                    (observable, oldValue, newValue) -> {
+                        model.toggleBlacklistWaytype(wayType);
+                    });
+            wayTypeLayoutBox.getChildren().add(checkBox);
+            waytypeSelectors.add(checkBox);
+        }
+    }
 
-		buildCheckboxes();
-	}
+    @FXML
+    private void onEnableAll(ActionEvent event) {
+        model.emptyBlacklist();
+        buildCheckboxes();
+    }
 
-	private void buildCheckboxes(){
-		for (CheckBox checkBox: waytypeSelectors){
-			wayTypeLayoutBox.getChildren().remove(checkBox);
-		}
-		waytypeSelectors.removeAll(waytypeSelectors);
-		for (WayType wayType: WayType.values()) {
-			CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
-			checkBox.setSelected(!model.dontDraw(wayType));
-			checkBox.selectedProperty().addListener(
-					//The parameters are not used, only for syntax
-					(observable, oldValue, newValue) -> {
-						model.toggleBlacklistWaytype(wayType);
-					});
-			wayTypeLayoutBox.getChildren().add(checkBox);
-			waytypeSelectors.add(checkBox);
-		}
-	}
+    @FXML
+    private void onDisableAll(ActionEvent event) {
+        model.fillBlacklist();
+        buildCheckboxes();
+    }
 
-	@FXML
-	private void onEnableAll(ActionEvent event){
-		model.emptyBlacklist();
-		buildCheckboxes();
-	}
+    public void togglePanel() {
+        if (enabled) {
+            removeUI();
+        } else {
+            loadWaytypes();
+        }
+        enabled = !enabled;
+    }
 
-	@FXML
-	private void onDisableAll(ActionEvent event){
-		model.fillBlacklist();
-		buildCheckboxes();
-	}
-
-	public void togglePanel(){
-		if (enabled){
-			removeUI();
-		} else {
-			loadWaytypes();
-		}
-		enabled = !enabled;
-	}
-
-	private void removeUI(){
-		wayTypeLayoutBox.getChildren().removeAll();
-		waytypeScrollPane.setContent(null);
-		borderPane.setRight(null);
-	}
+    private void removeUI() {
+        wayTypeLayoutBox.getChildren().removeAll();
+        waytypeScrollPane.setContent(null);
+        borderPane.setRight(null);
+    }
 }

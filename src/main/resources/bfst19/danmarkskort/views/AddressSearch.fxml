@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane
-    xmlns="http://javafx.com/javafx"
     xmlns:fx="http://javafx.com/fxml"
+    xmlns="http://javafx.com/javafx"
     prefWidth="300.0"
     fx:controller="bfst19.danmarkskort.controller.AddressSearchController"
     fx:id="addressPane"

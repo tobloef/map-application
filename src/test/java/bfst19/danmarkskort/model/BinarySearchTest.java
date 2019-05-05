@@ -13,7 +13,7 @@ public class BinarySearchTest {
     @Test
     public void testSearch_integerFound1() {
         List<Integer> list = new ArrayList<>(Arrays.asList(
-                0,1,2,3,4,5,6,7,8,9
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         ));
         list.sort(Integer::compareTo);
         int index = BinarySearch.search(list, 8, Integer::compareTo);
@@ -23,7 +23,7 @@ public class BinarySearchTest {
     @Test
     public void testSearch_integerFound2() {
         List<Integer> list = new ArrayList<>(Arrays.asList(
-                0,1,2,3,4,5,6,7,8,9
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         ));
         list.sort(Integer::compareTo);
         int index = BinarySearch.search(list, 2, Integer::compareTo);

@@ -27,6 +27,7 @@ public class RadixTreeTest {
         assertNotNull(tree.search("Men"));
         assertNotNull(tree.search("Man"));
     }
+
     @Test
     public void testWordNotFound() {
         RadixTreeNode tree = new RadixTreeNode();

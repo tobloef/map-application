@@ -27,6 +27,7 @@ public class TrieTest {
         assertNotNull(trie.search("Men"));
         assertNotNull(trie.search("Man"));
     }
+
     @Test
     public void testWordNotFound() {
         TrieNode trie = new TrieNode();

@@ -21,7 +21,11 @@ import java.util.function.Consumer;
 public class AddressSearchController {
     private static final int MAX_SUGGESTIONS = 10;
     private static final int DEBOUNCE_DELAY = 300;
-
+    public static AddressSearchController instance;
+    private static Model model;
+    private static AddressSearch addressSearch;
+    private static MapCanvas mapCanvas;
+    public boolean enabled = false;
     @FXML
     private ScrollPane directionsScrollPane;
     @FXML
@@ -32,21 +36,14 @@ public class AddressSearchController {
     private TextField startField;
     @FXML
     private TextField endField;
-
     private BorderPane parent;
     private boolean dontReopenPopup = false;
-    public boolean enabled = false;
 
-    private static Model model;
-    private static AddressSearch addressSearch;
-    private static MapCanvas mapCanvas;
-    public static AddressSearchController instance;
-
-    public AddressSearchController(){
+    public AddressSearchController() {
         instance = this;
     }
 
-    public static void init(Model model, BorderPane parent, MapCanvas mapCanvas){
+    public static void init(Model model, BorderPane parent, MapCanvas mapCanvas) {
         instance.parent = parent;
         AddressSearchController.model = model;
         addressSearch = new AddressSearch(model.getAddressData());
@@ -118,7 +115,7 @@ public class AddressSearchController {
         directionsScrollPane.setContent(vbox);
     }
 
-    private void removeUI(){
+    private void removeUI() {
         addressLayoutBox.getChildren().removeAll();
         addressPane.setCenter(null);
         parent.setLeft(null);

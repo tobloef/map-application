@@ -42,7 +42,7 @@
     texture: "rs:textures/sand.jpg"
 
 - MOTORWAY:
-      fillColor:
-      strokeColor: "E43D1A"
-      lineWidth: 0.0005
-      zoomLevel:
+    fillColor:
+    strokeColor: "E43D1A"
+    lineWidth: 0.0005
+    zoomLevel:

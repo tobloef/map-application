@@ -349,12 +349,12 @@ public class Model {
         return modelBounds;
     }
 
-    public void setIsMouseInWindow(boolean isMouseInWindow) {
-        this.isMouseInWindow = isMouseInWindow;
-    }
-
     public boolean getIsMouseInWindow() {
         return isMouseInWindow;
+    }
+
+    public void setIsMouseInWindow(boolean isMouseInWindow) {
+        this.isMouseInWindow = isMouseInWindow;
     }
 
     public PolyRoad getStart() {

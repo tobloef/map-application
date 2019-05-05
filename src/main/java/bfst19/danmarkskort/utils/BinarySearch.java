@@ -7,9 +7,10 @@ import java.util.function.Function;
 public class BinarySearch {
     /**
      * Performs binary search on a sorted list to find the index of a given element.
-     * @param <T> Type of the object in the list.
-     * @param list A sorted list to search in.
-     * @param target Object to find in the list.
+     *
+     * @param <T>        Type of the object in the list.
+     * @param list       A sorted list to search in.
+     * @param target     Object to find in the list.
      * @param comparator Comparator for the objects.
      * @return Index of the first matching item found, -1 if not found.
      */
@@ -20,11 +21,12 @@ public class BinarySearch {
     /**
      * Performs binary search on a sorted list to find the index of a given element.
      * Allows for searching lists of object of a different type to the target's type.
-     * @param <T1> The type of object in the list.
-     * @param <T2> The type of object to compare to.
-     * @param list A sorted list to search in.
-     * @param target Object to find in the list.
-     * @param getter Function for getting the object to compare from an item in the list.
+     *
+     * @param <T1>       The type of object in the list.
+     * @param <T2>       The type of object to compare to.
+     * @param list       A sorted list to search in.
+     * @param target     Object to find in the list.
+     * @param getter     Function for getting the object to compare from an item in the list.
      * @param comparator Comparator for the objects.
      * @return Index of the first matching item found, -1 if not found.
      */

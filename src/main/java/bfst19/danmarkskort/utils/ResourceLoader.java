@@ -33,7 +33,7 @@ public class ResourceLoader {
         } else {
             try {
                 return new FileInputStream(name);
-            } catch(FileNotFoundException e){
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 return null;
             }

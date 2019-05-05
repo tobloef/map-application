@@ -11,18 +11,18 @@ import java.io.IOException;
 import java.net.URL;
 
 public class View {
-	public View(Model model, Stage stage) throws IOException {
-		URL url = ResourceLoader.getResource("rs:views/View.fxml");
-		FXMLLoader loader = new FXMLLoader(url);
-		Scene scene = loader.load();
-		Controller controller = loader.getController();
-		stage.setScene(scene);
-		stage.show();
-		stage.setTitle("First year project: Map");
-		// On exit, do necessary cleanup, such as stopping other threads, etc.
-		stage.setOnCloseRequest(event -> {
-			model.cleanup();
-		});
-		controller.init(model, stage);
-	}
+    public View(Model model, Stage stage) throws IOException {
+        URL url = ResourceLoader.getResource("rs:views/View.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+        Scene scene = loader.load();
+        Controller controller = loader.getController();
+        stage.setScene(scene);
+        stage.show();
+        stage.setTitle("First year project: Map");
+        // On exit, do necessary cleanup, such as stopping other threads, etc.
+        stage.setOnCloseRequest(event -> {
+            model.cleanup();
+        });
+        controller.init(model, stage);
+    }
 }
