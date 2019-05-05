@@ -3,6 +3,7 @@ package bfst19.danmarkskort.view.controls;
 import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.view.drawers.*;
 import javafx.application.Platform;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -109,13 +110,18 @@ public class MapCanvas extends Canvas {
     }
 
     public void panViewToAddress(Address address) {
-        // TODO: Implement
+        Rectangle boundingBox = new Rectangle(
+                address.getLon(),
+                address.getLat(),
+                address.getLon(),
+                address.getLat()
+        );
+        panToBoundingBox(boundingBox);
     }
 
     public void panViewToRoute(Route route) {
         Rectangle routeBBox = route.getBoundingBox();
         panToBoundingBox(routeBBox);
-        //ZOOMING DOESNT WORK.
         //TODO: MAKE ZOOM WORK.
         //double sizeDelta = routeBBox.getSizeLargestDelta(screenBounds) / getDegreesLatitudePerPixel();
         //System.out.println(sizeDelta);
