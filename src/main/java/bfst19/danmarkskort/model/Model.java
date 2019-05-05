@@ -63,19 +63,15 @@ public class Model {
         return theme;
     }
 
-    public void toggleHDTheme() {
-        if (HDOn) {
-            theme = ThemeLoader.loadTheme(themePath, null);
-        } else {
-            theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
-        }
-        HDOn = !HDOn;
+    public void setTheme(Theme theme) {
+        this.theme = theme;
         notifyWayTypeObservers();
     }
 
     public void changeDefaultTheme(String path) {
         themePath = path;
         theme = ThemeLoader.loadTheme(themePath, null);
+        notifyWayTypeObservers();
     }
 
     public void appendTheme(String path) {

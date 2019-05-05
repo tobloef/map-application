@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<MenuBar xmlns:fx="http://javafx.com/fxml"
-         xmlns="http://javafx.com/javafx"
-         fx:controller="bfst19.danmarkskort.controller.TopMenuController">
-    <Menu text="Program">
-        <MenuItem text="Load File" onAction="#onLoadFile"/>
-        <MenuItem text="Help" onAction="#onHelp"/>
-        <MenuItem text="About" onAction="#onAbout"/>
+
+<fx:root
+    type="javafx.scene.control.MenuBar"
+    xmlns:fx="http://javafx.com/fxml"
+    xmlns="http://javafx.com/javafx"
+>
+    <Menu text="File">
+        <MenuItem text="Open map data..." onAction="#onLoadMapData"/>
+        <MenuItem text="Open custom theme..." onAction="#onLoadTheme"/>
+        <MenuItem text="Save route to file..." onAction="#onSaveRouteToFile"/>
     </Menu>
-    <Menu text="Route">
-        <MenuItem text="Print to file" onAction="#onPrintToFile"/>
-        <MenuItem text="A*" onAction="#onAStar"/>
-        <MenuItem text="Dijkstra" onAction="#onDijkstra"/>
+    <Menu text="Settings">
+        <MenuItem text="Toggle way type selector" onAction="#onToggleWaytypeSelector"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Use theme: Default" onAction="#onUseDefaultTheme"/>
+        <MenuItem text="Use theme: HD Graphics" onAction="#onUseHDGraphicsTheme"/>
     </Menu>
-    <Menu text="Extra">
-        <MenuItem text="Points of Interest" onAction="#onPOI"/>
-        <MenuItem text="HD Graphics" onAction="#onHDGraphics"/>
-        <MenuItem text="Select Theme" onAction="#onSelectTheme"/>
-        <MenuItem text="Append Theme" onAction="#onAppendTheme"/>
-    </Menu>
-</MenuBar>
+</fx:root>

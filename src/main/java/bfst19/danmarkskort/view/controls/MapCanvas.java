@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.view;
+package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.view.drawers.*;

@@ -1,14 +1,16 @@
-package bfst19.danmarkskort.controller;
+package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.PolyRoad;
 import bfst19.danmarkskort.model.VehicleType;
-import bfst19.danmarkskort.view.MapCanvas;
-import bfst19.danmarkskort.view.View;
+import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -17,35 +19,73 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
-public class Controller {
+public class MainWindow extends Scene {
     @FXML
     private MapCanvas mapCanvas;
     @FXML
     private BorderPane borderPane;
     @FXML
     private Button toggleSearchButton;
+    @FXML
+    private TopMenu topMenu;
+    @FXML
+    private AddressSearch addressSearch;
 
     private Model model;
     private double x, y;
+    private Parent parent;
 
-    public void init(Model model, Stage stage) {
+    public MainWindow(Parent parent) throws IOException {
+        super(parent);
+        this.parent = parent;
+        // Setup FXML component
+        URL url = ResourceLoader.getResource("rs:views/MainWindow.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+        loader.setRoot(this);
+        loader.setController(this);
+        loader.load();
+    }
+
+    public void initialize(Model model, Stage stage) {
         this.model = model;
+        // Show window
+        stage.setScene(this);
+        stage.show();
+        // On exit, do necessary cleanup, such as stopping other threads, etc.
+        stage.setOnCloseRequest(event -> model.cleanup());
+        // Initialize sub-components
         mapCanvas.initialize(model);
-        WaytypeSelectorController.init(model, borderPane);
-        AddressSearchController.init(model, borderPane, mapCanvas);
-        TopMenuController.init(model, stage);
+        topMenu.initialize(model, stage, this::toggleWayTypeSelector);
+        addressSearch.initialize(model, borderPane, mapCanvas);
         updateSearchToggleButtonText();
     }
 
+    private void toggleWayTypeSelector() {
+        if (borderPane.getRight() instanceof WaytypeSelector) {
+            borderPane.setRight(null);
+        } else {
+            WaytypeSelector waytypeSelector = null;
+            try {
+                waytypeSelector = new WaytypeSelector();
+                waytypeSelector.initialize(model);
+                borderPane.setRight(waytypeSelector);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @FXML
-    private void onKeyPressed(KeyEvent e) {
-        switch (e.getCode()) {
+    private void onKeyPressed(KeyEvent event) {
+        switch (event.getCode()) {
             case V:
                 try {
-                    new View(model, new Stage());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                    MainWindow mainWindow = new MainWindow(parent);
+                    mainWindow.initialize(model, new Stage());
+                } catch (IOException exception) {
+                    exception.printStackTrace();
                 }
                 break;
             case E: {
@@ -131,12 +171,12 @@ public class Controller {
 
     @FXML
     private void toggleSearchPane(ActionEvent actionEvent) {
-        AddressSearchController.instance.togglePanel();
+        addressSearch.togglePanel();
         updateSearchToggleButtonText();
     }
 
     private void updateSearchToggleButtonText() {
-        if (AddressSearchController.instance.enabled) {
+        if (addressSearch.isEnabled()) {
             toggleSearchButton.setText("<<");
         } else {
             toggleSearchButton.setText(">>");

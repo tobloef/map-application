@@ -1,12 +1,12 @@
-package bfst19.danmarkskort.controller;
+package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Address;
-import bfst19.danmarkskort.model.AddressSearch;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Route;
-import bfst19.danmarkskort.view.MapCanvas;
+import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -14,41 +14,47 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class AddressSearchController {
-    private static final int MAX_SUGGESTIONS = 10;
-    private static final int DEBOUNCE_DELAY = 300;
-    public static AddressSearchController instance;
-    private static Model model;
-    private static AddressSearch addressSearch;
-    private static MapCanvas mapCanvas;
-    public boolean enabled = false;
+public class AddressSearch extends BorderPane {
+
+    private final int MAX_SUGGESTIONS = 10;
+    private final int DEBOUNCE_DELAY = 300;
+
+    private boolean enabled = false;
+    private Model model;
+    private bfst19.danmarkskort.model.AddressSearch addressSearch;
+    private MapCanvas mapCanvas;
+    private BorderPane parent;
+    private boolean dontReopenPopup = false;
+
     @FXML
     private ScrollPane directionsScrollPane;
     @FXML
     private VBox addressLayoutBox;
     @FXML
-    private BorderPane addressPane;
-    @FXML
     private TextField startField;
     @FXML
     private TextField endField;
-    private BorderPane parent;
-    private boolean dontReopenPopup = false;
 
-    public AddressSearchController() {
-        instance = this;
+    public AddressSearch() throws IOException {
+        URL url = ResourceLoader.getResource("rs:views/AddressSearch.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+        loader.setRoot(this);
+        loader.setController(this);
+        loader.load();
     }
 
-    public static void init(Model model, BorderPane parent, MapCanvas mapCanvas) {
-        instance.parent = parent;
-        AddressSearchController.model = model;
-        addressSearch = new AddressSearch(model.getAddressData());
-        AddressSearchController.mapCanvas = mapCanvas;
-        instance.togglePanel();
+    public void initialize(Model model, BorderPane parent, MapCanvas mapCanvas) {
+        this.parent = parent;
+        this.model = model;
+        this.mapCanvas = mapCanvas;
+        addressSearch = new bfst19.danmarkskort.model.AddressSearch(model.getAddressData());
+        togglePanel();
     }
 
     public void togglePanel() {
@@ -61,8 +67,8 @@ public class AddressSearchController {
     }
 
     private void addUI() {
-        parent.setLeft(addressPane);
-        addressPane.setCenter(addressLayoutBox);
+        parent.setLeft(this);
+        setCenter(addressLayoutBox);
         ContextMenu startPopup = new ContextMenu();
         ContextMenu endPopup = new ContextMenu();
         initializePopup(startPopup, startField, endPopup, address -> model.setStart(address));
@@ -117,7 +123,7 @@ public class AddressSearchController {
 
     private void removeUI() {
         addressLayoutBox.getChildren().removeAll();
-        addressPane.setCenter(null);
+        setCenter(null);
         parent.setLeft(null);
     }
 
@@ -165,5 +171,9 @@ public class AddressSearchController {
         }
         popup.getItems().clear();
         popup.getItems().addAll(items);
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }
