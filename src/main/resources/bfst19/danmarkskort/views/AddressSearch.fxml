@@ -3,12 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane
+
+<fx:root
+    type="javafx.scene.layout.BorderPane"
     xmlns:fx="http://javafx.com/fxml"
     xmlns="http://javafx.com/javafx"
-    prefWidth="300.0"
-    fx:controller="bfst19.danmarkskort.controller.AddressSearchController"
-    fx:id="addressPane"
 >
     <style>
         -fx-background-color: #FFFFFF;
@@ -45,4 +44,4 @@
             />
         </VBox>
     </center>
-</BorderPane>
+</fx:root>

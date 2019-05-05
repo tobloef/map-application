@@ -1,5 +1,7 @@
 package bfst19.danmarkskort.model;
 
+import javafx.util.Pair;
+
 import java.util.HashMap;
 import java.util.Map;
 

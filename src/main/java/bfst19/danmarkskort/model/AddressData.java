@@ -11,8 +11,8 @@ public class AddressData {
     public AddressData(
             List<Address> addressesByStreetName,
             List<Address> addressesByCity,
-            List<String> cities,
-            List<String> streetNames
+            List<String> streetNames,
+            List<String> cities
     ) {
         this.addressesByStreetName = addressesByStreetName;
         this.addressesByCity = addressesByCity;

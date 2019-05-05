@@ -18,6 +18,10 @@ import static bfst19.danmarkskort.utils.EnumHelper.stringToWayType;
 
 public class ThemeLoader {
 
+    public static Theme loadTheme(String path) throws YAMLException {
+        return loadTheme(path, null);
+    }
+
     public static Theme loadTheme(String path, Theme existingTheme) throws YAMLException {
         Theme theme = existingTheme;
         if (theme == null) {

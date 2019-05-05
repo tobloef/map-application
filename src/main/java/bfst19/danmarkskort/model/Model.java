@@ -32,8 +32,6 @@ public class Model {
     private Rectangle modelBounds;
     private boolean isMouseInWindow;
     private Theme theme;
-    private boolean HDOn;
-    private String themePath;
     private AddressData addressData;
 
     public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
@@ -44,6 +42,7 @@ public class Model {
         } else {
             loadDataFromArgs(args);
         }
+        String themePath;
         if (args.size() == 2) {
             themePath = args.get(1);
         } else {
@@ -63,23 +62,9 @@ public class Model {
         return theme;
     }
 
-    public void toggleHDTheme() {
-        if (HDOn) {
-            theme = ThemeLoader.loadTheme(themePath, null);
-        } else {
-            theme = ThemeLoader.loadTheme("rs:config/themes/hdgraphics.yaml", theme);
-        }
-        HDOn = !HDOn;
+    public void setTheme(Theme theme) {
+        this.theme = theme;
         notifyWayTypeObservers();
-    }
-
-    public void changeDefaultTheme(String path) {
-        themePath = path;
-        theme = ThemeLoader.loadTheme(themePath, null);
-    }
-
-    public void appendTheme(String path) {
-        theme = ThemeLoader.loadTheme(path, theme);
     }
 
     public boolean dontDraw(WayType waytype) {
@@ -144,7 +129,7 @@ public class Model {
     }
 
 
-    public void loadNewDataset(String argumentPath) throws IOException, XMLStreamException, ClassNotFoundException {
+    public void loadNewMapData(String argumentPath) throws IOException, XMLStreamException, ClassNotFoundException {
         System.out.println("Loading data...");
         long time = -System.nanoTime();
         List<String> tempList = new ArrayList<>();
@@ -161,7 +146,6 @@ public class Model {
         start = end = null;
     }
 
-    // TODO: Update the default data before final release.
     private void loadDefaultData() throws IOException, ClassNotFoundException {
         InputStream inputStream = ResourceLoader.getResourceAsStream("rs:data/default.osm.ser");
         try {
