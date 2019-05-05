@@ -11,13 +11,15 @@
         <MenuItem text="Open map data..." onAction="#onLoadMapData"/>
         <MenuItem text="Save route to file..." onAction="#onSaveRouteToFile"/>
     </Menu>
-    <Menu text="Themes">
+    <Menu text="View">
+        <MenuItem text="Open new window" onAction="#onOpenNewView"/>
+        <SeparatorMenuItem/>
         <MenuItem text="Use theme: Default" onAction="#onUseDefaultTheme"/>
         <MenuItem text="Use theme: HD Graphics" onAction="#onUseHDGraphicsTheme"/>
-        <SeparatorMenuItem/>
         <MenuItem text="Open custom theme..." onAction="#onLoadTheme"/>
     </Menu>
-    <Menu text="Settings">
+    <Menu text="Debugging">
         <MenuItem text="Toggle way type selector" onAction="#onToggleWaytypeSelector"/>
+        <MenuItem text="Toggle explored routes" onAction="#onToggleRouteShowExplored"/>
     </Menu>
 </fx:root>

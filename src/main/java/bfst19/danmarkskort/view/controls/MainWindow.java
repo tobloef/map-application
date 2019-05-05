@@ -1,10 +1,7 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.PolyRoad;
-import bfst19.danmarkskort.model.VehicleType;
 import bfst19.danmarkskort.utils.ResourceLoader;
-import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +9,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
@@ -35,11 +31,11 @@ public class MainWindow extends Scene {
 
     private Model model;
     private double x, y;
-    private Parent parent;
+    private Parent root;
 
-    public MainWindow(Parent parent) throws IOException {
-        super(parent);
-        this.parent = parent;
+    public MainWindow(Parent root) throws IOException {
+        super(root);
+        this.root = root;
         // Setup FXML component
         URL url = ResourceLoader.getResource("rs:views/MainWindow.fxml");
         FXMLLoader loader = new FXMLLoader(url);
@@ -57,7 +53,7 @@ public class MainWindow extends Scene {
         stage.setOnCloseRequest(event -> model.cleanup());
         // Initialize sub-components
         mapCanvas.initialize(model);
-        topMenu.initialize(model, stage, this::toggleWayTypeSelector);
+        topMenu.initialize(model, stage, root, this::toggleWayTypeSelector);
         addressSearch.initialize(model, borderPane, mapCanvas);
         updateSearchToggleButtonText();
     }
@@ -66,63 +62,13 @@ public class MainWindow extends Scene {
         if (borderPane.getRight() instanceof WaytypeSelector) {
             borderPane.setRight(null);
         } else {
-            WaytypeSelector waytypeSelector = null;
+            WaytypeSelector waytypeSelector;
             try {
                 waytypeSelector = new WaytypeSelector();
                 waytypeSelector.initialize(model);
                 borderPane.setRight(waytypeSelector);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    @FXML
-    private void onKeyPressed(KeyEvent event) {
-        switch (event.getCode()) {
-            case V:
-                try {
-                    MainWindow mainWindow = new MainWindow(parent);
-                    mainWindow.initialize(model, new Stage());
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-                break;
-            case E: {
-                model.updateEnd();
-                break;
-            }
-            case S: {
-                model.updateStart();
-                break;
-            }
-            case D: {
-                model.swapStartAndEnd();
-                break;
-            }
-            case F: {
-                RouteDrawer.debugging = !RouteDrawer.debugging;
-                break;
-            }
-            case G: {
-                RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
-                break;
-            }
-            case C: {
-                model.updateVehicleType(VehicleType.CAR);
-                break;
-            }
-            case B: {
-                model.updateVehicleType(VehicleType.BICYCLE);
-                break;
-            }
-            case P: {
-                model.addPOIAtCurrentMousePosition();
-                break;
-            }
-            case Q: {
-                PolyRoad road = model.getClosestRoad();
-                System.out.println(road.getStreetNameOrDefault() + " " + road.getRepresentativeX() + " " + road.getRepresentativeY());
             }
         }
     }

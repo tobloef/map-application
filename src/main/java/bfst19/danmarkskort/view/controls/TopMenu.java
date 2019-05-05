@@ -6,9 +6,11 @@ import bfst19.danmarkskort.model.Theme;
 import bfst19.danmarkskort.model.Themes;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
+import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuBar;
@@ -22,6 +24,7 @@ import java.net.URL;
 public class TopMenu extends MenuBar {
     private Model model;
     private Stage stage;
+    private Parent root;
     private Runnable  toggleWayTypeSelector;
 
     public TopMenu() throws IOException {
@@ -32,14 +35,15 @@ public class TopMenu extends MenuBar {
         loader.load();
     }
 
-    public void initialize(Model model, Stage stage, Runnable toggleWayTypeSelector) {
+    public void initialize(Model model, Stage stage, Parent root, Runnable toggleWayTypeSelector) {
         this.model = model;
         this.stage = stage;
+        this.root = root;
         this.toggleWayTypeSelector = toggleWayTypeSelector;
     }
 
     @FXML
-    public void onLoadMapData(final ActionEvent event) {
+    public void onLoadMapData(ActionEvent event) {
         File file = openMapDataFileSelect();
         if (file == null) {
             displayMapDataNotLoadedAlert();
@@ -75,7 +79,7 @@ public class TopMenu extends MenuBar {
     }
 
     @FXML
-    private void onLoadTheme(final ActionEvent event) {
+    private void onLoadTheme(ActionEvent event) {
         File file = openThemeFileSelect();
         if (file == null) {
             displayThemeNotLoadedAlert();
@@ -108,7 +112,7 @@ public class TopMenu extends MenuBar {
     }
 
     @FXML
-    private void onAbout(final ActionEvent event) {
+    private void onAbout(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "This project was made by ITU students (Group G):\n\n" +
                         "Anders Parsberg Wagner\n" +
@@ -123,7 +127,7 @@ public class TopMenu extends MenuBar {
     }
 
     @FXML
-    private void onSaveRouteToFile(final ActionEvent event) {
+    private void onSaveRouteToFile(ActionEvent event) {
         Route route = model.getShortestPath();
         File file = openRouteFileSelect(route.getSuggestedFileName());
         route.printToFile(file);
@@ -139,17 +143,42 @@ public class TopMenu extends MenuBar {
     }
 
     @FXML
-    private void onToggleWaytypeSelector(final ActionEvent event) {
+    private void onToggleWaytypeSelector(ActionEvent event) {
         toggleWayTypeSelector.run();
     }
 
     @FXML
-    private void onUseDefaultTheme(final ActionEvent event) {
+    private void onUseDefaultTheme(ActionEvent event) {
         model.setTheme(Themes.DefaultTheme);
     }
 
     @FXML
-    private void onUseHDGraphicsTheme(final ActionEvent event) {
+    private void onUseHDGraphicsTheme(ActionEvent event) {
         model.setTheme(Themes.HDGraphics);
+    }
+
+    @FXML
+    private void onOpenNewView(ActionEvent event) {
+        try {
+            MainWindow mainWindow = new MainWindow(root);
+            mainWindow.initialize(model, new Stage());
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            displayOpenNewViewError();
+        }
+    }
+
+
+    private void displayOpenNewViewError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                "An error occurred and we couldn't open the new window.",
+                ButtonType.CLOSE);
+        alert.setTitle("Error opening window");
+        alert.setHeaderText("Error opening window");
+        alert.show();
+    }
+    @FXML
+    private void onToggleRouteShowExplored() {
+        RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
     }
 }

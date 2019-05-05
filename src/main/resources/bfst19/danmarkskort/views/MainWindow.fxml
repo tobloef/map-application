@@ -12,7 +12,6 @@
     xmlns:fx="http://javafx.com/fxml"
     xmlns="http://javafx.com/javafx"
     fx:id="scene"
-    onKeyPressed="#onKeyPressed"
 >
     <BorderPane prefHeight="600.0" prefWidth="1100.0" fx:id="borderPane">
         <top>
