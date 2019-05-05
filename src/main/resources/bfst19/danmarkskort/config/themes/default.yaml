@@ -41,13 +41,13 @@
 
 - SCREE:
     fillColor: "F1E5DC"
-    zoomLevel: *region
+    zoomLevel: *largeCity
 
 # Nature
 
 - TREES:
     fillColor: "006400"
-    zoomLevel: *region
+    zoomLevel: *largeCity
 
 - GRASS:
     fillColor: "C4EDB2"
@@ -59,15 +59,15 @@
 
 - FARMLAND:
     fillColor: "EFF1D5"
-    zoomLevel: *region
+    zoomLevel: *largeCity
 
 - WOOD:
     fillColor: "A1D29F"
-    zoomLevel: *region
+    zoomLevel: *largeCity
 
 - HEATH:
     fillColor: "D6D99F"
-    zoomLevel: *region
+    zoomLevel: *largeCity
 
 - MEADOW:
     fillColor: "C4EDB2"
@@ -141,32 +141,6 @@
     fillColor: "DADAE0"
     zoomLevel: *largeCity
 
-# Road exits
-
-- TERTIARY_ROAD_EXIT:
-    fillColor:
-    strokeColor: "FFFFFF"
-    lineWidth: 0.00008
-    zoomLevel: *largeCity
-
-- SECONDARY_ROAD_EXIT:
-    fillColor:
-    strokeColor: "F7FBBB"
-    lineWidth: 0.00012
-    zoomLevel: *largeCity
-
-- PRIMARY_ROAD_EXIT:
-    fillColor:
-    strokeColor: "FFAD95"
-    lineWidth: 0.00012
-    zoomLevel: *largeCity
-
-- MOTORWAY_EXIT:
-    fillColor:
-    strokeColor: "FEB9C3"
-    lineWidth: 0.00014
-    zoomLevel: *region
-
 # Roads
 
 - RESIDENTIAL_ROAD:
@@ -208,8 +182,10 @@
 - PRIMARY_ROAD:
     fillColor:
     strokeColor: "FFAD95"
-    lineWidth: 0.00012
-    zoomLevel: *largeCity
+    lineWidth: 3
+    lineWidthMax: 0.014
+    lineWidthMin: 0.00014
+    zoomLevel: *wholeDenmark
 
 - RUNWAY:
     fillColor:
@@ -238,7 +214,9 @@
 - MOTORWAY:
     fillColor:
     strokeColor: "FEB9C3"
-    lineWidth: 0.00014
+    lineWidth: 3
+    lineWidthMax: 0.014
+    lineWidthMin: 0.00014
     zoomLevel: *wholeDenmark
 
 - BRIDGE:
@@ -256,24 +234,6 @@
 - TRACK:
     fillColor:
     strokeColor: "B68235"
-    lineDash: 2
-    zoomLevel: *suburb
-
-- FERRY:
-    fillColor:
-    strokeColor: "0000FF"
-    lineDash: 2
-    zoomLevel: *suburb
-
-- TOUR:
-    fillColor:
-    strokeColor: "000000"
-    lineDash: 2
-    zoomLevel: *suburb
-
-- BUS_GUIDEWAY:
-    fillColor:
-    strokeColor: "6066FF"
     lineDash: 2
     zoomLevel: *suburb
 

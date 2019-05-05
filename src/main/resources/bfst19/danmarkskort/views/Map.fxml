@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import bfst19.danmarkskort.view.controls.MapCanvas?>
+<?import javafx.scene.control.Button?>
+<fx:root
+    type="javafx.scene.layout.Pane"
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+>
+    <MapCanvas
+        fx:id="mapCanvas"
+        width="${mapCanvas.parent.width}"
+        height="${mapCanvas.parent.height}"
+        onScroll="#onScroll"
+        onMousePressed="#onMousePressed"
+        onMouseDragged="#onMouseDragged"
+        onMouseMoved="#onMouseMoved"
+        onMouseExited="#onMouseExited"
+        onMouseEntered="#onMouseEntered"
+    />
+
+    <Button
+        fx:id="toggleSearchButton"
+        text=">>"
+        onAction="#toggleSearchPane"
+    />
+</fx:root>

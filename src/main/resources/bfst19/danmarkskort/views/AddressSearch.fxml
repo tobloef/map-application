@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root
+    type="javafx.scene.layout.BorderPane"
+    xmlns:fx="http://javafx.com/fxml"
+    xmlns="http://javafx.com/javafx"
+>
+    <style>
+        -fx-background-color: #FFFFFF;
+        -fx-border-color: #000000;
+        -fx-border-width: 0px 2px 0px 0px;
+    </style>
+    <center>
+        <VBox
+            fx:id="addressLayoutBox"
+            style="-fx-padding: 10px;"
+        >
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Origin</Label>
+            <TextField fx:id="startField">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </TextField>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Destination</Label>
+            <TextField fx:id="endField">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>15</bottom>
+                    </Insets>
+                </VBox.margin>
+            </TextField>
+            <Button fx:id="swapAddressesButton" text="Swap origin and destination">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </Button>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Vehicle</Label>
+            <ComboBox fx:id="vehicleSelection" promptText="Select vehicle">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </ComboBox>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Route description</Label>
+            <ScrollPane
+                fx:id="directionsScrollPane"
+                VBox.vgrow="ALWAYS"
+                style="-fx-focus-color: transparent; -fx-background-insets: 0"
+                fitToWidth="true"
+            />
+        </VBox>
+    </center>
+</fx:root>

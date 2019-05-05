@@ -27,11 +27,7 @@
 
 - BUILDING:
   - amenity:
-      - university
-
-- BUS_GUIDEWAY:
-  - highway:
-    - bus_guideway
+    - university
 
 - CYCLEWAY:
   - highway:
@@ -48,9 +44,6 @@
 - MOTORWAY:
   - highway:
     - motorway
-
-- MOTORWAY_EXIT:
-  - highway:
     - motorway_link
 
 - PEDESTRIAN:
@@ -61,9 +54,6 @@
   - highway:
     - primary
     - trunk
-
-- PRIMARY_ROAD_EXIT:
-  - highway:
     - primary_link
     - trunk_link
 
@@ -78,9 +68,6 @@
 - SECONDARY_ROAD:
   - highway:
     - secondary
-
-- SECONDARY_ROAD_EXIT:
-  - highway:
     - secondary_link
 
 - SERVICE_ROAD:
@@ -90,14 +77,13 @@
 - TERTIARY_ROAD:
   - highway:
     - tertiary
-
-- TERTIARY_ROAD_EXIT:
-  - high:
     - tertiary_link
 
 - TRACK:
   - highway:
     - track
+    - path
+    - steps
 
 - UNCLASSIFIED_ROAD:
   - highway:
@@ -213,10 +199,6 @@
 
 - RESIDENTIAL:
   - residential
-
-- FERRY:
-  - route:
-    - ferry tour
 
 - CANAL:
   - water:

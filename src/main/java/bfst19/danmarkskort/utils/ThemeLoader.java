@@ -1,14 +1,15 @@
 package bfst19.danmarkskort.utils;
 
 import bfst19.danmarkskort.model.DrawingInfo;
-import bfst19.danmarkskort.model.Wrapper;
 import bfst19.danmarkskort.model.Theme;
 import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.model.Wrapper;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
+
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,10 @@ import java.util.Map;
 import static bfst19.danmarkskort.utils.EnumHelper.stringToWayType;
 
 public class ThemeLoader {
+
+    public static Theme loadTheme(String path) throws YAMLException {
+        return loadTheme(path, null);
+    }
 
     public static Theme loadTheme(String path, Theme existingTheme) throws YAMLException {
         Theme theme = existingTheme;
@@ -66,6 +71,8 @@ public class ThemeLoader {
         Wrapper<Color> strokeColor = null;
         Wrapper<Double> lineDash = null;
         Wrapper<Double> lineWidth = null;
+        Wrapper<Double> lineWidthMax = null;
+        Wrapper<Double> lineWidthMin = null;
         Wrapper<Double> zoomLevel = null;
         Wrapper<Boolean> alwaysDraw = null;
         Wrapper<ImagePattern> texture = null;
@@ -81,6 +88,12 @@ public class ThemeLoader {
         if (themeValuesMap.containsKey("lineWidth")) {
             lineWidth = new Wrapper<>(parseDouble(themeValuesMap, "lineWidth"));
         }
+        if (themeValuesMap.containsKey("lineWidthMax")) {
+            lineWidthMax = new Wrapper<>(parseDouble(themeValuesMap, "lineWidthMax"));
+        }
+        if (themeValuesMap.containsKey("lineWidthMin")) {
+            lineWidthMin = new Wrapper<>(parseDouble(themeValuesMap, "lineWidthMin"));
+        }
         if (themeValuesMap.containsKey("zoomLevel")) {
             zoomLevel = new Wrapper<>(parseDouble(themeValuesMap, "zoomLevel"));
         }
@@ -95,6 +108,8 @@ public class ThemeLoader {
                 strokeColor,
                 lineDash,
                 lineWidth,
+                lineWidthMax,
+                lineWidthMin,
                 zoomLevel,
                 alwaysDraw,
                 texture

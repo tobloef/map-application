@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.Scene?>
+<?import bfst19.danmarkskort.view.controls.MapCanvas?>
+<?import bfst19.danmarkskort.view.controls.AddressSearch?>
+<?import bfst19.danmarkskort.view.controls.TopMenu?>
+<?import bfst19.danmarkskort.view.controls.Map?>
+<fx:root
+    type="javafx.scene.Scene"
+    xmlns:fx="http://javafx.com/fxml"
+    xmlns="http://javafx.com/javafx"
+>
+    <BorderPane prefHeight="600.0" prefWidth="1100.0" fx:id="borderPane">
+        <top>
+            <TopMenu fx:id="topMenu"/>
+        </top>
+        <center>
+            <Map fx:id="map"/>
+        </center>
+        <left>
+            <AddressSearch fx:id="addressSearch" prefWidth="300"/>
+        </left>
+    </BorderPane>
+</fx:root>
+

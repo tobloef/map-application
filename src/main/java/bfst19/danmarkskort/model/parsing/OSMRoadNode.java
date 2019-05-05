@@ -1,36 +1,36 @@
 package bfst19.danmarkskort.model.parsing;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-public class OSMRoadNode extends OSMNode{
-	private Set<OSMRoadWay> connections;
+public class OSMRoadNode extends OSMNode {
+    private List<OSMRoadWay> connections;
 
-	public OSMRoadNode(OSMNode node) {
-		super(node.getAsLong(), node.getLon(), node.getLat());
-		connections = new HashSet<>();
-	}
+    public OSMRoadNode(OSMNode node) {
+        super(node.getAsLong(), node.getLon(), node.getLat());
+        connections = new ArrayList<>();
+    }
 
-	public void add(OSMRoadWay newConnection) {
-		for (OSMRoadWay connection : connections) {
-			if (connection.equals(newConnection)) return;
-		}
-		connections.add(newConnection);
-	}
+    public void add(OSMRoadWay newConnection) {
+        for (OSMRoadWay connection : connections) {
+            if (connection.equals(newConnection)) return;
+        }
+        connections.add(newConnection);
+    }
 
-	public int getConnectionAmount() {
-		return connections.size();
-	}
+    public int getConnectionAmount() {
+        return connections.size();
+    }
 
-	public Set<OSMRoadWay> getConnections() {
-		return connections;
-	}
+    public List<OSMRoadWay> getConnections() {
+        return connections;
+    }
 
-	public String toString() {
-		return "" + getAsLong();
-	}
+    public String toString() {
+        return "" + getAsLong();
+    }
 
-	public void removeConnection(OSMRoadWay removal) {
-		connections.remove(removal);
-	}
+    public void removeConnection(OSMRoadWay removal) {
+        connections.remove(removal);
+    }
 }

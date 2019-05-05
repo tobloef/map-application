@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<MenuBar xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml"
-         fx:controller="bfst19.danmarkskort.controller.TopMenu">
-        <Menu text="Program">
-            <MenuItem text="Help" onAction="#onHelp"/>
-            <MenuItem text="About" onAction="#onAbout"/>
-        </Menu>
-        <Menu text="Route">
-            <MenuItem text="Print to file" onAction="#onPrintToFile"/>
-            <MenuItem text="A*" onAction="#onAStar"/>
-            <MenuItem text="Djikstra" onAction="#onDjikstra"/>
-        </Menu>
-        <Menu text="Extra">
-            <MenuItem text="Points of Interest" onAction="#onPOI"/>
-            <MenuItem text="Easter Egg" onAction="#onEE"/>
-        </Menu>
-</MenuBar>
+
+<fx:root
+    type="javafx.scene.control.MenuBar"
+    xmlns:fx="http://javafx.com/fxml"
+    xmlns="http://javafx.com/javafx"
+>
+    <Menu text="File">
+        <MenuItem text="Open data..." onAction="#onLoadMapData"/>
+        <MenuItem text="Save map..." onAction="#onSaveMapData"/>
+        <MenuItem text="Save route to file..." onAction="#onSaveRouteToFile"/>
+    </Menu>
+    <Menu text="View">
+        <MenuItem text="Open new window" onAction="#onOpenNewView"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Use theme: Default" onAction="#onUseDefaultTheme"/>
+        <MenuItem text="Use theme: HD Graphics" onAction="#onUseHDGraphicsTheme"/>
+        <MenuItem text="Open custom theme..." onAction="#onLoadTheme"/>
+    </Menu>
+    <Menu text="Debugging">
+        <MenuItem text="Toggle way type selector" onAction="#onToggleWaytypeSelector"/>
+        <MenuItem text="Toggle explored routes" onAction="#onToggleRouteShowExplored"/>
+    </Menu>
+</fx:root>
