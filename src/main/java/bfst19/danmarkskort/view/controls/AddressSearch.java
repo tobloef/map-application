@@ -87,7 +87,7 @@ public class AddressSearch extends BorderPane {
             displayNoRouteFoundAlert();
         }
         updateRouteDescription(route);
-        waitThenReenablePopup();
+        waitThenReEnablePopup();
     }
 
     private void displayNoRouteFoundAlert() {
@@ -113,17 +113,17 @@ public class AddressSearch extends BorderPane {
     public void setStartText(String text) {
         dontReopenPopup = true;
         startField.setText(text);
-        waitThenReenablePopup();
+        waitThenReEnablePopup();
     }
 
 
     public void setEndText(String text) {
         dontReopenPopup = true;
         endField.setText(text);
-        waitThenReenablePopup();
+        waitThenReEnablePopup();
     }
 
-    private void waitThenReenablePopup() {
+    private void waitThenReEnablePopup() {
         PauseTransition pause = new PauseTransition(new Duration(1000));
         pause.setOnFinished(e -> dontReopenPopup = false);
         pause.playFromStart();
@@ -236,7 +236,7 @@ public class AddressSearch extends BorderPane {
                 }
                 field.textProperty().setValue(string);
                 field.positionCaret(string.length());
-                waitThenReenablePopup();
+                waitThenReEnablePopup();
             });
             items.add(item);
         }

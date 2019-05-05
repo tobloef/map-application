@@ -2,6 +2,7 @@ package bfst19.danmarkskort.view.drawers;
 
 import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.PointOfInterest;
 import bfst19.danmarkskort.model.WayType;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -35,6 +36,24 @@ public class POIDrawer implements Drawer {
         double zoomFactor = canvas.getDegreesLatitudePerPixel();
         for (Drawable drawable : model.getWaysOfType(WayType.POI, canvas.getScreenBounds())) {
             drawable.fill(graphicsContext, zoomFactor);
+        }
+        drawAddressIndicators(graphicsContext, model, zoomFactor);
+    }
+
+    private void drawAddressIndicators(GraphicsContext graphicsContext, Model model, double zoomFactor) {
+        if (model.getStart() != null) {
+            PointOfInterest startPOI = new PointOfInterest(
+                    model.getStart().getRepresentativeX(),
+                    model.getStart().getRepresentativeY()
+            );
+            startPOI.fill(graphicsContext, zoomFactor);
+        }
+        if (model.getEnd() != null) {
+            PointOfInterest endPoi = new PointOfInterest(
+                    model.getEnd().getRepresentativeX(),
+                    model.getEnd().getRepresentativeY()
+            );
+            endPoi.fill(graphicsContext, zoomFactor);
         }
     }
 }

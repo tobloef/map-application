@@ -351,7 +351,7 @@ public class Model {
     public void setStart(PolyRoad road) {
         start = road;
         updateShortestPath();
-        addPOIAtPosition(road.getRepresentativeX(), road.getRepresentativeY());
+        notifyWayTypeObservers();
     }
 
     public void setStart(Address address) {
@@ -365,7 +365,7 @@ public class Model {
     public void setEnd(PolyRoad road) {
         end = road;
         updateShortestPath();
-        addPOIAtPosition(road.getRepresentativeX(), road.getRepresentativeY());
+        notifyWayTypeObservers();
     }
 
     public void setEnd(Address address) {

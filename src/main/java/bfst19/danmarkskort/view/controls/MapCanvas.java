@@ -26,7 +26,6 @@ public class MapCanvas extends Canvas {
 
     public void initialize(Model model) {
         this.model = model;
-        model.addWayTypeObserver(this::repaint);
         model.addReloadObserver(this::initialize);
         initialize();
     }
