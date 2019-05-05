@@ -1,9 +1,8 @@
 package bfst19.danmarkskort.view;
 
-import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.controller.Controller;
 import bfst19.danmarkskort.model.Model;
-import javafx.application.Platform;
+import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

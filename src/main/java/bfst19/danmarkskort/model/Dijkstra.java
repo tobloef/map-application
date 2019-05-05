@@ -1,6 +1,8 @@
 package bfst19.danmarkskort.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Dijkstra {
 	public static int[] pathToRoad;

@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model.parsing;
 import bfst19.danmarkskort.model.WayType;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import org.yaml.snakeyaml.Yaml;
+
 import java.io.InputStream;
 import java.util.*;
 

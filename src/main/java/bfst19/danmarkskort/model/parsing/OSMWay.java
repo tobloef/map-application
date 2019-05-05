@@ -1,6 +1,8 @@
 package bfst19.danmarkskort.model.parsing;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.LongSupplier;
 import java.util.stream.Collectors;
 

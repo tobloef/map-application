@@ -1,9 +1,6 @@
 
 package bfst19.danmarkskort.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // The wayTypes are drawn in the order they are written in
 @SuppressWarnings("unused")
 public enum WayType {

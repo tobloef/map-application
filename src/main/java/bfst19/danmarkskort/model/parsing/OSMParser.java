@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
-import static bfst19.danmarkskort.model.parsing.OSMTagKeys.*;
+import static bfst19.danmarkskort.model.parsing.OSMTagKeys.nameKeys;
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static bfst19.danmarkskort.utils.Misc.internIfNotNull;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;

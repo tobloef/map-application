@@ -1,7 +1,11 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.utils.EnumHelper;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class KDTreeDrawableModel implements DrawableModel {
 	Map<WayType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();

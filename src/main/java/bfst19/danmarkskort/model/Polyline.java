@@ -2,6 +2,7 @@ package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMWay;
 import javafx.scene.canvas.GraphicsContext;
+
 import java.io.Serializable;
 
 public class Polyline implements Drawable, Serializable, SpatialIndexable {

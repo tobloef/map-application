@@ -6,9 +6,7 @@ import bfst19.danmarkskort.model.AddressData;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static bfst19.danmarkskort.model.parsing.OSMTagKeys.cityKeys;
-import static bfst19.danmarkskort.model.parsing.OSMTagKeys.houseNumberKeys;
-import static bfst19.danmarkskort.model.parsing.OSMTagKeys.streetNameKeys;
+import static bfst19.danmarkskort.model.parsing.OSMTagKeys.*;
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static bfst19.danmarkskort.utils.Misc.internIfNotNull;
 

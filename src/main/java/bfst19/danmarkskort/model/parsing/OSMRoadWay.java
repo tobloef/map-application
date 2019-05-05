@@ -6,7 +6,6 @@ import bfst19.danmarkskort.model.WayType;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
 public class OSMRoadWay extends OSMWay {
 	private String streetName;
