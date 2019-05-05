@@ -1,9 +1,8 @@
-package bfst19.danmarkskort.controls.controls;
+package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;

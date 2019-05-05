@@ -1,7 +1,7 @@
-package bfst19.danmarkskort.controls.drawers;
+package bfst19.danmarkskort.view.drawers;
 
 import bfst19.danmarkskort.model.*;
-import bfst19.danmarkskort.controls.controls.MapCanvas;
+import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;

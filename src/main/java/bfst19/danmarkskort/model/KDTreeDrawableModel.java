@@ -104,16 +104,13 @@ public class KDTreeDrawableModel implements DrawableModel {
 
     @Override
     public void insert(WayType type, Drawable drawable) {
-        if (wayTypeToKDTreeRoot.containsKey(type)) {
-            if (drawable instanceof SpatialIndexable) {
-                wayTypeToKDTreeRoot.get(type).insert((SpatialIndexable) drawable);
-            } else {
-                throw new IllegalArgumentException("tried inserting drawable which was not spatialindexable");
-            }
+        if (!wayTypeToKDTreeRoot.containsKey(type)) {
+            wayTypeToKDTreeRoot.put(type, new KDTree(new ArrayList<Drawable>()));
+        }
+        if (drawable instanceof SpatialIndexable) {
+            wayTypeToKDTreeRoot.get(type).insert((SpatialIndexable) drawable);
         } else {
-            List<Drawable> tempList = new ArrayList<>();
-            tempList.add(drawable);
-            wayTypeToKDTreeRoot.put(type, new KDTree(tempList));
+            throw new IllegalArgumentException("tried inserting drawable which was not spatialindexable");
         }
     }
 

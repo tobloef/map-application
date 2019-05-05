@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.Scene?>
-<?import bfst19.danmarkskort.controls.controls.MapCanvas?>
-<?import bfst19.danmarkskort.controls.controls.AddressSearch?>
-<?import bfst19.danmarkskort.controls.controls.TopMenu?>
-<?import bfst19.danmarkskort.controls.controls.Map?>
+<?import bfst19.danmarkskort.view.controls.MapCanvas?>
+<?import bfst19.danmarkskort.view.controls.AddressSearch?>
+<?import bfst19.danmarkskort.view.controls.TopMenu?>
+<?import bfst19.danmarkskort.view.controls.Map?>
 <fx:root
     type="javafx.scene.Scene"
     xmlns:fx="http://javafx.com/fxml"

@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.controls.controls;
+package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Route;
@@ -6,7 +6,7 @@ import bfst19.danmarkskort.model.Theme;
 import bfst19.danmarkskort.model.Themes;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
-import bfst19.danmarkskort.controls.drawers.RouteDrawer;
+import bfst19.danmarkskort.view.drawers.RouteDrawer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

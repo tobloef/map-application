@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.controls.controls;
+package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.WayType;

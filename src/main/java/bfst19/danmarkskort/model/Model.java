@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
+import bfst19.danmarkskort.view.drawers.POIDrawer;
 import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
@@ -326,8 +327,8 @@ public class Model {
         this.addPOIAtPosition(mouseModelX, mouseModelY);
     }
 
-    private void addPOIAtPosition(float mouseX, float mouseY) {
-        PointOfInterest pointOfInterest = new PointOfInterest(mouseX, mouseY);
+    private void addPOIAtPosition(float x, float y) {
+        PointOfInterest pointOfInterest = new PointOfInterest(x, y);
         this.insert(WayType.POI, pointOfInterest);
     }
 
@@ -350,6 +351,7 @@ public class Model {
     public void setStart(PolyRoad road) {
         start = road;
         updateShortestPath();
+        addPOIAtPosition(road.getRepresentativeX(), road.getRepresentativeY());
     }
 
     public void setStart(Address address) {
@@ -363,6 +365,7 @@ public class Model {
     public void setEnd(PolyRoad road) {
         end = road;
         updateShortestPath();
+        addPOIAtPosition(road.getRepresentativeX(), road.getRepresentativeY());
     }
 
     public void setEnd(Address address) {
