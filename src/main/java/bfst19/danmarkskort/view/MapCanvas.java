@@ -114,15 +114,19 @@ public class MapCanvas extends Canvas {
 
     public void panViewToRoute(Route route) {
         Rectangle routeBBox = route.getBoundingBox();
+        panToBoundingBox(routeBBox);
+        //ZOOMING DOESNT WORK.
+        //TODO: MAKE ZOOM WORK.
+        //double sizeDelta = routeBBox.getSizeLargestDelta(screenBounds) / getDegreesLatitudePerPixel();
+        //System.out.println(sizeDelta);
+        //zoom(sizeDelta, routeBBox.getMiddleX(), routeBBox.getMiddleY() );
+    }
+
+    private void panToBoundingBox(Rectangle bbox) {
         Rectangle screenBounds = getScreenBounds();
-        System.out.println(routeBBox);
-        System.out.println(screenBounds);
-        double sizeDelta = screenBounds.getSizeLargestDelta(routeBBox);
-        double x = -(routeBBox.xMin - screenBounds.getMiddleX()) / getDegreesLatitudePerPixel();
-        double y = (routeBBox.yMax - screenBounds.getMiddleY()) / getDegreesLatitudePerPixel();
+        double x = -(bbox.getMiddleX() - screenBounds.getMiddleX()) / getDegreesLatitudePerPixel();
+        double y = (bbox.getMiddleY() - screenBounds.getMiddleY()) / getDegreesLatitudePerPixel();
         pan(x, y);
-        System.out.println(sizeDelta);
-        //zoom(sizeDelta, routeBBox.xMin, routeBBox.yMax);
     }
 
     private double findInitialZoomFactor() {

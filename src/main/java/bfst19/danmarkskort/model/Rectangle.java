@@ -91,7 +91,7 @@ public class Rectangle implements Serializable {
             return getWidth() / otherRectangle.getWidth();
         }
         else{
-            return getHeight()/otherRectangle.getHeight();
+            return getHeight() / otherRectangle.getHeight();
         }
 	}
 
