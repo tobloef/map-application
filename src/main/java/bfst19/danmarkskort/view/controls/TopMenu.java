@@ -2,23 +2,22 @@ package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Route;
+import bfst19.danmarkskort.model.Theme;
+import bfst19.danmarkskort.model.Themes;
 import bfst19.danmarkskort.utils.ResourceLoader;
+import bfst19.danmarkskort.utils.ThemeLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.function.Function;
 
 public class TopMenu extends MenuBar {
     private Model model;
@@ -40,11 +39,27 @@ public class TopMenu extends MenuBar {
     }
 
     @FXML
-    public void onLoadMapData(final ActionEvent event) throws IOException, XMLStreamException, ClassNotFoundException {
+    public void onLoadMapData(final ActionEvent event) {
         File file = openMapDataFileSelect();
-        if (file != null) {
-            model.loadNewDataset(file.getAbsolutePath());
+        if (file == null) {
+            displayMapDataNotLoadedAlert();
+            return;
         }
+        try {
+            model.loadNewMapData(file.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+            displayMapDataNotLoadedAlert();
+        }
+    }
+
+    private void displayMapDataNotLoadedAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                "The specified map data couldn't be loaded.",
+                ButtonType.CLOSE);
+        alert.setTitle("Error loading map data");
+        alert.setHeaderText("Error loading map data");
+        alert.show();
     }
 
     private File openMapDataFileSelect() {
@@ -62,9 +77,25 @@ public class TopMenu extends MenuBar {
     @FXML
     private void onLoadTheme(final ActionEvent event) {
         File file = openThemeFileSelect();
-        if (file != null) {
-            model.changeDefaultTheme(file.getAbsolutePath());
+        if (file == null) {
+            displayThemeNotLoadedAlert();
+            return;
         }
+        Theme theme = ThemeLoader.loadTheme(file.getAbsolutePath());
+        if (theme == null) {
+            displayThemeNotLoadedAlert();
+            return;
+        }
+        model.setTheme(theme);
+    }
+
+    private void displayThemeNotLoadedAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                "The specified theme couldn't be loaded.",
+                ButtonType.CLOSE);
+        alert.setTitle("Error loading theme");
+        alert.setHeaderText("Error loading theme");
+        alert.show();
     }
 
     private File openThemeFileSelect() {
@@ -74,16 +105,6 @@ public class TopMenu extends MenuBar {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("YAML", "*.yaml"));
         return fileChooser.showOpenDialog(stage);
-    }
-
-    @FXML
-    private void onHelp(final ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "This is where to show help",
-                ButtonType.CLOSE);
-        alert.setTitle("Help");
-        alert.setHeaderText("Help");
-        alert.show();
     }
 
     @FXML
@@ -124,11 +145,11 @@ public class TopMenu extends MenuBar {
 
     @FXML
     private void onUseDefaultTheme(final ActionEvent event) {
-        // TODO: Implement this
+        model.setTheme(Themes.DefaultTheme);
     }
 
     @FXML
     private void onUseHDGraphicsTheme(final ActionEvent event) {
-        // TODO: Implement this
+        model.setTheme(Themes.HDGraphics);
     }
 }
