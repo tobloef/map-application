@@ -7,7 +7,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 
 import static bfst19.danmarkskort.model.parsing.OSMTagKeys.*;
@@ -28,15 +27,14 @@ public class OSMParser {
     private Map<Long, OSMWay> idToWay = new HashMap<>();
     private NodeGraphCreator nodeGraphCreator;
     private Map<String, String> tags = new HashMap<>();
-    private List<Address> addresses = new ArrayList<>();
-    private Set<String> cities = new HashSet<>();
-    private Set<String> streetNames = new HashSet<>();
+    private OSMAddressParser osmAddressParser;
     private AddressData addressData = null;
 
     public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
         InputStream osmSource;
         this.drawableModel = drawableModel;
         nodeGraphCreator = new NodeGraphCreator(this.drawableModel);
+        osmAddressParser = new OSMAddressParser();
         if (filename.endsWith(".zip")) {
             osmSource = getZipFile(filename);
         } else if (filename.endsWith(".osm")) {
@@ -49,39 +47,13 @@ public class OSMParser {
     }
 
     private void doneParsing() {
-        addressData = createAddressData();
+        addressData = osmAddressParser.createAddressData();
         idToNode = null;
         idToWay = null;
         System.gc();
         System.runFinalization();
         nodeGraphCreator.initPolyRoadConnections();
         drawableModel.doneAdding();
-    }
-
-    private AddressData createAddressData() {
-        // Create list of addresses sorted by street name
-        List<Address> addressesByStreetName = addresses.stream()
-                .filter(a -> a.getStreetName() != null)
-                .sorted(Comparator.comparing(a -> a.getStreetName().toLowerCase()))
-                .collect(Collectors.toList());
-        // Create list of addresses sorted by city name
-        List<Address> addressesByCity = addresses.stream()
-                .filter(a -> a.getCity() != null)
-                .sorted(Comparator.comparing(a -> a.getCity().toLowerCase()))
-                .collect(Collectors.toList());
-        // Create list of cities, sorted alphabetically
-        List<String> cityList = new ArrayList<>(cities);
-        cityList.sort(String::compareToIgnoreCase);
-        // Create list of street names, sorted alphabetically
-        List<String> streetNameList = new ArrayList<>(streetNames);
-        streetNameList.sort(String::compareToIgnoreCase);
-        // Return the final address data
-        return new AddressData(
-                addressesByStreetName,
-                addressesByCity,
-                cityList,
-                streetNameList
-        );
     }
 
     private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
@@ -180,7 +152,7 @@ public class OSMParser {
                 drawableModel.add(currentType, new Polyline(currentWay));
             }
         }
-        tryAddPlace();
+        osmAddressParser.tryAddAddress(tags, getCurrentPositionNode());
         currentWay = null;
     }
 
@@ -199,7 +171,7 @@ public class OSMParser {
         if (currentRelation.hasMembers() && currentType != WayType.UNKNOWN) {
             drawableModel.add(currentType, new MultiPolyline(currentRelation));
         }
-        tryAddPlace();
+        osmAddressParser.tryAddAddress(tags, getCurrentPositionNode());
         currentRelation = null;
     }
 
@@ -241,13 +213,13 @@ public class OSMParser {
     }
 
     private OSMRoadWay convertWayToRoad(OSMWay way, List<OSMRoadNode> newNodes) {
-        EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad(way);
+        EnumSet<RoadRestriction> restrictions = getRestrictionsOfRoad();
         int speedLimit = getMaxSpeed();
         String streetName = internIfNotNull(getWithFallback(tags, nameKeys));
         return new OSMRoadWay(way, newNodes, streetName, speedLimit, currentType, restrictions);
     }
 
-    private EnumSet<RoadRestriction> getRestrictionsOfRoad(OSMWay way) {
+    private EnumSet<RoadRestriction> getRestrictionsOfRoad() {
         EnumSet<RoadRestriction> restrictions = EnumSet.noneOf(RoadRestriction.class);
         if (tags.containsKey("highway")) {
             RoadRestriction vehicleRestriction = getVehicleRestriction();
@@ -341,7 +313,6 @@ public class OSMParser {
         return null;
     }
 
-
     private OSMRoadNode convertNodeToRoadNode(OSMNode node) {
         OSMRoadNode newNode = new OSMRoadNode(node);
         idToNode.replace(newNode);
@@ -356,7 +327,6 @@ public class OSMParser {
                 maxSpeed = Integer.parseInt(tags.get("maxspeed"));
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                maxSpeed = 50;
             }
         } else {
             maxSpeed = RoadInformation.speedLimitsFromTags.getOrDefault(tags.get("highway"), 50);
@@ -384,49 +354,11 @@ public class OSMParser {
     }
 
     private void handleEndNode() {
-        tryAddPlace();
+        osmAddressParser.tryAddAddress(tags, getCurrentPositionNode());
         currentNode = null;
     }
 
-    private void tryAddPlace() {
-        long id = getPlaceOSMId();
-        if (id == -1) {
-            return;
-        }
-        OSMNode positionNode = getPlacePositionNode();
-        if (positionNode == null) {
-            return;
-        }
-        float lat = positionNode.getLat();
-        float lon = positionNode.getLon();
-        String streetName = internIfNotNull(getWithFallback(tags, streetNameKeys));
-        String houseNumber = internIfNotNull(getWithFallback(tags, houseNumberKeys));
-        String city = internIfNotNull(getWithFallback(tags, cityKeys));
-        if (streetName == null) {
-            return;
-        }
-        streetNames.add(streetName);
-        if (city != null) {
-            cities.add(city);
-        }
-        Address address = new Address(lat, lon, streetName, houseNumber, city);
-        addresses.add(address);
-    }
-
-    private long getPlaceOSMId() {
-        if (currentNode != null) {
-            return currentNode.getAsLong();
-        }
-        if (currentWay != null) {
-            return currentWay.getAsLong();
-        }
-        if (currentRelation != null) {
-            return currentRelation.getAsLong();
-        }
-        return -1;
-    }
-
-    private OSMNode getPlacePositionNode() {
+    private OSMNode getCurrentPositionNode() {
         if (currentNode != null) {
             return currentNode;
         }
