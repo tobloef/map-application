@@ -59,11 +59,8 @@ public class Dijkstra {
         if (current.wrongWay(connectedRoad, vehicleType)) {
             return true;
         }
-        if (!connectedRoad.vehicleIsAllowedToTakeRoad(vehicleType)) {
-            return true;
-        }
-        return false;
-    }
+		return !connectedRoad.vehicleIsAllowedToTakeRoad(vehicleType);
+	}
 
     private static void insertStartConnections(PolyRoad origin, PolyRoad destination, IndexMinPQ<Double> remainingPolyRoads, VehicleType vehicleType) {
         for (int connectedRoadIndex : origin.getAllConnections()) {

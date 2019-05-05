@@ -237,7 +237,9 @@ public class PolyRoad extends Polyline implements Serializable {
             return true;
         } else if (restrictions.contains(RoadRestriction.ONE_WAY_REVERSED) && contains(lastConnections, origin.getIndex())) {
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     public boolean isOneWay() {
@@ -246,9 +248,7 @@ public class PolyRoad extends Polyline implements Serializable {
 
     public boolean vehicleIsAllowedToTakeRoad(VehicleType vehicleType) {
         if (vehicleType == VehicleType.CAR) {
-            if (restrictions.contains(RoadRestriction.NO_CAR)) {
-                return false;
-            }
+			return !restrictions.contains(RoadRestriction.NO_CAR);
         } else if (vehicleType == VehicleType.BICYCLE || vehicleType == VehicleType.WALKING) {
             return !restrictions.contains(RoadRestriction.CAR_ONLY);
         }

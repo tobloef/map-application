@@ -107,7 +107,7 @@ public class TopMenuController {
     }
 
     @FXML
-    private void onSelectTheme(final ActionEvent event) throws IOException {
+    private void onSelectTheme(final ActionEvent event) {
         File file = loadThemeAbsolutePath();
 
         if (file != null) {
@@ -116,7 +116,7 @@ public class TopMenuController {
     }
 
     @FXML
-    private void onAppendTheme(final ActionEvent event) throws IOException {
+    private void onAppendTheme(final ActionEvent event) {
         File file = loadThemeAbsolutePath();
 
         if (file != null) {
