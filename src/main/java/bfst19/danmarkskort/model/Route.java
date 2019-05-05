@@ -146,4 +146,12 @@ public class Route extends ArrayList<PolyRoad> {
     public String getSuggestedFileName() {
         return get(0).getStreetNameOrDefault() + "_" + get(size() - 1).getStreetNameOrDefault() + ".txt";
     }
+
+    public Rectangle getBoundingBox(){
+        Rectangle boundingBox = new Rectangle(get(0).getMinimumBoundingRectangle());
+        for (PolyRoad road : this){
+            boundingBox.growToEncompass(road.getMinimumBoundingRectangle());
+        }
+        return boundingBox;
+    }
 }

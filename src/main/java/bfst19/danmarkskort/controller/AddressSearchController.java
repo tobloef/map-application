@@ -81,7 +81,7 @@ public class AddressSearchController {
                 updatePopup(popup, field, otherPopup, newValue, (address) -> {
                     addressHandler.accept(address);
                     Route route = model.getShortestPath();
-                    if (route != null) {
+                    if (route != null && route.size() > 1) {
                         mapCanvas.panViewToRoute(route);
                     } else if (address != null) {
                         mapCanvas.panViewToAddress(address);

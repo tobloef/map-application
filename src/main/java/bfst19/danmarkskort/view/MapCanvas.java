@@ -113,7 +113,16 @@ public class MapCanvas extends Canvas {
     }
 
     public void panViewToRoute(Route route) {
-        // TODO: Implement
+        Rectangle routeBBox = route.getBoundingBox();
+        Rectangle screenBounds = getScreenBounds();
+        System.out.println(routeBBox);
+        System.out.println(screenBounds);
+        double sizeDelta = screenBounds.getSizeLargestDelta(routeBBox);
+        double x = -(routeBBox.xMin - screenBounds.getMiddleX()) / getDegreesLatitudePerPixel();
+        double y = (routeBBox.yMax - screenBounds.getMiddleY()) / getDegreesLatitudePerPixel();
+        pan(x, y);
+        System.out.println(sizeDelta);
+        //zoom(sizeDelta, routeBBox.xMin, routeBBox.yMax);
     }
 
     private double findInitialZoomFactor() {
@@ -170,7 +179,6 @@ public class MapCanvas extends Canvas {
     }
 
     public void updateDegreesPerPixel() {
-        //TODO make this a static method
         double determinant = graphicsContext.getTransform().determinant();
         degreesLatitudePerPixel = 1 / Math.sqrt(Math.abs(determinant));
     }
