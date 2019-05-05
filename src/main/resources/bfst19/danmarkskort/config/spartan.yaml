@@ -27,7 +27,7 @@
 
 - BUILDING:
   - amenity:
-      - university
+    - university
 
 - CYCLEWAY:
   - highway:

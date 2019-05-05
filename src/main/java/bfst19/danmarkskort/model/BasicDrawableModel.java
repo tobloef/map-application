@@ -8,58 +8,58 @@ import java.util.Map;
 
 public class BasicDrawableModel implements DrawableModel {
 
-	Map<WayType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
-	Rectangle modelBounds;
+    Map<WayType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
+    Rectangle modelBounds;
 
 
-	public BasicDrawableModel(){
+    public BasicDrawableModel() {
 
-	}
+    }
 
-	@Override
-	public void add(WayType type, Drawable drawable) {
-		wayTypeEnumMap.get(type).add(drawable);
-	}
+    @Override
+    public void add(WayType type, Drawable drawable) {
+        wayTypeEnumMap.get(type).add(drawable);
+    }
 
-	@Override
-	public Iterable<Drawable> getDrawablesOfTypeInBounds(WayType type, Rectangle bounds) {
-		return wayTypeEnumMap.get(type);
-	}
+    @Override
+    public Iterable<Drawable> getDrawablesOfTypeInBounds(WayType type, Rectangle bounds) {
+        return wayTypeEnumMap.get(type);
+    }
 
-	@Override
-	public Iterable<Drawable> getAllDrawablesOfType(WayType type) {
-		return wayTypeEnumMap.get(type);
-	}
+    @Override
+    public Iterable<Drawable> getAllDrawablesOfType(WayType type) {
+        return wayTypeEnumMap.get(type);
+    }
 
-	@Override
-	public void doneAdding() {
-		//Does nothing in this model, but is needed for more complex models.
-		return;
-	}
+    @Override
+    public void doneAdding() {
+        //Does nothing in this model, but is needed for more complex models.
+        return;
+    }
 
-	@Override
-	public void doNewDataSet(){
-		return;
-	}
+    @Override
+    public void doNewDataSet() {
+        return;
+    }
 
-	@Override
-	public void setModelBounds(Rectangle bounds) {
-		modelBounds = bounds;
-	}
+    @Override
+    public Rectangle getModelBounds() {
+        return modelBounds;
+    }
 
-	@Override
-	public Rectangle getModelBounds() {
-		return modelBounds;
-	}
+    @Override
+    public void setModelBounds(Rectangle bounds) {
+        modelBounds = bounds;
+    }
 
-	@Override
-	public Drawable getNearestNeighbor(WayType type, float x, float y) {
-		throw new RuntimeException("This methods does not make sense for a non spatial data type.");
-	}
+    @Override
+    public Drawable getNearestNeighbor(WayType type, float x, float y) {
+        throw new RuntimeException("This methods does not make sense for a non spatial data type.");
+    }
 
-	@Override
-	public void insert(WayType type, Drawable drawable) {
-		wayTypeEnumMap.get(type).add(drawable);
-	}
+    @Override
+    public void insert(WayType type, Drawable drawable) {
+        wayTypeEnumMap.get(type).add(drawable);
+    }
 
 }

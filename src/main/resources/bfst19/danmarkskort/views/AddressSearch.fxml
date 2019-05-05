@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane
+    xmlns:fx="http://javafx.com/fxml"
+    xmlns="http://javafx.com/javafx"
+    prefWidth="300.0"
+    fx:controller="bfst19.danmarkskort.controller.AddressSearchController"
+    fx:id="addressPane"
+>
+    <style>
+        -fx-background-color: #FFFFFF;
+        -fx-border-color: #000000;
+        -fx-border-width: 0px 2px 0px 0px;
+    </style>
+    <center>
+        <VBox
+            fx:id="addressLayoutBox"
+            style="-fx-padding: 10px;"
+        >
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Origin</Label>
+            <TextField fx:id="startField">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </TextField>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Destination</Label>
+            <TextField fx:id="endField">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </TextField>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Route description</Label>
+            <ScrollPane
+                fx:id="directionsScrollPane"
+                VBox.vgrow="ALWAYS"
+                style="-fx-focus-color: transparent; -fx-background-insets: 0"
+                fitToWidth="true"
+            />
+        </VBox>
+    </center>
+</BorderPane>

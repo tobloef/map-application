@@ -1,14 +1,15 @@
 package bfst19.danmarkskort.utils;
 
 import bfst19.danmarkskort.model.DrawingInfo;
-import bfst19.danmarkskort.model.Wrapper;
 import bfst19.danmarkskort.model.Theme;
 import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.model.Wrapper;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
+
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;

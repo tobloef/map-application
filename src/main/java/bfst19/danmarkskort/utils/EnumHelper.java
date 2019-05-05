@@ -11,13 +11,14 @@ import java.util.Map;
 public class EnumHelper {
     /**
      * Convert a string to a WayType, returning null of it fails.
+     *
      * @param name The name of the enum.
      * @return The corresponding enum or null.
      */
-    public static WayType stringToWayType(String name){
+    public static WayType stringToWayType(String name) {
         try {
             return WayType.valueOf(name);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }
@@ -30,16 +31,15 @@ public class EnumHelper {
         return wayTypeEnumMap;
     }
 
-    public static String waytypeToDecoratedString(WayType wayType){
+    public static String waytypeToDecoratedString(WayType wayType) {
         String temp = wayType.name();
         String[] words = temp.split("_");
         StringBuilder toReturn = new StringBuilder();
-        for (int i = 0; i < words.length; i++){
+        for (int i = 0; i < words.length; i++) {
             StringBuilder stringBuilder = new StringBuilder(words[i].toLowerCase());
             stringBuilder.setCharAt(0, Character.toUpperCase(stringBuilder.charAt(0)));
             toReturn.append(stringBuilder.toString());
-            if (i < words.length-1)
-            {
+            if (i < words.length - 1) {
                 toReturn.append(" ");
             }
         }

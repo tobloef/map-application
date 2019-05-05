@@ -14,30 +14,33 @@ import java.net.URL;
  */
 
 public class ResourceLoader {
-    private static String testFile = "DO_NOT_DELETE";
+    private static final String testFile = "DO_NOT_DELETE";
     private static Boolean useLeadingSlash = null;
 
     public static URL getResource(String name) {
+        if (name.startsWith("rs:")) {
+            name = name.substring(3);
+        }
         name = fixPath(name);
         return Main.class.getResource(name);
     }
 
     public static InputStream getResourceAsStream(String name) {
         if (name.startsWith("rs:")) {
+            name = name.substring(3);
             name = fixPath(name);
             return Main.class.getResourceAsStream(name);
         } else {
             try {
                 return new FileInputStream(name);
-            } catch(FileNotFoundException e){
-                System.out.println(e.getMessage());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
                 return null;
             }
         }
     }
 
     public static String fixPath(String path) {
-        path = path.substring(3);
         if (path == null) {
             return null;
         }

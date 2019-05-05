@@ -43,6 +43,10 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
+tasks.withType(JavaExec) {
+    jvmArgs = ['-Xms512m', '-Xmx4096m']
+}
+
 test {
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'

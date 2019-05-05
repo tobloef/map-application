@@ -171,14 +171,14 @@ public class DrawingInfo {
 
 
     public double calculateLineWidth(double currentZoomLevel) {
-        if (lineWidthMaxWrapper == null || lineWidthMinWrapper == null){
+        if (lineWidthMaxWrapper == null || lineWidthMinWrapper == null) {
             return lineWidthWrapper.getValue();
         }
         double lineWidth = lineWidthWrapper.getValue() * currentZoomLevel;
-        if (lineWidth < lineWidthMinWrapper.getValue()){
+        if (lineWidth < lineWidthMinWrapper.getValue()) {
             lineWidth = lineWidthMinWrapper.getValue();
         }
-        if (lineWidth > lineWidthMaxWrapper.getValue()){
+        if (lineWidth > lineWidthMaxWrapper.getValue()) {
             lineWidth = lineWidthMaxWrapper.getValue();
         }
         return lineWidth;

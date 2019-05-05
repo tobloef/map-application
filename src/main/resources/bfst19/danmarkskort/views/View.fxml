@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.BorderPane?>
+<?import bfst19.danmarkskort.view.MapCanvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.Scene?>
-
-<?import bfst19.danmarkskort.view.controls.MapCanvas?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<Scene xmlns="http://javafx.com/javafx"
-       xmlns:fx="http://javafx.com/fxml"
+<Scene xmlns:fx="http://javafx.com/fxml"
+       xmlns="http://javafx.com/javafx"
        fx:controller="bfst19.danmarkskort.controller.Controller"
        fx:id="scene"
        onKeyPressed="#onKeyPressed">
-            <BorderPane prefHeight="600.0" prefWidth="800.0" fx:id="borderPane">
-                <top>
-                    <HBox>
-                        <fx:include source="TopMenu.fxml"/>
-                        <Region HBox.hgrow="ALWAYS" styleClass="menu-bar"/>
-                        <fx:include source="TopRightMenu.fxml" />
-                    </HBox>
-                </top>
-                <center>
-                    <!-- The symbol mapCanvas.parent.width cannot be resolved.
-                         Don't be alarmed, this is not a problem, it works.
-                     -->
-                    <Pane>
-                        <MapCanvas fx:id="mapCanvas"
-                                   width="${mapCanvas.parent.width}"
-                                   height="${mapCanvas.parent.height}"
-                                   onScroll="#onScroll"
-                                   onMousePressed="#onMousePressed"
-                                   onMouseDragged="#onMouseDragged"
-                                   onMouseMoved="#onMouseMoved"
-                        />
-                    </Pane>
-                </center>
-                <right>
-                    <fx:include source="WaytypeSelector.fxml"/>
-                </right>
-            </BorderPane>
+    <BorderPane prefHeight="600.0" prefWidth="800.0" fx:id="borderPane">
+        <top>
+            <HBox>
+                <fx:include source="TopMenu.fxml"/>
+                <Region HBox.hgrow="ALWAYS" styleClass="menu-bar"/>
+                <fx:include source="TopRightMenu.fxml"/>
+            </HBox>
+        </top>
+        <center>
+            <!-- The symbol mapCanvas.parent.width cannot be resolved.
+                 Don't be alarmed, this is not a problem, it works.
+             -->
+            <Pane>
+                <MapCanvas fx:id="mapCanvas"
+                           width="${mapCanvas.parent.width}"
+                           height="${mapCanvas.parent.height}"
+                           onScroll="#onScroll"
+                           onMousePressed="#onMousePressed"
+                           onMouseDragged="#onMouseDragged"
+                           onMouseMoved="#onMouseMoved"
+                           onMouseExited="#onMouseExited"
+                           onMouseEntered="#onMouseEntered"
+                />
+
+                <Button
+                    fx:id="toggleSearchButton"
+                    text=">>"
+                    onAction="#toggleSearchPane"
+                />
+            </Pane>
+        </center>
+        <right>
+            <fx:include source="WaytypeSelector.fxml"/>
+        </right>
+        <left>
+            <fx:include source="AddressSearch.fxml"/>
+        </left>
+    </BorderPane>
 </Scene>
 
