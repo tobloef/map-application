@@ -209,11 +209,11 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 		return returnElements;
 	}
 
-	public List<T> rangeQuery(Rectangle queryBox, List<T> returnElements){
-		return rangeQuery(queryBox, true, returnElements);
+	public List<T> rangeSearch(Rectangle queryBox, List<T> returnElements){
+		return rangeSearch(queryBox, true, returnElements);
 	}
 
-	private List<T> rangeQuery(Rectangle queryBox, boolean odd, List<T> returnElements){
+	private List<T> rangeSearch(Rectangle queryBox, boolean odd, List<T> returnElements){
 		if (splitElement == null){
 			for (T leafElement : leafElements){
 				if (leafElement.getMinimumBoundingRectangle().intersect(queryBox)){
@@ -226,10 +226,10 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 			returnElements.add(splitElement);
 		}
 		if(queryBox.intersect(lower.getBbox())){
-			lower.rangeQuery(queryBox, !odd, returnElements);
+			lower.rangeSearch(queryBox, !odd, returnElements);
 		}
 		if(queryBox.intersect(higher.getBbox())){
-			higher.rangeQuery(queryBox, !odd, returnElements);
+			higher.rangeSearch(queryBox, !odd, returnElements);
 		}
 		return returnElements;
 	}

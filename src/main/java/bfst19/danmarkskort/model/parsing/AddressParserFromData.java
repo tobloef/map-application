@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.model.parsing;
 
-import bfst19.danmarkskort.model.AddressQuery;
+import bfst19.danmarkskort.model.AddressInput;
 import bfst19.danmarkskort.utils.BinarySearch;
 
 import java.util.ArrayList;
@@ -26,54 +26,54 @@ public class AddressParserFromData implements AddressParser {
         this.cities = cities;
     }
 
-    public AddressQuery parse(String query) {
-        AddressQuery addressQuery = new AddressQuery();
+    public AddressInput parse(String query) {
+        AddressInput addressInput = new AddressInput();
         List<List<String>> splits = getSplits(query);
         List<List<Integer>> usedSplits = new ArrayList<>();
 
         for (int s = 0; s < splits.size(); s++) {
             List<String> subSplits = splits.get(s);
             usedSplits.add(new ArrayList<>());
-            trySetStreet(addressQuery, usedSplits, s, subSplits);
-            trySetCity(addressQuery, usedSplits, s, subSplits);
-            trySetPostCode(addressQuery, usedSplits, s, subSplits);
-            trySetHouseInfo(addressQuery, usedSplits, subSplits, 0, s);
+            trySetStreet(addressInput, usedSplits, s, subSplits);
+            trySetCity(addressInput, usedSplits, s, subSplits);
+            trySetPostCode(addressInput, usedSplits, s, subSplits);
+            trySetHouseInfo(addressInput, usedSplits, subSplits, 0, s);
         }
 
         setFromRemainingSplits(
-                addressQuery,
-                AddressQuery::getStreetName,
-                AddressQuery::setStreetName,
+                addressInput,
+                AddressInput::getStreetName,
+                AddressInput::setStreetName,
                 splits,
                 usedSplits
         );
         setFromRemainingSplits(
-                addressQuery,
-                AddressQuery::getCity,
-                AddressQuery::setCity,
+                addressInput,
+                AddressInput::getCity,
+                AddressInput::setCity,
                 splits,
                 usedSplits
         );
 
-        return addressQuery;
+        return addressInput;
     }
 
-    private void trySetPostCode(AddressQuery addressQuery, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
+    private void trySetPostCode(AddressInput addressInput, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
         for (int i = 0; i < subSplits.size(); i++) {
             if (usedSplits.get(s).contains(i)) {
                 continue;
             }
             String candidate = subSplits.get(i);
-            if (addressQuery.getPostCode() == null && candidate.matches(postcodeRegex)) {
-                addressQuery.setPostCode(candidate);
+            if (addressInput.getPostCode() == null && candidate.matches(postcodeRegex)) {
+                addressInput.setPostCode(candidate);
                 usedSplits.get(s).add(i);
                 break;
             }
         }
     }
 
-    private void trySetStreet(AddressQuery addressQuery, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
-        if (addressQuery.getStreetName() != null) {
+    private void trySetStreet(AddressInput addressInput, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
+        if (addressInput.getStreetName() != null) {
             return;
         }
         for (int i = 0; i < subSplits.size(); i++) {
@@ -93,37 +93,37 @@ public class AddressParserFromData implements AddressParser {
                 if (streetIndex == -1) {
                     continue;
                 }
-                addressQuery.setStreetName(candidate);
+                addressInput.setStreetName(candidate);
                 for (int k = i; k < j; k++) {
                     usedSplits.get(s).add(k);
                 }
-                trySetHouseInfo(addressQuery, usedSplits, subSplits, j, s);
+                trySetHouseInfo(addressInput, usedSplits, subSplits, j, s);
                 return;
             }
         }
     }
 
-    private void trySetHouseInfo(AddressQuery addressQuery, List<List<Integer>> usedSplits, List<String> subSplits, int j, int s) {
+    private void trySetHouseInfo(AddressInput addressInput, List<List<Integer>> usedSplits, List<String> subSplits, int j, int s) {
         for (int k = j; k < subSplits.size(); k++) {
             if (usedSplits.get(s).contains(k)) {
                 continue;
             }
             String candidateAfterStreetName = subSplits.get(k);
-            if (addressQuery.getHouseNumber() == null && candidateAfterStreetName.matches(houseRegex)) {
-                addressQuery.setHouseNumber(candidateAfterStreetName);
+            if (addressInput.getHouseNumber() == null && candidateAfterStreetName.matches(houseRegex)) {
+                addressInput.setHouseNumber(candidateAfterStreetName);
                 usedSplits.get(s).add(k);
-            } else if (addressQuery.getFloor() == null && candidateAfterStreetName.matches(floorRegex)) {
-                addressQuery.setFloor(candidateAfterStreetName);
+            } else if (addressInput.getFloor() == null && candidateAfterStreetName.matches(floorRegex)) {
+                addressInput.setFloor(candidateAfterStreetName);
                 usedSplits.get(s).add(k);
-            } else if (addressQuery.getDoor() == null && candidateAfterStreetName.matches(doorRegex)) {
-                addressQuery.setDoor(candidateAfterStreetName);
+            } else if (addressInput.getDoor() == null && candidateAfterStreetName.matches(doorRegex)) {
+                addressInput.setDoor(candidateAfterStreetName);
                 usedSplits.get(s).add(k);
             }
         }
     }
 
-    private void trySetCity(AddressQuery addressQuery, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
-        if (addressQuery.getCity() != null) {
+    private void trySetCity(AddressInput addressInput, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
+        if (addressInput.getCity() != null) {
             return;
         }
         for (int i = 0; i < subSplits.size(); i++) {
@@ -143,7 +143,7 @@ public class AddressParserFromData implements AddressParser {
                 if (cityIndex == -1) {
                     continue;
                 }
-                addressQuery.setCity(candidate);
+                addressInput.setCity(candidate);
                 for (int k = i; k < j; k++) {
                     usedSplits.get(s).add(k);
                 }
@@ -153,13 +153,13 @@ public class AddressParserFromData implements AddressParser {
     }
 
     private void setFromRemainingSplits(
-            AddressQuery addressQuery,
-            Function<AddressQuery, String> getter,
-            BiConsumer<AddressQuery, String> setter,
+            AddressInput addressInput,
+            Function<AddressInput, String> getter,
+            BiConsumer<AddressInput, String> setter,
             List<List<String>> splits,
             List<List<Integer>> usedSplits
     ) {
-        if (getter.apply(addressQuery) != null) {
+        if (getter.apply(addressInput) != null) {
             return;
         }
 
@@ -205,7 +205,7 @@ public class AddressParserFromData implements AddressParser {
         if (candidate == null) {
             return;
         }
-        setter.accept(addressQuery, candidate);
+        setter.accept(addressInput, candidate);
         usedSplits.get(usedSplitCandidate).addAll(usedSubSplitsCandidate);
     }
 

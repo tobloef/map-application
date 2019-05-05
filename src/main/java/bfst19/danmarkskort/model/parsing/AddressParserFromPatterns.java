@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.model.parsing;
 
-import bfst19.danmarkskort.model.AddressQuery;
+import bfst19.danmarkskort.model.AddressInput;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -69,13 +69,13 @@ public class AddressParserFromPatterns implements AddressParser {
     }
 
     @Override
-    public AddressQuery parse(String query) {
+    public AddressInput parse(String query) {
         // We simply try each pattern until a match is found
         for (Pattern pattern : compiledPatterns) {
             Matcher matcher = pattern.matcher(query.trim());
             if (matcher.matches()) {
                 // Try to get the properties from each named group, ignoring the group if it isn't found.
-                return new AddressQuery.Builder()
+                return new AddressInput.Builder()
                         .streetName(tryGetGroup(matcher, "street"))
                         .houseNumber(tryGetGroup(matcher, "house"))
                         .floor(tryGetGroup(matcher, "floor"))

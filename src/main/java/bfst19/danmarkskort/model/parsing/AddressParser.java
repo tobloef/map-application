@@ -1,7 +1,7 @@
 package bfst19.danmarkskort.model.parsing;
 
-import bfst19.danmarkskort.model.AddressQuery;
+import bfst19.danmarkskort.model.AddressInput;
 
 public interface AddressParser {
-    public AddressQuery parse(String query);
+    public AddressInput parse(String query);
 }

@@ -35,7 +35,7 @@ public class KDTreeDrawableModel implements DrawableModel {
 			throw new RuntimeException("The KDTree has not been initialized yet");
 		}
 		if (wayTypeToKDTreeRoot.containsKey(type))
-			return wayTypeToKDTreeRoot.get(type).rangeQuery(bounds, new ArrayList<Drawable>());
+			return wayTypeToKDTreeRoot.get(type).rangeSearch(bounds, new ArrayList<Drawable>());
 		else {
 			return new ArrayList<>();
 		}
