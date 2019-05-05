@@ -12,6 +12,11 @@ import java.util.function.Function;
 import static bfst19.danmarkskort.model.parsing.AddressParsingRegexes.*;
 import static bfst19.danmarkskort.utils.Misc.trimList;
 
+/**
+ * Address parser that relies on being able to check parts of the query against a set of data,
+ * such as street names, cities, etc. This yield fairly accurate results, but you need to be
+ * careful with how you handle large data sets.
+ */
 public class AddressParserFromData implements AddressParser {
     private final List<String> streetNames;
     private final List<String> cities;

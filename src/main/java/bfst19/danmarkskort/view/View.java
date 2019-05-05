@@ -20,10 +20,9 @@ public class View {
 		stage.setScene(scene);
 		stage.show();
 		stage.setTitle("First year project: Map");
+		// On exit, do necessary cleanup, such as stopping other threads, etc.
 		stage.setOnCloseRequest(event -> {
 			model.cleanup();
-			//Platform.exit();
-			//System.exit(0);
 		});
 		controller.init(model, stage);
 	}

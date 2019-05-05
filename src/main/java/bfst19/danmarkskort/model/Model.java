@@ -34,7 +34,7 @@ public class Model {
     private Theme theme;
     private boolean HDOn;
     private String themePath;
-    AddressData addressData;
+    private AddressData addressData;
 
     public Model(List<String> args) throws IOException, XMLStreamException, ClassNotFoundException {
         System.out.println("Loading data...");

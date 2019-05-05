@@ -8,6 +8,10 @@ import java.util.regex.Pattern;
 
 import static bfst19.danmarkskort.model.parsing.AddressParsingRegexes.*;
 
+/**
+ * Address parser that relies purely on pattern matching and doens't need any data about street names, cities, etc.
+ * This is somewhat useful for very large data sets, but the results aren't as accurate as they could be with the data.
+ */
 public class AddressParserFromPatterns implements AddressParser {
     // These are the relevant permutations of the regex patterns above.
     // Inputted addresses should hopefully match any of these.
