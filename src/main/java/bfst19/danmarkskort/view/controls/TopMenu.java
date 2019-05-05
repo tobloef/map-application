@@ -74,8 +74,43 @@ public class TopMenu extends MenuBar {
                 new FileChooser.ExtensionFilter("All Files", "*.osm", "*.zip", "*.ser"),
                 new FileChooser.ExtensionFilter("OSM", "*.osm"),
                 new FileChooser.ExtensionFilter("ZIP", "*.zip"),
-                new FileChooser.ExtensionFilter("Serialised", "*.ser"));
+                new FileChooser.ExtensionFilter("Serialised", "*.ser")
+        );
         return fileChooser.showOpenDialog(stage);
+    }
+
+    @FXML
+    private void onSaveMapData(ActionEvent event) {
+        File file = openMapDataFileSave();
+        if (file == null) {
+            displayMapDataNotSavedAlert();
+            return;
+        }
+        try {
+            model.saveMapData(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            displayMapDataNotSavedAlert();
+        }
+    }
+
+    private File openMapDataFileSave() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save map data");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Serialised", "*.ser")
+        );
+        return fileChooser.showSaveDialog(stage);
+    }
+
+    private void displayMapDataNotSavedAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                "The specified map data couldn't be loaded.",
+                ButtonType.CLOSE);
+        alert.setTitle("Error loading map data");
+        alert.setHeaderText("Error loading map data");
+        alert.show();
     }
 
     @FXML
@@ -129,8 +164,21 @@ public class TopMenu extends MenuBar {
     @FXML
     private void onSaveRouteToFile(ActionEvent event) {
         Route route = model.getShortestPath();
+        if (route == null) {
+            displayNoRouteAlert();
+            return;
+        }
         File file = openRouteFileSelect(route.getSuggestedFileName());
         route.printToFile(file);
+    }
+
+    private void displayNoRouteAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                "No route to save. Please find a route using the address search before trying to save.",
+                ButtonType.CLOSE);
+        alert.setTitle("Error saving route");
+        alert.setHeaderText("Error saving route");
+        alert.show();
     }
 
     private File openRouteFileSelect(String fileName) {

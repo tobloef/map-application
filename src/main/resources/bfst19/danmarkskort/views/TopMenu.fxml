@@ -8,7 +8,8 @@
     xmlns="http://javafx.com/javafx"
 >
     <Menu text="File">
-        <MenuItem text="Open map data..." onAction="#onLoadMapData"/>
+        <MenuItem text="Open data..." onAction="#onLoadMapData"/>
+        <MenuItem text="Save map..." onAction="#onSaveMapData"/>
         <MenuItem text="Save route to file..." onAction="#onSaveRouteToFile"/>
     </Menu>
     <Menu text="View">

@@ -142,6 +142,10 @@ public class Model {
         notifyReloadObservers();
     }
 
+    public void saveMapData(File file) throws IOException {
+        serializeData(file.getAbsolutePath());
+    }
+
     private void cleanUpShortestPath() {
         start = end = null;
     }
