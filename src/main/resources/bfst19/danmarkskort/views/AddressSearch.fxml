@@ -4,6 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <fx:root
     type="javafx.scene.layout.BorderPane"
     xmlns:fx="http://javafx.com/fxml"
@@ -35,6 +37,14 @@
                     </Insets>
                 </VBox.margin>
             </TextField>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Vehicle</Label>
+            <ComboBox fx:id="vehicleSelection" promptText="Select vehicle">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </ComboBox>
             <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Route description</Label>
             <ScrollPane
                 fx:id="directionsScrollPane"

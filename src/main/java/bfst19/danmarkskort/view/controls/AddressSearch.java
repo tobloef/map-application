@@ -3,6 +3,7 @@ package bfst19.danmarkskort.view.controls;
 import bfst19.danmarkskort.model.Address;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.Route;
+import bfst19.danmarkskort.model.VehicleType;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -39,6 +40,8 @@ public class AddressSearch extends BorderPane {
     private TextField startField;
     @FXML
     private TextField endField;
+    @FXML
+    private ComboBox<VehicleType> vehicleSelection;
 
     public AddressSearch() throws IOException {
         URL url = ResourceLoader.getResource("rs:views/AddressSearch.fxml");
@@ -54,6 +57,12 @@ public class AddressSearch extends BorderPane {
         this.map = map;
         addressSearch = new bfst19.danmarkskort.model.AddressSearch(model.getAddressData());
         togglePanel();
+        vehicleSelection.getItems().setAll(VehicleType.values());
+        vehicleSelection.setOnAction(event -> {
+            model.setVehicleType(vehicleSelection.getValue());
+            updateRouteDescription(model.getShortestPath());
+        });
+        vehicleSelection.setValue(VehicleType.CAR);
     }
 
     public void togglePanel() {

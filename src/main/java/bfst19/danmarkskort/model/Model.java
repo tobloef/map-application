@@ -262,7 +262,9 @@ public class Model {
     public Route getShortestPath() {
         if (shortestPath != null) {
             return shortestPath;
-        } else return new Route();
+        } else {
+            return new Route();
+        }
     }
 
     public void updateEnd() {
@@ -312,7 +314,7 @@ public class Model {
         notifyWayTypeObservers();
     }
 
-    public void updateVehicleType(VehicleType vehicleType) {
+    public void setVehicleType(VehicleType vehicleType) {
         this.currentVehicleType = vehicleType;
         updateShortestPath();
     }
