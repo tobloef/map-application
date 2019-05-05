@@ -1,7 +1,7 @@
-package bfst19.danmarkskort.view.drawers;
+package bfst19.danmarkskort.controls.drawers;
 
 import bfst19.danmarkskort.model.*;
-import bfst19.danmarkskort.view.controls.MapCanvas;
+import bfst19.danmarkskort.controls.controls.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
@@ -156,8 +156,8 @@ public class MapDrawer implements Drawer {
     }
 
     private boolean coastlineIsVisible() {
-        return model.getWaysOfType(WayType.COASTLINE, canvas.getScreenBounds())
-                .iterator()
-                .hasNext();
+        Rectangle screenBounds = canvas.getScreenBounds();
+        Iterable<Drawable> coastlines = model.getWaysOfType(WayType.COASTLINE, screenBounds);
+        return coastlines.iterator().hasNext();
     }
 }

@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.view.controls;
+package bfst19.danmarkskort.controls.controls;
 
 import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.utils.ResourceLoader;

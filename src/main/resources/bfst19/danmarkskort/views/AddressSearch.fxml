@@ -3,9 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <fx:root
     type="javafx.scene.layout.BorderPane"
     xmlns:fx="http://javafx.com/fxml"
@@ -33,10 +30,17 @@
             <TextField fx:id="endField">
                 <VBox.margin>
                     <Insets>
-                        <bottom>10</bottom>
+                        <bottom>15</bottom>
                     </Insets>
                 </VBox.margin>
             </TextField>
+            <Button fx:id="swapAddressesButton" text="Swap origin and destination">
+                <VBox.margin>
+                    <Insets>
+                        <bottom>10</bottom>
+                    </Insets>
+                </VBox.margin>
+            </Button>
             <Label style="-fx-font-weight: bold; -fx-font-size: 16px;">Vehicle</Label>
             <ComboBox fx:id="vehicleSelection" promptText="Select vehicle">
                 <VBox.margin>

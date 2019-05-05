@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.view.drawers;
+package bfst19.danmarkskort.controls.drawers;
 
 
 public interface Drawer {

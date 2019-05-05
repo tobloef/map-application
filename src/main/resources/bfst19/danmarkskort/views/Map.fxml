@@ -2,7 +2,7 @@
 
 <?import javafx.scene.layout.*?>
 
-<?import bfst19.danmarkskort.view.controls.MapCanvas?>
+<?import bfst19.danmarkskort.controls.controls.MapCanvas?>
 <?import javafx.scene.control.Button?>
 <fx:root
     type="javafx.scene.layout.Pane"

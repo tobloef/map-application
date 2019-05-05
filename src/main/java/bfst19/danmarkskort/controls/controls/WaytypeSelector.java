@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.view.controls;
+package bfst19.danmarkskort.controls.controls;
 
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.WayType;
@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;

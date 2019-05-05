@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.view.controls;
+package bfst19.danmarkskort.controls.controls;
 
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.utils.ResourceLoader;
@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 

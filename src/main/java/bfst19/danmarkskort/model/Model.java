@@ -247,12 +247,15 @@ public class Model {
 
     private void updateShortestPath() {
         long time = -System.nanoTime();
-        if (start == null || end == null)
+        if (start == null || end == null) {
+            shortestPath = null;
             return;
+        }
         try {
             shortestPath = Dijkstra.getShortestPath(start, end, currentVehicleType);
         } catch (DisconnectedRoadsException e) {
-            shortestPath = new Route();
+            shortestPath = null;
+            return;
         }
         time += System.nanoTime();
         System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);

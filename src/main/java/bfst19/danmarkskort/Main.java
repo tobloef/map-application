@@ -1,7 +1,7 @@
 package bfst19.danmarkskort;
 
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.view.controls.MainWindow;
+import bfst19.danmarkskort.controls.controls.MainWindow;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;

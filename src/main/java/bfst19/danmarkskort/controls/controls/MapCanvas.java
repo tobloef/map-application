@@ -1,16 +1,13 @@
-package bfst19.danmarkskort.view.controls;
+package bfst19.danmarkskort.controls.controls;
 
 import bfst19.danmarkskort.model.*;
-import bfst19.danmarkskort.view.drawers.*;
-import javafx.application.Platform;
+import bfst19.danmarkskort.controls.drawers.*;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Tooltip;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
 
 import java.util.ArrayList;
 import java.util.List;
