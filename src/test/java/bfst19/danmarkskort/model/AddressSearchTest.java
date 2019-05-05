@@ -1,6 +1,5 @@
 package bfst19.danmarkskort.model;
 
-import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -10,11 +9,11 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AddressSearchTest {
-    private AddressSearch addressSearch = new AddressSearch( new AddressData(TestData.ADDRESSES_BY_STREET_NAME_1,
+    private AddressSearch addressSearch = new AddressSearch(
+            TestData.ADDRESSES_BY_STREET_NAME_1,
             TestData.ADDRESSES_BY_CITY_1,
             TestData.STREET_NAMES_1,
-            TestData.CITIES_1)
-
+            TestData.CITIES_1
     );
 
     @Test
@@ -35,7 +34,7 @@ public class AddressSearchTest {
         List<Address> expected = TestData.ADDRESSES_BY_STREET_NAME_1.stream()
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .collect(Collectors.toList());
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -50,7 +49,7 @@ public class AddressSearchTest {
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .collect(Collectors.toList());
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -65,7 +64,7 @@ public class AddressSearchTest {
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .collect(Collectors.toList());
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -81,7 +80,7 @@ public class AddressSearchTest {
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .filter(address -> address.getHouseNumber().startsWith("1"))
                 .collect(Collectors.toList());
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -92,7 +91,7 @@ public class AddressSearchTest {
     @Test
     public void testgetSuggestions_PartialStreet() {
         String query = "Vej T";
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         if (actual != null) {
             assertEquals(0, actual.size());
         }
@@ -105,7 +104,7 @@ public class AddressSearchTest {
                 .filter(address -> address.getStreetName().startsWith("Vej"))
                 .filter(address -> Objects.equals(address.getCity(), "By Et"))
                 .collect(Collectors.toList());
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -120,7 +119,7 @@ public class AddressSearchTest {
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> address.getCity().startsWith("By"))
                 .collect(Collectors.toList());
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
@@ -135,7 +134,7 @@ public class AddressSearchTest {
                 .filter(address -> Objects.equals(address.getStreetName(), "Vej To"))
                 .filter(address -> address.getHouseNumber().startsWith("1"))
                 .collect(Collectors.toList());
-        List<Pair<String, Address>> actual = addressSearch.getSuggestions(query);
+        List<Address> actual = addressSearch.getSuggestions(query);
         assertNotNull(actual);
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
