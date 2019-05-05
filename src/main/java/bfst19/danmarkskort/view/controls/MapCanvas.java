@@ -2,12 +2,10 @@ package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.view.drawers.*;
-import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Tooltip;
 import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Affine;
 
@@ -15,20 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapCanvas extends Canvas {
-    private static final float tooltipMaxDistance = 50f;
-    private static final float tooltipMinZoom = 0.00003f;
-
-    private GraphicsContext graphicsContext = getGraphicsContext2D(); // these are assigned here since they are otherwise the only reason for a constructor
+    private GraphicsContext graphicsContext;
     private Model model;
     private List<Drawer> drawers;
     private double degreesLatitudePerPixel;
     private double minZoom = 0;
     private double maxZoom = 1000000;
-    private Tooltip tooltip;
+
+    public MapCanvas() {
+        graphicsContext = getGraphicsContext2D();
+    }
 
     public void initialize(Model model) {
         this.model = model;
-        model.addWayTypeObserver(this::repaint);
         model.addReloadObserver(this::initialize);
         initialize();
     }
@@ -44,17 +41,6 @@ public class MapCanvas extends Canvas {
         model.addWayTypeObserver(this::repaint);
         makeCanvasUpdateOnResize();
         repaint();
-        model.addMouseIdleObserver(idle -> {
-            if (idle) {
-                showTooltip();
-            } else {
-                hideTooltip();
-            }
-        });
-
-        tooltip = new Tooltip();
-        tooltip.setAutoHide(false);
-        tooltip.setAutoFix(false);
     }
 
     private void initializeDrawers(Model model) {
@@ -65,7 +51,6 @@ public class MapCanvas extends Canvas {
         drawers.add(new POIDrawer(this, model));
         drawers.add(new ZoomIndicatorDrawer(this));
     }
-
 
     public void repaint() {
         clearBackground();
@@ -108,27 +93,6 @@ public class MapCanvas extends Canvas {
         minZoom = transform.getMxx();
     }
 
-    public void panViewToAddress(Address address) {
-        // TODO: Implement
-    }
-
-    public void panViewToRoute(Route route) {
-        Rectangle routeBBox = route.getBoundingBox();
-        panToBoundingBox(routeBBox);
-        //ZOOMING DOESNT WORK.
-        //TODO: MAKE ZOOM WORK.
-        //double sizeDelta = routeBBox.getSizeLargestDelta(screenBounds) / getDegreesLatitudePerPixel();
-        //System.out.println(sizeDelta);
-        //zoom(sizeDelta, routeBBox.getMiddleX(), routeBBox.getMiddleY() );
-    }
-
-    private void panToBoundingBox(Rectangle bbox) {
-        Rectangle screenBounds = getScreenBounds();
-        double x = -(bbox.getMiddleX() - screenBounds.getMiddleX()) / getDegreesLatitudePerPixel();
-        double y = (bbox.getMiddleY() - screenBounds.getMiddleY()) / getDegreesLatitudePerPixel();
-        pan(x, y);
-    }
-
     private double findInitialZoomFactor() {
         double minRequiredWidthZoom = getWidth() / (model.getModelBounds().xMax - model.getModelBounds().xMin);
         double minRequiredHeightZoom = getHeight() / (model.getModelBounds().yMax - model.getModelBounds().yMin);
@@ -140,7 +104,6 @@ public class MapCanvas extends Canvas {
     private void updateLineWidth() {
         graphicsContext.setLineWidth(getDegreesLatitudePerPixel());
     }
-
 
     public void pan(double deltaX, double deltaY) {
         pan(deltaX, deltaY, true);
@@ -192,7 +155,7 @@ public class MapCanvas extends Canvas {
     }
 
 
-    public Point2D modelCoords(double x, double y) {
+    public Point2D screenToModelCoords(double x, double y) {
         try {
             return graphicsContext.getTransform().inverseTransform(x, y);
         } catch (Exception e) {
@@ -202,63 +165,14 @@ public class MapCanvas extends Canvas {
     }
 
     public Rectangle getScreenBounds() {
-        Bounds bounds = this.getBoundsInLocal();
-        Point2D min = this.modelCoords(bounds.getMinX(), bounds.getMinY());
-        Point2D max = this.modelCoords(bounds.getMaxX(), bounds.getMaxY());
-        // Needed because the model is flipped
-        return new Rectangle((float) min.getX(), (float) max.getY(), (float) max.getX(), (float) min.getY());
-    }
+            Bounds bounds = this.getBoundsInLocal();
+            Point2D min = this.screenToModelCoords(bounds.getMinX(), bounds.getMinY());
+            Point2D max = this.screenToModelCoords(bounds.getMaxX(), bounds.getMaxY());
+            if (min == null || max == null) {
+                return null;
+            }
+            // Needed because the model is flipped
+            return new Rectangle((float) min.getX(), (float) max.getY(), (float) max.getX(), (float) min.getY());
 
-    //Test function to visualize if the KDTree works.
-    private Rectangle getSmallModelBounds() {
-        int boxsize = 100;
-        Bounds bounds = this.getBoundsInLocal();
-        double minX = bounds.getMinX() + bounds.getMaxX() / 2 - boxsize;
-        double minY = bounds.getMinY() + bounds.getMaxY() / 2 - boxsize;
-        double maxX = bounds.getMaxX() / 2 + boxsize;
-        double maxY = bounds.getMaxY() / 2 + boxsize;
-        Point2D min = this.modelCoords(minX, minY);
-        Point2D max = this.modelCoords(maxX, maxY);
-        // Needed because the model is flipped
-        return new Rectangle((float) min.getX(), (float) max.getY(), (float) max.getX(), (float) min.getY());
-    }
-
-    private void hideTooltip() {
-        if (tooltip != null) {
-            tooltip.hide();
-        }
-    }
-
-    private void showTooltip() {
-        if (!model.getIsMouseInWindow()) {
-            return;
-        }
-        if (tooltip == null) {
-            return;
-        }
-        if (getDegreesLatitudePerPixel() > tooltipMinZoom) {
-            return;
-        }
-        float mouseModelX = model.getMouseModelX();
-        float mouseModelY = model.getMouseModelY();
-        float mouseScreenX = model.getMouseScreenX();
-        float mouseScreenY = model.getMouseScreenY();
-        PolyRoad road = model.getClosestRoad(mouseModelX, mouseModelY);
-        if (road == null) {
-            return;
-        }
-        if (road.getStreetName() == null) {
-            return;
-        }
-        double distance = Math.sqrt(road.euclideanDistanceSquaredTo(mouseModelX, mouseModelY));
-        distance = distance / getDegreesLatitudePerPixel();
-        if (distance > tooltipMaxDistance) {
-            return;
-        }
-        Platform.runLater(() -> {
-            tooltip.setText(road.getStreetName());
-            Point2D screenCoords = this.localToScreen(mouseScreenX, mouseScreenY);
-            tooltip.show(this, screenCoords.getX(), screenCoords.getY() - 30);
-        });
     }
 }

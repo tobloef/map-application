@@ -156,8 +156,8 @@ public class MapDrawer implements Drawer {
     }
 
     private boolean coastlineIsVisible() {
-        return model.getWaysOfType(WayType.COASTLINE, canvas.getScreenBounds())
-                .iterator()
-                .hasNext();
+        Rectangle screenBounds = canvas.getScreenBounds();
+        Iterable<Drawable> coastlines = model.getWaysOfType(WayType.COASTLINE, screenBounds);
+        return coastlines.iterator().hasNext();
     }
 }

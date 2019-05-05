@@ -7,40 +7,18 @@
 <?import bfst19.danmarkskort.view.controls.MapCanvas?>
 <?import bfst19.danmarkskort.view.controls.AddressSearch?>
 <?import bfst19.danmarkskort.view.controls.TopMenu?>
+<?import bfst19.danmarkskort.view.controls.Map?>
 <fx:root
     type="javafx.scene.Scene"
     xmlns:fx="http://javafx.com/fxml"
     xmlns="http://javafx.com/javafx"
-    fx:id="scene"
-    onKeyPressed="#onKeyPressed"
 >
     <BorderPane prefHeight="600.0" prefWidth="1100.0" fx:id="borderPane">
         <top>
             <TopMenu fx:id="topMenu"/>
         </top>
         <center>
-            <!-- The symbol mapCanvas.parent.width cannot be resolved.
-                 Don't be alarmed, this is not a problem, it works.
-             -->
-            <Pane>
-                <MapCanvas
-                    fx:id="mapCanvas"
-                    width="${mapCanvas.parent.width}"
-                    height="${mapCanvas.parent.height}"
-                    onScroll="#onScroll"
-                    onMousePressed="#onMousePressed"
-                    onMouseDragged="#onMouseDragged"
-                    onMouseMoved="#onMouseMoved"
-                    onMouseExited="#onMouseExited"
-                    onMouseEntered="#onMouseEntered"
-                />
-
-                <Button
-                    fx:id="toggleSearchButton"
-                    text=">>"
-                    onAction="#toggleSearchPane"
-                />
-            </Pane>
+            <Map fx:id="map"/>
         </center>
         <left>
             <AddressSearch fx:id="addressSearch" prefWidth="300"/>

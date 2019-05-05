@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;

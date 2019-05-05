@@ -3,6 +3,7 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
+import bfst19.danmarkskort.view.drawers.POIDrawer;
 import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
@@ -142,6 +143,10 @@ public class Model {
         notifyReloadObservers();
     }
 
+    public void saveMapData(File file) throws IOException {
+        serializeData(file.getAbsolutePath());
+    }
+
     private void cleanUpShortestPath() {
         start = end = null;
     }
@@ -243,12 +248,15 @@ public class Model {
 
     private void updateShortestPath() {
         long time = -System.nanoTime();
-        if (start == null || end == null)
+        if (start == null || end == null) {
+            shortestPath = null;
             return;
+        }
         try {
             shortestPath = Dijkstra.getShortestPath(start, end, currentVehicleType);
         } catch (DisconnectedRoadsException e) {
-            shortestPath = new Route();
+            shortestPath = null;
+            return;
         }
         time += System.nanoTime();
         System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
@@ -258,30 +266,25 @@ public class Model {
     public Route getShortestPath() {
         if (shortestPath != null) {
             return shortestPath;
-        } else return new Route();
+        } else {
+            return new Route();
+        }
     }
 
     public void updateEnd() {
-        Drawable nearest = getClosestRoad(mouseModelX, mouseModelY);
-        if (nearest instanceof PolyRoad) {
-            end = (PolyRoad) nearest;
+        PolyRoad nearest = getClosestRoad(mouseModelX, mouseModelY);
+        if (nearest != null) {
+            end = nearest;
             updateShortestPath();
         }
     }
 
     public void updateStart() {
-        Drawable nearest = getClosestRoad(mouseModelX, mouseModelY);
-        if (nearest instanceof PolyRoad) {
-            start = (PolyRoad) nearest;
+        PolyRoad nearest = getClosestRoad(mouseModelX, mouseModelY);
+        if (nearest != null) {
+            start = nearest;
             updateShortestPath();
         }
-    }
-
-    public void swapStartAndEnd() {
-        PolyRoad temp = start;
-        start = end;
-        end = temp;
-        updateShortestPath();
     }
 
     public PolyRoad getClosestRoad(float x, float y) {
@@ -315,7 +318,7 @@ public class Model {
         notifyWayTypeObservers();
     }
 
-    public void updateVehicleType(VehicleType vehicleType) {
+    public void setVehicleType(VehicleType vehicleType) {
         this.currentVehicleType = vehicleType;
         updateShortestPath();
     }
@@ -324,8 +327,8 @@ public class Model {
         this.addPOIAtPosition(mouseModelX, mouseModelY);
     }
 
-    private void addPOIAtPosition(float mouseX, float mouseY) {
-        PointOfInterest pointOfInterest = new PointOfInterest(mouseX, mouseY);
+    private void addPOIAtPosition(float x, float y) {
+        PointOfInterest pointOfInterest = new PointOfInterest(x, y);
         this.insert(WayType.POI, pointOfInterest);
     }
 
@@ -345,18 +348,28 @@ public class Model {
         return start;
     }
 
-    public void setStart(Address address) {
-        start = getClosestRoad(address.getLon(), address.getLat());
+    public void setStart(PolyRoad road) {
+        start = road;
         updateShortestPath();
+        notifyWayTypeObservers();
+    }
+
+    public void setStart(Address address) {
+        setStart(getClosestRoad(address.getLon(), address.getLat()));
     }
 
     public PolyRoad getEnd() {
         return end;
     }
 
-    public void setEnd(Address address) {
-        end = getClosestRoad(address.getLon(), address.getLat());
+    public void setEnd(PolyRoad road) {
+        end = road;
         updateShortestPath();
+        notifyWayTypeObservers();
+    }
+
+    public void setEnd(Address address) {
+        setEnd(getClosestRoad(address.getLon(), address.getLat()));
     }
 
     public AddressData getAddressData() {

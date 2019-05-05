@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class RouteDrawer implements Drawer {
     public static boolean ShowExplored;
-    public static boolean debugging = true;
     Theme theme;
     private boolean enabled = true;
     private MapCanvas canvas;
@@ -35,10 +34,6 @@ public class RouteDrawer implements Drawer {
 
     @Override
     public void draw() {
-        if (!debugging) {
-            return;
-        }
-
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 2);
         Set<PolyRoad> oneWayRoads = new HashSet<>();
