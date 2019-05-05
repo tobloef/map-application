@@ -235,11 +235,8 @@ public class PolyRoad extends Polyline implements Serializable {
         }
         if (restrictions.contains(RoadRestriction.ONE_WAY) && contains(firstConnections, origin.getIndex())) {
             return true;
-        } else if (restrictions.contains(RoadRestriction.ONE_WAY_REVERSED) && contains(lastConnections, origin.getIndex())) {
-            return true;
-        } else {
-            return false;
-        }
+        } else
+            return restrictions.contains(RoadRestriction.ONE_WAY_REVERSED) && contains(lastConnections, origin.getIndex());
     }
 
     public boolean isOneWay() {

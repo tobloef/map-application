@@ -21,14 +21,13 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class AddressSearch extends BorderPane {
-
     private final int MAX_SUGGESTIONS = 10;
     private final int DEBOUNCE_DELAY = 300;
 
     private boolean enabled = false;
     private Model model;
     private bfst19.danmarkskort.model.AddressSearch addressSearch;
-    private MapCanvas mapCanvas;
+    private Map map;
     private BorderPane parent;
     private boolean dontReopenPopup = false;
 
@@ -49,10 +48,10 @@ public class AddressSearch extends BorderPane {
         loader.load();
     }
 
-    public void initialize(Model model, BorderPane parent, MapCanvas mapCanvas) {
+    public void initialize(Model model, BorderPane parent, Map map) {
         this.parent = parent;
         this.model = model;
-        this.mapCanvas = mapCanvas;
+        this.map = map;
         addressSearch = new bfst19.danmarkskort.model.AddressSearch(model.getAddressData());
         togglePanel();
     }
@@ -64,6 +63,17 @@ public class AddressSearch extends BorderPane {
             addUI();
         }
         enabled = !enabled;
+    }
+
+    public void setStartText(String text) {
+        dontReopenPopup = true;
+        startField.setText(text);
+    }
+
+
+    public void setEndText(String text) {
+        dontReopenPopup = true;
+        endField.setText(text);
     }
 
     private void addUI() {
@@ -82,15 +92,21 @@ public class AddressSearch extends BorderPane {
         Duration pauseTime = Duration.millis(DEBOUNCE_DELAY);
         PauseTransition debounce = new PauseTransition(pauseTime);
         field.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
             field.positionCaret(newValue.length());
             debounce.setOnFinished(event -> {
                 updatePopup(popup, field, otherPopup, newValue, (address) -> {
+                    if (address == null) {
+                        return;
+                    }
                     addressHandler.accept(address);
                     Route route = model.getShortestPath();
                     if (route != null && route.size() > 1) {
-                        mapCanvas.panViewToRoute(route);
-                    } else if (address != null) {
-                        mapCanvas.panViewToAddress(address);
+                        map.panViewToRoute(route);
+                    } else {
+                        map.panViewToAddress(address);
                     }
                     updateRouteDescription(route);
                 });
@@ -105,7 +121,7 @@ public class AddressSearch extends BorderPane {
         });
     }
 
-    private void updateRouteDescription(Route route) {
+    public void updateRouteDescription(Route route) {
         if (route == null) {
             return;
         }

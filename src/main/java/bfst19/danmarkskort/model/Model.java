@@ -262,26 +262,19 @@ public class Model {
     }
 
     public void updateEnd() {
-        Drawable nearest = getClosestRoad(mouseModelX, mouseModelY);
-        if (nearest instanceof PolyRoad) {
-            end = (PolyRoad) nearest;
+        PolyRoad nearest = getClosestRoad(mouseModelX, mouseModelY);
+        if (nearest != null) {
+            end = nearest;
             updateShortestPath();
         }
     }
 
     public void updateStart() {
-        Drawable nearest = getClosestRoad(mouseModelX, mouseModelY);
-        if (nearest instanceof PolyRoad) {
-            start = (PolyRoad) nearest;
+        PolyRoad nearest = getClosestRoad(mouseModelX, mouseModelY);
+        if (nearest != null) {
+            start = nearest;
             updateShortestPath();
         }
-    }
-
-    public void swapStartAndEnd() {
-        PolyRoad temp = start;
-        start = end;
-        end = temp;
-        updateShortestPath();
     }
 
     public PolyRoad getClosestRoad(float x, float y) {
@@ -345,18 +338,26 @@ public class Model {
         return start;
     }
 
-    public void setStart(Address address) {
-        start = getClosestRoad(address.getLon(), address.getLat());
+    public void setStart(PolyRoad road) {
+        start = road;
         updateShortestPath();
+    }
+
+    public void setStart(Address address) {
+        setStart(getClosestRoad(address.getLon(), address.getLat()));
     }
 
     public PolyRoad getEnd() {
         return end;
     }
 
-    public void setEnd(Address address) {
-        end = getClosestRoad(address.getLon(), address.getLat());
+    public void setEnd(PolyRoad road) {
+        end = road;
         updateShortestPath();
+    }
+
+    public void setEnd(Address address) {
+        setEnd(getClosestRoad(address.getLon(), address.getLat()));
     }
 
     public AddressData getAddressData() {
