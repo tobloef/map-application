@@ -7,6 +7,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 
 import static bfst19.danmarkskort.model.parsing.OSMTagKeys.*;
@@ -30,6 +31,7 @@ public class OSMParser {
     private List<Address> addresses = new ArrayList<>();
     private Set<String> cities = new HashSet<>();
     private Set<String> streetNames = new HashSet<>();
+    private AddressData addressData = null;
 
     public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {
         InputStream osmSource;
@@ -47,12 +49,39 @@ public class OSMParser {
     }
 
     private void doneParsing() {
+        addressData = createAddressData();
         idToNode = null;
         idToWay = null;
         System.gc();
         System.runFinalization();
         nodeGraphCreator.initPolyRoadConnections();
         drawableModel.doneAdding();
+    }
+
+    private AddressData createAddressData() {
+        // Create list of addresses sorted by street name
+        List<Address> addressesByStreetName = addresses.stream()
+                .filter(a -> a.getStreetName() != null)
+                .sorted(Comparator.comparing(a -> a.getStreetName().toLowerCase()))
+                .collect(Collectors.toList());
+        // Create list of addresses sorted by city name
+        List<Address> addressesByCity = addresses.stream()
+                .filter(a -> a.getCity() != null)
+                .sorted(Comparator.comparing(a -> a.getCity().toLowerCase()))
+                .collect(Collectors.toList());
+        // Create list of cities, sorted alphabetically
+        List<String> cityList = new ArrayList<>(cities);
+        cityList.sort(String::compareToIgnoreCase);
+        // Create list of street names, sorted alphabetically
+        List<String> streetNameList = new ArrayList<>(streetNames);
+        streetNameList.sort(String::compareToIgnoreCase);
+        // Return the final address data
+        return new AddressData(
+                addressesByStreetName,
+                addressesByCity,
+                cityList,
+                streetNameList
+        );
     }
 
     private BufferedInputStream getOsmFile(String filename) throws FileNotFoundException {
@@ -425,15 +454,7 @@ public class OSMParser {
         return bounds;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public Set<String> getCities() {
-        return cities;
-    }
-
-    public Set<String> getStreetNames() {
-        return streetNames;
+    public AddressData getAddressData() {
+        return addressData;
     }
 }

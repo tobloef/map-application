@@ -13,31 +13,39 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class AddressSearch {
-    private List<Address> addressesByStreetName;
-    private List<Address> addressesByCity;
-    private List<String> streetNames;
-    private List<String> cities;
+    private AddressData addressData;
     private AddressParser addressParser;
 
-    public AddressSearch(
-            List<Address> addressesByStreetName,
-            List<Address> addressesByCity,
-            List<String> streetNames,
-            List<String> cities
-    ) {
-        this.addressesByStreetName = addressesByStreetName;
-        this.addressesByCity = addressesByCity;
-        this.streetNames = streetNames;
-        this.cities = cities;
-        addressParser = new AddressParserFromData(streetNames, cities);
+    public AddressSearch(AddressData addressData) {
+        this.addressData = addressData;
+        addressParser = new AddressParserFromData(
+                addressData.getStreetNames(),
+                addressData.getCities()
+        );
     }
+
+
 
     public List<Pair<String, Address>> getSuggestions(String stringQuery) {
         AddressQuery addressQuery = addressParser.parse(stringQuery);
         if (addressQuery == null) {
             return null;
         }
-        List<Address> matches = null;
+        List<Address> matches = getPossibleAddressMatches(addressQuery);
+
+        List<Pair<String, Address>> suggestions;
+        if (matches != null) {
+            // If any addresses were found matching the search query, get the suggestions from those.
+            suggestions = getSuggestionsFromMatches(matches, addressQuery);
+        } else {
+            // If no addresses have been found so far, suggest street names or cities.
+            suggestions = getSuggestionsFromStreetsAndCities(stringQuery);
+        }
+        return suggestions;
+    }
+
+    private List<Address> getPossibleAddressMatches(AddressQuery addressQuery) {
+        List<Address> matches = new ArrayList<>();
         if (addressQuery.getStreetName() != null) {
             matches = getAddressesWithStreetName(addressQuery.getStreetName());
         }
@@ -45,32 +53,47 @@ public class AddressSearch {
             matches = getAddressesWithCity(addressQuery.getCity());
             matches.sort(Comparator.comparing(Address::getStreetName));
         }
+        return matches;
+    }
+
+    private List<Pair<String, Address>> getSuggestionsFromStreetsAndCities(String stringQuery) {
+        // Try to get suggestions from street names.
         List<Pair<String, Address>> suggestions;
-        if (matches != null) {
-            suggestions = matches.stream()
-                    .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getStreetName, Address::getStreetName))
-                    .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getCity, Address::getCity))
-                    .filter(a -> searchIfQueryNotNull(addressQuery, a, AddressQuery::getHouseNumber, Address::getHouseNumber))
-                    .map(a -> new Pair<>(a.toString(), a))
-                    .collect(Collectors.toList());
-        } else {
-            suggestions = streetNames.stream()
+        suggestions = addressData.getStreetNames().stream()
+                .filter(s -> s.toLowerCase().startsWith(stringQuery.toLowerCase()))
+                .map(s -> new Pair<String, Address>(s, null))
+                .collect(Collectors.toList());
+        // If no suggestions were found, try go get them from the city names.
+        if (suggestions.size() == 0) {
+            suggestions = addressData.getCities().stream()
                     .filter(s -> s.toLowerCase().startsWith(stringQuery.toLowerCase()))
                     .map(s -> new Pair<String, Address>(s, null))
                     .collect(Collectors.toList());
-            if (suggestions.size() == 0) {
-                suggestions = cities.stream()
-                        .filter(s -> s.toLowerCase().startsWith(stringQuery.toLowerCase()))
-                        .map(s -> new Pair<String, Address>(s, null))
-                        .collect(Collectors.toList());
-            }
         }
         return suggestions;
     }
 
+    private List<Pair<String, Address>> getSuggestionsFromMatches(List<Address> addresses, AddressQuery addressQuery) {
+        List<Pair<String, Address>> list = new ArrayList<>();
+        for (Address a : addresses) {
+            if (!addressPropertyMatchesQuery(addressQuery, a, AddressQuery::getStreetName, Address::getStreetName)) {
+                continue;
+            }
+            if (!addressPropertyMatchesQuery(addressQuery, a, AddressQuery::getCity, Address::getCity)) {
+                continue;
+            }
+            if (!addressPropertyMatchesQuery(addressQuery, a, AddressQuery::getHouseNumber, Address::getHouseNumber)) {
+                continue;
+            }
+            Pair<String, Address> stringAddressPair = new Pair<>(a.toString(), a);
+            list.add(stringAddressPair);
+        }
+        return list;
+    }
+
     public List<Address> getAddressesWithStreetName(String streetName) {
         return getAddressesWithProperty(
-                addressesByStreetName,
+                addressData.getAddressesByStreetName(),
                 streetName,
                 Address::getStreetName,
                 String::compareToIgnoreCase
@@ -79,7 +102,7 @@ public class AddressSearch {
 
     public List<Address> getAddressesWithCity(String city) {
         return getAddressesWithProperty(
-                addressesByCity,
+                addressData.getAddressesByCity(),
                 city,
                 Address::getCity,
                 String::compareToIgnoreCase
@@ -87,10 +110,12 @@ public class AddressSearch {
     }
 
     private <T> List<Address> getAddressesWithProperty(List<Address> addresses, T value, Function<Address, T> getter, Comparator<T> comparator) {
+        // Find some index of an address matching the query.
         int middle = BinarySearch.search(addresses, value, getter, comparator);
         if (middle == -1) {
             return null;
         }
+        // Expand the range of indexes, to get all matching the query.
         int low = middle;
         int high = middle;
         while (low > 0) {
@@ -108,7 +133,7 @@ public class AddressSearch {
         return addresses.subList(low, high + 1);
     }
 
-    private boolean searchIfQueryNotNull(
+    private boolean addressPropertyMatchesQuery(
             AddressQuery query,
             Address address,
             Function<AddressQuery, String> queryGetter,

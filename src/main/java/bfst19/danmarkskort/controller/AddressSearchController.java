@@ -49,12 +49,7 @@ public class AddressSearchController {
     public static void init(Model model, BorderPane parent, MapCanvas mapCanvas){
         instance.parent = parent;
         AddressSearchController.model = model;
-        addressSearch = new AddressSearch(
-                model.getAddressesByStreetName(),
-                model.getAddressesByCity(),
-                model.getStreetNames(),
-                model.getCities()
-        );
+        addressSearch = new AddressSearch(model.getAddressData());
         AddressSearchController.mapCanvas = mapCanvas;
         instance.togglePanel();
     }
