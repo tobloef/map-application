@@ -59,7 +59,7 @@ public class TopMenuController {
     @FXML
     private void onAbout(final ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "This project was made by ITU students (Group G):\n" +
+                "This project was made by ITU students (Group G):\n\n" +
                         "Anders Parsberg Wagner\n" +
                         "Anne-Sophie Bak\n" +
                         "Hjalte Mac Dalland\n" +

@@ -57,8 +57,8 @@ public class OSMAddressParser {
         return new AddressData(
                 addressesByStreetName,
                 addressesByCity,
-                cityList,
-                streetNameList
+                streetNameList,
+                cityList
         );
     }
 
