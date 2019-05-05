@@ -31,10 +31,10 @@ public class RouteTest {
         model.setMouseModelCoords(endX, endY);
         model.updateEnd();
         Route route = model.getShortestPath();
-        assertEquals(3, route.size());
+        assertEquals(4, route.size());
         List<String> fakeDescription = new ArrayList<>();
         fakeDescription.add("Start on Wildersgade");
-        fakeDescription.add("Drive 199 m and turn left onto Torvegade");
+        fakeDescription.add("Drive 203 m and turn left onto Torvegade");
         fakeDescription.add("Drive 87 m and turn right onto Strandgade");
         fakeDescription.add("You will then arrive at your destination");
         assertEquals(fakeDescription, route.getTextDescription());
