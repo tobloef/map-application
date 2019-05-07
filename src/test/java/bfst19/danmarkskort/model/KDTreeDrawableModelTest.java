@@ -32,8 +32,24 @@ class KDTreeDrawableModelTest {
 	}
 
 	@Test
+	void adding() {
+		long totalBefore = countAllDrawables();
+		long totalAdded = 0;
+		for(WayType wayType : WayType.values()){
+			for(int i = 0; i < 10; i++) {
+				model.insert(wayType, new PointOfInterest(2, 2));
+				totalAdded++;
+			}
+		}
+		assertEquals(totalBefore+totalAdded, countAllDrawables());
+	}
+
+	@Test
 	void newDataSet() throws IOException, XMLStreamException {
 		long totalBefore = countAllDrawables();
+		//adding something to the model and making sure it gets removed when the same dataset is loaded again.
+		model.insert(WayType.COASTLINE, new PointOfInterest(2,2));
+		assertEquals(totalBefore+1, countAllDrawables());
 		String filePath = ResourceLoader.getResource("model/small.osm").getPath();
 		new OSMParser(filePath, model);
 		assertEquals(totalBefore, countAllDrawables());
@@ -42,7 +58,7 @@ class KDTreeDrawableModelTest {
 	private long countAllDrawables() {
 		long totalCount = 0;
 		for (WayType wayType : WayType.values()) {
-			totalCount+= countIterable(model.getDrawablesOfTypeInBounds(wayType, model.modelBounds));
+			totalCount+= countIterable(model.getAllDrawablesOfType(wayType));
 		}
 		return totalCount;
 	}
