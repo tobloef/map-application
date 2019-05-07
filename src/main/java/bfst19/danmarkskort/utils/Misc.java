@@ -1,9 +1,6 @@
 package bfst19.danmarkskort.utils;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class Misc {

@@ -1,12 +1,13 @@
-package bfst19.danmarkskort.model.data;
+package bfst19.danmarkskort.data;
 
 import bfst19.danmarkskort.model.Address;
+import bfst19.danmarkskort.model.AddressData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RealAddresses extends AddressData {
+public class RealAddresses extends AddressTestData {
     @Override
     public List<Address> getAddresses() {
         return new ArrayList<>(Arrays.asList(

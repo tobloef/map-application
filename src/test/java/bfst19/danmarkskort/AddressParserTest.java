@@ -1,8 +1,9 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
-import bfst19.danmarkskort.model.data.AddressData;
-import bfst19.danmarkskort.model.data.RealAddresses;
-import bfst19.danmarkskort.model.data.TestAddresses;
+import bfst19.danmarkskort.data.AddressTestData;
+import bfst19.danmarkskort.data.RealAddresses;
+import bfst19.danmarkskort.data.TestAddresses;
+import bfst19.danmarkskort.model.AddressInput;
 import bfst19.danmarkskort.model.parsing.AddressParser;
 import bfst19.danmarkskort.model.parsing.AddressParserFromData;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SuppressWarnings("SimplifiableJUnitAssertion")
 public class AddressParserTest {
-    private AddressData testAddresses = new TestAddresses();
-    private AddressData realAddresses = new RealAddresses();
+    private AddressTestData testAddresses = new TestAddresses();
+    private AddressTestData realAddresses = new RealAddresses();
     private AddressParser addressParserTestData = new AddressParserFromData(
             testAddresses.getStreetNames(),
             testAddresses.getCities()

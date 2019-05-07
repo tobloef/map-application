@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model.data;
+package bfst19.danmarkskort.data;
 
 import bfst19.danmarkskort.model.Address;
 
@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AddressData {
+public abstract class AddressTestData {
     public abstract List<Address> getAddresses();
 
     public List<Address> getAddressesByStreetName() {

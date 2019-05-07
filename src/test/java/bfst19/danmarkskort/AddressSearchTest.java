@@ -1,7 +1,11 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
-import bfst19.danmarkskort.model.data.RealAddresses;
-import bfst19.danmarkskort.model.data.TestAddresses;
+import bfst19.danmarkskort.data.AddressTestData;
+import bfst19.danmarkskort.data.RealAddresses;
+import bfst19.danmarkskort.data.TestAddresses;
+import bfst19.danmarkskort.model.Address;
+import bfst19.danmarkskort.model.AddressData;
+import bfst19.danmarkskort.model.AddressSearch;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +16,8 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AddressSearchTest {
-    private bfst19.danmarkskort.model.data.AddressData testAddresses = new TestAddresses();
-    private bfst19.danmarkskort.model.data.AddressData realAddresses = new RealAddresses();
+    private AddressTestData testAddresses = new TestAddresses();
+    private AddressTestData realAddresses = new RealAddresses();
     private AddressSearch addressSearchTestData = new AddressSearch(new AddressData(
             testAddresses.getAddressesByStreetName(),
             testAddresses.getAddressesByCity(),
