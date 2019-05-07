@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static bfst19.danmarkskort.utils.EnumHelper.stringToWayType;
+import static bfst19.danmarkskort.utils.EnumHelper.stringToDrawableType;
 
 public class ThemeLoader {
 
@@ -38,7 +38,7 @@ public class ThemeLoader {
         }
         for (Map themeMap : themeMaps) {
             for (Object themeEntryObj : themeMap.entrySet()) {
-                // Don't fail entire OSMparsing if one entry fails.
+                // Don't fail entire osmParsing if one entry fails.
                 try {
                     Map.Entry<String, Object> themeEntry = (Map.Entry<String, Object>) themeEntryObj;
                     parseThemeEntry(themeEntry, theme);
@@ -53,13 +53,13 @@ public class ThemeLoader {
     }
 
     private static void parseThemeEntry(Map.Entry<String, Object> themeEntry, Theme theme) throws Exception {
-        String wayTypeStr = themeEntry.getKey();
-        if (wayTypeStr.equals("constants")) {
+        String drawableTypeStr = themeEntry.getKey();
+        if (drawableTypeStr.equals("constants")) {
             return;
         }
-        DrawableType drawableType = stringToWayType(wayTypeStr);
+        DrawableType drawableType = stringToDrawableType(drawableTypeStr);
         if (drawableType == null) {
-            throw new Exception("Wrong/Missing DrawableType: " + wayTypeStr);
+            throw new Exception("Wrong/Missing DrawableType: " + drawableTypeStr);
         }
         Map<String, Object> themeValuesMap = (Map<String, Object>) themeEntry.getValue();
         DrawingInfo drawingInfo = parseThemeValueMap(themeValuesMap);

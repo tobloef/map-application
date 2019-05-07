@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model.OSMparsing;
+package bfst19.danmarkskort.model.osmParsing;
 
 import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.utils.ResourceLoader;
@@ -7,17 +7,17 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;
 import java.util.*;
 
-import static bfst19.danmarkskort.utils.EnumHelper.stringToWayType;
+import static bfst19.danmarkskort.utils.EnumHelper.stringToDrawableType;
 
 @SuppressWarnings("unchecked")
-public class WayTypeFactory {
-    private static final String wayTypesConfigPath = "rs:config/spartan.yaml";
+public class DrawableTypeFactory {
+    private static final String drawableTypesConfigPath = "rs:config/spartan.yaml";
 
     /**
      * Maps cartographic feature keys to maps that map feature values to DrawableType.
      * Uses null feature value to indicate the key has no values, but still correspond to a DrawableType.
      */
-    private static Map<String, Map<String, DrawableType>> keyToValueWayTypeMap;
+    private static Map<String, Map<String, DrawableType>> keyToValueDrawableTypeMap;
 
     /***
      * Get the DrawableType for a given OSM key and value.
@@ -25,12 +25,12 @@ public class WayTypeFactory {
      * @param value Optional value of the feature
      * @return The corresponding DrawableType
      */
-    public static DrawableType getWayType(String key, String value) {
-        if (keyToValueWayTypeMap == null) {
-            initializeWayTypes();
+    public static DrawableType getDrawableType(String key, String value) {
+        if (keyToValueDrawableTypeMap == null) {
+            initializeDrawableTypes();
         }
-        if (keyToValueWayTypeMap.containsKey(key)) {
-            Map<String, DrawableType> values = keyToValueWayTypeMap.get(key);
+        if (keyToValueDrawableTypeMap.containsKey(key)) {
+            Map<String, DrawableType> values = keyToValueDrawableTypeMap.get(key);
 
             if (values.containsKey(value)) {
                 return values.get(value);
@@ -42,21 +42,21 @@ public class WayTypeFactory {
     }
 
     /**
-     * Initialize the map of WayTypes by reading a config file from disk.
+     * Initialize the map of DrawableTypes by reading a config file from disk.
      */
-    private static void initializeWayTypes() {
-        keyToValueWayTypeMap = new HashMap<>();
+    private static void initializeDrawableTypes() {
+        keyToValueDrawableTypeMap = new HashMap<>();
         // Read the YAML file
         Yaml yaml = new Yaml();
-        InputStream inputStream = ResourceLoader.getResourceAsStream(wayTypesConfigPath);
-        List<Map> wayTypeMaps = yaml.load(inputStream);
+        InputStream inputStream = ResourceLoader.getResourceAsStream(drawableTypesConfigPath);
+        List<Map> drawableTypeMaps = yaml.load(inputStream);
 
         // Read each DrawableType in the file
-        for (Map wayTypeMap : wayTypeMaps) {
-            for (Object wayTypeEntryObj : wayTypeMap.entrySet()) {
+        for (Map drawableTypeMap : drawableTypeMaps) {
+            for (Object drawableTypeEntryObj : drawableTypeMap.entrySet()) {
                 try {
-                    Map.Entry<String, Object> wayTypeEntry = (Map.Entry<String, Object>) wayTypeEntryObj;
-                    parseWayTypeEntry(wayTypeEntry);
+                    Map.Entry<String, Object> drawableTypeEntry = (Map.Entry<String, Object>) drawableTypeEntryObj;
+                    parseDrawableTypeEntry(drawableTypeEntry);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -64,12 +64,12 @@ public class WayTypeFactory {
         }
     }
 
-    private static void parseWayTypeEntry(Map.Entry<String, Object> entry) throws Exception {
+    private static void parseDrawableTypeEntry(Map.Entry<String, Object> entry) throws Exception {
         // Get DrawableType
-        String wayTypeStr = entry.getKey();
-        DrawableType drawableType = stringToWayType(entry.getKey());
+        String drawableTypeStr = entry.getKey();
+        DrawableType drawableType = stringToDrawableType(entry.getKey());
         if (drawableType == null) {
-            throw new Exception("Wrong/Missing DrawableType: " + wayTypeStr);
+            throw new Exception("Wrong/Missing DrawableType: " + drawableTypeStr);
         }
         // Load the keys
         ArrayList<Object> keys = (ArrayList<Object>) entry.getValue();
@@ -95,16 +95,16 @@ public class WayTypeFactory {
     }
 
     private static void addValues(DrawableType drawableType, String key, List<String> values) {
-        if (!keyToValueWayTypeMap.containsKey(key)) {
-            keyToValueWayTypeMap.put(key, new HashMap<>());
+        if (!keyToValueDrawableTypeMap.containsKey(key)) {
+            keyToValueDrawableTypeMap.put(key, new HashMap<>());
         }
         if (values != null && values.size() > 0) {
             for (String value : values) {
-                keyToValueWayTypeMap.get(key).put(value, drawableType);
+                keyToValueDrawableTypeMap.get(key).put(value, drawableType);
             }
         } else {
             // Default case for when there's no values, only key.
-            keyToValueWayTypeMap.get(key).put(null, drawableType);
+            keyToValueDrawableTypeMap.get(key).put(null, drawableType);
         }
     }
 }

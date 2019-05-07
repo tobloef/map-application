@@ -1,7 +1,7 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.exceptions.DisconnectedRoadsException;
-import bfst19.danmarkskort.model.OSMparsing.OSMParser;
+import bfst19.danmarkskort.model.osmParsing.OSMParser;
 import bfst19.danmarkskort.model.address.Address;
 import bfst19.danmarkskort.model.address.AddressData;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;
@@ -29,13 +29,13 @@ public class Model {
     private final static long mouseIdleTime = 250;
 
     private DrawableModel drawableModel = new KDTreeDrawableModel();
-    private final Set<DrawableType> blacklistedWaytypes = new HashSet<>();
+    private final Set<DrawableType> blacklistedDrawableTypes = new HashSet<>();
     private float mouseModelX, mouseModelY;
     private float mouseScreenX, mouseScreenY;
     private PolyRoad start, end;
     private Route shortestPath;
     private VehicleType currentVehicleType = VehicleType.CAR;
-    private final List<Runnable> wayTypeObservers = new ArrayList<>();
+    private final List<Runnable> drawableTypeObservers = new ArrayList<>();
     private final List<Runnable> reloadObservers = new ArrayList<>();
     private final List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
     private ScheduledExecutorService executor;
@@ -75,11 +75,11 @@ public class Model {
 
     public void setTheme(Theme theme) {
         this.theme = theme;
-        notifyWayTypeObservers();
+        notifyDrawableTypeObservers();
     }
 
-    public boolean dontDraw(DrawableType waytype) {
-        return blacklistedWaytypes.contains(waytype);
+    public boolean dontDraw(DrawableType drawableType) {
+        return blacklistedDrawableTypes.contains(drawableType);
     }
 
     public Iterable<Drawable> getWaysOfType(DrawableType type, Rectangle modelBounds) {
@@ -90,12 +90,12 @@ public class Model {
         return drawableModel.getAllDrawablesOfType(type);
     }
 
-    public void addWayTypeObserver(Runnable observer) {
-        wayTypeObservers.add(observer);
+    public void addDrawableTypeObserver(Runnable observer) {
+        drawableTypeObservers.add(observer);
     }
 
-    public void notifyWayTypeObservers() {
-        for (Runnable observer : wayTypeObservers) {
+    public void notifyDrawableTypeObservers() {
+        for (Runnable observer : drawableTypeObservers) {
             observer.run();
         }
     }
@@ -114,25 +114,25 @@ public class Model {
         reloadObservers.add(observer);
     }
 
-    public void toggleBlacklistWaytype(DrawableType waytype) {
-        if (!blacklistedWaytypes.contains(waytype)) {
-            blacklistedWaytypes.add(waytype);
+    public void toggleBlacklistDrawable(DrawableType drawableType) {
+        if (!blacklistedDrawableTypes.contains(drawableType)) {
+            blacklistedDrawableTypes.add(drawableType);
         } else {
-            blacklistedWaytypes.remove(waytype);
+            blacklistedDrawableTypes.remove(drawableType);
         }
-        notifyWayTypeObservers();
+        notifyDrawableTypeObservers();
     }
 
     public void emptyBlacklist() {
         for (DrawableType drawableType : DrawableType.values()) {
-            blacklistedWaytypes.remove(drawableType);
+            blacklistedDrawableTypes.remove(drawableType);
         }
-        notifyWayTypeObservers();
+        notifyDrawableTypeObservers();
     }
 
     public void fillBlacklist() {
-        blacklistedWaytypes.addAll(Arrays.asList(DrawableType.values()));
-        notifyWayTypeObservers();
+        blacklistedDrawableTypes.addAll(Arrays.asList(DrawableType.values()));
+        notifyDrawableTypeObservers();
     }
 
     public void notifyReloadObservers() {
@@ -270,7 +270,7 @@ public class Model {
         }
         time += System.nanoTime();
         System.out.printf("Shortest Path Time: %.1fs\n", time / 1e9);
-        notifyWayTypeObservers();
+        notifyDrawableTypeObservers();
     }
 
     public Route getShortestPath() {
@@ -324,7 +324,7 @@ public class Model {
 
     public void insert(DrawableType type, Drawable drawable) {
         drawableModel.insert(type, drawable);
-        notifyWayTypeObservers();
+        notifyDrawableTypeObservers();
     }
 
     public void setVehicleType(VehicleType vehicleType) {
@@ -360,7 +360,7 @@ public class Model {
     public void setStart(PolyRoad road) {
         start = road;
         updateShortestPath();
-        notifyWayTypeObservers();
+        notifyDrawableTypeObservers();
     }
 
     public void setStart(Address address) {
@@ -374,7 +374,7 @@ public class Model {
     public void setEnd(PolyRoad road) {
         end = road;
         updateShortestPath();
-        notifyWayTypeObservers();
+        notifyDrawableTypeObservers();
     }
 
     public void setEnd(Address address) {

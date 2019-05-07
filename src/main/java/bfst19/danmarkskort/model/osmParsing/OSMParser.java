@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model.OSMparsing;
+package bfst19.danmarkskort.model.osmParsing;
 
 import bfst19.danmarkskort.model.address.AddressData;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;
@@ -16,7 +16,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
-import static bfst19.danmarkskort.model.OSMparsing.OSMTagKeys.nameKeys;
+import static bfst19.danmarkskort.model.osmParsing.OSMTagKeys.nameKeys;
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static bfst19.danmarkskort.utils.Misc.internIfNotNull;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
@@ -189,13 +189,13 @@ public class OSMParser {
         if (member != null) currentRelation.add(member);
     }
 
-    // assigns waytype the current way, based on key and value
+    // assigns DrawableType the current way, based on key and value
     private void handleStartTag(XMLStreamReader reader) {
         String k = reader.getAttributeValue(null, "k");
         String v = reader.getAttributeValue(null, "v");
         tags.put(k, v);
         if (currentWay != null || currentRelation != null) {
-            DrawableType type = WayTypeFactory.getWayType(k, v);
+            DrawableType type = DrawableTypeFactory.getDrawableType(k, v);
             if (type != null) {
                 this.currentType = type;
             }

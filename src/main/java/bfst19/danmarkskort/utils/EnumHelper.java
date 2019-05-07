@@ -15,7 +15,7 @@ public class EnumHelper {
      * @param name The name of the enum.
      * @return The corresponding enum or null.
      */
-    public static DrawableType stringToWayType(String name) {
+    public static DrawableType stringToDrawableType(String name) {
         try {
             return DrawableType.valueOf(name);
         } catch (IllegalArgumentException e) {
@@ -23,15 +23,15 @@ public class EnumHelper {
         }
     }
 
-    public static Map<DrawableType, List<Drawable>> createWayTypeDrawablesMap() {
-        java.util.Map<DrawableType, List<Drawable>> wayTypeEnumMap = new EnumMap<>(DrawableType.class);
+    public static Map<DrawableType, List<Drawable>> createDrawableTypeDrawablesMap() {
+        Map<DrawableType, List<Drawable>> drawableTypeEnumMap = new EnumMap<>(DrawableType.class);
         for (DrawableType type : DrawableType.values()) {
-            wayTypeEnumMap.put(type, new ArrayList<>());
+            drawableTypeEnumMap.put(type, new ArrayList<>());
         }
-        return wayTypeEnumMap;
+        return drawableTypeEnumMap;
     }
 
-    public static String waytypeToDecoratedString(DrawableType drawableType) {
+    public static String drawableToDecoratedString(DrawableType drawableType) {
         String temp = drawableType.name();
         String[] words = temp.split("_");
         StringBuilder toReturn = new StringBuilder();

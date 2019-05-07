@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.model.drawables;
 
-import bfst19.danmarkskort.model.OSMparsing.OSMRoadWay;
+import bfst19.danmarkskort.model.osmParsing.OSMRoadWay;
 import bfst19.danmarkskort.model.routePlanning.RoadRestriction;
 import bfst19.danmarkskort.model.routePlanning.VehicleType;
 import bfst19.danmarkskort.utils.Misc;

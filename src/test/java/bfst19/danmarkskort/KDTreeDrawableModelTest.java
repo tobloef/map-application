@@ -1,10 +1,10 @@
 package bfst19.danmarkskort;
 
-import bfst19.danmarkskort.model.Drawable;
-import bfst19.danmarkskort.model.KDTreeDrawableModel;
-import bfst19.danmarkskort.model.PointOfInterest;
-import bfst19.danmarkskort.model.WayType;
-import bfst19.danmarkskort.model.parsing.OSMParser;
+import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
+import bfst19.danmarkskort.model.drawables.Drawable;
+import bfst19.danmarkskort.model.drawables.DrawableType;
+import bfst19.danmarkskort.model.drawables.PointOfInterest;
+import bfst19.danmarkskort.model.osmParsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.scene.canvas.GraphicsContext;
 import org.junit.jupiter.api.AfterEach;
@@ -14,11 +14,9 @@ import org.junit.jupiter.api.Test;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static bfst19.danmarkskort.utils.Misc.countIterable;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class KDTreeDrawableModelTest {
 	KDTreeDrawableModel model;
@@ -40,9 +38,9 @@ class KDTreeDrawableModelTest {
 	void adding() {
 		long totalBefore = countAllDrawables();
 		long totalAdded = 0;
-		for(WayType wayType : WayType.values()){
+		for(DrawableType drawableType : DrawableType.values()){
 			for(int i = 0; i < 10; i++) {
-				model.insert(wayType, new PointOfInterest(2, 2));
+				model.insert(drawableType, new PointOfInterest(2, 2));
 				totalAdded++;
 			}
 		}
@@ -53,7 +51,7 @@ class KDTreeDrawableModelTest {
 	void newDataSet() throws IOException, XMLStreamException {
 		long totalBefore = countAllDrawables();
 		//adding something to the model and making sure it gets removed when the same dataset is loaded again.
-		model.insert(WayType.COASTLINE, new PointOfInterest(2,2));
+		model.insert(DrawableType.COASTLINE, new PointOfInterest(2,2));
 		assertEquals(totalBefore+1, countAllDrawables());
 		String filePath = ResourceLoader.getResource("model/small.osm").getPath();
 		new OSMParser(filePath, model);
@@ -62,8 +60,8 @@ class KDTreeDrawableModelTest {
 
 	private long countAllDrawables() {
 		long totalCount = 0;
-		for (WayType wayType : WayType.values()) {
-			totalCount+= countIterable(model.getAllDrawablesOfType(wayType));
+		for (DrawableType drawableType : DrawableType.values()) {
+			totalCount+= countIterable(model.getAllDrawablesOfType(drawableType));
 		}
 		return totalCount;
 	}
@@ -85,12 +83,16 @@ class KDTreeDrawableModelTest {
 
 	@Test
 	void insertNonSpatial() {
-		assertThrows(IllegalArgumentException.class , ()->model.insert(WayType.COASTLINE, new NonSpatial()));
+		assertThrows(IllegalArgumentException.class , ()-> {
+			model.insert(DrawableType.COASTLINE, new NonSpatial());
+		});
 	}
 
 	@Test
 	void getBeforeInit(){
 		model = new KDTreeDrawableModel();
-		assertThrows(RuntimeException.class ,()->model.getAllDrawablesOfType(WayType.COASTLINE));
+		assertThrows(RuntimeException.class ,()-> {
+			model.getAllDrawablesOfType(DrawableType.COASTLINE);
+		});
 	}
 }

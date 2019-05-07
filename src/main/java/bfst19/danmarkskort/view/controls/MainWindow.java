@@ -45,19 +45,19 @@ public class MainWindow extends Scene {
         stage.setOnCloseRequest(event -> model.cleanup());
         // Initialize sub-components
         mapPane.initialize(model, addressSearchPane);
-        topMenu.initialize(model, stage, root, this::toggleWayTypeSelector);
+        topMenu.initialize(model, stage, root, this::toggleDrawableTypeSelector);
         addressSearchPane.initialize(model, borderPane, mapPane);
     }
 
-    private void toggleWayTypeSelector() {
-        if (borderPane.getRight() instanceof WaytypeSelectorPane) {
+    private void toggleDrawableTypeSelector() {
+        if (borderPane.getRight() instanceof DrawableTypeSelectorPane) {
             borderPane.setRight(null);
         } else {
-            WaytypeSelectorPane waytypeSelectorPane;
+            DrawableTypeSelectorPane drawableTypeSelectorPane;
             try {
-                waytypeSelectorPane = new WaytypeSelectorPane();
-                waytypeSelectorPane.initialize(model);
-                borderPane.setRight(waytypeSelectorPane);
+                drawableTypeSelectorPane = new DrawableTypeSelectorPane();
+                drawableTypeSelectorPane.initialize(model);
+                borderPane.setRight(drawableTypeSelectorPane);
             } catch (IOException e) {
                 e.printStackTrace();
             }

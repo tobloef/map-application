@@ -1,5 +1,6 @@
 package bfst19.danmarkskort;
 
+import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawables.Drawable;
 import bfst19.danmarkskort.model.drawables.DrawableType;
@@ -91,10 +92,10 @@ public class KDTreeTest {
         for (int x = 1000; x < 1100; x++) {
             for (int y = 1000; y < 1100; y++) {
                 PointOfInterest poi = new PointOfInterest(x, y);
-                model.insert(WayType.POI, poi);
+                model.insert(DrawableType.POI, poi);
                 numInserted++;
                 Point2D coords = new Point2D(x, y );
-                PointOfInterest nearest = (PointOfInterest) model.getNearest(WayType.POI, coords);
+                PointOfInterest nearest = (PointOfInterest) model.getNearest(DrawableType.POI, coords);
                 assertEquals(poi.getRepresentativeX(), nearest.getRepresentativeX());
                 assertEquals(poi.getRepresentativeY(), nearest.getRepresentativeY());
                 assertEquals(poi,nearest);

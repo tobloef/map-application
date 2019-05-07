@@ -25,7 +25,7 @@ public class TopMenu extends MenuBar {
     private Model model;
     private Stage stage;
     private Parent root;
-    private Runnable  toggleWayTypeSelector;
+    private Runnable toggleDrawableTypeSelector;
 
     public TopMenu() throws IOException {
         URL url = ResourceLoader.getResource("rs:views/TopMenu.fxml");
@@ -35,11 +35,11 @@ public class TopMenu extends MenuBar {
         loader.load();
     }
 
-    public void initialize(Model model, Stage stage, Parent root, Runnable toggleWayTypeSelector) {
+    public void initialize(Model model, Stage stage, Parent root, Runnable toggleDrawableTypeSelector) {
         this.model = model;
         this.stage = stage;
         this.root = root;
-        this.toggleWayTypeSelector = toggleWayTypeSelector;
+        this.toggleDrawableTypeSelector = toggleDrawableTypeSelector;
     }
 
     @FXML
@@ -190,8 +190,8 @@ public class TopMenu extends MenuBar {
     }
 
     @FXML
-    private void onToggleWaytypeSelector(ActionEvent event) {
-        toggleWayTypeSelector.run();
+    private void onToggleDrawableTypeSelector(ActionEvent event) {
+        toggleDrawableTypeSelector.run();
     }
 
     @FXML
@@ -227,6 +227,6 @@ public class TopMenu extends MenuBar {
     @FXML
     private void onToggleShowExploredRoutes() {
         RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
-        model.notifyWayTypeObservers();
+        model.notifyDrawableTypeObservers();
     }
 }

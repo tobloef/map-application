@@ -1,6 +1,6 @@
 package bfst19.danmarkskort;
 
-import bfst19.danmarkskort.model.OSMparsing.OSMParser;
+import bfst19.danmarkskort.model.osmParsing.OSMParser;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;
 import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
 import bfst19.danmarkskort.model.drawables.PolyRoad;

@@ -1,7 +1,7 @@
 package bfst19.danmarkskort.model.drawables;
 
-import bfst19.danmarkskort.model.OSMparsing.OSMRelation;
-import bfst19.danmarkskort.model.OSMparsing.OSMWay;
+import bfst19.danmarkskort.model.osmParsing.OSMRelation;
+import bfst19.danmarkskort.model.osmParsing.OSMWay;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawableModel.SpatialIndexable;
 import javafx.scene.canvas.GraphicsContext;

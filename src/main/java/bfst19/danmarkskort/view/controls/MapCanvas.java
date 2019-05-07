@@ -39,7 +39,7 @@ public class MapCanvas extends Canvas {
         initializeDrawers(model);
         panViewToMapBounds();
         updateDegreesPerPixel();
-        model.addWayTypeObserver(this::repaint);
+        model.addDrawableTypeObserver(this::repaint);
         makeCanvasUpdateOnResize();
         repaint();
     }

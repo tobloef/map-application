@@ -17,7 +17,7 @@
             -fx-border-color: #000000;
             -fx-border-width: 0px 0px 0px 2px;
         </style>
-        <VBox fx:id="wayTypeLayoutBox">
+        <VBox fx:id="drawableTypeLayoutBox">
             <style>
                 -fx-padding: 10px;
             </style>
@@ -26,14 +26,14 @@
                     -fx-padding: 0 0 20px 0;
                 </style>
                 <Label text="Way types" style="-fx-font-size: 1.5em; -fx-font-weight: bold;"/>
-                <Button text="Enable all waytypes" onAction="#onEnableAll" style="-fx-font-weight: bold">
+                <Button text="Enable all drawable types" onAction="#onEnableAll" style="-fx-font-weight: bold">
                     <VBox.margin>
                         <Insets>
                             <bottom>10</bottom>
                         </Insets>
                     </VBox.margin>
                 </Button>
-                <Button text="Disable all waytypes" onAction="#onDisableAll" style="-fx-font-weight: bold"/>
+                <Button text="Disable all drawable types" onAction="#onDisableAll" style="-fx-font-weight: bold"/>
             </VBox>
         </VBox>
     </ScrollPane>

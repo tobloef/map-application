@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model.OSMparsing;
+package bfst19.danmarkskort.model.osmParsing;
 
 import bfst19.danmarkskort.model.address.Address;
 import bfst19.danmarkskort.model.address.AddressData;
@@ -6,7 +6,7 @@ import bfst19.danmarkskort.model.address.AddressData;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static bfst19.danmarkskort.model.OSMparsing.OSMTagKeys.*;
+import static bfst19.danmarkskort.model.osmParsing.OSMTagKeys.*;
 import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static bfst19.danmarkskort.utils.Misc.internIfNotNull;
 

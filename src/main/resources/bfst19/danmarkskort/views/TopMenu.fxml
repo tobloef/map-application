@@ -20,7 +20,7 @@
         <MenuItem text="Open custom theme..." onAction="#onLoadTheme"/>
     </Menu>
     <Menu text="Debugging">
-        <MenuItem text="Toggle way type selector" onAction="#onToggleWaytypeSelector"/>
+        <MenuItem text="Toggle way type selector" onAction="#onToggleDrawableTypeSelector"/>
         <MenuItem text="Toggle explored routes" onAction="#onToggleShowExploredRoutes"/>
     </Menu>
 </fx:root>

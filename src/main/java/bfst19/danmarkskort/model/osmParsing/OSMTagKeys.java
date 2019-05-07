@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model.OSMparsing;
+package bfst19.danmarkskort.model.osmParsing;
 
 public class OSMTagKeys {
     final public static String[] streetNameKeys = new String[]{

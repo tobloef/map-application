@@ -17,17 +17,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaytypeSelectorPane extends VBox {
+public class DrawableTypeSelectorPane extends VBox {
     private  Model model;
-    private final List<CheckBox> waytypeSelectors = new ArrayList<>();
+    private final List<CheckBox> drawableTypeSelectors = new ArrayList<>();
 
     @FXML
-    private VBox wayTypeLayoutBox;
+    private VBox drawableTypeLayoutBox;
     @FXML
     private ScrollPane scrollPane;
 
-    public WaytypeSelectorPane() throws IOException {
-        URL url = ResourceLoader.getResource("rs:views/WayTypeSelector.fxml");
+    public DrawableTypeSelectorPane() throws IOException {
+        URL url = ResourceLoader.getResource("rs:views/DrawableTypeSelector.fxml");
         FXMLLoader loader = new FXMLLoader(url);
         loader.setRoot(this);
         loader.setController(this);
@@ -40,17 +40,17 @@ public class WaytypeSelectorPane extends VBox {
     }
 
     private void buildCheckboxes() {
-        for (CheckBox checkBox : waytypeSelectors) {
-            wayTypeLayoutBox.getChildren().remove(checkBox);
+        for (CheckBox checkBox : drawableTypeSelectors) {
+            drawableTypeLayoutBox.getChildren().remove(checkBox);
         }
-        waytypeSelectors.clear();
+        drawableTypeSelectors.clear();
         for (DrawableType drawableType : DrawableType.values()) {
-            CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(drawableType));
+            CheckBox checkBox = new CheckBox(EnumHelper.drawableToDecoratedString(drawableType));
             checkBox.setSelected(!model.dontDraw(drawableType));
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> model.toggleBlacklistWaytype(drawableType));
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> model.toggleBlacklistDrawable(drawableType));
             VBox.setMargin(checkBox, new Insets(0, 0, 5, 0));
-            wayTypeLayoutBox.getChildren().add(checkBox);
-            waytypeSelectors.add(checkBox);
+            drawableTypeLayoutBox.getChildren().add(checkBox);
+            drawableTypeSelectors.add(checkBox);
         }
     }
 
