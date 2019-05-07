@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class Misc {
     public static <T> T pickNotNull(T first, T second) {
@@ -27,5 +28,9 @@ public class Misc {
             str = str.intern();
         }
         return str;
+    }
+
+    public static long countIterable(Iterable iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false).count();
     }
 }

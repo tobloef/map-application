@@ -3,7 +3,6 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
-import bfst19.danmarkskort.view.drawers.POIDrawer;
 import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
@@ -136,7 +135,6 @@ public class Model {
         List<String> tempList = new ArrayList<>();
         tempList.add(argumentPath);
         cleanUpShortestPath();
-        drawableModel.doNewDataSet();
         loadDataFromArgs(tempList);
         time += System.nanoTime();
         System.out.printf("Load time: %.1fs\n", time / 1e9);
@@ -148,13 +146,14 @@ public class Model {
     }
 
     private void cleanUpShortestPath() {
+        shortestPath = null;
         start = end = null;
     }
 
     private void loadDefaultData() throws IOException, ClassNotFoundException {
         InputStream inputStream = ResourceLoader.getResourceAsStream("rs:data/default.osm.ser");
         try {
-            parseObj(inputStream);
+            parseSerialized(inputStream);
         } catch (InvalidClassException e) {
             System.err.println("Couldn't load default object data, it's an old version.");
         }
@@ -164,7 +163,7 @@ public class Model {
         String filename = args.get(0);
         if (filename.endsWith(".ser")) {
             try {
-                parseObj(filename);
+                parseSerialized(filename);
             } catch (InvalidClassException e) {
                 System.err.println("Couldn't load object data from args, it's an old version..");
             }
@@ -182,12 +181,12 @@ public class Model {
         addressData = parser.getAddressData();
     }
 
-    private void parseObj(String path) throws IOException, ClassNotFoundException {
+    private void parseSerialized(String path) throws IOException, ClassNotFoundException {
         InputStream inputStream = new FileInputStream(path);
-        parseObj(inputStream);
+        parseSerialized(inputStream);
     }
 
-    private void parseObj(InputStream inputStream) throws IOException, ClassNotFoundException {
+    private void parseSerialized(InputStream inputStream) throws IOException, ClassNotFoundException {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         try (ObjectInputStream input = new ObjectInputStream(bufferedInputStream)) {
             PolyRoad.setAllPolyRoads((PolyRoad[]) input.readObject());
