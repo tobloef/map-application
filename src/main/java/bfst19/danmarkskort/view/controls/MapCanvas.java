@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.view.drawers.*;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -56,9 +57,6 @@ public class MapCanvas extends Canvas {
         clearBackground();
         updateLineWidth();
         for (Drawer drawer : drawers) {
-            if (!drawer.getEnabled()) {
-                continue;
-            }
             graphicsContext.save();
             try {
                 drawer.draw();

@@ -1,5 +1,8 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.drawableModel.Rectangle;
+import bfst19.danmarkskort.model.drawables.Drawable;
+import bfst19.danmarkskort.model.drawables.PointOfInterest;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,8 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.parsing.AddressParser;
-import bfst19.danmarkskort.model.parsing.AddressParserFromData;
+import bfst19.danmarkskort.model.address.AddressInput;
+import bfst19.danmarkskort.model.address.AddressParser;
+import bfst19.danmarkskort.model.address.AddressParserFromData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

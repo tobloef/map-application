@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.utils;
 
-import bfst19.danmarkskort.model.Drawable;
+import bfst19.danmarkskort.model.drawables.Drawable;
 import bfst19.danmarkskort.model.WayType;
 
 import java.util.ArrayList;

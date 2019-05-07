@@ -1,7 +1,7 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.Route;
+import bfst19.danmarkskort.model.routePlanning.Route;
 import bfst19.danmarkskort.model.Theme;
 import bfst19.danmarkskort.model.Themes;
 import bfst19.danmarkskort.utils.ResourceLoader;

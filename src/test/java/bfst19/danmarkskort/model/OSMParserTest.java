@@ -1,6 +1,9 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.parsing.OSMParser;
+import bfst19.danmarkskort.model.OSMparsing.OSMParser;
+import bfst19.danmarkskort.model.drawableModel.DrawableModel;
+import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
+import bfst19.danmarkskort.model.drawables.PolyRoad;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;

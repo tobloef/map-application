@@ -1,5 +1,6 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,6 +1,19 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.parsing.OSMParser;
+import bfst19.danmarkskort.exceptions.DisconnectedRoadsException;
+import bfst19.danmarkskort.model.OSMparsing.OSMParser;
+import bfst19.danmarkskort.model.address.Address;
+import bfst19.danmarkskort.model.address.AddressData;
+import bfst19.danmarkskort.model.drawableModel.DrawableModel;
+import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
+import bfst19.danmarkskort.model.drawableModel.Rectangle;
+import bfst19.danmarkskort.model.drawables.Drawable;
+import bfst19.danmarkskort.model.drawables.PointOfInterest;
+import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.routePlanning.Dijkstra;
+import bfst19.danmarkskort.model.routePlanning.RoadInformation;
+import bfst19.danmarkskort.model.routePlanning.Route;
+import bfst19.danmarkskort.model.routePlanning.VehicleType;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
 import javafx.geometry.Point2D;
@@ -14,7 +27,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-//todo del ting ind i mapper, exceptions, dataobjekter, enmus, drawables
+//todo del ting ind i mapper, dataobjekter, enmus, drawables
 
 public class Model {
     private final static long mouseIdleTime = 250;

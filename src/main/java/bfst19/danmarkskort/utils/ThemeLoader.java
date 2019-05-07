@@ -38,7 +38,7 @@ public class ThemeLoader {
         }
         for (Map themeMap : themeMaps) {
             for (Object themeEntryObj : themeMap.entrySet()) {
-                // Don't fail entire parsing if one entry fails.
+                // Don't fail entire OSMparsing if one entry fails.
                 try {
                     Map.Entry<String, Object> themeEntry = (Map.Entry<String, Object>) themeEntryObj;
                     parseThemeEntry(themeEntry, theme);

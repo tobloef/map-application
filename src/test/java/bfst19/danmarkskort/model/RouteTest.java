@@ -1,5 +1,7 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.routePlanning.Route;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;

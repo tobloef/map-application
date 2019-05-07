@@ -1,5 +1,8 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.address.Address;
+import bfst19.danmarkskort.model.address.AddressData;
+import bfst19.danmarkskort.model.address.AddressSearch;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
 
