@@ -23,7 +23,7 @@ public class MainWindow extends Scene {
     private MapPane mapPane;
 
     private Model model;
-    private Parent root;
+    private final Parent root;
 
     public MainWindow(Parent root) throws IOException {
         super(root);

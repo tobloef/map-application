@@ -14,7 +14,7 @@ class ModelTest {
     void getBoundsOSM() throws IOException, XMLStreamException, ClassNotFoundException {
         //Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
         String filePath = this.getClass().getResource("small.osm").getPath();
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         args.add(filePath);
         Model model = new Model(args);
         assertEquals(55.6631, model.getModelBounds().yMin, 0.02);
@@ -27,9 +27,9 @@ class ModelTest {
     void loadFromObj() throws IOException, XMLStreamException, ClassNotFoundException {
         //Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
         String filePath = this.getClass().getResource("small.osm").getPath();
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         args.add(filePath);
-        Model model = new Model(args);
+        new Model(args);
         args.set(0, args.get(0) + ".ser");
         Model objModel = new Model(args);
         assertEquals(55.6631, objModel.getModelBounds().yMin, 0.02);

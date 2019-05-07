@@ -1,5 +1,7 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.routePlanning.Route;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;
@@ -15,7 +17,7 @@ public class RouteTest {
     @Test
     void basicTest() throws XMLStreamException, IOException, ClassNotFoundException {
         String filePath = this.getClass().getResource("small.osm").getPath();
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         args.add(filePath);
         Model model = new Model(args);
         float startX = 7.0991707f;

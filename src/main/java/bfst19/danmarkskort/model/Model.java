@@ -1,6 +1,17 @@
 package bfst19.danmarkskort.model;
 
-import bfst19.danmarkskort.model.parsing.OSMParser;
+import bfst19.danmarkskort.exceptions.DisconnectedRoadsException;
+import bfst19.danmarkskort.model.OSMparsing.OSMParser;
+import bfst19.danmarkskort.model.address.Address;
+import bfst19.danmarkskort.model.address.AddressData;
+import bfst19.danmarkskort.model.drawableModel.DrawableModel;
+import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
+import bfst19.danmarkskort.model.drawableModel.Rectangle;
+import bfst19.danmarkskort.model.drawables.*;
+import bfst19.danmarkskort.model.routePlanning.Dijkstra;
+import bfst19.danmarkskort.model.routePlanning.RoadInformation;
+import bfst19.danmarkskort.model.routePlanning.Route;
+import bfst19.danmarkskort.model.routePlanning.VehicleType;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
 import javafx.geometry.Point2D;
@@ -18,15 +29,15 @@ public class Model {
     private final static long mouseIdleTime = 250;
 
     private DrawableModel drawableModel = new KDTreeDrawableModel();
-    private Set<WayType> blacklistedWaytypes = new HashSet<>();
+    private final Set<DrawableType> blacklistedWaytypes = new HashSet<>();
     private float mouseModelX, mouseModelY;
     private float mouseScreenX, mouseScreenY;
     private PolyRoad start, end;
     private Route shortestPath;
     private VehicleType currentVehicleType = VehicleType.CAR;
-    private List<Runnable> wayTypeObservers = new ArrayList<>();
-    private List<Runnable> reloadObservers = new ArrayList<>();
-    private List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
+    private final List<Runnable> wayTypeObservers = new ArrayList<>();
+    private final List<Runnable> reloadObservers = new ArrayList<>();
+    private final List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
     private ScheduledExecutorService executor;
     private ScheduledFuture<?> mouseIdleTask;
     private Rectangle modelBounds;
@@ -67,15 +78,15 @@ public class Model {
         notifyWayTypeObservers();
     }
 
-    public boolean dontDraw(WayType waytype) {
+    public boolean dontDraw(DrawableType waytype) {
         return blacklistedWaytypes.contains(waytype);
     }
 
-    public Iterable<Drawable> getWaysOfType(WayType type, Rectangle modelBounds) {
+    public Iterable<Drawable> getWaysOfType(DrawableType type, Rectangle modelBounds) {
         return drawableModel.getDrawablesOfTypeInBounds(type, modelBounds);
     }
 
-    public Iterable<Drawable> getWaysOfType(WayType type) {
+    public Iterable<Drawable> getWaysOfType(DrawableType type) {
         return drawableModel.getAllDrawablesOfType(type);
     }
 
@@ -103,7 +114,7 @@ public class Model {
         reloadObservers.add(observer);
     }
 
-    public void toggleBlacklistWaytype(WayType waytype) {
+    public void toggleBlacklistWaytype(DrawableType waytype) {
         if (!blacklistedWaytypes.contains(waytype)) {
             blacklistedWaytypes.add(waytype);
         } else {
@@ -113,14 +124,14 @@ public class Model {
     }
 
     public void emptyBlacklist() {
-        for (WayType wayType : WayType.values()) {
-            blacklistedWaytypes.remove(wayType);
+        for (DrawableType drawableType : DrawableType.values()) {
+            blacklistedWaytypes.remove(drawableType);
         }
         notifyWayTypeObservers();
     }
 
     public void fillBlacklist() {
-        blacklistedWaytypes.addAll(Arrays.asList(WayType.values()));
+        blacklistedWaytypes.addAll(Arrays.asList(DrawableType.values()));
         notifyWayTypeObservers();
     }
 
@@ -207,7 +218,7 @@ public class Model {
         }
     }
 
-    public Drawable getNearest(WayType type, Point2D modelCoords) {
+    public Drawable getNearest(DrawableType type, Point2D modelCoords) {
         return drawableModel.getNearestNeighbor(type, (float) modelCoords.getX(), (float) modelCoords.getY());
     }
 
@@ -243,9 +254,7 @@ public class Model {
         if (mouseIdleTask != null) {
             mouseIdleTask.cancel(true);
         }
-        mouseIdleTask = executor.schedule(() -> {
-            notifyMouseIdleObservers(true);
-        }, mouseIdleTime, TimeUnit.MILLISECONDS);
+        mouseIdleTask = executor.schedule(() -> notifyMouseIdleObservers(true), mouseIdleTime, TimeUnit.MILLISECONDS);
     }
 
     private void updateShortestPath() {
@@ -266,11 +275,7 @@ public class Model {
     }
 
     public Route getShortestPath() {
-        if (shortestPath != null) {
-            return shortestPath;
-        } else {
-            return new Route();
-        }
+		return Objects.requireNonNullElseGet(shortestPath, Route::new);
     }
 
     public void updateEnd() {
@@ -291,7 +296,7 @@ public class Model {
 
     public PolyRoad getClosestRoad(float x, float y) {
         PolyRoad closestRoad = null;
-        for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)) {
+        for (DrawableType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)) {
             Drawable close = getNearest(roadType, new Point2D(x, y));
             if (!(close instanceof PolyRoad)) {
                 continue;
@@ -308,6 +313,9 @@ public class Model {
             closestRoad = closeRoad;
 
         }
+        if (closestRoad == null) {
+        	throw new RuntimeException("No roads were found");
+		}
         return closestRoad;
     }
 
@@ -315,7 +323,7 @@ public class Model {
         return getClosestRoad(mouseModelX, mouseModelY);
     }
 
-    public void insert(WayType type, Drawable drawable) {
+    public void insert(DrawableType type, Drawable drawable) {
         drawableModel.insert(type, drawable);
         notifyWayTypeObservers();
     }
@@ -331,7 +339,7 @@ public class Model {
 
     private void addPOIAtPosition(float x, float y) {
         PointOfInterest pointOfInterest = new PointOfInterest(x, y);
-        this.insert(WayType.POI, pointOfInterest);
+        this.insert(DrawableType.POI, pointOfInterest);
     }
 
     public Rectangle getModelBounds() {

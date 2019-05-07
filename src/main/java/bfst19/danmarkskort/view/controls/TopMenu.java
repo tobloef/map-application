@@ -1,9 +1,9 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.Route;
-import bfst19.danmarkskort.model.Theme;
-import bfst19.danmarkskort.model.Themes;
+import bfst19.danmarkskort.model.routePlanning.Route;
+import bfst19.danmarkskort.model.drawables.Theme;
+import bfst19.danmarkskort.model.drawables.BuiltInThemes;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;
@@ -58,13 +58,8 @@ public class TopMenu extends MenuBar {
     }
 
     private void displayMapDataNotLoadedAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR,
-                "The specified map data couldn't be loaded.",
-                ButtonType.CLOSE);
-        alert.setTitle("Error loading map data");
-        alert.setHeaderText("Error loading map data");
-        alert.show();
-    }
+		displayAlert();
+	}
 
     private File openMapDataFileSelect() {
         FileChooser fileChooser = new FileChooser();
@@ -105,15 +100,19 @@ public class TopMenu extends MenuBar {
     }
 
     private void displayMapDataNotSavedAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR,
-                "The specified map data couldn't be loaded.",
-                ButtonType.CLOSE);
-        alert.setTitle("Error loading map data");
-        alert.setHeaderText("Error loading map data");
-        alert.show();
-    }
+		displayAlert();
+	}
 
-    @FXML
+	private void displayAlert() {
+		Alert alert = new Alert(Alert.AlertType.ERROR,
+				"The specified map data couldn't be loaded.",
+				ButtonType.CLOSE);
+		alert.setTitle("Error loading map data");
+		alert.setHeaderText("Error loading map data");
+		alert.show();
+	}
+
+	@FXML
     private void onLoadTheme(ActionEvent event) {
         File file = openThemeFileSelect();
         if (file == null) {
@@ -197,12 +196,12 @@ public class TopMenu extends MenuBar {
 
     @FXML
     private void onUseDefaultTheme(ActionEvent event) {
-        model.setTheme(Themes.DefaultTheme);
+        model.setTheme(BuiltInThemes.DefaultTheme);
     }
 
     @FXML
     private void onUseHDGraphicsTheme(ActionEvent event) {
-        model.setTheme(Themes.HDGraphics);
+        model.setTheme(BuiltInThemes.HDGraphics);
     }
 
     @FXML

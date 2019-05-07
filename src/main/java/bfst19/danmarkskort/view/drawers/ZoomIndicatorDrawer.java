@@ -9,18 +9,17 @@ import javafx.scene.transform.Affine;
 
 
 public class ZoomIndicatorDrawer implements Drawer {
-    private boolean enabled = true;
-    private MapCanvas canvas;
-    private GraphicsContext graphicsContext;
+    private final MapCanvas canvas;
+    private final GraphicsContext graphicsContext;
     private boolean leftAligned = false;
     private boolean topAligned = false;
     private double xOrigin;
     private double yOrigin;
-    private int outerMargin = 5;
-    private int innerMargin = outerMargin;
-    private int boxWidth = 100;
-    private int boxHeight = 20;
-    private int maxPixelWidth = boxWidth - (innerMargin * 2);
+    private final int outerMargin = 5;
+    private final int innerMargin = outerMargin;
+    private final int boxWidth = 100;
+    private final int boxHeight = 20;
+    private final int maxPixelWidth = boxWidth - (innerMargin * 2);
 
 
     public ZoomIndicatorDrawer(MapCanvas canvas) {
@@ -28,17 +27,7 @@ public class ZoomIndicatorDrawer implements Drawer {
         this.graphicsContext = canvas.getGraphicsContext2D();
     }
 
-    @Override
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
+	@Override
     public void draw() {
         graphicsContext.save();
         graphicsContext.setTransform(new Affine());

@@ -1,5 +1,7 @@
 package bfst19.danmarkskort.model;
 
+import bfst19.danmarkskort.model.address.Address;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;

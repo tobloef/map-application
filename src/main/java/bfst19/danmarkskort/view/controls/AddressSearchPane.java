@@ -1,6 +1,11 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.model.address.Address;
+import bfst19.danmarkskort.model.address.AddressSearch;
+import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.routePlanning.Route;
+import bfst19.danmarkskort.model.routePlanning.VehicleType;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -24,7 +29,7 @@ public class AddressSearchPane extends BorderPane {
 
     private boolean enabled = false;
     private Model model;
-    private bfst19.danmarkskort.model.AddressSearch addressSearch;
+    private AddressSearch addressSearch;
     private MapPane mapPane;
     private BorderPane parent;
     private boolean dontReopenPopup = false;
@@ -54,7 +59,7 @@ public class AddressSearchPane extends BorderPane {
         this.parent = parent;
         this.model = model;
         this.mapPane = mapPane;
-        addressSearch = new bfst19.danmarkskort.model.AddressSearch(model.getAddressData());
+        addressSearch = new AddressSearch(model.getAddressData());
         // Address swap button
         swapAddressesButton.setMaxWidth(Double.MAX_VALUE);
         swapAddressesButton.setOnAction(e -> swapAddresses());
@@ -149,24 +154,22 @@ public class AddressSearchPane extends BorderPane {
                 return;
             }
             field.positionCaret(newValue.length());
-            debounce.setOnFinished(event -> {
-                updatePopup(popup, field, otherPopup, newValue, (address) -> {
-                    if (address == null) {
-                        return;
-                    }
-                    addressHandler.accept(address);
-                    Route route = model.getShortestPath();
-                    if (route != null && route.size() > 1) {
-                        mapPane.panViewToRoute(route);
-                    } else {
-                        mapPane.panViewToAddress(address);
-                    }
-                    if (route == null) {
-                        displayNoRouteFoundAlert();
-                    }
-                    updateRouteDescription(route);
-                });
-            });
+            debounce.setOnFinished(event -> updatePopup(popup, field, otherPopup, newValue, (address) -> {
+				if (address == null) {
+					return;
+				}
+				addressHandler.accept(address);
+				Route route = model.getShortestPath();
+				if (route != null && route.size() > 1) {
+					mapPane.panViewToRoute(route);
+				} else {
+					mapPane.panViewToAddress(address);
+				}
+				if (route == null) {
+					displayNoRouteFoundAlert();
+				}
+				updateRouteDescription(route);
+			}));
             debounce.playFromStart();
         });
         field.focusedProperty().addListener((observable, oldValue, newValue) -> {

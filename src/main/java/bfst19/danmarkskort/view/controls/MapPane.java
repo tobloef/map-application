@@ -1,6 +1,10 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.model.address.Address;
+import bfst19.danmarkskort.model.drawableModel.Rectangle;
+import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.routePlanning.Route;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -144,10 +148,6 @@ public class MapPane extends Pane {
 
     private void handleAddressSelect(BiConsumer<AddressSearchPane, String> searchSetter, BiConsumer<Model, PolyRoad> modelSetter) {
         PolyRoad road = model.getClosestRoad();
-        if (road == null) {
-            displayNoRoadFoundError();
-            return;
-        }
         modelSetter.accept(model, road);
         searchSetter.accept(addressSearchPane, road.getStreetName());
         Route route = model.getShortestPath();
@@ -208,7 +208,7 @@ public class MapPane extends Pane {
     public void panViewToRoute(Route route) {
         Rectangle routeBBox = route.getBoundingBox();
         panToBoundingBox(routeBBox);
-        //TODO: MAKE ZOOM WORK.
+        //TODO: get zoom to fit route in view.
         //double sizeDelta = routeBBox.getSizeLargestDelta(screenBounds) / getDegreesLatitudePerPixel();
         //System.out.println(sizeDelta);
         //zoom(sizeDelta, routeBBox.getMiddleX(), routeBBox.getMiddleY() );
@@ -219,9 +219,5 @@ public class MapPane extends Pane {
         double x = -(boundingBox.getMiddleX() - screenBounds.getMiddleX()) / mapCanvas.getDegreesLatitudePerPixel();
         double y = (boundingBox.getMiddleY() - screenBounds.getMiddleY()) / mapCanvas.getDegreesLatitudePerPixel();
         mapCanvas.pan(x, y);
-    }
-
-    private void displayNoRoadFoundError() {
-
     }
 }

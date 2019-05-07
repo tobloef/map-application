@@ -1,7 +1,7 @@
 package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.utils.EnumHelper;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.event.ActionEvent;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class WaytypeSelectorPane extends VBox {
     private  Model model;
-    private List<CheckBox> waytypeSelectors = new ArrayList<>();
+    private final List<CheckBox> waytypeSelectors = new ArrayList<>();
 
     @FXML
     private VBox wayTypeLayoutBox;
@@ -44,12 +44,10 @@ public class WaytypeSelectorPane extends VBox {
             wayTypeLayoutBox.getChildren().remove(checkBox);
         }
         waytypeSelectors.clear();
-        for (WayType wayType : WayType.values()) {
-            CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
-            checkBox.setSelected(!model.dontDraw(wayType));
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                    model.toggleBlacklistWaytype(wayType);
-            });
+        for (DrawableType drawableType : DrawableType.values()) {
+            CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(drawableType));
+            checkBox.setSelected(!model.dontDraw(drawableType));
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> model.toggleBlacklistWaytype(drawableType));
             VBox.setMargin(checkBox, new Insets(0, 0, 5, 0));
             wayTypeLayoutBox.getChildren().add(checkBox);
             waytypeSelectors.add(checkBox);
