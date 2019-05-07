@@ -155,4 +155,38 @@ public class AddressSearchTest {
             assertEquals(expected.get(i), actual.get(i).getValue());
         }
     }
+
+    @Test
+    public void testGetSuggestions_NoSuggestions() {
+        String query = "This doesn't exist";
+        List<Pair<String, Address>> actual = addressSearchTestData.getSuggestions(query);
+        assertNotNull(actual);
+        assertEquals(0, actual.size());
+    }
+
+    @Test
+    public void testGetSuggestions_suggestStreets() {
+        String query = "Ve";
+        List<String> expected = testAddresses.getAddressesByStreetName().stream()
+                .filter(address -> address.getStreetName().startsWith("Ve"))
+                .map(Address::getStreetName)
+                .distinct()
+                .collect(Collectors.toList());
+        List<Pair<String, Address>> actual = addressSearchTestData.getSuggestions(query);
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.size());
+    }
+
+    @Test
+    public void testGetSuggestions_suggestCity() {
+        String query = "B";
+        List<String> expected = testAddresses.getAddressesByStreetName().stream()
+                .filter(address -> address.getCity().startsWith("B"))
+                .map(Address::getCity)
+                .distinct()
+                .collect(Collectors.toList());
+        List<Pair<String, Address>> actual = addressSearchTestData.getSuggestions(query);
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.size());
+    }
 }

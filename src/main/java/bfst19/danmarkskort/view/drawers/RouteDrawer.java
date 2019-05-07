@@ -1,9 +1,9 @@
 package bfst19.danmarkskort.view.drawers;
 
-import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.drawables.Drawable;
-import bfst19.danmarkskort.model.drawables.PolyRoad;
 import bfst19.danmarkskort.model.drawables.DrawableType;
+import bfst19.danmarkskort.model.drawables.PolyRoad;
 import bfst19.danmarkskort.model.drawables.Theme;
 import bfst19.danmarkskort.model.routePlanning.Dijkstra;
 import bfst19.danmarkskort.view.controls.MapCanvas;

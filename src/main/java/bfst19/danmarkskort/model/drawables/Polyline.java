@@ -1,8 +1,8 @@
 package bfst19.danmarkskort.model.drawables;
 
-import bfst19.danmarkskort.model.osmParsing.OSMWay;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawableModel.SpatialIndexable;
+import bfst19.danmarkskort.model.osmParsing.OSMWay;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;

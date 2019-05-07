@@ -1,6 +1,5 @@
 package bfst19.danmarkskort.model.address;
 
-import bfst19.danmarkskort.model.address.*;
 import bfst19.danmarkskort.utils.BinarySearch;
 import javafx.util.Pair;
 
