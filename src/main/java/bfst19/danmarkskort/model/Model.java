@@ -135,7 +135,6 @@ public class Model {
         List<String> tempList = new ArrayList<>();
         tempList.add(argumentPath);
         cleanUpShortestPath();
-        drawableModel.doNewDataSet();
         loadDataFromArgs(tempList);
         time += System.nanoTime();
         System.out.printf("Load time: %.1fs\n", time / 1e9);

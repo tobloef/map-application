@@ -1,5 +1,6 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
+import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import org.junit.jupiter.api.Test;
 

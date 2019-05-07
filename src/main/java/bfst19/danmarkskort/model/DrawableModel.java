@@ -11,8 +11,6 @@ public interface DrawableModel extends Serializable {
 
     void doneAdding();
 
-    void doNewDataSet();
-
     Rectangle getModelBounds();
 
     void setModelBounds(Rectangle bounds);
