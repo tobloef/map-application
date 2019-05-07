@@ -193,6 +193,7 @@ public class Model {
             PolyRoad.setAllPolyRoads((PolyRoad[]) input.readObject());
             drawableModel = (KDTreeDrawableModel) input.readObject();
             modelBounds = drawableModel.getModelBounds();
+            addressData = (AddressData) input.readObject();
         }
     }
 
@@ -202,6 +203,7 @@ public class Model {
         try (ObjectOutputStream output = new ObjectOutputStream(bufferedOutputStream)) {
             output.writeObject(PolyRoad.getAllPolyRoads());
             output.writeObject(drawableModel);
+            output.writeObject(addressData);
         }
     }
 

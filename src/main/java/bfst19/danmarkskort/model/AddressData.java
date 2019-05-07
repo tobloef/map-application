@@ -1,8 +1,9 @@
 package bfst19.danmarkskort.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AddressData {
+public class AddressData implements Serializable {
     private List<Address> addressesByStreetName;
     private List<Address> addressesByCity;
     private List<String> cities;
