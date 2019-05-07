@@ -226,7 +226,8 @@ public class TopMenu extends MenuBar {
         alert.show();
     }
     @FXML
-    private void onToggleRouteShowExplored() {
+    private void onToggleShowExploredRoutes() {
         RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
+        model.notifyWayTypeObservers();
     }
 }

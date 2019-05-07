@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.function.BiConsumer;
 
-public class Map extends Pane {
+public class MapPane extends Pane {
     private static final float tooltipMaxDistance = 50f;
     private static final float tooltipMinZoom = 0.00003f;
 
@@ -29,14 +29,14 @@ public class Map extends Pane {
     private Model model;
     private Tooltip tooltip;
     private ContextMenu contextMenu;
-    private AddressSearch addressSearch;
+    private AddressSearchPane addressSearchPane;
 
     @FXML
     private MapCanvas mapCanvas;
     @FXML
     private Button toggleSearchButton;
 
-    public Map() throws IOException {
+    public MapPane() throws IOException {
         URL url = ResourceLoader.getResource("rs:views/Map.fxml");
         FXMLLoader loader = new FXMLLoader(url);
         loader.setRoot(this);
@@ -44,8 +44,8 @@ public class Map extends Pane {
         loader.load();
     }
 
-    public void initialize(Model model, AddressSearch addressSearch) {
-        this.addressSearch = addressSearch;
+    public void initialize(Model model, AddressSearchPane addressSearchPane) {
+        this.addressSearchPane = addressSearchPane;
         this.model = model;
         updateSearchToggleButtonText();
         // Address tooltip
@@ -63,9 +63,9 @@ public class Map extends Pane {
         MenuItem placePOIItem = new MenuItem("Add point of interest");
         placePOIItem.setOnAction(event -> model.addPOIAtCurrentMousePosition());
         MenuItem useAsStartItem = new MenuItem("Use as origin");
-        useAsStartItem.setOnAction(e -> handleAddressSelect(AddressSearch::setStartText, Model::setStart));
+        useAsStartItem.setOnAction(e -> handleAddressSelect(AddressSearchPane::setStartText, Model::setStart));
         MenuItem useAsEndItem = new MenuItem("Use as destination");
-        useAsEndItem.setOnAction(e -> handleAddressSelect(AddressSearch::setEndText, Model::setEnd));
+        useAsEndItem.setOnAction(e -> handleAddressSelect(AddressSearchPane::setEndText, Model::setEnd));
         contextMenu = new ContextMenu(
                 placePOIItem,
                 useAsStartItem,
@@ -123,12 +123,12 @@ public class Map extends Pane {
 
     @FXML
     private void toggleSearchPane(ActionEvent actionEvent) {
-        addressSearch.togglePanel();
+        addressSearchPane.togglePanel();
         updateSearchToggleButtonText();
     }
 
     private void updateSearchToggleButtonText() {
-        if (addressSearch.isEnabled()) {
+        if (addressSearchPane.isEnabled()) {
             toggleSearchButton.setText("<<");
         } else {
             toggleSearchButton.setText(">>");
@@ -142,17 +142,17 @@ public class Map extends Pane {
         contextMenu.show(this, screenCoords.getX(), screenCoords.getY());
     }
 
-    private void handleAddressSelect(BiConsumer<AddressSearch, String> searchSetter, BiConsumer<Model, PolyRoad> modelSetter) {
+    private void handleAddressSelect(BiConsumer<AddressSearchPane, String> searchSetter, BiConsumer<Model, PolyRoad> modelSetter) {
         PolyRoad road = model.getClosestRoad();
         if (road == null) {
             displayNoRoadFoundError();
             return;
         }
         modelSetter.accept(model, road);
-        searchSetter.accept(addressSearch, road.getStreetName());
+        searchSetter.accept(addressSearchPane, road.getStreetName());
         Route route = model.getShortestPath();
         if (route != null) {
-            addressSearch.updateRouteDescription(route);
+            addressSearchPane.updateRouteDescription(route);
         }
     }
 

@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaytypeSelector extends VBox {
+public class WaytypeSelectorPane extends VBox {
     private  Model model;
     private List<CheckBox> waytypeSelectors = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public class WaytypeSelector extends VBox {
     @FXML
     private ScrollPane scrollPane;
 
-    public WaytypeSelector() throws IOException {
+    public WaytypeSelectorPane() throws IOException {
         URL url = ResourceLoader.getResource("rs:views/WayTypeSelector.fxml");
         FXMLLoader loader = new FXMLLoader(url);
         loader.setRoot(this);

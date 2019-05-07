@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.Scene?>
 <?import bfst19.danmarkskort.view.controls.MapCanvas?>
-<?import bfst19.danmarkskort.view.controls.AddressSearch?>
+<?import bfst19.danmarkskort.view.controls.AddressSearchPane?>
 <?import bfst19.danmarkskort.view.controls.TopMenu?>
-<?import bfst19.danmarkskort.view.controls.Map?>
+<?import bfst19.danmarkskort.view.controls.MapPane?>
 <fx:root
     type="javafx.scene.Scene"
     xmlns:fx="http://javafx.com/fxml"
@@ -18,10 +18,10 @@
             <TopMenu fx:id="topMenu"/>
         </top>
         <center>
-            <Map fx:id="map"/>
+            <MapPane fx:id="mapPane"/>
         </center>
         <left>
-            <AddressSearch fx:id="addressSearch" prefWidth="300"/>
+            <AddressSearchPane fx:id="addressSearchPane" prefWidth="300"/>
         </left>
     </BorderPane>
 </fx:root>
