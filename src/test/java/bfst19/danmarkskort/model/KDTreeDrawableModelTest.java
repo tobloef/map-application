@@ -2,6 +2,7 @@ package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
+import javafx.scene.canvas.GraphicsContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,5 +62,25 @@ class KDTreeDrawableModelTest {
 			totalCount+= countIterable(model.getAllDrawablesOfType(wayType));
 		}
 		return totalCount;
+	}
+
+	private class NonSpatial implements Drawable{
+
+		@Override
+		public void stroke(GraphicsContext gc, double zoomFactor) {
+		}
+
+		@Override
+		public void fill(GraphicsContext gc, double zoomFactor) {}
+
+		@Override
+		public long getNumOfFloats() {
+			return 0;
+		}
+	}
+
+	@Test
+	void insertNonSpatial() {
+		assertThrows(IllegalArgumentException.class , ()->model.insert(WayType.COASTLINE, new NonSpatial()));
 	}
 }
