@@ -80,14 +80,20 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 
     @Override
     public float getRepresentativeX() {
-        //TODO: Make something more representative then just the first coords.
-        return list.get(0).getRepresentativeX();
+		float sum = 0;
+		for (Polyline line : list) {
+			sum += line.getRepresentativeX();
+		}
+		return sum / list.size();
     }
 
     @Override
     public float getRepresentativeY() {
-        //TODO: Make something more representative then just the first coords.
-        return list.get(0).getRepresentativeY();
+		float sum = 0;
+		for (Polyline line : list) {
+			sum += line.getRepresentativeY();
+		}
+		return sum / list.size();
     }
 
     @Override

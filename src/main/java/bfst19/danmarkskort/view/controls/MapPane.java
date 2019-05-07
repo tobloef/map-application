@@ -208,7 +208,7 @@ public class MapPane extends Pane {
     public void panViewToRoute(Route route) {
         Rectangle routeBBox = route.getBoundingBox();
         panToBoundingBox(routeBBox);
-        //TODO: MAKE ZOOM WORK.
+        //TODO: get zoom to fit route in view.
         //double sizeDelta = routeBBox.getSizeLargestDelta(screenBounds) / getDegreesLatitudePerPixel();
         //System.out.println(sizeDelta);
         //zoom(sizeDelta, routeBBox.getMiddleX(), routeBBox.getMiddleY() );

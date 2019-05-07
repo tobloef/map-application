@@ -6,180 +6,180 @@ import javafx.scene.paint.ImagePattern;
 import static bfst19.danmarkskort.utils.Misc.pickNotNull;
 
 public class DrawingInfo {
-    private final Wrapper<Color> fillColorWrapper;
-    private final Wrapper<Color> strokeColorWrapper;
-    private final Wrapper<Double> lineDashWrapper;
-    private final Wrapper<Double> lineWidthWrapper;
-    private final Wrapper<Double> lineWidthMaxWrapper;
-    private final Wrapper<Double> lineWidthMinWrapper;
-    private final Wrapper<Double> zoomLevelWrapper;
-    private final Wrapper<Boolean> alwaysDrawWrapper;
-    private final Wrapper<ImagePattern> textureWrapper;
+    private final NullWrapper<Color> fillColorNullWrapper;
+    private final NullWrapper<Color> strokeColorNullWrapper;
+    private final NullWrapper<Double> lineDashNullWrapper;
+    private final NullWrapper<Double> lineWidthNullWrapper;
+    private final NullWrapper<Double> lineWidthMaxNullWrapper;
+    private final NullWrapper<Double> lineWidthMinNullWrapper;
+    private final NullWrapper<Double> zoomLevelNullWrapper;
+    private final NullWrapper<Boolean> alwaysDrawNullWrapper;
+    private final NullWrapper<ImagePattern> textureNullWrapper;
 
     public DrawingInfo(
-            Wrapper<Color> fillColorWrapper,
-            Wrapper<Color> strokeColorWrapper,
-            Wrapper<Double> lineDashWrapper,
-            Wrapper<Double> lineWidthWrapper,
-            Wrapper<Double> lineWidthMaxWrapper,
-            Wrapper<Double> lineWidthMinWrapper,
-            Wrapper<Double> zoomLevelWrapper,
-            Wrapper<Boolean> alwaysDrawWrapper,
-            Wrapper<ImagePattern> textureWrapper
+            NullWrapper<Color> fillColorNullWrapper,
+            NullWrapper<Color> strokeColorNullWrapper,
+            NullWrapper<Double> lineDashNullWrapper,
+            NullWrapper<Double> lineWidthNullWrapper,
+            NullWrapper<Double> lineWidthMaxNullWrapper,
+            NullWrapper<Double> lineWidthMinNullWrapper,
+            NullWrapper<Double> zoomLevelNullWrapper,
+            NullWrapper<Boolean> alwaysDrawNullWrapper,
+            NullWrapper<ImagePattern> textureNullWrapper
     ) {
-        this.fillColorWrapper = fillColorWrapper;
-        this.strokeColorWrapper = strokeColorWrapper;
-        this.lineDashWrapper = lineDashWrapper;
-        this.lineWidthWrapper = lineWidthWrapper;
-        this.lineWidthMaxWrapper = lineWidthMaxWrapper;
-        this.lineWidthMinWrapper = lineWidthMinWrapper;
-        this.zoomLevelWrapper = zoomLevelWrapper;
-        this.alwaysDrawWrapper = alwaysDrawWrapper;
-        this.textureWrapper = textureWrapper;
+        this.fillColorNullWrapper = fillColorNullWrapper;
+        this.strokeColorNullWrapper = strokeColorNullWrapper;
+        this.lineDashNullWrapper = lineDashNullWrapper;
+        this.lineWidthNullWrapper = lineWidthNullWrapper;
+        this.lineWidthMaxNullWrapper = lineWidthMaxNullWrapper;
+        this.lineWidthMinNullWrapper = lineWidthMinNullWrapper;
+        this.zoomLevelNullWrapper = zoomLevelNullWrapper;
+        this.alwaysDrawNullWrapper = alwaysDrawNullWrapper;
+        this.textureNullWrapper = textureNullWrapper;
     }
 
     public DrawingInfo createMerged(DrawingInfo other) {
         return new DrawingInfo(
-                pickNotNull(other.getFillColorWrapper(), this.getFillColorWrapper()),
-                pickNotNull(other.getStrokeColorWrapper(), this.getStrokeColorWrapper()),
-                pickNotNull(other.getLineDashWrapper(), this.getLineDashWrapper()),
-                pickNotNull(other.getLineWidthWrapper(), this.getLineWidthWrapper()),
-                pickNotNull(other.getLineWidthMaxWrapper(), this.getLineWidthMaxWrapper()),
-                pickNotNull(other.getLineWidthMinWrapper(), this.getLineWidthMinWrapper()),
-                pickNotNull(other.getZoomLevelWrapper(), this.getZoomLevelWrapper()),
-                pickNotNull(other.getAlwaysDrawWrapper(), this.getAlwaysDrawWrapper()),
-                pickNotNull(other.getTextureWrapper(), this.getTextureWrapper())
+                pickNotNull(other.getFillColorNullWrapper(), this.getFillColorNullWrapper()),
+                pickNotNull(other.getStrokeColorNullWrapper(), this.getStrokeColorNullWrapper()),
+                pickNotNull(other.getLineDashNullWrapper(), this.getLineDashNullWrapper()),
+                pickNotNull(other.getLineWidthNullWrapper(), this.getLineWidthNullWrapper()),
+                pickNotNull(other.getLineWidthMaxNullWrapper(), this.getLineWidthMaxNullWrapper()),
+                pickNotNull(other.getLineWidthMinNullWrapper(), this.getLineWidthMinNullWrapper()),
+                pickNotNull(other.getZoomLevelNullWrapper(), this.getZoomLevelNullWrapper()),
+                pickNotNull(other.getAlwaysDrawNullWrapper(), this.getAlwaysDrawNullWrapper()),
+                pickNotNull(other.getTextureNullWrapper(), this.getTextureNullWrapper())
         );
     }
 
     // Getters
 
     public Color getFillColor() {
-        if (fillColorWrapper == null) {
+        if (fillColorNullWrapper == null) {
             return null;
         }
-        return fillColorWrapper.getValue();
+        return fillColorNullWrapper.getValue();
     }
 
     public Color getStrokeColor() {
-        if (strokeColorWrapper == null) {
+        if (strokeColorNullWrapper == null) {
             return null;
         }
-        return strokeColorWrapper.getValue();
+        return strokeColorNullWrapper.getValue();
     }
 
     public Double getLineDash() {
-        if (lineDashWrapper == null) {
+        if (lineDashNullWrapper == null) {
             return null;
         }
-        return lineDashWrapper.getValue();
+        return lineDashNullWrapper.getValue();
     }
 
     public Double getLineWidth() {
-        if (lineWidthWrapper == null) {
+        if (lineWidthNullWrapper == null) {
             return null;
         }
-        return lineWidthWrapper.getValue();
+        return lineWidthNullWrapper.getValue();
     }
 
     public Double getZoomLevel() {
-        if (zoomLevelWrapper == null) {
+        if (zoomLevelNullWrapper == null) {
             return null;
         }
-        return zoomLevelWrapper.getValue();
+        return zoomLevelNullWrapper.getValue();
     }
 
     public Boolean getAlwaysDraw() {
-        if (alwaysDrawWrapper == null) {
+        if (alwaysDrawNullWrapper == null) {
             return null;
         }
-        return alwaysDrawWrapper.getValue();
+        return alwaysDrawNullWrapper.getValue();
     }
 
     public ImagePattern getTexture() {
-        if (textureWrapper == null) {
+        if (textureNullWrapper == null) {
             return null;
         }
-        return textureWrapper.getValue();
+        return textureNullWrapper.getValue();
     }
 
-    public Wrapper<Color> getFillColorWrapper() {
-        return fillColorWrapper;
+    public NullWrapper<Color> getFillColorNullWrapper() {
+        return fillColorNullWrapper;
     }
 
-    public Wrapper<Color> getStrokeColorWrapper() {
-        return strokeColorWrapper;
+    public NullWrapper<Color> getStrokeColorNullWrapper() {
+        return strokeColorNullWrapper;
     }
 
-    public Wrapper<Double> getLineDashWrapper() {
-        return lineDashWrapper;
+    public NullWrapper<Double> getLineDashNullWrapper() {
+        return lineDashNullWrapper;
     }
 
-    public Wrapper<Double> getLineWidthWrapper() {
-        return lineWidthWrapper;
+    public NullWrapper<Double> getLineWidthNullWrapper() {
+        return lineWidthNullWrapper;
     }
 
-    public Wrapper<Double> getLineWidthMaxWrapper() {
-        return lineWidthMaxWrapper;
+    public NullWrapper<Double> getLineWidthMaxNullWrapper() {
+        return lineWidthMaxNullWrapper;
     }
 
-    public Wrapper<Double> getLineWidthMinWrapper() {
-        return lineWidthMinWrapper;
+    public NullWrapper<Double> getLineWidthMinNullWrapper() {
+        return lineWidthMinNullWrapper;
     }
 
-    public Wrapper<Double> getZoomLevelWrapper() {
-        return zoomLevelWrapper;
+    public NullWrapper<Double> getZoomLevelNullWrapper() {
+        return zoomLevelNullWrapper;
     }
 
-    public Wrapper<Boolean> getAlwaysDrawWrapper() {
-        return alwaysDrawWrapper;
+    public NullWrapper<Boolean> getAlwaysDrawNullWrapper() {
+        return alwaysDrawNullWrapper;
     }
 
-    public Wrapper<ImagePattern> getTextureWrapper() {
-        return textureWrapper;
+    public NullWrapper<ImagePattern> getTextureNullWrapper() {
+        return textureNullWrapper;
     }
 
     // Hassers
 
     public boolean hasFillColor() {
-        return fillColorWrapper != null && fillColorWrapper.getValue() != null;
+        return fillColorNullWrapper != null && fillColorNullWrapper.getValue() != null;
     }
 
     public boolean hasStrokeColor() {
-        return strokeColorWrapper != null && strokeColorWrapper.getValue() != null;
+        return strokeColorNullWrapper != null && strokeColorNullWrapper.getValue() != null;
     }
 
     public boolean hasLineDash() {
-        return lineDashWrapper != null && lineDashWrapper.getValue() != null;
+        return lineDashNullWrapper != null && lineDashNullWrapper.getValue() != null;
     }
 
     public boolean hasLineWidth() {
-        return lineWidthWrapper != null && lineWidthWrapper.getValue() != null;
+        return lineWidthNullWrapper != null && lineWidthNullWrapper.getValue() != null;
     }
 
     public boolean hasZoomLevel() {
-        return zoomLevelWrapper != null && zoomLevelWrapper.getValue() != null;
+        return zoomLevelNullWrapper != null && zoomLevelNullWrapper.getValue() != null;
     }
 
     public boolean hasAlwaysDraw() {
-        return alwaysDrawWrapper != null && alwaysDrawWrapper.getValue() != null;
+        return alwaysDrawNullWrapper != null && alwaysDrawNullWrapper.getValue() != null;
     }
 
     public boolean hasTexture() {
-        return textureWrapper != null && textureWrapper.getValue() != null;
+        return textureNullWrapper != null && textureNullWrapper.getValue() != null;
     }
 
 
     public double calculateLineWidth(double currentZoomLevel) {
-        if (lineWidthMaxWrapper == null || lineWidthMinWrapper == null) {
-            return lineWidthWrapper.getValue();
+        if (lineWidthMaxNullWrapper == null || lineWidthMinNullWrapper == null) {
+            return lineWidthNullWrapper.getValue();
         }
-        double lineWidth = lineWidthWrapper.getValue() * currentZoomLevel;
-        if (lineWidth < lineWidthMinWrapper.getValue()) {
-            lineWidth = lineWidthMinWrapper.getValue();
+        double lineWidth = lineWidthNullWrapper.getValue() * currentZoomLevel;
+        if (lineWidth < lineWidthMinNullWrapper.getValue()) {
+            lineWidth = lineWidthMinNullWrapper.getValue();
         }
-        if (lineWidth > lineWidthMaxWrapper.getValue()) {
-            lineWidth = lineWidthMaxWrapper.getValue();
+        if (lineWidth > lineWidthMaxNullWrapper.getValue()) {
+            lineWidth = lineWidthMaxNullWrapper.getValue();
         }
         return lineWidth;
     }

@@ -54,21 +54,21 @@ public class PolyRoad extends Polyline implements Serializable {
         allPolyRoads = newAllPolyRoads;
     }
 
-    private static int[] getUniqueValues(int[] arr) { //todo fix names
-        int n = arr.length;
-        if (n == 0 || n == 1) {
-            return arr;
+    private static int[] getUniqueValues(int[] array) {
+        int length = array.length;
+        if (length == 0 || length == 1) {
+            return array;
         }
         //Sort it and ignore duplicates
-        Arrays.sort(arr);
-        int[] temp = new int[n];
+        Arrays.sort(array);
+        int[] temp = new int[length];
         int j = 0;
-        for (int i = 0; i < n - 1; i++) {
-            if (arr[i] != arr[i + 1]) {
-                temp[j++] = arr[i];
+        for (int i = 0; i < length - 1; i++) {
+            if (array[i] != array[i + 1]) {
+                temp[j++] = array[i];
             }
         }
-        temp[j++] = arr[n - 1];
+        temp[j++] = array[length - 1];
         //Size it correctly.
         int[] tempToSize = new int[j];
 		System.arraycopy(temp, 0, tempToSize, 0, j);

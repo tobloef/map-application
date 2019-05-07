@@ -25,8 +25,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-//todo del ting ind i mapper, dataobjekter, enums, drawables
-
 public class Model {
     private final static long mouseIdleTime = 250;
 

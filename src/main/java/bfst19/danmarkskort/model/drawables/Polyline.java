@@ -86,14 +86,20 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 
     @Override
     public float getRepresentativeX() {
-        //TODO: Make something more representative then just the first coords.
-        return coords[0];
+		float sum = 0;
+		for (int i = 0; i < coords.length / 2; i++) {
+			sum += coords[i*2];
+		}
+        return sum / (coords.length / 2);
     }
 
     @Override
     public float getRepresentativeY() {
-        //TODO: Make something more representative then just the first coords.
-        return coords[1];
+		float sum = 0;
+		for (int i = 0; i < coords.length / 2; i++) {
+			sum += coords[i*2+1];
+		}
+		return sum / (coords.length / 2);
     }
 
     @Override

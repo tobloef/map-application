@@ -3,7 +3,7 @@ package bfst19.danmarkskort.utils;
 import bfst19.danmarkskort.model.drawables.DrawingInfo;
 import bfst19.danmarkskort.model.drawables.Theme;
 import bfst19.danmarkskort.model.drawables.DrawableType;
-import bfst19.danmarkskort.model.drawables.Wrapper;
+import bfst19.danmarkskort.model.drawables.NullWrapper;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -68,41 +68,41 @@ public class ThemeLoader {
     }
 
     private static DrawingInfo parseThemeValueMap(Map<String, Object> themeValuesMap) {
-        Wrapper<Color> fillColor = null;
-        Wrapper<Color> strokeColor = null;
-        Wrapper<Double> lineDash = null;
-        Wrapper<Double> lineWidth = null;
-        Wrapper<Double> lineWidthMax = null;
-        Wrapper<Double> lineWidthMin = null;
-        Wrapper<Double> zoomLevel = null;
-        Wrapper<Boolean> alwaysDraw = null;
-        Wrapper<ImagePattern> texture = null;
+        NullWrapper<Color> fillColor = null;
+        NullWrapper<Color> strokeColor = null;
+        NullWrapper<Double> lineDash = null;
+        NullWrapper<Double> lineWidth = null;
+        NullWrapper<Double> lineWidthMax = null;
+        NullWrapper<Double> lineWidthMin = null;
+        NullWrapper<Double> zoomLevel = null;
+        NullWrapper<Boolean> alwaysDraw = null;
+        NullWrapper<ImagePattern> texture = null;
         if (themeValuesMap.containsKey("fillColor")) {
-            fillColor = new Wrapper<>(parseColor(themeValuesMap, "fillColor"));
+            fillColor = new NullWrapper<>(parseColor(themeValuesMap, "fillColor"));
         }
         if (themeValuesMap.containsKey("strokeColor")) {
-            strokeColor = new Wrapper<>(parseColor(themeValuesMap, "strokeColor"));
+            strokeColor = new NullWrapper<>(parseColor(themeValuesMap, "strokeColor"));
         }
         if (themeValuesMap.containsKey("lineDash")) {
-            lineDash = new Wrapper<>(parseDouble(themeValuesMap, "lineDash"));
+            lineDash = new NullWrapper<>(parseDouble(themeValuesMap, "lineDash"));
         }
         if (themeValuesMap.containsKey("lineWidth")) {
-            lineWidth = new Wrapper<>(parseDouble(themeValuesMap, "lineWidth"));
+            lineWidth = new NullWrapper<>(parseDouble(themeValuesMap, "lineWidth"));
         }
         if (themeValuesMap.containsKey("lineWidthMax")) {
-            lineWidthMax = new Wrapper<>(parseDouble(themeValuesMap, "lineWidthMax"));
+            lineWidthMax = new NullWrapper<>(parseDouble(themeValuesMap, "lineWidthMax"));
         }
         if (themeValuesMap.containsKey("lineWidthMin")) {
-            lineWidthMin = new Wrapper<>(parseDouble(themeValuesMap, "lineWidthMin"));
+            lineWidthMin = new NullWrapper<>(parseDouble(themeValuesMap, "lineWidthMin"));
         }
         if (themeValuesMap.containsKey("zoomLevel")) {
-            zoomLevel = new Wrapper<>(parseDouble(themeValuesMap, "zoomLevel"));
+            zoomLevel = new NullWrapper<>(parseDouble(themeValuesMap, "zoomLevel"));
         }
         if (themeValuesMap.containsKey("alwaysDraw")) {
-            alwaysDraw = new Wrapper<>(parseBoolean(themeValuesMap));
+            alwaysDraw = new NullWrapper<>(parseBoolean(themeValuesMap));
         }
         if (themeValuesMap.containsKey("texture")) {
-            texture = new Wrapper<>(parseTexture(themeValuesMap));
+            texture = new NullWrapper<>(parseTexture(themeValuesMap));
         }
         return new DrawingInfo(
                 fillColor,
