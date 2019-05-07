@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.geometry.Insets?>
 <fx:root
     type="javafx.scene.layout.VBox"
     xmlns:fx="http://javafx.com/fxml"
@@ -25,7 +26,13 @@
                     -fx-padding: 0 0 20px 0;
                 </style>
                 <Label text="Way types" style="-fx-font-size: 1.5em; -fx-font-weight: bold;"/>
-                <Button text="Enable all waytypes" onAction="#onEnableAll" style="-fx-font-weight: bold"/>
+                <Button text="Enable all waytypes" onAction="#onEnableAll" style="-fx-font-weight: bold">
+                    <VBox.margin>
+                        <Insets>
+                            <bottom>10</bottom>
+                        </Insets>
+                    </VBox.margin>
+                </Button>
                 <Button text="Disable all waytypes" onAction="#onDisableAll" style="-fx-font-weight: bold"/>
             </VBox>
         </VBox>

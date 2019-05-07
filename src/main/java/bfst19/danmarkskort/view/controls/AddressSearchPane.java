@@ -18,14 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class AddressSearch extends BorderPane {
+public class AddressSearchPane extends BorderPane {
     private final int MAX_SUGGESTIONS = 10;
     private final int DEBOUNCE_DELAY = 300;
 
     private boolean enabled = false;
     private Model model;
     private bfst19.danmarkskort.model.AddressSearch addressSearch;
-    private Map map;
+    private MapPane mapPane;
     private BorderPane parent;
     private boolean dontReopenPopup = false;
 
@@ -42,7 +42,7 @@ public class AddressSearch extends BorderPane {
     @FXML
     private Button swapAddressesButton;
 
-    public AddressSearch() throws IOException {
+    public AddressSearchPane() throws IOException {
         URL url = ResourceLoader.getResource("rs:views/AddressSearch.fxml");
         FXMLLoader loader = new FXMLLoader(url);
         loader.setRoot(this);
@@ -50,10 +50,10 @@ public class AddressSearch extends BorderPane {
         loader.load();
     }
 
-    public void initialize(Model model, BorderPane parent, Map map) {
+    public void initialize(Model model, BorderPane parent, MapPane mapPane) {
         this.parent = parent;
         this.model = model;
-        this.map = map;
+        this.mapPane = mapPane;
         addressSearch = new bfst19.danmarkskort.model.AddressSearch(model.getAddressData());
         // Address swap button
         swapAddressesButton.setMaxWidth(Double.MAX_VALUE);
@@ -157,9 +157,9 @@ public class AddressSearch extends BorderPane {
                     addressHandler.accept(address);
                     Route route = model.getShortestPath();
                     if (route != null && route.size() > 1) {
-                        map.panViewToRoute(route);
+                        mapPane.panViewToRoute(route);
                     } else {
-                        map.panViewToAddress(address);
+                        mapPane.panViewToAddress(address);
                     }
                     if (route == null) {
                         displayNoRouteFoundAlert();

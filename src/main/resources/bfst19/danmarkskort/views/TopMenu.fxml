@@ -21,6 +21,6 @@
     </Menu>
     <Menu text="Debugging">
         <MenuItem text="Toggle way type selector" onAction="#onToggleWaytypeSelector"/>
-        <MenuItem text="Toggle explored routes" onAction="#onToggleRouteShowExplored"/>
+        <MenuItem text="Toggle explored routes" onAction="#onToggleShowExploredRoutes"/>
     </Menu>
 </fx:root>
