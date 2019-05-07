@@ -1,8 +1,8 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort.model.drawables;
 
 // The wayTypes are drawn in the order they are written in
 @SuppressWarnings("unused")
-public enum WayType {
+public enum DrawableType {
     COASTLINE,
 
     // Islands

@@ -1,52 +1,52 @@
 package bfst19.danmarkskort.model.routePlanning;
 
-import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.model.drawables.DrawableType;
 
 import java.util.*;
 
 public class RoadInformation {
 
     public static final Map<String, Integer> speedLimitsFromTags = initSpeedLimitsFromTags();
-    public static final Set<WayType> roadTypes = getRoadTypes();
-    public static final Map<VehicleType, EnumSet<WayType>> allowedRoadTypes = initAllowedRoadTypes();
+    public static final Set<DrawableType> roadTypes = getRoadTypes();
+    public static final Map<VehicleType, EnumSet<DrawableType>> allowedRoadTypes = initAllowedRoadTypes();
 
-    private static Map<VehicleType, EnumSet<WayType>> initAllowedRoadTypes() {
-        Map<VehicleType, EnumSet<WayType>> allowedRoadTypes = new EnumMap<>(VehicleType.class);
+    private static Map<VehicleType, EnumSet<DrawableType>> initAllowedRoadTypes() {
+        Map<VehicleType, EnumSet<DrawableType>> allowedRoadTypes = new EnumMap<>(VehicleType.class);
         for (VehicleType vehicleType : VehicleType.values()) {
-            allowedRoadTypes.put(vehicleType, EnumSet.noneOf(WayType.class));
+            allowedRoadTypes.put(vehicleType, EnumSet.noneOf(DrawableType.class));
         }
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.RESIDENTIAL_ROAD);
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.SERVICE_ROAD);
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.TERTIARY_ROAD);
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.LIVING_STREET);
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.SECONDARY_ROAD);
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.UNCLASSIFIED_ROAD);
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.PRIMARY_ROAD);
-        allowedRoadTypes.get(VehicleType.CAR).add(WayType.MOTORWAY);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.RESIDENTIAL_ROAD);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.SERVICE_ROAD);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.TERTIARY_ROAD);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.LIVING_STREET);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.SECONDARY_ROAD);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.UNCLASSIFIED_ROAD);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.PRIMARY_ROAD);
+        allowedRoadTypes.get(VehicleType.CAR).add(DrawableType.MOTORWAY);
         allowedRoadTypes.get(VehicleType.WALKING).addAll(getRoadTypes());
-        allowedRoadTypes.get(VehicleType.WALKING).remove(WayType.MOTORWAY);
+        allowedRoadTypes.get(VehicleType.WALKING).remove(DrawableType.MOTORWAY);
         allowedRoadTypes.get(VehicleType.BICYCLE).addAll(allowedRoadTypes.get(VehicleType.WALKING));
         return allowedRoadTypes;
     }
 
 
-    public static Set<WayType> getRoadTypes() {
-        Set<WayType> roadTypes = new HashSet<>();
-        roadTypes.add(WayType.RESIDENTIAL_ROAD);
-        roadTypes.add(WayType.FOOTWAY);
-        roadTypes.add(WayType.BRIDLEWAY);
-        roadTypes.add(WayType.TRACK);
-        roadTypes.add(WayType.PIER);
-        roadTypes.add(WayType.SERVICE_ROAD);
-        roadTypes.add(WayType.TERTIARY_ROAD);
-        roadTypes.add(WayType.LIVING_STREET);
-        roadTypes.add(WayType.SECONDARY_ROAD);
-        roadTypes.add(WayType.UNCLASSIFIED_ROAD);
-        roadTypes.add(WayType.PRIMARY_ROAD);
-        roadTypes.add(WayType.PEDESTRIAN);
-        roadTypes.add(WayType.RACEWAY);
-        roadTypes.add(WayType.MOTORWAY);
-        roadTypes.add(WayType.CYCLEWAY);
+    public static Set<DrawableType> getRoadTypes() {
+        Set<DrawableType> roadTypes = new HashSet<>();
+        roadTypes.add(DrawableType.RESIDENTIAL_ROAD);
+        roadTypes.add(DrawableType.FOOTWAY);
+        roadTypes.add(DrawableType.BRIDLEWAY);
+        roadTypes.add(DrawableType.TRACK);
+        roadTypes.add(DrawableType.PIER);
+        roadTypes.add(DrawableType.SERVICE_ROAD);
+        roadTypes.add(DrawableType.TERTIARY_ROAD);
+        roadTypes.add(DrawableType.LIVING_STREET);
+        roadTypes.add(DrawableType.SECONDARY_ROAD);
+        roadTypes.add(DrawableType.UNCLASSIFIED_ROAD);
+        roadTypes.add(DrawableType.PRIMARY_ROAD);
+        roadTypes.add(DrawableType.PEDESTRIAN);
+        roadTypes.add(DrawableType.RACEWAY);
+        roadTypes.add(DrawableType.MOTORWAY);
+        roadTypes.add(DrawableType.CYCLEWAY);
         return roadTypes;
     }
 

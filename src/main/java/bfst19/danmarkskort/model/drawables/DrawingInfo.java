@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort.model.drawables;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -38,7 +38,7 @@ public class DrawingInfo {
         this.textureWrapper = textureWrapper;
     }
 
-    DrawingInfo createMerged(DrawingInfo other) {
+    public DrawingInfo createMerged(DrawingInfo other) {
         return new DrawingInfo(
                 pickNotNull(other.getFillColorWrapper(), this.getFillColorWrapper()),
                 pickNotNull(other.getStrokeColorWrapper(), this.getStrokeColorWrapper()),

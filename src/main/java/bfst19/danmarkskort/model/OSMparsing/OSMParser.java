@@ -1,9 +1,9 @@
 package bfst19.danmarkskort.model.OSMparsing;
 
-import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.model.address.AddressData;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
+import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.model.drawables.MultiPolyline;
 import bfst19.danmarkskort.model.drawables.Polyline;
 import bfst19.danmarkskort.model.routePlanning.RoadInformation;
@@ -28,7 +28,7 @@ public class OSMParser {
     private OSMNode currentNode = null;
     private OSMWay currentWay = null;
     private OSMRelation currentRelation = null;
-    private WayType currentType = null;
+    private DrawableType currentType = null;
     private final DrawableModel drawableModel;
     private final Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
     private Map<Long, OSMWay> idToWay = new HashMap<>();
@@ -135,7 +135,7 @@ public class OSMParser {
 
     private void handleStartWay(XMLStreamReader reader) {
         long id = Long.parseLong(reader.getAttributeValue(null, "id"));
-        currentType = WayType.UNKNOWN;
+        currentType = DrawableType.UNKNOWN;
         currentWay = new OSMWay(id);
         tags = new HashMap<>();
     }
@@ -152,7 +152,7 @@ public class OSMParser {
             }
         }
         idToWay.put(currentWay.getAsLong(), currentWay);
-        if (currentType != WayType.UNKNOWN) {
+        if (currentType != DrawableType.UNKNOWN) {
             if (currentWay instanceof OSMRoadWay) {
                 nodeGraphCreator.addRoad((OSMRoadWay) currentWay);
             } else {
@@ -169,13 +169,13 @@ public class OSMParser {
 
     private void handleStartRelation(XMLStreamReader reader) {
         long id = Long.parseLong(reader.getAttributeValue(null, "id"));
-        currentType = WayType.UNKNOWN;
+        currentType = DrawableType.UNKNOWN;
         currentRelation = new OSMRelation(id);
         tags = new HashMap<>();
     }
 
     private void handleEndRelation() {
-        if (currentRelation.hasMembers() && currentType != WayType.UNKNOWN) {
+        if (currentRelation.hasMembers() && currentType != DrawableType.UNKNOWN) {
             drawableModel.add(currentType, new MultiPolyline(currentRelation));
         }
         osmAddressParser.tryAddAddress(tags, getCurrentPositionNode());
@@ -195,7 +195,7 @@ public class OSMParser {
         String v = reader.getAttributeValue(null, "v");
         tags.put(k, v);
         if (currentWay != null || currentRelation != null) {
-            WayType type = WayTypeFactory.getWayType(k, v);
+            DrawableType type = WayTypeFactory.getWayType(k, v);
             if (type != null) {
                 this.currentType = type;
             }

@@ -4,6 +4,7 @@ import bfst19.danmarkskort.model.OSMparsing.OSMParser;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;
 import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
 import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.drawables.DrawableType;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;
@@ -46,7 +47,7 @@ class OSMParserTest {
         DrawableModel drawableModel = new KDTreeDrawableModel();
         String filePath = this.getClass().getResource("small.osm").getPath();
         new OSMParser(filePath, drawableModel);
-        PolyRoad a = (PolyRoad) drawableModel.getNearestNeighbor(WayType.RESIDENTIAL_ROAD, 205, 408);
+        PolyRoad a = (PolyRoad) drawableModel.getNearestNeighbor(DrawableType.RESIDENTIAL_ROAD, 205, 408);
         Set<PolyRoad> aConnections = new HashSet<>(a.getFirstConnections());
         aConnections.addAll(a.getLastConnections());
         for (PolyRoad road : aConnections) {

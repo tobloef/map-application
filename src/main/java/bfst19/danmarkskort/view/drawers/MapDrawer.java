@@ -3,6 +3,9 @@ package bfst19.danmarkskort.view.drawers;
 import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawables.Drawable;
+import bfst19.danmarkskort.model.drawables.DrawableType;
+import bfst19.danmarkskort.model.drawables.DrawingInfo;
+import bfst19.danmarkskort.model.drawables.Theme;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.ImagePattern;
@@ -30,22 +33,22 @@ public class MapDrawer implements Drawer {
         }
         double currentZoomLevel = canvas.getDegreesLatitudePerPixel();
         fillBackground(model.getCurrentTheme());
-        for (WayType wayType : WayType.values()) {
+        for (DrawableType drawableType : DrawableType.values()) {
 
             //Skip if no theme found
-            DrawingInfo drawingInfo = model.getCurrentTheme().getDrawingInfo(wayType);
+            DrawingInfo drawingInfo = model.getCurrentTheme().getDrawingInfo(drawableType);
             if (drawingInfo == null) {
                 continue;
             }
-            if (model.dontDraw(wayType)) {
+            if (model.dontDraw(drawableType)) {
                 continue;
             }
 
             Iterable<Drawable> drawablesToDraw;
             if (drawingInfo.hasAlwaysDraw() && drawingInfo.getAlwaysDraw()) {
-                drawablesToDraw = model.getWaysOfType(wayType);
+                drawablesToDraw = model.getWaysOfType(drawableType);
             } else if (isVisibleAtZoom(drawingInfo, currentZoomLevel)) {
-                drawablesToDraw = model.getWaysOfType(wayType, canvas.getScreenBounds());
+                drawablesToDraw = model.getWaysOfType(drawableType, canvas.getScreenBounds());
             } else {
                 continue;
             }
@@ -133,9 +136,9 @@ public class MapDrawer implements Drawer {
 
     private void fillBackground(Theme theme) {
         graphicsContext.save();
-        DrawingInfo backgroundDrawingInfo = theme.getDrawingInfo(WayType.COASTLINE);
+        DrawingInfo backgroundDrawingInfo = theme.getDrawingInfo(DrawableType.COASTLINE);
         if (coastlineIsVisible()) {
-            backgroundDrawingInfo = theme.getDrawingInfo(WayType.WATER);
+            backgroundDrawingInfo = theme.getDrawingInfo(DrawableType.WATER);
         }
         if (backgroundDrawingInfo != null && backgroundDrawingInfo.hasFillColor()) {
             graphicsContext.setFill(backgroundDrawingInfo.getFillColor());
@@ -147,7 +150,7 @@ public class MapDrawer implements Drawer {
 
     private boolean coastlineIsVisible() {
         Rectangle screenBounds = canvas.getScreenBounds();
-        Iterable<Drawable> coastlines = model.getWaysOfType(WayType.COASTLINE, screenBounds);
+        Iterable<Drawable> coastlines = model.getWaysOfType(DrawableType.COASTLINE, screenBounds);
         return coastlines.iterator().hasNext();
     }
 }

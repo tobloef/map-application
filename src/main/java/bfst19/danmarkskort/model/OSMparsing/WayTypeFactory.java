@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.model.OSMparsing;
 
-import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import org.yaml.snakeyaml.Yaml;
 
@@ -14,23 +14,23 @@ public class WayTypeFactory {
     private static final String wayTypesConfigPath = "rs:config/spartan.yaml";
 
     /**
-     * Maps cartographic feature keys to maps that map feature values to WayType.
-     * Uses null feature value to indicate the key has no values, but still correspond to a WayType.
+     * Maps cartographic feature keys to maps that map feature values to DrawableType.
+     * Uses null feature value to indicate the key has no values, but still correspond to a DrawableType.
      */
-    private static Map<String, Map<String, WayType>> keyToValueWayTypeMap;
+    private static Map<String, Map<String, DrawableType>> keyToValueWayTypeMap;
 
     /***
-     * Get the WayType for a given OSM key and value.
+     * Get the DrawableType for a given OSM key and value.
      * @param key Key of the cartographic feature
      * @param value Optional value of the feature
-     * @return The corresponding WayType
+     * @return The corresponding DrawableType
      */
-    public static WayType getWayType(String key, String value) {
+    public static DrawableType getWayType(String key, String value) {
         if (keyToValueWayTypeMap == null) {
             initializeWayTypes();
         }
         if (keyToValueWayTypeMap.containsKey(key)) {
-            Map<String, WayType> values = keyToValueWayTypeMap.get(key);
+            Map<String, DrawableType> values = keyToValueWayTypeMap.get(key);
 
             if (values.containsKey(value)) {
                 return values.get(value);
@@ -51,7 +51,7 @@ public class WayTypeFactory {
         InputStream inputStream = ResourceLoader.getResourceAsStream(wayTypesConfigPath);
         List<Map> wayTypeMaps = yaml.load(inputStream);
 
-        // Read each WayType in the file
+        // Read each DrawableType in the file
         for (Map wayTypeMap : wayTypeMaps) {
             for (Object wayTypeEntryObj : wayTypeMap.entrySet()) {
                 try {
@@ -65,11 +65,11 @@ public class WayTypeFactory {
     }
 
     private static void parseWayTypeEntry(Map.Entry<String, Object> entry) throws Exception {
-        // Get WayType
+        // Get DrawableType
         String wayTypeStr = entry.getKey();
-        WayType wayType = stringToWayType(entry.getKey());
-        if (wayType == null) {
-            throw new Exception("Wrong/Missing WayType: " + wayTypeStr);
+        DrawableType drawableType = stringToWayType(entry.getKey());
+        if (drawableType == null) {
+            throw new Exception("Wrong/Missing DrawableType: " + wayTypeStr);
         }
         // Load the keys
         ArrayList<Object> keys = (ArrayList<Object>) entry.getValue();
@@ -89,22 +89,22 @@ public class WayTypeFactory {
             } else {
                 throw new Exception("Invalid type for key: " + keyObj.getClass());
             }
-            // Add the WayType, key and possible values to the map.
-            addValues(wayType, key, values);
+            // Add the DrawableType, key and possible values to the map.
+            addValues(drawableType, key, values);
         }
     }
 
-    private static void addValues(WayType wayType, String key, List<String> values) {
+    private static void addValues(DrawableType drawableType, String key, List<String> values) {
         if (!keyToValueWayTypeMap.containsKey(key)) {
             keyToValueWayTypeMap.put(key, new HashMap<>());
         }
         if (values != null && values.size() > 0) {
             for (String value : values) {
-                keyToValueWayTypeMap.get(key).put(value, wayType);
+                keyToValueWayTypeMap.get(key).put(value, drawableType);
             }
         } else {
             // Default case for when there's no values, only key.
-            keyToValueWayTypeMap.get(key).put(null, wayType);
+            keyToValueWayTypeMap.get(key).put(null, drawableType);
         }
     }
 }

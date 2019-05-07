@@ -7,9 +7,7 @@ import bfst19.danmarkskort.model.address.AddressData;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;
 import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
-import bfst19.danmarkskort.model.drawables.Drawable;
-import bfst19.danmarkskort.model.drawables.PointOfInterest;
-import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.drawables.*;
 import bfst19.danmarkskort.model.routePlanning.Dijkstra;
 import bfst19.danmarkskort.model.routePlanning.RoadInformation;
 import bfst19.danmarkskort.model.routePlanning.Route;
@@ -27,13 +25,13 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-//todo del ting ind i mapper, dataobjekter, enmus, drawables
+//todo del ting ind i mapper, dataobjekter, enums, drawables
 
 public class Model {
     private final static long mouseIdleTime = 250;
 
     private DrawableModel drawableModel = new KDTreeDrawableModel();
-    private final Set<WayType> blacklistedWaytypes = new HashSet<>();
+    private final Set<DrawableType> blacklistedWaytypes = new HashSet<>();
     private float mouseModelX, mouseModelY;
     private float mouseScreenX, mouseScreenY;
     private PolyRoad start, end;
@@ -82,15 +80,15 @@ public class Model {
         notifyWayTypeObservers();
     }
 
-    public boolean dontDraw(WayType waytype) {
+    public boolean dontDraw(DrawableType waytype) {
         return blacklistedWaytypes.contains(waytype);
     }
 
-    public Iterable<Drawable> getWaysOfType(WayType type, Rectangle modelBounds) {
+    public Iterable<Drawable> getWaysOfType(DrawableType type, Rectangle modelBounds) {
         return drawableModel.getDrawablesOfTypeInBounds(type, modelBounds);
     }
 
-    public Iterable<Drawable> getWaysOfType(WayType type) {
+    public Iterable<Drawable> getWaysOfType(DrawableType type) {
         return drawableModel.getAllDrawablesOfType(type);
     }
 
@@ -118,7 +116,7 @@ public class Model {
         reloadObservers.add(observer);
     }
 
-    public void toggleBlacklistWaytype(WayType waytype) {
+    public void toggleBlacklistWaytype(DrawableType waytype) {
         if (!blacklistedWaytypes.contains(waytype)) {
             blacklistedWaytypes.add(waytype);
         } else {
@@ -128,14 +126,14 @@ public class Model {
     }
 
     public void emptyBlacklist() {
-        for (WayType wayType : WayType.values()) {
-            blacklistedWaytypes.remove(wayType);
+        for (DrawableType drawableType : DrawableType.values()) {
+            blacklistedWaytypes.remove(drawableType);
         }
         notifyWayTypeObservers();
     }
 
     public void fillBlacklist() {
-        blacklistedWaytypes.addAll(Arrays.asList(WayType.values()));
+        blacklistedWaytypes.addAll(Arrays.asList(DrawableType.values()));
         notifyWayTypeObservers();
     }
 
@@ -219,7 +217,7 @@ public class Model {
         }
     }
 
-    public Drawable getNearest(WayType type, Point2D modelCoords) {
+    public Drawable getNearest(DrawableType type, Point2D modelCoords) {
         return drawableModel.getNearestNeighbor(type, (float) modelCoords.getX(), (float) modelCoords.getY());
     }
 
@@ -297,7 +295,7 @@ public class Model {
 
     public PolyRoad getClosestRoad(float x, float y) {
         PolyRoad closestRoad = null;
-        for (WayType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)) {
+        for (DrawableType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)) {
             Drawable close = getNearest(roadType, new Point2D(x, y));
             if (!(close instanceof PolyRoad)) {
                 continue;
@@ -324,7 +322,7 @@ public class Model {
         return getClosestRoad(mouseModelX, mouseModelY);
     }
 
-    public void insert(WayType type, Drawable drawable) {
+    public void insert(DrawableType type, Drawable drawable) {
         drawableModel.insert(type, drawable);
         notifyWayTypeObservers();
     }
@@ -340,7 +338,7 @@ public class Model {
 
     private void addPOIAtPosition(float x, float y) {
         PointOfInterest pointOfInterest = new PointOfInterest(x, y);
-        this.insert(WayType.POI, pointOfInterest);
+        this.insert(DrawableType.POI, pointOfInterest);
     }
 
     public Rectangle getModelBounds() {

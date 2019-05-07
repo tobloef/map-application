@@ -1,7 +1,7 @@
 package bfst19.danmarkskort.model.OSMparsing;
 
+import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.model.routePlanning.RoadRestriction;
-import bfst19.danmarkskort.model.WayType;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -10,7 +10,7 @@ import java.util.List;
 public class OSMRoadWay extends OSMWay {
     private String streetName;
     private int speedLimit;
-    private WayType type;
+    private DrawableType type;
     private EnumSet<RoadRestriction> restrictions;
     private String name;
 
@@ -19,7 +19,7 @@ public class OSMRoadWay extends OSMWay {
             OSMWay way,
             String streetName,
             int speedLimit,
-            WayType type,
+            DrawableType type,
             EnumSet<RoadRestriction> restrictions
     ) {
         this(way, way.getNodes(), streetName, speedLimit, type, restrictions);
@@ -31,7 +31,7 @@ public class OSMRoadWay extends OSMWay {
             List<? extends OSMNode> newNodes,
             String streetName,
             int speedLimit,
-            WayType type,
+            DrawableType type,
             EnumSet<RoadRestriction> restrictions
     ) {
         super(way.id);
@@ -90,7 +90,7 @@ public class OSMRoadWay extends OSMWay {
         return null;
     }
 
-	public WayType getType() {
+	public DrawableType getType() {
         return type;
     }
 

@@ -1,9 +1,9 @@
 package bfst19.danmarkskort.utils;
 
-import bfst19.danmarkskort.model.DrawingInfo;
-import bfst19.danmarkskort.model.Theme;
-import bfst19.danmarkskort.model.WayType;
-import bfst19.danmarkskort.model.Wrapper;
+import bfst19.danmarkskort.model.drawables.DrawingInfo;
+import bfst19.danmarkskort.model.drawables.Theme;
+import bfst19.danmarkskort.model.drawables.DrawableType;
+import bfst19.danmarkskort.model.drawables.Wrapper;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -57,14 +57,14 @@ public class ThemeLoader {
         if (wayTypeStr.equals("constants")) {
             return;
         }
-        WayType wayType = stringToWayType(wayTypeStr);
-        if (wayType == null) {
-            throw new Exception("Wrong/Missing WayType: " + wayTypeStr);
+        DrawableType drawableType = stringToWayType(wayTypeStr);
+        if (drawableType == null) {
+            throw new Exception("Wrong/Missing DrawableType: " + wayTypeStr);
         }
         Map<String, Object> themeValuesMap = (Map<String, Object>) themeEntry.getValue();
         DrawingInfo drawingInfo = parseThemeValueMap(themeValuesMap);
-        // Add WayType and theme to the map
-        theme.addDrawingInfo(wayType, drawingInfo);
+        // Add DrawableType and theme to the map
+        theme.addDrawingInfo(drawableType, drawingInfo);
     }
 
     private static DrawingInfo parseThemeValueMap(Map<String, Object> themeValuesMap) {

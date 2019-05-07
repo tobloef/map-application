@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.model.drawableModel;
 
-import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.model.drawables.Drawable;
 import bfst19.danmarkskort.utils.EnumHelper;
 
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class KDTreeDrawableModel implements DrawableModel {
-    Map<WayType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
-    Map<WayType, KDTree> wayTypeToKDTreeRoot;
+    Map<DrawableType, List<Drawable>> wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
+    Map<DrawableType, KDTree> wayTypeToKDTreeRoot;
     Rectangle modelBounds;
 
     public KDTreeDrawableModel() {
@@ -21,22 +21,22 @@ public class KDTreeDrawableModel implements DrawableModel {
     private void initializeKDTree() {
         countFloats();
         wayTypeToKDTreeRoot = new HashMap<>();
-        for (WayType wayType : WayType.values()) {
-            List<Drawable> drawables = wayTypeEnumMap.get(wayType);
+        for (DrawableType drawableType : DrawableType.values()) {
+            List<Drawable> drawables = wayTypeEnumMap.get(drawableType);
             if (drawables.size() > 0) {
                 KDTree newTree = new KDTree(drawables);
-                wayTypeToKDTreeRoot.put(wayType, newTree);
+                wayTypeToKDTreeRoot.put(drawableType, newTree);
             }
         }
     }
 
     @Override
-    public void add(WayType type, Drawable drawable) {
+    public void add(DrawableType type, Drawable drawable) {
         wayTypeEnumMap.get(type).add(drawable);
     }
 
     @Override
-    public Iterable<Drawable> getDrawablesOfTypeInBounds(WayType type, Rectangle bounds) {
+    public Iterable<Drawable> getDrawablesOfTypeInBounds(DrawableType type, Rectangle bounds) {
         if (wayTypeToKDTreeRoot == null) {
             throw new RuntimeException("The KDTree has not been initialized yet");
         }
@@ -48,7 +48,7 @@ public class KDTreeDrawableModel implements DrawableModel {
     }
 
     @Override
-    public Iterable<Drawable> getAllDrawablesOfType(WayType type) {
+    public Iterable<Drawable> getAllDrawablesOfType(DrawableType type) {
         if (wayTypeToKDTreeRoot.containsKey(type)) {
             return wayTypeToKDTreeRoot.get(type).getContent(new ArrayList<Drawable>());
         } else {
@@ -73,12 +73,12 @@ public class KDTreeDrawableModel implements DrawableModel {
 
     private void countFloats() {
         //System.out.println("Number of floats for each type");
-        for (WayType wayType : WayType.values()) {
+        for (DrawableType drawableType : DrawableType.values()) {
             long numOfFloats = 0;
-            for (Drawable drawable : wayTypeEnumMap.get(wayType)) {
+            for (Drawable drawable : wayTypeEnumMap.get(drawableType)) {
                 numOfFloats += drawable.getNumOfFloats();
             }
-            //System.out.println( wayTypeEnumMap.get(wayType).size() + " of " + wayType.name() + " having : " + numOfFloats + " floats");
+            //System.out.println( wayTypeEnumMap.get(drawableType).size() + " of " + drawableType.name() + " having : " + numOfFloats + " floats");
         }
     }
 
@@ -93,7 +93,7 @@ public class KDTreeDrawableModel implements DrawableModel {
     }
 
     @Override
-    public Drawable getNearestNeighbor(WayType type, float x, float y) {
+    public Drawable getNearestNeighbor(DrawableType type, float x, float y) {
         if (wayTypeToKDTreeRoot.containsKey(type)) {
             SpatialIndexable drawable = wayTypeToKDTreeRoot.get(type).getNearestNeighbor(x, y);
             if (drawable != null) {
@@ -104,7 +104,7 @@ public class KDTreeDrawableModel implements DrawableModel {
     }
 
     @Override
-    public void insert(WayType type, Drawable drawable) {
+    public void insert(DrawableType type, Drawable drawable) {
         if (!wayTypeToKDTreeRoot.containsKey(type)) {
             wayTypeToKDTreeRoot.put(type, new KDTree(new ArrayList<Drawable>()));
         }
