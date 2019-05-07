@@ -95,17 +95,17 @@ public class Rectangle implements Serializable {
         }
 	}
 
-    private double getSize() {
+    public double getSize() {
         float width = getWidth();
         float height = getHeight();
-        return 2*width + 2*height;
+        return width * height;
     }
 
-    private float getHeight() {
+    public float getHeight() {
         return yMax -yMin;
     }
 
-    private float getWidth() {
+    public float getWidth() {
         return xMax - xMin;
     }
 
