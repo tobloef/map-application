@@ -147,6 +147,7 @@ public class Model {
     }
 
     private void cleanUpShortestPath() {
+        shortestPath = null;
         start = end = null;
     }
 

@@ -98,9 +98,6 @@ public class KDTreeTest {
                 assertEquals(poi,nearest);
             }
         }
-        Point2D coords = new Point2D(1001, 1001 );
-        PointOfInterest nearest = (PointOfInterest) model.getNearest(WayType.POI, coords);
-        assertEquals(coords.getX(), nearest.getRepresentativeX());
     }
 
     public static double generateRandomDouble(double min, double max) {
