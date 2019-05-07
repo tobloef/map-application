@@ -1,11 +1,24 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RectangleTest {
+    Rectangle testRectangle;
+
+    @BeforeEach
+    void setup(){
+        testRectangle = new Rectangle(0,0,10,10);
+    }
+
+    @AfterEach
+    void tearDown(){
+        testRectangle = null;
+    }
 
     @Test
     void intersectTrue() {
@@ -68,5 +81,55 @@ class RectangleTest {
     @Test
     void wrongY() {
         assertThrows(IllegalArgumentException.class, () -> new Rectangle(0, 100, 10, 10)); //The larger one
+    }
+
+
+    @Test
+    void getMiddleY() {
+        assertEquals(5,testRectangle.getMiddleY());
+    }
+
+    @Test
+    void getMiddleX() {
+        assertEquals(5,testRectangle.getMiddleX());
+    }
+
+    @Test
+    void getSize() {
+        assertEquals(10*10,testRectangle.getSize());
+    }
+
+    @Test
+    void getHeight() {
+        assertEquals(10,testRectangle.getHeight());
+
+    }
+
+    @Test
+    void getWidth() {
+        assertEquals(10,testRectangle.getWidth());
+    }
+
+
+    @Test
+    void growToEncompass() {
+        testRectangle = new Rectangle();
+        testRectangle.growToEncompass(new Rectangle(19,19,20,20));
+        testRectangle.growToEncompass(new Rectangle(-20,-20, -19,-19));
+        assertEquals(-20,testRectangle.xMin);
+        assertEquals(-20,testRectangle.yMin);
+        assertEquals(20,testRectangle.xMax);
+        assertEquals(20,testRectangle.yMax);
+    }
+
+    @Test
+    void getSizeLargestDelta() {
+        assertEquals(0.5, testRectangle.getSizeLargestDelta(new Rectangle(0,0,20,20)));
+        assertEquals(2, testRectangle.getSizeLargestDelta(new Rectangle(0,0,5,5)));
+    }
+
+    @Test
+    void toStringTest(){
+        assertNotNull(testRectangle.toString());
     }
 }

@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static bfst19.danmarkskort.model.address.AddressParsingRegexes.*;
-import static bfst19.danmarkskort.utils.Misc.trimList;
 
 /**
  * Address parser that relies on being able to check parts of the query against a set of data,
@@ -31,7 +31,7 @@ public class AddressParserFromData implements AddressParser {
         List<List<Integer>> usedSplits = new ArrayList<>();
 
         for (int s = 0; s < splits.size(); s++) {
-            List<String> subSplits = splits.get(s);
+            List<String> subSplits = fixSplits(splits.get(s));
             usedSplits.add(new ArrayList<>());
             trySetStreet(addressInput, usedSplits, s, subSplits);
             trySetCity(addressInput, usedSplits, s, subSplits);
@@ -118,15 +118,15 @@ public class AddressParserFromData implements AddressParser {
             if (usedSplits.get(s).contains(k)) {
                 continue;
             }
-            String candidateAfterStreetName = subSplits.get(k);
-            if (addressInput.getHouseNumber() == null && candidateAfterStreetName.matches(houseRegex)) {
-                addressInput.setHouseNumber(candidateAfterStreetName);
+            String candidate = subSplits.get(k);
+            if (addressInput.getHouseNumber() == null && candidate.matches(houseRegex)) {
+                addressInput.setHouseNumber(candidate);
                 usedSplits.get(s).add(k);
-            } else if (addressInput.getFloor() == null && candidateAfterStreetName.matches(floorRegex)) {
-                addressInput.setFloor(candidateAfterStreetName);
+            } else if (addressInput.getFloor() == null && candidate.matches(floorRegex)) {
+                addressInput.setFloor(candidate);
                 usedSplits.get(s).add(k);
-            } else if (addressInput.getDoor() == null && candidateAfterStreetName.matches(doorRegex)) {
-                addressInput.setDoor(candidateAfterStreetName);
+            } else if (addressInput.getDoor() == null && candidate.matches(doorRegex)) {
+                addressInput.setDoor(candidate);
                 usedSplits.get(s).add(k);
             }
         }
@@ -209,8 +209,16 @@ public class AddressParserFromData implements AddressParser {
     private List<List<String>> getSplits(String query) {
         ArrayList<List<String>> splits = new ArrayList<>();
         for (String commaSplit : query.split(",")) {
-            splits.add(trimList(Arrays.asList(commaSplit.split(" "))));
+            List<String> subSplits = Arrays.asList(commaSplit.split(" "));
+            splits.add(fixSplits(subSplits));
         }
         return splits;
+    }
+
+    private List<String> fixSplits(List<String> splits) {
+        return splits.stream()
+                .map(String::trim)
+                .filter(s -> !s.isEmpty() && !s.isBlank())
+                .collect(Collectors.toList());
     }
 }

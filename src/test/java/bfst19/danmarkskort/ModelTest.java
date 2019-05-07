@@ -1,5 +1,6 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
+import bfst19.danmarkskort.model.Model;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.stream.XMLStreamException;

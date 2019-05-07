@@ -23,7 +23,6 @@ public class AddressSearch {
         );
     }
 
-
     public List<Pair<String, Address>> getSuggestions(String stringQuery) {
         AddressInput addressInput = addressParser.parse(stringQuery);
         if (addressInput == null) {

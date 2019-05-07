@@ -32,6 +32,9 @@ public class KDTreeDrawableModel implements DrawableModel {
 
     @Override
     public void add(DrawableType type, Drawable drawable) {
+        if (type == null) {
+            type = EnumHelper.createWayTypeDrawablesMap();
+        }
         wayTypeEnumMap.get(type).add(drawable);
     }
 
@@ -61,15 +64,6 @@ public class KDTreeDrawableModel implements DrawableModel {
         initializeKDTree();
         wayTypeEnumMap = null;
 	}
-
-    @Override
-    public void doNewDataSet() {
-        if (wayTypeEnumMap == null) {
-            wayTypeEnumMap = EnumHelper.createWayTypeDrawablesMap();
-        }
-        initializeKDTree();
-    }
-
 
     private void countFloats() {
         //System.out.println("Number of floats for each type");

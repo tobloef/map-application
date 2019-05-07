@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
 import bfst19.danmarkskort.model.OSMparsing.OSMParser;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;

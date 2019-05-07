@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawables.Drawable;
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.StreamSupport;
 
+import static bfst19.danmarkskort.utils.Misc.countIterable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class KDTreeTest {
@@ -29,9 +30,6 @@ public class KDTreeTest {
         model = new Model(args);
     }
 
-    private static long countIterable(Iterable iterable) {
-        return StreamSupport.stream(iterable.spliterator(), false).count();
-    }
 
     @Test
     void oneWayInSight() {

@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.model.address;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Address implements Serializable {
     private final float lat;
@@ -46,5 +47,26 @@ public class Address implements Serializable {
     @Override
     public String toString() {
         return streetName + " " + houseNumber + ", " + city;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Address address = (Address) obj;
+        return Float.compare(address.lat, lat) == 0 &&
+                Float.compare(address.lon, lon) == 0 &&
+                Objects.equals(streetName, address.streetName) &&
+                Objects.equals(houseNumber, address.houseNumber) &&
+                Objects.equals(city, address.city);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lat, lon, streetName, houseNumber, city);
     }
 }

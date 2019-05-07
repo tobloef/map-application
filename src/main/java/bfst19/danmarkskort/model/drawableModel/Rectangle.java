@@ -84,11 +84,28 @@ public class Rectangle implements Serializable {
         return resultX * resultX + resultY * resultY;
     }
 
-	private float getHeight() {
+	public double getSizeLargestDelta(Rectangle otherRectangle) {
+        double widthDifference = Math.abs(getWidth() - otherRectangle.getWidth());
+        double heightDifference = Math.abs(getHeight() - otherRectangle.getHeight());
+        if (widthDifference > heightDifference) {
+            return getWidth() / otherRectangle.getWidth();
+        }
+        else{
+            return getHeight() / otherRectangle.getHeight();
+        }
+	}
+
+    public double getSize() {
+        float width = getWidth();
+        float height = getHeight();
+        return width * height;
+    }
+
+    public float getHeight() {
         return yMax -yMin;
     }
 
-    private float getWidth() {
+    public float getWidth() {
         return xMax - xMin;
     }
 
