@@ -25,7 +25,7 @@ public class KDTreeTest {
 
     @BeforeAll
     public static void setUpClass() throws XMLStreamException, IOException, ClassNotFoundException {
-        String filePath = ResourceLoader.getResource("model/small.osm").getPath();
+        String filePath = ResourceLoader.getResource("small.osm").getPath();
         List<String> args = new ArrayList<>();
         args.add(filePath);
         model = new Model(args);

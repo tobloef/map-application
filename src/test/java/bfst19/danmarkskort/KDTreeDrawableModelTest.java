@@ -25,7 +25,7 @@ class KDTreeDrawableModelTest {
 	@BeforeEach
 	void setUp() throws XMLStreamException, IOException, ClassNotFoundException {
 		model = new KDTreeDrawableModel();
-		String filePath = ResourceLoader.getResource("model/small.osm").getPath();
+		String filePath = ResourceLoader.getResource("small.osm").getPath();
 		new OSMParser(filePath, model);
 	}
 
@@ -53,7 +53,7 @@ class KDTreeDrawableModelTest {
 		//adding something to the model and making sure it gets removed when the same dataset is loaded again.
 		model.insert(DrawableType.COASTLINE, new PointOfInterest(2,2));
 		assertEquals(totalBefore+1, countAllDrawables());
-		String filePath = ResourceLoader.getResource("model/small.osm").getPath();
+		String filePath = ResourceLoader.getResource("small.osm").getPath();
 		new OSMParser(filePath, model);
 		assertEquals(totalBefore, countAllDrawables());
 	}

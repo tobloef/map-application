@@ -1,7 +1,6 @@
 package bfst19.danmarkskort.data;
 
-import bfst19.danmarkskort.model.Address;
-import bfst19.danmarkskort.model.AddressData;
+import bfst19.danmarkskort.model.address.Address;
 
 import java.util.ArrayList;
 import java.util.Arrays;

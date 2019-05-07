@@ -3,9 +3,9 @@ package bfst19.danmarkskort;
 import bfst19.danmarkskort.data.AddressTestData;
 import bfst19.danmarkskort.data.RealAddresses;
 import bfst19.danmarkskort.data.TestAddresses;
-import bfst19.danmarkskort.model.AddressInput;
-import bfst19.danmarkskort.model.parsing.AddressParser;
-import bfst19.danmarkskort.model.parsing.AddressParserFromData;
+import bfst19.danmarkskort.model.address.AddressInput;
+import bfst19.danmarkskort.model.address.AddressParser;
+import bfst19.danmarkskort.model.address.AddressParserFromData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

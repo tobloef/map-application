@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 public class KDTreeDrawableModel implements DrawableModel {
-    Map<DrawableType, List<Drawable>> drawableTypeEnumMap = EnumHelper.createDrawableTypeDrawablesMap();
+    Map<DrawableType, List<Drawable>> drawableTypeEnumMap;
     Map<DrawableType, KDTree> drawableTypeToKDTreeRoot;
     Rectangle modelBounds;
 
     public KDTreeDrawableModel() {
-
+        drawableTypeEnumMap =  EnumHelper.createDrawableTypeDrawablesMap();
     }
 
     private void initializeKDTree() {
@@ -32,18 +32,13 @@ public class KDTreeDrawableModel implements DrawableModel {
 
     @Override
     public void add(DrawableType type, Drawable drawable) {
+        if (drawableTypeEnumMap == null) {
+            drawableTypeEnumMap = EnumHelper.createDrawableTypeDrawablesMap();
+        }
         if (!drawableTypeEnumMap.containsKey(type)) {
             drawableTypeEnumMap.put(type, new ArrayList<>());
         }
         drawableTypeEnumMap.get(type).add(drawable);
-    }
-
-    @Override
-    public void doNewDataSet() {
-        if (drawableTypeEnumMap == null) {
-            drawableTypeEnumMap = EnumHelper.createDrawableTypeDrawablesMap();
-        }
-        initializeKDTree();
     }
 
     @Override

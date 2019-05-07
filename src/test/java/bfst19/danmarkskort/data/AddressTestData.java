@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.data;
 
-import bfst19.danmarkskort.model.Address;
+import bfst19.danmarkskort.model.address.Address;
 
 import java.util.Comparator;
 import java.util.List;
