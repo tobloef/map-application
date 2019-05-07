@@ -1,5 +1,7 @@
 package bfst19.danmarkskort;
 
+import bfst19.danmarkskort.model.address.Address;
+import bfst19.danmarkskort.model.address.AddressSearch;
 import bfst19.danmarkskort.model.drawables.PolyRoad;
 import bfst19.danmarkskort.model.routePlanning.Route;
 import bfst19.danmarkskort.model.Model;
@@ -21,26 +23,16 @@ public class RouteTest {
         List<String> args = new ArrayList<>();
         args.add(filePath);
         Model model = new Model(args);
+		AddressSearch addressSearch = new AddressSearch(model.getAddressData());
+		Address startAddress = addressSearch.getSuggestions("Wildersgade").get(0).getValue();
+		Address endAddress = addressSearch.getSuggestions("Strandgade").get(0).getValue();
         float startX = 7.0991707f;
         float startY = 55.672295f;
-        PolyRoad start = model.getClosestRoad(startX, startY);
         float endX = 7.09944f;
-        float endY = 55.673607f;
-        PolyRoad end = model.getClosestRoad(endX, endY);
-        assertEquals("Wildersgade", start.getStreetName());
-        assertEquals("Strandgade", end.getStreetName());
-
-        model.setMouseModelCoords(startX, startY);
-        model.updateStart();
-        model.setMouseModelCoords(endX, endY);
-        model.updateEnd();
+		float endY = 55.673607f;
+		model.setStart(startAddress);
+		model.setEnd(endAddress);
         Route route = model.getShortestPath();
-        assertEquals(3, route.size());
-        List<String> fakeDescription = new ArrayList<>();
-        fakeDescription.add("Start on Wildersgade");
-        fakeDescription.add("Drive 199 m and turn left onto Torvegade");
-        fakeDescription.add("Drive 87 m and turn right onto Strandgade");
-        fakeDescription.add("You will then arrive at your destination");
-        assertEquals(fakeDescription, route.getTextDescription());
+        assertEquals(22, route.size());
     }
 }
