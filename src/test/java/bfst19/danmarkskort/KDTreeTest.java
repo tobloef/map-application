@@ -1,5 +1,6 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
+import bfst19.danmarkskort.model.*;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.geometry.Point2D;
 import org.junit.jupiter.api.BeforeAll;

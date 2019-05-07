@@ -1,8 +1,6 @@
 package bfst19.danmarkskort.utils;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class Misc {
@@ -11,16 +9,6 @@ public class Misc {
             return first;
         }
         return second;
-    }
-
-    public static <T> T pickNotNull(T first, T second, T third) {
-        if (first != null) {
-            return first;
-        }
-        if (second != null) {
-            return second;
-        }
-        return third;
     }
 
     public static String getWithFallback(Map<String, String> map, String[] keys) {
@@ -37,12 +25,6 @@ public class Misc {
             str = str.intern();
         }
         return str;
-    }
-
-    public static List<String> trimList(List<String> list) {
-        return list.stream()
-                .map(String::trim)
-                .collect(Collectors.toList());
     }
 
     public static long countIterable(Iterable iterable) {

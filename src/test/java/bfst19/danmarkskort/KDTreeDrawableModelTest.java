@@ -1,5 +1,9 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
+import bfst19.danmarkskort.model.Drawable;
+import bfst19.danmarkskort.model.KDTreeDrawableModel;
+import bfst19.danmarkskort.model.PointOfInterest;
+import bfst19.danmarkskort.model.WayType;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import javafx.scene.canvas.GraphicsContext;
@@ -64,7 +68,7 @@ class KDTreeDrawableModelTest {
 		return totalCount;
 	}
 
-	private class NonSpatial implements Drawable{
+	private class NonSpatial implements Drawable {
 
 		@Override
 		public void stroke(GraphicsContext gc, double zoomFactor) {

@@ -1,7 +1,8 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import bfst19.danmarkskort.model.Rectangle;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

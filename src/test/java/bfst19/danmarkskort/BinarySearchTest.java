@@ -1,4 +1,4 @@
-package bfst19.danmarkskort.model;
+package bfst19.danmarkskort;
 
 import bfst19.danmarkskort.utils.BinarySearch;
 import org.junit.jupiter.api.Test;
