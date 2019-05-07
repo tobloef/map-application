@@ -32,7 +32,7 @@ public class PointOfInterest implements Drawable, SpatialIndexable, Serializable
 
     @Override
     public float euclideanDistanceSquaredTo(float x, float y) {
-        return 0;
+        return (x - xCoord) * (x - xCoord) + (y - yCoord) * (y - yCoord);
     }
 
     @Override

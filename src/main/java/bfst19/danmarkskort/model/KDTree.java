@@ -28,7 +28,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
     }
 
     private void generateKDTree(List<T> inputElements, boolean odd) {
-        this.setBbox(new Rectangle());
+        initbbox();
         if (inputElements.size() < MAX_NODES_PER_LEAF) {
             this.leafElements = inputElements;
             growToEncompassLeafElements(inputElements);
@@ -38,6 +38,15 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
             this.bboxGrowToEncompass(splitElement.getMinimumBoundingRectangle());
             makeSubTrees(inputElements, odd);
         }
+    }
+
+    private void initbbox() {
+        Rectangle bbox = new Rectangle();
+        bbox.xMin = Float.POSITIVE_INFINITY;
+        bbox.yMin = Float.POSITIVE_INFINITY;
+        bbox.xMax = Float.NEGATIVE_INFINITY;
+        bbox.yMax = Float.NEGATIVE_INFINITY;
+        this.setBbox(bbox);
     }
 
     private void makeSubTrees(List<T> inputElements, boolean odd) {
@@ -92,8 +101,10 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
     private NearestNeighbor getNearestNeighbor(float x, float y, NearestNeighbor nearestNeighbor) {
         if (splitElement == null) {
             T closestElement = getClosestElement(x, y);
-            nearestNeighbor.element = closestElement;
-            nearestNeighbor.distance = closestElement.euclideanDistanceSquaredTo(x, y);
+            if (closestElement.euclideanDistanceSquaredTo(x,y) < nearestNeighbor.distance) {
+                nearestNeighbor.element = closestElement;
+                nearestNeighbor.distance = closestElement.euclideanDistanceSquaredTo(x, y);
+            }
             return nearestNeighbor;
         }
         checkIfSplitElementIsNearestNeighbor(x, y, nearestNeighbor);
@@ -172,13 +183,17 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
     private void insert(T insertionElement, boolean odd) {
         if (splitElement == null) {
             leafElements.add(insertionElement);
+            bboxGrowToEncompass(insertionElement.getMinimumBoundingRectangle());
         } else {
             if (spatialLessThen(insertionElement, splitElement, odd)) {
                 lower.insert(insertionElement, !odd);
+                bboxGrowToEncompass(lower.getBbox());
             } else {
                 higher.insert(insertionElement, !odd);
+                bboxGrowToEncompass(higher.getBbox());
             }
         }
+
     }
 
     public List<T> getContent(List<T> returnElements) {

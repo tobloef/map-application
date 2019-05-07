@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.utils.ResourceLoader;
+import javafx.geometry.Point2D;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.StreamSupport;
 
 import static bfst19.danmarkskort.utils.Misc.countIterable;
@@ -77,5 +79,26 @@ public class KDTreeTest {
             assertEquals(0, rect.euclideanDistanceSquaredTo(poi.getRepresentativeX(), poi.getRepresentativeY()));
         }
         assertEquals(100, countIterable(ways));
+    }
+
+    @Test
+    void nearestNeighborTest(){
+        int numInserted = 0;
+        for (int x = 1000; x < 1100; x++) {
+            for (int y = 1000; y < 1100; y++) {
+                PointOfInterest poi = new PointOfInterest(x, y);
+                model.insert(WayType.POI, poi);
+                numInserted++;
+                Point2D coords = new Point2D(x, y );
+                PointOfInterest nearest = (PointOfInterest) model.getNearest(WayType.POI, coords);
+                assertEquals(poi.getRepresentativeX(), nearest.getRepresentativeX());
+                assertEquals(poi.getRepresentativeY(), nearest.getRepresentativeY());
+                assertEquals(poi,nearest);
+            }
+        }
+    }
+
+    public static double generateRandomDouble(double min, double max) {
+        return ThreadLocalRandom.current().nextDouble(min, max);
     }
 }
