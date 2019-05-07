@@ -48,8 +48,7 @@ public class OSMRoadWay extends OSMWay {
         this.speedLimit = speedLimit;
         this.type = type;
         this.restrictions = restrictions;
-        this.name = name;
-    }
+	}
 
     public double getSpeedLimit() {
         return speedLimit;
@@ -59,17 +58,7 @@ public class OSMRoadWay extends OSMWay {
         return streetName;
     }
 
-    public boolean hasValidNodes() {
-        for (OSMNode node : list) {
-            OSMRoadNode roadNode = (OSMRoadNode) node;
-            if (!roadNode.getConnections().contains(this)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public OSMRoadWay splitIfNeeded() {
+	public OSMRoadWay splitIfNeeded() {
         for (int i = 1; i < list.size() - 1; i++) {
 
             OSMRoadNode node;
@@ -101,15 +90,7 @@ public class OSMRoadWay extends OSMWay {
         return null;
     }
 
-    public List<OSMRoadNode> getNodesAsRoadNodes() {
-        List<OSMRoadNode> result = new ArrayList<>();
-        for (OSMNode node : list) {
-            result.add((OSMRoadNode) node);
-        }
-        return result;
-    }
-
-    public WayType getType() {
+	public WayType getType() {
         return type;
     }
 

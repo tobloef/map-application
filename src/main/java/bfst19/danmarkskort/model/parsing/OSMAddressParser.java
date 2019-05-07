@@ -11,9 +11,9 @@ import static bfst19.danmarkskort.utils.Misc.getWithFallback;
 import static bfst19.danmarkskort.utils.Misc.internIfNotNull;
 
 public class OSMAddressParser {
-    private List<Address> addresses = new ArrayList<>();
-    private Set<String> cities = new HashSet<>();
-    private Set<String> streetNames = new HashSet<>();
+    private final List<Address> addresses = new ArrayList<>();
+    private final Set<String> cities = new HashSet<>();
+    private final Set<String> streetNames = new HashSet<>();
 
     public void tryAddAddress(Map<String, String> tags, OSMNode positionNode) {
         String streetName = internIfNotNull(getWithFallback(tags, streetNameKeys));

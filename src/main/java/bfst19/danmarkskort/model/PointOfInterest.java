@@ -5,12 +5,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PointOfInterest implements Drawable, SpatialIndexable, Serializable {
-    private static String iconUrl = "rs:textures/poi.png";
+    private static final String iconUrl = "rs:textures/poi.png";
     private static float imgFactor = 0.05f;
-    private static Image iconImg = new Image(ResourceLoader.getResourceAsStream(iconUrl));
-    private float xCoord = 0, yCoord = 0;
+    private static final Image iconImg = new Image(Objects.requireNonNull(ResourceLoader.getResourceAsStream(iconUrl)));
+    private float xCoord, yCoord;
 
 
     public PointOfInterest(float xCoordinate, float yCoordinate) {

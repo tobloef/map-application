@@ -10,10 +10,9 @@ import java.util.Set;
 
 public class RouteDrawer implements Drawer {
     public static boolean ShowExplored;
-    Theme theme;
-    private boolean enabled = true;
-    private MapCanvas canvas;
-    private Model model;
+    private final Theme theme;
+    private final MapCanvas canvas;
+    private final Model model;
 
 
     public RouteDrawer(MapCanvas canvas, Model model) {
@@ -22,17 +21,7 @@ public class RouteDrawer implements Drawer {
         theme = model.getCurrentTheme();
     }
 
-    @Override
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
+	@Override
     public void draw() {
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 2);

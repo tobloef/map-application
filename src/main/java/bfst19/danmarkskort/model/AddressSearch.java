@@ -13,8 +13,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class AddressSearch {
-    private AddressData addressData;
-    private AddressParser addressParser;
+    private final AddressData addressData;
+    private final AddressParser addressParser;
 
     public AddressSearch(AddressData addressData) {
         this.addressData = addressData;

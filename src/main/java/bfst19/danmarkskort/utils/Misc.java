@@ -43,4 +43,8 @@ public class Misc {
                 .map(String::trim)
                 .collect(Collectors.toList());
     }
+
+	public static void arrayCopy(int[] connections, int[] tempArray) {
+		System.arraycopy(connections, 0, tempArray, 0, connections.length);
+	}
 }

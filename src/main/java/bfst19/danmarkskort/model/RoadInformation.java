@@ -4,9 +4,9 @@ import java.util.*;
 
 public class RoadInformation {
 
-    public static Map<String, Integer> speedLimitsFromTags = initSpeedLimitsFromTags();
-    public static Set<WayType> roadTypes = getRoadTypes();
-    public static Map<VehicleType, EnumSet<WayType>> allowedRoadTypes = initAllowedRoadTypes();
+    public static final Map<String, Integer> speedLimitsFromTags = initSpeedLimitsFromTags();
+    public static final Set<WayType> roadTypes = getRoadTypes();
+    public static final Map<VehicleType, EnumSet<WayType>> allowedRoadTypes = initAllowedRoadTypes();
 
     private static Map<VehicleType, EnumSet<WayType>> initAllowedRoadTypes() {
         Map<VehicleType, EnumSet<WayType>> allowedRoadTypes = new EnumMap<>(VehicleType.class);

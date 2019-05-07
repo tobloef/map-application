@@ -3,10 +3,10 @@ package bfst19.danmarkskort.model;
 import java.util.List;
 
 public class AddressData {
-    private List<Address> addressesByStreetName;
-    private List<Address> addressesByCity;
-    private List<String> cities;
-    private List<String> streetNames;
+    private final List<Address> addressesByStreetName;
+    private final List<Address> addressesByCity;
+    private final List<String> cities;
+    private final List<String> streetNames;
 
     public AddressData(
             List<Address> addressesByStreetName,

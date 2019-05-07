@@ -15,7 +15,7 @@ public class RouteTest {
     @Test
     void basicTest() throws XMLStreamException, IOException, ClassNotFoundException {
         String filePath = this.getClass().getResource("small.osm").getPath();
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         args.add(filePath);
         Model model = new Model(args);
         float startX = 7.0991707f;

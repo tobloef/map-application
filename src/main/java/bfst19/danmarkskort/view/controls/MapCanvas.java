@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapCanvas extends Canvas {
-    private GraphicsContext graphicsContext;
+    private final GraphicsContext graphicsContext;
     private Model model;
     private List<Drawer> drawers;
     private double degreesLatitudePerPixel;

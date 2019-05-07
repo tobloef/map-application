@@ -13,6 +13,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static bfst19.danmarkskort.utils.EnumHelper.stringToWayType;
 
@@ -98,10 +99,10 @@ public class ThemeLoader {
             zoomLevel = new Wrapper<>(parseDouble(themeValuesMap, "zoomLevel"));
         }
         if (themeValuesMap.containsKey("alwaysDraw")) {
-            alwaysDraw = new Wrapper<>(parseBoolean(themeValuesMap, "alwaysDraw"));
+            alwaysDraw = new Wrapper<>(parseBoolean(themeValuesMap));
         }
         if (themeValuesMap.containsKey("texture")) {
-            texture = new Wrapper<>(parseTexture(themeValuesMap, "texture"));
+            texture = new Wrapper<>(parseTexture(themeValuesMap));
         }
         return new DrawingInfo(
                 fillColor,
@@ -116,11 +117,11 @@ public class ThemeLoader {
         );
     }
 
-    private static ImagePattern parseTexture(Map<String, Object> themeValuesMap, String key) {
-        String texturePath = (String) themeValuesMap.get(key);
+    private static ImagePattern parseTexture(Map<String, Object> themeValuesMap) {
+        String texturePath = (String) themeValuesMap.get("texture");
         if (texturePath != null) {
             InputStream inputStream = ResourceLoader.getResourceAsStream(texturePath);
-            return new ImagePattern(new Image(inputStream));
+            return new ImagePattern(new Image(Objects.requireNonNull(inputStream)));
         }
         return null;
     }
@@ -135,8 +136,8 @@ public class ThemeLoader {
         return null;
     }
 
-    private static Boolean parseBoolean(Map<String, Object> themeValuesMap, String key) {
-        Object value = themeValuesMap.get(key);
+    private static Boolean parseBoolean(Map<String, Object> themeValuesMap) {
+        Object value = themeValuesMap.get("alwaysDraw");
         if (value instanceof Boolean) {
             return (Boolean) value;
         }

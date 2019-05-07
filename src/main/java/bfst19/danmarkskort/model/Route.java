@@ -11,15 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Route extends ArrayList<PolyRoad> {
-    public double sumLength() {
-        return stream().mapToDouble(PolyRoad::getRealLength).sum();
-    }
 
-    public double sumTime() {
-        return stream().mapToDouble(PolyRoad::getDurationInMinutes).map(Math::sqrt).sum();
-    }
-
-    public List<String> getTextDescription() {
+	public List<String> getTextDescription() {
         if (size() == 0) {
             return new ArrayList<>();
         }
@@ -77,16 +70,8 @@ public class Route extends ArrayList<PolyRoad> {
         throw new RuntimeException("interpretDirection returned a number that isn't -1, 0 or 1");
     }
 
-    private String getTimeDescription(double summedDurationInMinutes) {
-        if (summedDurationInMinutes < 1) {
-            return "less than a minute";
-        } else {
-            return String.format("%.0f", summedDurationInMinutes) + " minutes";
-        }
-    }
 
-
-    private double getDegree(PolyRoad last, PolyRoad current) {
+	private double getDegree(PolyRoad last, PolyRoad current) {
         double lastDegree = last.getDegree(current);
         double firstDegree = current.getDegree(last);
         return clampAngle(lastDegree - firstDegree + 180); //the 180 is because directly ahead is 180, while one degree

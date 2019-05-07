@@ -9,10 +9,9 @@ import javafx.scene.transform.Affine;
 
 public class MapDrawer implements Drawer {
     private final double textureScaleFactor = 10000;
-    private boolean enabled = true;
-    private MapCanvas canvas;
-    private GraphicsContext graphicsContext;
-    private Model model;
+    private final MapCanvas canvas;
+    private final GraphicsContext graphicsContext;
+    private final Model model;
     private Rectangle textureDefaultRect;
 
     public MapDrawer(MapCanvas canvas, Model model) {
@@ -22,17 +21,7 @@ public class MapDrawer implements Drawer {
         textureDefaultRect = new Rectangle(model.getModelBounds());
     }
 
-    @Override
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
+	@Override
     public void draw() {
         if (model.getCurrentTheme() == null) {
             return;
@@ -94,15 +83,14 @@ public class MapDrawer implements Drawer {
             double height = -(textureDefaultRect.yMax - textureDefaultRect.yMin) / textureScaleFactor;
             double modelX = (textureDefaultRect.xMin + (width / 2));
             double modelY = (textureDefaultRect.yMin + (height / 2));
-            ImagePattern scaledImg = new ImagePattern(
-                    drawingInfo.getTexture().getImage(),
-                    modelX,
-                    modelY,
-                    width,
-                    height,
-                    false
-            );
-            fill = scaledImg;
+			fill = new ImagePattern(
+					drawingInfo.getTexture().getImage(),
+					modelX,
+					modelY,
+					width,
+					height,
+					false
+			);
         }
         if (fill == null) {
             return;

@@ -6,15 +6,15 @@ import javafx.scene.paint.ImagePattern;
 import static bfst19.danmarkskort.utils.Misc.pickNotNull;
 
 public class DrawingInfo {
-    private Wrapper<Color> fillColorWrapper;
-    private Wrapper<Color> strokeColorWrapper;
-    private Wrapper<Double> lineDashWrapper;
-    private Wrapper<Double> lineWidthWrapper;
-    private Wrapper<Double> lineWidthMaxWrapper;
-    private Wrapper<Double> lineWidthMinWrapper;
-    private Wrapper<Double> zoomLevelWrapper;
-    private Wrapper<Boolean> alwaysDrawWrapper;
-    private Wrapper<ImagePattern> textureWrapper;
+    private final Wrapper<Color> fillColorWrapper;
+    private final Wrapper<Color> strokeColorWrapper;
+    private final Wrapper<Double> lineDashWrapper;
+    private final Wrapper<Double> lineWidthWrapper;
+    private final Wrapper<Double> lineWidthMaxWrapper;
+    private final Wrapper<Double> lineWidthMinWrapper;
+    private final Wrapper<Double> zoomLevelWrapper;
+    private final Wrapper<Boolean> alwaysDrawWrapper;
+    private final Wrapper<ImagePattern> textureWrapper;
 
     public DrawingInfo(
             Wrapper<Color> fillColorWrapper,

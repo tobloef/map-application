@@ -1,20 +1,21 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.model.parsing.OSMRoadWay;
+import bfst19.danmarkskort.utils.Misc;
 
 import java.io.Serializable;
 import java.util.*;
 
 public class PolyRoad extends Polyline implements Serializable {
-    final static String defaultStreetName = "unknown road";
+    private final static String defaultStreetName = "unknown road";
     private static PolyRoad[] allPolyRoads;
     private int index;
-    private double speedLimit;
-    private String streetName;
+    private final double speedLimit;
+    private final String streetName;
     private int[] firstConnections;
     private int[] lastConnections;
-    private double length = 0;
-    private EnumSet<RoadRestriction> restrictions;
+    private double length;
+    private final EnumSet<RoadRestriction> restrictions;
 
     public PolyRoad(OSMRoadWay way) {
         super(way);
@@ -51,7 +52,7 @@ public class PolyRoad extends Polyline implements Serializable {
         allPolyRoads = newAllPolyRoads;
     }
 
-    private static int[] getUniqueValues(int arr[]) {
+    private static int[] getUniqueValues(int[] arr) { //todo fix names
         int n = arr.length;
         if (n == 0 || n == 1) {
             return arr;
@@ -68,9 +69,7 @@ public class PolyRoad extends Polyline implements Serializable {
         temp[j++] = arr[n - 1];
         //Size it correctly.
         int[] tempToSize = new int[j];
-        for (int i = 0; i < j; i++) {
-            tempToSize[i] = temp[i];
-        }
+		System.arraycopy(temp, 0, tempToSize, 0, j);
         return tempToSize;
     }
 
@@ -100,18 +99,16 @@ public class PolyRoad extends Polyline implements Serializable {
     private int[] add(int[] connections, int index) {
         if (!contains(connections, index)) {
             int[] tempArray = new int[connections.length + 1];
-            for (int i = 0; i < connections.length; i++) {
-                tempArray[i] = connections[i];
-            }
-            tempArray[tempArray.length - 1] = index;
+			Misc.arrayCopy(connections, tempArray);
+			tempArray[tempArray.length - 1] = index;
             return tempArray;
         } else return connections;
     }
 
-    private boolean contains(int[] connections, int index) {
-        for (int i = 0; i < connections.length; i++) {
-            if (connections[i] == index) return true;
-        }
+	private boolean contains(int[] connections, int index) {
+		for (int connection : connections) {
+			if (connection == index) return true;
+		}
         return false;
     }
 

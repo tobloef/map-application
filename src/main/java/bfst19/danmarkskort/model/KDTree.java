@@ -16,8 +16,8 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
     T splitElement;
     Rectangle bbox;
     List<T> leafElements;
-    KDTree lower;
-    KDTree higher;
+    KDTree<T> lower;
+    KDTree<T> higher;
 
     public KDTree(List<T> inputElements) {
         this(inputElements, true);
@@ -53,7 +53,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
                 higherElements.add(element);
             }
         }
-        higher = new KDTree<T>(higherElements, !odd);
+        higher = new KDTree<>(higherElements, !odd);
         this.bboxGrowToEncompass(higher.getBbox());
     }
 
@@ -64,7 +64,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
                 lowerElements.add(element);
             }
         }
-        lower = new KDTree<T>(lowerElements, !odd);
+        lower = new KDTree<>(lowerElements, !odd);
         this.bboxGrowToEncompass(lower.getBbox());
     }
 
@@ -110,19 +110,19 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
         }
     }
 
-    private KDTree closestSubTreeToPoint(float x, float y) {
+    private KDTree<T> closestSubTreeToPoint(float x, float y) {
         if (higher.bbox.euclideanDistanceSquaredTo(x, y) < lower.bbox.euclideanDistanceSquaredTo(x, y)) {
             return higher;
         } else return lower;
     }
 
-    private KDTree furthestSubTreeFromPoint(float x, float y) {
+    private KDTree<T> furthestSubTreeFromPoint(float x, float y) {
         if (higher.bbox.euclideanDistanceSquaredTo(x, y) > lower.bbox.euclideanDistanceSquaredTo(x, y)) {
             return higher;
         } else return lower;
     }
 
-    private void getNearestNeighborInSubTree(float x, float y, NearestNeighbor nearestNeighbor, KDTree subTree) {
+    private void getNearestNeighborInSubTree(float x, float y, NearestNeighbor nearestNeighbor, KDTree<T> subTree) {
         if (subTree.bbox.euclideanDistanceSquaredTo(x, y) < nearestNeighbor.distance) {
             subTree.getNearestNeighbor(x, y, nearestNeighbor);
         }
@@ -251,7 +251,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
         return storeIndex;
     }
 
-    private final <T> void swap(List<T> a, int i, int j) {
+    private <T> void swap(List<T> a, int i, int j) {
         T t = a.get(i);
         a.set(i, a.get(j));
         a.set(j, t);

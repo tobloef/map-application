@@ -4,8 +4,7 @@ import java.util.*;
 import java.util.function.LongSupplier;
 
 public class OSMRelation implements LongSupplier {
-    public String debugName;
-    long id;
+    private final long id;
     private List<OSMWay> list = new ArrayList<>();
 
     public OSMRelation(long id) {

@@ -1,18 +1,12 @@
 package bfst19.danmarkskort.model;
 
-import javafx.util.Pair;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Theme {
-    private Map<WayType, DrawingInfo> drawingInfoMap;
+    private final Map<WayType, DrawingInfo> drawingInfoMap;
 
-    public Theme(Map<WayType, DrawingInfo> drawingInfoMap) {
-        this.drawingInfoMap = drawingInfoMap;
-    }
-
-    public Theme() {
+	public Theme() {
         drawingInfoMap = new HashMap<>();
     }
 

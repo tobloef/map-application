@@ -3,8 +3,9 @@ package bfst19.danmarkskort.model.parsing;
 import java.util.function.LongSupplier;
 
 public class OSMNode implements LongSupplier {
-    private float lat, lon;
-    private long id;
+    private final float lat;
+	private final float lon;
+    private final long id;
 
     public OSMNode(long id, float lon, float lat) {
         this.id = id;

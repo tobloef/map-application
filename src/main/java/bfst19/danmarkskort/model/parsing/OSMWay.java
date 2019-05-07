@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class OSMWay implements LongSupplier {
     List<OSMNode> list = new ArrayList<>();
-    long id;
+    final long id;
 
     public OSMWay(long id) {
         this.id = id;

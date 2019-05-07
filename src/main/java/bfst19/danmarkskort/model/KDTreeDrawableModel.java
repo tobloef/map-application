@@ -58,8 +58,7 @@ public class KDTreeDrawableModel implements DrawableModel {
     public void doneAdding() {
         initializeKDTree();
         wayTypeEnumMap = null;
-        return;
-    }
+	}
 
     @Override
     public void doNewDataSet() {

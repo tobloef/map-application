@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OSMRoadNode extends OSMNode {
-    private List<OSMRoadWay> connections;
+    private final List<OSMRoadWay> connections;
 
     public OSMRoadNode(OSMNode node) {
         super(node.getAsLong(), node.getLon(), node.getLat());

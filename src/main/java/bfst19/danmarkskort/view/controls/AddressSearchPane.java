@@ -149,24 +149,22 @@ public class AddressSearchPane extends BorderPane {
                 return;
             }
             field.positionCaret(newValue.length());
-            debounce.setOnFinished(event -> {
-                updatePopup(popup, field, otherPopup, newValue, (address) -> {
-                    if (address == null) {
-                        return;
-                    }
-                    addressHandler.accept(address);
-                    Route route = model.getShortestPath();
-                    if (route != null && route.size() > 1) {
-                        mapPane.panViewToRoute(route);
-                    } else {
-                        mapPane.panViewToAddress(address);
-                    }
-                    if (route == null) {
-                        displayNoRouteFoundAlert();
-                    }
-                    updateRouteDescription(route);
-                });
-            });
+            debounce.setOnFinished(event -> updatePopup(popup, field, otherPopup, newValue, (address) -> {
+				if (address == null) {
+					return;
+				}
+				addressHandler.accept(address);
+				Route route = model.getShortestPath();
+				if (route != null && route.size() > 1) {
+					mapPane.panViewToRoute(route);
+				} else {
+					mapPane.panViewToAddress(address);
+				}
+				if (route == null) {
+					displayNoRouteFoundAlert();
+				}
+				updateRouteDescription(route);
+			}));
             debounce.playFromStart();
         });
         field.focusedProperty().addListener((observable, oldValue, newValue) -> {

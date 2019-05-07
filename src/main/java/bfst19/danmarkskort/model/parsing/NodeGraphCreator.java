@@ -7,11 +7,11 @@ import bfst19.danmarkskort.model.RoadRestriction;
 import java.util.*;
 
 public class NodeGraphCreator {
-    DrawableModel drawableModel;
-    private List<OSMRoadNode> roadNodes = new ArrayList<>();
-    private Set<OSMRoadWay> osmRoads = new HashSet<>();
-    private Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
-    private Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
+    final DrawableModel drawableModel;
+    private final List<OSMRoadNode> roadNodes = new ArrayList<>();
+    private final Set<OSMRoadWay> osmRoads = new HashSet<>();
+    private final Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
+    private final Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
 
     public NodeGraphCreator(DrawableModel drawableModel) {

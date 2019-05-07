@@ -22,12 +22,12 @@ public class OSMParser {
     private OSMWay currentWay = null;
     private OSMRelation currentRelation = null;
     private WayType currentType = null;
-    private DrawableModel drawableModel;
-    private Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
+    private final DrawableModel drawableModel;
+    private final Rectangle bounds = new Rectangle(); //the outer bounds of our data in terms of coordinates
     private Map<Long, OSMWay> idToWay = new HashMap<>();
-    private NodeGraphCreator nodeGraphCreator;
+    private final NodeGraphCreator nodeGraphCreator;
     private Map<String, String> tags = new HashMap<>();
-    private OSMAddressParser osmAddressParser;
+    private final OSMAddressParser osmAddressParser;
     private AddressData addressData = null;
 
     public OSMParser(String filename, DrawableModel drawableModel) throws IOException, XMLStreamException {

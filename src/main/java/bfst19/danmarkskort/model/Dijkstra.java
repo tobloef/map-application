@@ -127,6 +127,6 @@ public class Dijkstra {
                 roads.add(PolyRoad.getPolyRoadFromIndex(roadIndex));
             }
             return roads;
-        } else return new ArrayList<PolyRoad>();
+        } else return new ArrayList<>();
     }
 }

@@ -3,11 +3,11 @@ package bfst19.danmarkskort.model;
 import java.io.Serializable;
 
 public class Address implements Serializable {
-    private float lat;
-    private float lon;
-    private String streetName;
-    private String houseNumber;
-    private String city;
+    private final float lat;
+    private final float lon;
+    private final String streetName;
+    private final String houseNumber;
+    private final String city;
 
     public Address(
             float lat,

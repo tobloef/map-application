@@ -76,34 +76,45 @@ public class AddressParserFromData implements AddressParser {
         if (addressInput.getStreetName() != null) {
             return;
         }
-        for (int i = 0; i < subSplits.size(); i++) {
-            for (int j = subSplits.size(); j > i; j--) {
-                String candidate = String.join(" ", subSplits.subList(i, j));
-                boolean splitsAvailable = true;
-                for (int k = i; k < j; k++) {
-                    if (usedSplits.get(s).contains(k)) {
-                        splitsAvailable = false;
-                        break;
-                    }
-                }
-                if (!splitsAvailable) {
-                    continue;
-                }
-                int streetIndex = BinarySearch.search(streetNames, candidate, String::compareToIgnoreCase);
-                if (streetIndex == -1) {
-                    continue;
-                }
-                addressInput.setStreetName(candidate);
-                for (int k = i; k < j; k++) {
-                    usedSplits.get(s).add(k);
-                }
-                trySetHouseInfo(addressInput, usedSplits, subSplits, j, s);
-                return;
-            }
-        }
-    }
+		trySet(addressInput, usedSplits, s, subSplits, streetNames, AddressInput::setStreetName);
+	}
 
-    private void trySetHouseInfo(AddressInput addressInput, List<List<Integer>> usedSplits, List<String> subSplits, int j, int s) {
+	private void trySetCity(AddressInput addressInput, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
+		if (addressInput.getCity() != null) {
+			return;
+		}
+		trySet(addressInput, usedSplits, s, subSplits, cities, AddressInput::setCity);
+	}
+
+	private void trySet(AddressInput addressInput, List<List<Integer>> usedSplits, int s, List<String> subSplits, List<String> names, BiConsumer<AddressInput, String> nameSetter) {
+		for (int i = 0; i < subSplits.size(); i++) {
+			for (int j = subSplits.size(); j > i; j--) {
+				String candidate = String.join(" ", subSplits.subList(i, j));
+				boolean splitsAvailable = true;
+				for (int k = i; k < j; k++) {
+					if (usedSplits.get(s).contains(k)) {
+						splitsAvailable = false;
+						break;
+					}
+				}
+				if (!splitsAvailable) {
+					continue;
+				}
+				int index = BinarySearch.search(names, candidate, String::compareToIgnoreCase);
+				if (index == -1) {
+					continue;
+				}
+				nameSetter.accept(addressInput, candidate);
+				for (int k = i; k < j; k++) {
+					usedSplits.get(s).add(k);
+				}
+				trySetHouseInfo(addressInput, usedSplits, subSplits, j, s);
+				return;
+			}
+		}
+	}
+
+	private void trySetHouseInfo(AddressInput addressInput, List<List<Integer>> usedSplits, List<String> subSplits, int j, int s) {
         for (int k = j; k < subSplits.size(); k++) {
             if (usedSplits.get(s).contains(k)) {
                 continue;
@@ -118,36 +129,6 @@ public class AddressParserFromData implements AddressParser {
             } else if (addressInput.getDoor() == null && candidateAfterStreetName.matches(doorRegex)) {
                 addressInput.setDoor(candidateAfterStreetName);
                 usedSplits.get(s).add(k);
-            }
-        }
-    }
-
-    private void trySetCity(AddressInput addressInput, List<List<Integer>> usedSplits, int s, List<String> subSplits) {
-        if (addressInput.getCity() != null) {
-            return;
-        }
-        for (int i = 0; i < subSplits.size(); i++) {
-            for (int j = subSplits.size(); j > i; j--) {
-                String candidate = String.join(" ", subSplits.subList(i, j));
-                boolean splitsAvailable = true;
-                for (int k = i; k < j; k++) {
-                    if (usedSplits.get(s).contains(k)) {
-                        splitsAvailable = false;
-                        break;
-                    }
-                }
-                if (!splitsAvailable) {
-                    continue;
-                }
-                int cityIndex = BinarySearch.search(cities, candidate, String::compareToIgnoreCase);
-                if (cityIndex == -1) {
-                    continue;
-                }
-                addressInput.setCity(candidate);
-                for (int k = i; k < j; k++) {
-                    usedSplits.get(s).add(k);
-                }
-                return;
             }
         }
     }

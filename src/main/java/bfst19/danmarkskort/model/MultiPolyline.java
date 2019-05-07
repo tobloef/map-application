@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
-    List<Polyline> list;
+    final List<Polyline> list;
     private float xMin, yMin, xMax, yMax;
 
     public MultiPolyline(OSMRelation rel) {

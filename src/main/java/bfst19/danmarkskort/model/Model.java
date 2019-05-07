@@ -3,7 +3,6 @@ package bfst19.danmarkskort.model;
 import bfst19.danmarkskort.model.parsing.OSMParser;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
-import bfst19.danmarkskort.view.drawers.POIDrawer;
 import javafx.geometry.Point2D;
 
 import javax.xml.stream.XMLStreamException;
@@ -15,19 +14,21 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+//todo del ting ind i mapper, exceptions, dataobjekter, enmus, drawables
+
 public class Model {
     private final static long mouseIdleTime = 250;
 
     private DrawableModel drawableModel = new KDTreeDrawableModel();
-    private Set<WayType> blacklistedWaytypes = new HashSet<>();
+    private final Set<WayType> blacklistedWaytypes = new HashSet<>();
     private float mouseModelX, mouseModelY;
     private float mouseScreenX, mouseScreenY;
     private PolyRoad start, end;
     private Route shortestPath;
     private VehicleType currentVehicleType = VehicleType.CAR;
-    private List<Runnable> wayTypeObservers = new ArrayList<>();
-    private List<Runnable> reloadObservers = new ArrayList<>();
-    private List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
+    private final List<Runnable> wayTypeObservers = new ArrayList<>();
+    private final List<Runnable> reloadObservers = new ArrayList<>();
+    private final List<Consumer<Boolean>> mouseIdleObservers = new ArrayList<>();
     private ScheduledExecutorService executor;
     private ScheduledFuture<?> mouseIdleTask;
     private Rectangle modelBounds;
@@ -241,9 +242,7 @@ public class Model {
         if (mouseIdleTask != null) {
             mouseIdleTask.cancel(true);
         }
-        mouseIdleTask = executor.schedule(() -> {
-            notifyMouseIdleObservers(true);
-        }, mouseIdleTime, TimeUnit.MILLISECONDS);
+        mouseIdleTask = executor.schedule(() -> notifyMouseIdleObservers(true), mouseIdleTime, TimeUnit.MILLISECONDS);
     }
 
     private void updateShortestPath() {
@@ -264,11 +263,7 @@ public class Model {
     }
 
     public Route getShortestPath() {
-        if (shortestPath != null) {
-            return shortestPath;
-        } else {
-            return new Route();
-        }
+		return Objects.requireNonNullElseGet(shortestPath, Route::new);
     }
 
     public void updateEnd() {
@@ -306,6 +301,9 @@ public class Model {
             closestRoad = closeRoad;
 
         }
+        if (closestRoad == null) {
+        	throw new RuntimeException("No roads were found");
+		}
         return closestRoad;
     }
 

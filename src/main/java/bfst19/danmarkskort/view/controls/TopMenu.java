@@ -58,13 +58,8 @@ public class TopMenu extends MenuBar {
     }
 
     private void displayMapDataNotLoadedAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR,
-                "The specified map data couldn't be loaded.",
-                ButtonType.CLOSE);
-        alert.setTitle("Error loading map data");
-        alert.setHeaderText("Error loading map data");
-        alert.show();
-    }
+		displayAlert();
+	}
 
     private File openMapDataFileSelect() {
         FileChooser fileChooser = new FileChooser();
@@ -105,15 +100,19 @@ public class TopMenu extends MenuBar {
     }
 
     private void displayMapDataNotSavedAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR,
-                "The specified map data couldn't be loaded.",
-                ButtonType.CLOSE);
-        alert.setTitle("Error loading map data");
-        alert.setHeaderText("Error loading map data");
-        alert.show();
-    }
+		displayAlert();
+	}
 
-    @FXML
+	private void displayAlert() {
+		Alert alert = new Alert(Alert.AlertType.ERROR,
+				"The specified map data couldn't be loaded.",
+				ButtonType.CLOSE);
+		alert.setTitle("Error loading map data");
+		alert.setHeaderText("Error loading map data");
+		alert.show();
+	}
+
+	@FXML
     private void onLoadTheme(ActionEvent event) {
         File file = openThemeFileSelect();
         if (file == null) {

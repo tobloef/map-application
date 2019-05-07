@@ -19,7 +19,7 @@ import java.util.List;
 
 public class WaytypeSelectorPane extends VBox {
     private  Model model;
-    private List<CheckBox> waytypeSelectors = new ArrayList<>();
+    private final List<CheckBox> waytypeSelectors = new ArrayList<>();
 
     @FXML
     private VBox wayTypeLayoutBox;
@@ -47,9 +47,7 @@ public class WaytypeSelectorPane extends VBox {
         for (WayType wayType : WayType.values()) {
             CheckBox checkBox = new CheckBox(EnumHelper.waytypeToDecoratedString(wayType));
             checkBox.setSelected(!model.dontDraw(wayType));
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                    model.toggleBlacklistWaytype(wayType);
-            });
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> model.toggleBlacklistWaytype(wayType));
             VBox.setMargin(checkBox, new Insets(0, 0, 5, 0));
             wayTypeLayoutBox.getChildren().add(checkBox);
             waytypeSelectors.add(checkBox);

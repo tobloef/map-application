@@ -144,10 +144,6 @@ public class MapPane extends Pane {
 
     private void handleAddressSelect(BiConsumer<AddressSearchPane, String> searchSetter, BiConsumer<Model, PolyRoad> modelSetter) {
         PolyRoad road = model.getClosestRoad();
-        if (road == null) {
-            displayNoRoadFoundError();
-            return;
-        }
         modelSetter.accept(model, road);
         searchSetter.accept(addressSearchPane, road.getStreetName());
         Route route = model.getShortestPath();
@@ -219,9 +215,5 @@ public class MapPane extends Pane {
         double x = -(boundingBox.getMiddleX() - screenBounds.getMiddleX()) / mapCanvas.getDegreesLatitudePerPixel();
         double y = (boundingBox.getMiddleY() - screenBounds.getMiddleY()) / mapCanvas.getDegreesLatitudePerPixel();
         mapCanvas.pan(x, y);
-    }
-
-    private void displayNoRoadFoundError() {
-
     }
 }

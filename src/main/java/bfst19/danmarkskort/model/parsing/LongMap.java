@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.function.LongSupplier;
 
 public class LongMap<T extends LongSupplier> {
-    private ArrayList<T> elements = new ArrayList<>();
+    private final ArrayList<T> elements = new ArrayList<>();
     private boolean sorted = false;
 
     public void add(T element) {

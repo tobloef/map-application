@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SuppressWarnings("SimplifiableJUnitAssertion")
 public class AddressParserTest {
 
-    AddressParser addressParser = new AddressParserFromData(TestData.STREET_NAMES_1, TestData.CITIES_1);
+    final AddressParser addressParser = new AddressParserFromData(TestData.STREET_NAMES_1, TestData.CITIES_1);
 
     @Test
     public void testParse_Street() {

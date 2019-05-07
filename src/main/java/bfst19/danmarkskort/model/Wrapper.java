@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.model;
 
-public class Wrapper<T> {
+public class Wrapper<T> { //todo ind bedre navn, lav bedre kommentar
     T value;
 
     public Wrapper(T value) {
@@ -11,7 +11,4 @@ public class Wrapper<T> {
         return value;
     }
 
-    public void setValue(T value) {
-        this.value = value;
-    }
 }
