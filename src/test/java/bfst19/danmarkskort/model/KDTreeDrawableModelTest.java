@@ -83,4 +83,10 @@ class KDTreeDrawableModelTest {
 	void insertNonSpatial() {
 		assertThrows(IllegalArgumentException.class , ()->model.insert(WayType.COASTLINE, new NonSpatial()));
 	}
+
+	@Test
+	void getBeforeInit(){
+		model = new KDTreeDrawableModel();
+		assertThrows(RuntimeException.class ,()->model.getAllDrawablesOfType(WayType.COASTLINE));
+	}
 }
