@@ -3,6 +3,7 @@ package bfst19.danmarkskort.utils;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class Misc {
     public static <T> T pickNotNull(T first, T second) {
@@ -42,5 +43,9 @@ public class Misc {
         return list.stream()
                 .map(String::trim)
                 .collect(Collectors.toList());
+    }
+
+    public static long countIterable(Iterable iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false).count();
     }
 }
