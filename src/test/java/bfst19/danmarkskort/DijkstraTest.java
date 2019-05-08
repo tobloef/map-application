@@ -18,8 +18,6 @@ public class DijkstraTest {
         List<String> args = new ArrayList<>();
         args.add(filePath);
         Model model = new Model(args);
-        //X: 7.100265 Y: 55.660103
-        //X: 7.1075945 Y: 55.663807
         model.setMouseModelCoords(7.100265f, 55.660103f);
         model.updateStart();
         model.setMouseModelCoords(7.1075945f, 55.663807f);
