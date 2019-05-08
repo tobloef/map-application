@@ -1,6 +1,7 @@
 package bfst19.danmarkskort.view.controls;
 
-import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.view.drawers.*;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapCanvas extends Canvas {
-    private GraphicsContext graphicsContext;
+    private final GraphicsContext graphicsContext;
     private Model model;
     private List<Drawer> drawers;
     private double degreesLatitudePerPixel;
@@ -38,7 +39,7 @@ public class MapCanvas extends Canvas {
         initializeDrawers(model);
         panViewToMapBounds();
         updateDegreesPerPixel();
-        model.addWayTypeObserver(this::repaint);
+        model.addDrawableTypeObserver(this::repaint);
         makeCanvasUpdateOnResize();
         repaint();
     }
@@ -56,9 +57,6 @@ public class MapCanvas extends Canvas {
         clearBackground();
         updateLineWidth();
         for (Drawer drawer : drawers) {
-            if (!drawer.getEnabled()) {
-                continue;
-            }
             graphicsContext.save();
             try {
                 drawer.draw();

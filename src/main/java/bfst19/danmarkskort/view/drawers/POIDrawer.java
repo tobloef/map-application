@@ -1,40 +1,28 @@
 package bfst19.danmarkskort.view.drawers;
 
-import bfst19.danmarkskort.model.Drawable;
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.PointOfInterest;
-import bfst19.danmarkskort.model.WayType;
+import bfst19.danmarkskort.model.drawables.Drawable;
+import bfst19.danmarkskort.model.drawables.DrawableType;
+import bfst19.danmarkskort.model.drawables.PointOfInterest;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class POIDrawer implements Drawer {
-    private boolean enabled = true;
-    private MapCanvas canvas;
-    private Model model;
+    private final MapCanvas canvas;
+    private final Model model;
 
     public POIDrawer(MapCanvas mapCanvas, Model model) {
         this.canvas = mapCanvas;
         this.model = model;
     }
-
-    @Override
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
+	@Override
     public void draw() {
-        if (model.dontDraw(WayType.POI)) {
+        if (model.dontDraw(DrawableType.POI)) {
             return;
         }
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         double zoomFactor = canvas.getDegreesLatitudePerPixel();
-        for (Drawable drawable : model.getWaysOfType(WayType.POI, canvas.getScreenBounds())) {
+        for (Drawable drawable : model.getWaysOfType(DrawableType.POI, canvas.getScreenBounds())) {
             drawable.fill(graphicsContext, zoomFactor);
         }
         drawAddressIndicators(graphicsContext, model, zoomFactor);

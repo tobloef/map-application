@@ -1,9 +1,10 @@
 package bfst19.danmarkskort.view.controls;
 
+import bfst19.danmarkskort.exceptions.InvalidUserInputException;
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.Route;
-import bfst19.danmarkskort.model.Theme;
-import bfst19.danmarkskort.model.Themes;
+import bfst19.danmarkskort.model.drawables.BuiltInThemes;
+import bfst19.danmarkskort.model.drawables.Theme;
+import bfst19.danmarkskort.model.routePlanning.Route;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;
@@ -25,7 +26,7 @@ public class TopMenu extends MenuBar {
     private Model model;
     private Stage stage;
     private Parent root;
-    private Runnable  toggleWayTypeSelector;
+    private Runnable toggleDrawableTypeSelector;
 
     public TopMenu() throws IOException {
         URL url = ResourceLoader.getResource("rs:views/TopMenu.fxml");
@@ -35,11 +36,11 @@ public class TopMenu extends MenuBar {
         loader.load();
     }
 
-    public void initialize(Model model, Stage stage, Parent root, Runnable toggleWayTypeSelector) {
+    public void initialize(Model model, Stage stage, Parent root, Runnable toggleDrawableTypeSelector) {
         this.model = model;
         this.stage = stage;
         this.root = root;
-        this.toggleWayTypeSelector = toggleWayTypeSelector;
+        this.toggleDrawableTypeSelector = toggleDrawableTypeSelector;
     }
 
     @FXML
@@ -58,13 +59,8 @@ public class TopMenu extends MenuBar {
     }
 
     private void displayMapDataNotLoadedAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR,
-                "The specified map data couldn't be loaded.",
-                ButtonType.CLOSE);
-        alert.setTitle("Error loading map data");
-        alert.setHeaderText("Error loading map data");
-        alert.show();
-    }
+		displayAlert();
+	}
 
     private File openMapDataFileSelect() {
         FileChooser fileChooser = new FileChooser();
@@ -105,15 +101,19 @@ public class TopMenu extends MenuBar {
     }
 
     private void displayMapDataNotSavedAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR,
-                "The specified map data couldn't be loaded.",
-                ButtonType.CLOSE);
-        alert.setTitle("Error loading map data");
-        alert.setHeaderText("Error loading map data");
-        alert.show();
-    }
+		displayAlert();
+	}
 
-    @FXML
+	private void displayAlert() {
+		Alert alert = new Alert(Alert.AlertType.ERROR,
+				"The specified map data couldn't be loaded.",
+				ButtonType.CLOSE);
+		alert.setTitle("Error loading map data");
+		alert.setHeaderText("Error loading map data");
+		alert.show();
+	}
+
+	@FXML
     private void onLoadTheme(ActionEvent event) {
         File file = openThemeFileSelect();
         if (file == null) {
@@ -169,8 +169,14 @@ public class TopMenu extends MenuBar {
             return;
         }
         File file = openRouteFileSelect(route.getSuggestedFileName());
-        route.printToFile(file);
-    }
+		try {
+			route.printToFile(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InvalidUserInputException e) {
+			makeAlert(e);
+		}
+	}
 
     private void displayNoRouteAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -191,18 +197,18 @@ public class TopMenu extends MenuBar {
     }
 
     @FXML
-    private void onToggleWaytypeSelector(ActionEvent event) {
-        toggleWayTypeSelector.run();
+    private void onToggleDrawableTypeSelector(ActionEvent event) {
+        toggleDrawableTypeSelector.run();
     }
 
     @FXML
     private void onUseDefaultTheme(ActionEvent event) {
-        model.setTheme(Themes.DefaultTheme);
+        model.setTheme(BuiltInThemes.DefaultTheme);
     }
 
     @FXML
     private void onUseHDGraphicsTheme(ActionEvent event) {
-        model.setTheme(Themes.HDGraphics);
+        model.setTheme(BuiltInThemes.HDGraphics);
     }
 
     @FXML
@@ -225,8 +231,19 @@ public class TopMenu extends MenuBar {
         alert.setHeaderText("Error opening window");
         alert.show();
     }
+
+	private void makeAlert(InvalidUserInputException e) {
+		Alert alert = new Alert(Alert.AlertType.ERROR,
+				e.getMessage(),
+				ButtonType.CLOSE);
+		alert.setTitle("Error: Wrong input");
+		alert.setHeaderText("Error: Wrong input");
+		alert.show();
+	}
+
     @FXML
-    private void onToggleRouteShowExplored() {
+    private void onToggleShowExploredRoutes() {
         RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
+        model.notifyDrawableTypeObservers();
     }
 }

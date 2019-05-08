@@ -1,6 +1,11 @@
 package bfst19.danmarkskort.view.drawers;
 
-import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.model.Model;
+import bfst19.danmarkskort.model.drawables.Drawable;
+import bfst19.danmarkskort.model.drawables.DrawableType;
+import bfst19.danmarkskort.model.drawables.PolyRoad;
+import bfst19.danmarkskort.model.drawables.Theme;
+import bfst19.danmarkskort.model.routePlanning.Dijkstra;
 import bfst19.danmarkskort.view.controls.MapCanvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -10,10 +15,9 @@ import java.util.Set;
 
 public class RouteDrawer implements Drawer {
     public static boolean ShowExplored;
-    Theme theme;
-    private boolean enabled = true;
-    private MapCanvas canvas;
-    private Model model;
+    private final Theme theme;
+    private final MapCanvas canvas;
+    private final Model model;
 
 
     public RouteDrawer(MapCanvas canvas, Model model) {
@@ -22,20 +26,10 @@ public class RouteDrawer implements Drawer {
         theme = model.getCurrentTheme();
     }
 
-    @Override
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
+	@Override
     public void draw() {
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.setLineWidth(theme.getDrawingInfo(WayType.RESIDENTIAL_ROAD).getLineWidth() * 2);
+        graphicsContext.setLineWidth(theme.getDrawingInfo(DrawableType.RESIDENTIAL_ROAD).getLineWidth() * 2);
         Set<PolyRoad> oneWayRoads = new HashSet<>();
         graphicsContext.save();
         if (ShowExplored) {

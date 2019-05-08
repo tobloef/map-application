@@ -18,12 +18,12 @@ public class MainWindow extends Scene {
     @FXML
     private TopMenu topMenu;
     @FXML
-    private AddressSearch addressSearch;
+    private AddressSearchPane addressSearchPane;
     @FXML
-    private Map map;
+    private MapPane mapPane;
 
     private Model model;
-    private Parent root;
+    private final Parent root;
 
     public MainWindow(Parent root) throws IOException {
         super(root);
@@ -44,20 +44,20 @@ public class MainWindow extends Scene {
         // On exit, do necessary cleanup, such as stopping other threads, etc.
         stage.setOnCloseRequest(event -> model.cleanup());
         // Initialize sub-components
-        map.initialize(model, addressSearch);
-        topMenu.initialize(model, stage, root, this::toggleWayTypeSelector);
-        addressSearch.initialize(model, borderPane, map);
+        mapPane.initialize(model, addressSearchPane);
+        topMenu.initialize(model, stage, root, this::toggleDrawableTypeSelector);
+        addressSearchPane.initialize(model, borderPane, mapPane);
     }
 
-    private void toggleWayTypeSelector() {
-        if (borderPane.getRight() instanceof WaytypeSelector) {
+    private void toggleDrawableTypeSelector() {
+        if (borderPane.getRight() instanceof DrawableTypeSelectorPane) {
             borderPane.setRight(null);
         } else {
-            WaytypeSelector waytypeSelector;
+            DrawableTypeSelectorPane drawableTypeSelectorPane;
             try {
-                waytypeSelector = new WaytypeSelector();
-                waytypeSelector.initialize(model);
-                borderPane.setRight(waytypeSelector);
+                drawableTypeSelectorPane = new DrawableTypeSelectorPane();
+                drawableTypeSelectorPane.initialize(model);
+                borderPane.setRight(drawableTypeSelectorPane);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-
 <fx:root
     type="javafx.scene.control.MenuBar"
     xmlns:fx="http://javafx.com/fxml"
@@ -20,7 +19,7 @@
         <MenuItem text="Open custom theme..." onAction="#onLoadTheme"/>
     </Menu>
     <Menu text="Debugging">
-        <MenuItem text="Toggle way type selector" onAction="#onToggleWaytypeSelector"/>
-        <MenuItem text="Toggle explored routes" onAction="#onToggleRouteShowExplored"/>
+        <MenuItem text="Toggle way type selector" onAction="#onToggleDrawableTypeSelector"/>
+        <MenuItem text="Toggle explored routes" onAction="#onToggleShowExploredRoutes"/>
     </Menu>
 </fx:root>

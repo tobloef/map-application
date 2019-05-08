@@ -1,0 +1,6 @@
+- COASTLINE:
+    fillColor: "EEF0D5"
+
+- RESIDENTIAL_ROAD:
+    strokeColor: "FFFFFF"
+    lineWidth: 0.0006

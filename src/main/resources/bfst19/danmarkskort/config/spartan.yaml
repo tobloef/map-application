@@ -26,8 +26,8 @@
     - bridleway
 
 - BUILDING:
-  - amenity:
-    - university
+  - building
+
 
 - CYCLEWAY:
   - highway:
