@@ -11,10 +11,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ModelTest {
+	String filePath = this.getClass().getResource("small.osm").getPath();
     @Test
     void getBoundsOSM() throws IOException, XMLStreamException, ClassNotFoundException {
         //Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
-        String filePath = this.getClass().getResource("small.osm").getPath();
         List<String> args = new ArrayList<>();
         args.add(filePath);
         Model model = new Model(args);
@@ -27,7 +27,6 @@ class ModelTest {
     @Test
     void loadFromObj() throws IOException, XMLStreamException, ClassNotFoundException {
         //Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
-        String filePath = this.getClass().getResource("small.osm").getPath();
         List<String> args = new ArrayList<>();
         args.add(filePath);
         new Model(args);
@@ -38,4 +37,23 @@ class ModelTest {
         assertEquals(55.6804, objModel.getModelBounds().yMax, 0.02);
         assertEquals(7.1073, objModel.getModelBounds().xMax, 0.02);
     }
+
+	@Test
+	void testMouse() throws IOException, XMLStreamException, ClassNotFoundException {
+		//Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
+		List<String> args = new ArrayList<>();
+		args.add(filePath);
+		Model model = new Model(args);
+		float mouseModelX = 55.6631f;
+		float mouseModelY = 7.090f;
+		model.setMouseModelCoords(mouseModelX, mouseModelY);
+		assertEquals(mouseModelX, model.getMouseModelX());
+		assertEquals(mouseModelY, model.getMouseModelY());
+		float mouseScreenX = 55.6631f;
+		float mouseScreenY = 7.090f;
+		model.setMouseScreenCoords(mouseScreenX, mouseScreenY);
+		assertEquals(mouseScreenX, model.getMouseScreenX());
+		assertEquals(mouseScreenY, model.getMouseScreenY());
+		model.updateMouseIdle();
+	}
 }

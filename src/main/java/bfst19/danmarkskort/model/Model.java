@@ -277,22 +277,6 @@ public class Model {
 		return Objects.requireNonNullElseGet(shortestPath, Route::new);
     }
 
-    public void updateEnd() {
-        PolyRoad nearest = getClosestRoad(mouseModelX, mouseModelY);
-        if (nearest != null) {
-            end = nearest;
-            updateShortestPath();
-        }
-    }
-
-    public void updateStart() {
-        PolyRoad nearest = getClosestRoad(mouseModelX, mouseModelY);
-        if (nearest != null) {
-            start = nearest;
-            updateShortestPath();
-        }
-    }
-
     public PolyRoad getClosestRoad(float x, float y) {
         PolyRoad closestRoad = null;
         for (DrawableType roadType : RoadInformation.allowedRoadTypes.get(currentVehicleType)) {

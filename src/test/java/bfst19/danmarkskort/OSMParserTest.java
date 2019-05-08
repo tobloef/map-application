@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OSMParserTest {
 
+	String filePath = this.getClass().getResource("small.osm").getPath();
+
     @Test
     void getBoundsOSM() throws IOException, XMLStreamException {
         //Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
@@ -45,7 +47,6 @@ class OSMParserTest {
     void testGraph() throws IOException, XMLStreamException {
         boolean test = true;
         DrawableModel drawableModel = new KDTreeDrawableModel();
-        String filePath = this.getClass().getResource("small.osm").getPath();
         new OSMParser(filePath, drawableModel);
         PolyRoad a = (PolyRoad) drawableModel.getNearestNeighbor(DrawableType.RESIDENTIAL_ROAD, 205, 408);
         Set<PolyRoad> aConnections = new HashSet<>(a.getFirstConnections());
@@ -59,4 +60,6 @@ class OSMParserTest {
         }
         assertTrue(test);
     }
+
+
 }
