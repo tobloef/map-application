@@ -29,14 +29,15 @@ public class Dijkstra {
                 if (notAllowedToTakeRoad(vehicleType, current, connectedRoad)) {
                     continue;
                 }
-                double connectedRoadWeight = calculateWeight(connectedRoad, destination, vehicleType);
-                if (distTo[connectedRoadIndex] > distTo[current.getIndex()] + connectedRoadWeight) {
-                    distTo[connectedRoadIndex] = distTo[current.getIndex()] + connectedRoadWeight;
+                double distToCurrent = Dijkstra.distTo[current.getIndex()];
+                double connectedRoadWeight = distToCurrent + calculateWeight(connectedRoad, destination, vehicleType);
+                if (distTo[connectedRoadIndex] > connectedRoadWeight) {
+                    distTo[connectedRoadIndex] = connectedRoadWeight;
                     pathToRoad[connectedRoadIndex] = current.getIndex();
                     if (remainingPolyRoads.contains(connectedRoadIndex)) {
-                        remainingPolyRoads.changeKey(connectedRoadIndex, distTo[connectedRoadIndex]);
+                        remainingPolyRoads.changeKey(connectedRoadIndex, connectedRoadWeight);
                     } else {
-                        remainingPolyRoads.insert(connectedRoadIndex, distTo[connectedRoadIndex]);
+                        remainingPolyRoads.insert(connectedRoadIndex, connectedRoadWeight);
                     }
                 }
             }
