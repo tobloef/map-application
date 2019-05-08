@@ -11,7 +11,6 @@ public class NodeGraphCreator {
     private final List<OSMRoadNode> roadNodes = new ArrayList<>();
     private final Set<OSMRoadWay> osmRoads = new HashSet<>();
     private final Map<OSMRoadWay, PolyRoad> roadWaysToPolyRoads = new HashMap<>();
-    private final Map<PolyRoad, Integer> polyRoadToIntegers = new HashMap<>();
 
 
     public NodeGraphCreator(DrawableModel drawableModel) {
@@ -64,7 +63,6 @@ public class NodeGraphCreator {
         PolyRoad.initializePolyRoadRegister(roadWaysToPolyRoads.values().size() + 1);
         int i = 1;
         for (PolyRoad road : roadWaysToPolyRoads.values()) {
-            polyRoadToIntegers.put(road, i);
             PolyRoad.setPolyRoadByIndex(i, road);
             road.setIndex(i);
             i++;

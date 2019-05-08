@@ -3,8 +3,6 @@ package bfst19.danmarkskort.model.routePlanning;
 import bfst19.danmarkskort.exceptions.InvalidUserInputException;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawables.PolyRoad;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 import java.io.BufferedWriter;
 import java.io.File;

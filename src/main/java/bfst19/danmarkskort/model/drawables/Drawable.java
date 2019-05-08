@@ -7,9 +7,8 @@ public interface Drawable {
     float sizeNonDrawFactor = 50;
 
     static boolean checkForSize(Rectangle minimumBoundingRectangle, double zoomFactor) {
-        if (minimumBoundingRectangle.getSize() < zoomFactor*zoomFactor * sizeNonDrawFactor)
-            return true;
-        return false;
+        return minimumBoundingRectangle.getSize() < zoomFactor*zoomFactor * sizeNonDrawFactor;
+
     }
     void stroke(GraphicsContext gc, double zoomFactor);
 

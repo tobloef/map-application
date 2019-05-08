@@ -4,7 +4,6 @@ import bfst19.danmarkskort.exceptions.InvalidUserInputException;
 import bfst19.danmarkskort.model.address.Address;
 import bfst19.danmarkskort.model.address.AddressSearch;
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.drawables.PolyRoad;
 import bfst19.danmarkskort.model.routePlanning.Route;
 import org.junit.jupiter.api.Test;
 

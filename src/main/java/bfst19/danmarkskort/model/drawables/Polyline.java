@@ -90,7 +90,7 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 		for (int i = 0; i < coords.length / 2; i++) {
 			sum += coords[i*2];
 		}
-        return sum / (coords.length / 2);
+        return sum / (coords.length / 2f);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
 		for (int i = 0; i < coords.length / 2; i++) {
 			sum += coords[i*2+1];
 		}
-		return sum / (coords.length / 2);
+		return sum / (coords.length / 2f);
     }
 
     @Override
