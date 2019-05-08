@@ -35,5 +35,6 @@ public class DijkstraTest {
 		assertNotNull(route);
 		assertTrue(route.size() > 2);
 		assertNotNull(Dijkstra.getLastVisitedRoads());
+		model.cleanup();
 	}
 }

@@ -40,7 +40,6 @@ class ModelTest {
 
 	@Test
 	void testMouse() throws IOException, XMLStreamException, ClassNotFoundException {
-		//Small osm bounds :  <bounds minlat="55.6631" minlon="7.090 " maxlat="55.6804" maxlon="7.107"/>
 		List<String> args = new ArrayList<>();
 		args.add(filePath);
 		Model model = new Model(args);
@@ -55,5 +54,13 @@ class ModelTest {
 		assertEquals(mouseScreenX, model.getMouseScreenX());
 		assertEquals(mouseScreenY, model.getMouseScreenY());
 		model.updateMouseIdle();
+	}
+
+	@Test
+	void testLoadData() throws IOException, XMLStreamException, ClassNotFoundException {
+		List<String> args = new ArrayList<>();
+		args.add(filePath);
+		Model model = new Model(args);
+		model.loadNewMapData(filePath);
 	}
 }
