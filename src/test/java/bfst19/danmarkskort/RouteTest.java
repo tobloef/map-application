@@ -18,11 +18,11 @@ public class RouteTest {
 
 	private String startQuery = "Pilestræde";
 	private String endQuery = "Halfdansgade";
+	private String filePath = this.getClass().getResource("small.osm").getPath();
 
-    // Somethings really wrong with this test, it passes and fails depending on how it's run.
+	// Somethings really wrong with this test, it passes and fails depending on how it's run.
     @Test
     void testCreation() throws XMLStreamException, IOException, ClassNotFoundException {
-		String filePath = this.getClass().getResource("small.osm").getPath();
 		List<String> args = new ArrayList<>();
 		args.add(filePath);
 		Model model = new Model(args);
@@ -37,7 +37,6 @@ public class RouteTest {
 
     @Test
 	void testPrint() throws IOException, XMLStreamException, ClassNotFoundException, InvalidUserInputException {
-		String filePath = this.getClass().getResource("small.osm").getPath();
 		List<String> args = new ArrayList<>();
 		args.add(filePath);
 		Model model = new Model(args);
@@ -65,7 +64,6 @@ public class RouteTest {
 
 	@Test
 	void testFileName() throws XMLStreamException, IOException, ClassNotFoundException {
-		String filePath = this.getClass().getResource("small.osm").getPath();
 		List<String> args = new ArrayList<>();
 		args.add(filePath);
 		Model model = new Model(args);
@@ -83,7 +81,6 @@ public class RouteTest {
 
 	@Test
 	void testBoundingBox() throws XMLStreamException, IOException, ClassNotFoundException {
-		String filePath = this.getClass().getResource("small.osm").getPath();
 		List<String> args = new ArrayList<>();
 		args.add(filePath);
 		Model model = new Model(args);
