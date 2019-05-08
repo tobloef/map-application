@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.StreamSupport;
 
 import static bfst19.danmarkskort.utils.Misc.countIterable;
 import static org.junit.jupiter.api.Assertions.assertEquals;

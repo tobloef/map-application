@@ -1,9 +1,9 @@
 package bfst19.danmarkskort.model.drawables;
 
-import bfst19.danmarkskort.model.osmParsing.OSMRelation;
-import bfst19.danmarkskort.model.osmParsing.OSMWay;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawableModel.SpatialIndexable;
+import bfst19.danmarkskort.model.osmParsing.OSMRelation;
+import bfst19.danmarkskort.model.osmParsing.OSMWay;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.Serializable;
@@ -52,10 +52,13 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 
     @Override
     public void fill(GraphicsContext graphicsContext, double zoomFactor) {
+        if (Drawable.checkForSize(getMinimumBoundingRectangle(), zoomFactor)) return;
         graphicsContext.beginPath();
         trace(graphicsContext, zoomFactor);
         graphicsContext.fill();
     }
+
+
 
     @Override
     public float euclideanDistanceSquaredTo(float x, float y) {

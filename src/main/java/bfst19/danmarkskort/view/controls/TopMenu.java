@@ -2,9 +2,9 @@ package bfst19.danmarkskort.view.controls;
 
 import bfst19.danmarkskort.exceptions.InvalidUserInputException;
 import bfst19.danmarkskort.model.Model;
-import bfst19.danmarkskort.model.routePlanning.Route;
-import bfst19.danmarkskort.model.drawables.Theme;
 import bfst19.danmarkskort.model.drawables.BuiltInThemes;
+import bfst19.danmarkskort.model.drawables.Theme;
+import bfst19.danmarkskort.model.routePlanning.Route;
 import bfst19.danmarkskort.utils.ResourceLoader;
 import bfst19.danmarkskort.utils.ThemeLoader;
 import bfst19.danmarkskort.view.drawers.RouteDrawer;

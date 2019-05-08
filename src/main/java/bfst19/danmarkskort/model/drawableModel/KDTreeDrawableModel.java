@@ -1,7 +1,7 @@
 package bfst19.danmarkskort.model.drawableModel;
 
-import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.model.drawables.Drawable;
+import bfst19.danmarkskort.model.drawables.DrawableType;
 import bfst19.danmarkskort.utils.EnumHelper;
 
 import java.util.ArrayList;

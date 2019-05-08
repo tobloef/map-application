@@ -1,6 +1,6 @@
 package bfst19.danmarkskort.view.controls;
 
-import bfst19.danmarkskort.model.*;
+import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.view.drawers.*;
 import javafx.geometry.Bounds;

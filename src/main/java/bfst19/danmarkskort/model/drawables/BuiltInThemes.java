@@ -1,6 +1,5 @@
 package bfst19.danmarkskort.model.drawables;
 
-import bfst19.danmarkskort.model.drawables.Theme;
 import bfst19.danmarkskort.utils.ThemeLoader;
 
 public class BuiltInThemes {

@@ -1,13 +1,13 @@
 package bfst19.danmarkskort.model;
 
 import bfst19.danmarkskort.exceptions.DisconnectedRoadsException;
-import bfst19.danmarkskort.model.osmParsing.OSMParser;
 import bfst19.danmarkskort.model.address.Address;
 import bfst19.danmarkskort.model.address.AddressData;
 import bfst19.danmarkskort.model.drawableModel.DrawableModel;
 import bfst19.danmarkskort.model.drawableModel.KDTreeDrawableModel;
 import bfst19.danmarkskort.model.drawableModel.Rectangle;
 import bfst19.danmarkskort.model.drawables.*;
+import bfst19.danmarkskort.model.osmParsing.OSMParser;
 import bfst19.danmarkskort.model.routePlanning.Dijkstra;
 import bfst19.danmarkskort.model.routePlanning.RoadInformation;
 import bfst19.danmarkskort.model.routePlanning.Route;
