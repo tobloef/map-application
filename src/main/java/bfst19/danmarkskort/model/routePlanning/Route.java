@@ -16,9 +16,9 @@ import java.util.List;
 public class Route extends ArrayList<PolyRoad> {
 
 	public List<String> getTextDescription() {
-        if (size() == 0) {
-            return new ArrayList<>();
-        }
+		if (this.size() == 0) {
+			return new ArrayList<>();
+		}
         List<String> result = new ArrayList<>();
         double summedLength = get(0).getRealLength();
         result.add("Start on " + get(0).getStreetNameOrDefault());
@@ -31,7 +31,7 @@ public class Route extends ArrayList<PolyRoad> {
             String description = makeDescription(summedLength, i, road);
             result.add(description);
             summedLength = 0;
-        }
+  	      }
         result.add("You will then arrive at your destination");
         return result;
     }
@@ -102,33 +102,18 @@ public class Route extends ArrayList<PolyRoad> {
         return angle;
     }
 
-    public void printToFile(File file) {
+    public void printToFile(File file) throws IOException, InvalidUserInputException {
         if (file == null) {
             return;
         }
-        try {
-            if (isEmpty()) {
-                throw new InvalidUserInputException("Please select a route.");
-            }
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
-            for (String string : getTextDescription()) {
-                bufferedWriter.write(string + String.format("%n"));
-            }
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidUserInputException e) {
-            makeAlert(e);
-        }
-    }
-
-    private void makeAlert(InvalidUserInputException e) {
-        Alert alert = new Alert(Alert.AlertType.ERROR,
-                e.getMessage(),
-                ButtonType.CLOSE);
-        alert.setTitle("Error: Wrong input");
-        alert.setHeaderText("Error: Wrong input");
-        alert.show();
+		if (isEmpty()) {
+			throw new InvalidUserInputException("Please select a route.");
+		}
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+		for (String string : getTextDescription()) {
+			bufferedWriter.write(string + String.format("%n"));
+		}
+		bufferedWriter.close();
     }
 
     public String getSuggestedFileName() {

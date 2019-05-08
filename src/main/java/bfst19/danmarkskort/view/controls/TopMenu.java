@@ -1,5 +1,6 @@
 package bfst19.danmarkskort.view.controls;
 
+import bfst19.danmarkskort.exceptions.InvalidUserInputException;
 import bfst19.danmarkskort.model.Model;
 import bfst19.danmarkskort.model.drawables.BuiltInThemes;
 import bfst19.danmarkskort.model.drawables.Theme;
@@ -168,8 +169,14 @@ public class TopMenu extends MenuBar {
             return;
         }
         File file = openRouteFileSelect(route.getSuggestedFileName());
-        route.printToFile(file);
-    }
+		try {
+			route.printToFile(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InvalidUserInputException e) {
+			makeAlert(e);
+		}
+	}
 
     private void displayNoRouteAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -224,6 +231,16 @@ public class TopMenu extends MenuBar {
         alert.setHeaderText("Error opening window");
         alert.show();
     }
+
+	private void makeAlert(InvalidUserInputException e) {
+		Alert alert = new Alert(Alert.AlertType.ERROR,
+				e.getMessage(),
+				ButtonType.CLOSE);
+		alert.setTitle("Error: Wrong input");
+		alert.setHeaderText("Error: Wrong input");
+		alert.show();
+	}
+
     @FXML
     private void onToggleShowExploredRoutes() {
         RouteDrawer.ShowExplored = !RouteDrawer.ShowExplored;
