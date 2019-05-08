@@ -52,10 +52,13 @@ public class MultiPolyline implements Drawable, Serializable, SpatialIndexable {
 
     @Override
     public void fill(GraphicsContext graphicsContext, double zoomFactor) {
+        if (Drawable.checkForSize(getMinimumBoundingRectangle(), zoomFactor)) return;
         graphicsContext.beginPath();
         trace(graphicsContext, zoomFactor);
         graphicsContext.fill();
     }
+
+
 
     @Override
     public float euclideanDistanceSquaredTo(float x, float y) {

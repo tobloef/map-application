@@ -18,7 +18,6 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
             coords[2 * i + 1] = way.get(i).getLat();
         }
         createMinimumBoundingRectangle();
-
     }
 
     private static float distance(float x, float y) {
@@ -62,6 +61,7 @@ public class Polyline implements Drawable, Serializable, SpatialIndexable {
     }
 
     public void fill(GraphicsContext gc, double zoomFactor) {
+        if (Drawable.checkForSize(getMinimumBoundingRectangle(), zoomFactor)) return;
         gc.beginPath();
         trace(gc, zoomFactor);
         gc.fill();
