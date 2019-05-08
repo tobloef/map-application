@@ -38,6 +38,7 @@ public class AddressSearch {
             // If no addresses have been found so far, suggest street names or cities.
             suggestions = getSuggestionsFromStreetsAndCities(stringQuery);
         }
+        suggestions.sort(Comparator.comparing(Pair::getKey));
         return suggestions;
     }
 

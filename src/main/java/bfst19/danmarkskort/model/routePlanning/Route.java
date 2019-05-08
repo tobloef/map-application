@@ -16,9 +16,9 @@ import java.util.List;
 public class Route extends ArrayList<PolyRoad> {
 
 	public List<String> getTextDescription() {
-        if (size() == 0) {
-            return new ArrayList<>();
-        }
+		if (this.size() == 0) {
+			return new ArrayList<>();
+		}
         List<String> result = new ArrayList<>();
         double summedLength = get(0).getRealLength();
         result.add("Start on " + get(0).getStreetNameOrDefault());
