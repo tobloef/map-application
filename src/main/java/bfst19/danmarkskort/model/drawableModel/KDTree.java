@@ -29,10 +29,10 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 
     private void generateKDTree(List<T> inputElements, boolean odd) {
         initbbox();
-        if (inputElements.size() < MAX_NODES_PER_LEAF) {
+        if (inputElements.size() < MAX_NODES_PER_LEAF) { // Kontrol punkt 1
             this.leafElements = inputElements;
             growToEncompassLeafElements(inputElements);
-        } else {
+        } else { // Kontrol punkt 2
             splitElement = quickMedian(inputElements, odd);
             inputElements.remove(splitElement);
             this.bboxGrowToEncompass(splitElement.getMinimumBoundingRectangle());
@@ -69,7 +69,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
     private void makeLowerTree(boolean odd, List<T> inputElements) {
         List<T> lowerElements = new ArrayList<>();
         for (T element : inputElements) {
-            if (spatialLessThen(element, this.splitElement, odd)) {
+            if (spatialLessThen(element, this.splitElement, odd)) { // Kontrol punkt 6 fejler her
                 lowerElements.add(element);
             }
         }
@@ -160,7 +160,7 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
 
     public void insert(T insertionElement) {
         insert(insertionElement, true);
-        if (treeIsUnbalanced()) {
+        if (treeIsUnbalanced()) { // Kontrol punkt 2
             rebalanceKDTree();
         }
     }
@@ -171,26 +171,26 @@ public class KDTree<T extends SpatialIndexable> implements Serializable {
     }
 
     private boolean treeIsUnbalanced() {
-        if (splitElement != null) {
+        if (splitElement != null) { // Kontrol punkt 2
             return lower.treeIsUnbalanced() || higher.treeIsUnbalanced();
         }
-        if (leafElements == null) {
+        if (leafElements == null) { // Kontrol punkt 2
             return false;
         }
-        return leafElements.size() > MAX_NODES_BEFORE_REBALANCE;
+        return leafElements.size() > MAX_NODES_BEFORE_REBALANCE; // Kontrol punkt 1
     }
 
     private void insert(T insertionElement, boolean odd) {
-        if (splitElement == null) {
+        if (splitElement == null) { // Kontrol Punkt 1
             leafElements.add(insertionElement);
-            bboxGrowToEncompass(insertionElement.getMinimumBoundingRectangle());
-        } else {
-            if (spatialLessThen(insertionElement, splitElement, odd)) {
+            bboxGrowToEncompass(insertionElement.getMinimumBoundingRectangle()); // Kontrol punkt 5
+        } else { // Kontrol punkt 2
+            if (spatialLessThen(insertionElement, splitElement, odd)) {  // Kontrol punkt 3
                 lower.insert(insertionElement, !odd);
-                bboxGrowToEncompass(lower.getBbox());
-            } else {
+                bboxGrowToEncompass(lower.getBbox()); // Kontrol punkt 5
+            } else { // Kontrol punkt 4
                 higher.insert(insertionElement, !odd);
-                bboxGrowToEncompass(higher.getBbox());
+                bboxGrowToEncompass(higher.getBbox()); // Kontrol punkt 5
             }
         }
 
