@@ -1,6 +1,26 @@
 # Changelog
 Alle ændringer bliver dokumenteret i dette dokument sammen med de ugentlige releases.
 
+## Færdig release
+![udklip](https://github.itu.dk/storage/user/1986/files/4d4a4400-71db-11e9-9b64-ddfc651550d4)
+Utallige ændringer.
+
+## v0.9 - 28/4/2019
+![image](https://github.itu.dk/storage/user/1986/files/6b10ef80-6a0a-11e9-979b-7d9d1b1e9467)
+
+### Tilføjet
+- Point of Interest som bruger kan tilføje til kortet.
+- Printing af rutevejledning.
+
+### Ændringer
+- Optimerede dijkstra 
+- Fixede rundkørelser. 
+- Optimerede parsing memory footprint
+
+
+### Bugs osv.
+- Lidt utydeligt, da vi opdatere imens changelog bliver skrevet.
+
 ## v0.8 - 21/4/2019
 v0.7 blev skippet, så dette er for de sidste 2 uger.
 ### Tilføjet
