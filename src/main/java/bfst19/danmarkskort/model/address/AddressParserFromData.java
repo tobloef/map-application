@@ -161,7 +161,7 @@ public class AddressParserFromData implements AddressParser {
             usedSplitCandidate = i;
             usedSubSplitsCandidate = listFromRange(0, subSplits.size());
         }
-        // Couldn't add while splits, try adding parts of sub-splits
+        // Couldn't add whole splits, try adding parts of sub-splits
         if (candidate == null) {
             for (int i = 0; i < splits.size(); i++) {
                 List<String> subSplits = splits.get(i);
